@@ -12,9 +12,9 @@ from petsc4py  import PETSc
 from basix.ufl import element, mixed_element
 from dolfinx.fem.petsc import assemble_matrix, _assemble_vector_vec, set_bc, apply_lifting, create_vector
 
-from imports.mesh                 import recal_mark_boundaries_flow, recal_anterior_cilia_volume, recal_middle_ventral_cilia_volume
-from imports.forcing_expressions  import OscillatoryPressure
-from imports.normals_and_tangents import facet_vector_approximation
+from utilities.mesh                 import recal_mark_boundaries_flow, recal_anterior_cilia_volume, recal_middle_ventral_cilia_volume
+from utilities.forcing_expressions  import OscillatoryPressure
+from utilities.normals_and_tangents import facet_vector_approximation
 
 print = PETSc.Sys.Print
 

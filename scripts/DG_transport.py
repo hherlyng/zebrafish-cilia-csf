@@ -1,5 +1,5 @@
-from imports.local_imports import *
-from imports.mesh          import mark_boundaries_flow_and_transport, create_ventricle_volumes_meshtags
+from utilities.local_imports import *
+from utilities.mesh          import mark_boundaries_flow_and_transport, create_ventricle_volumes_meshtags
 
 import os
 import time
