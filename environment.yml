@@ -14,5 +14,3 @@ dependencies:
   - vtk
   - mpich
   - conda-ecosystem-user-package-isolation
-  - pip:
-      - "multiphenicsx@git+https://github.com/multiphenics/multiphenicsx.git"
