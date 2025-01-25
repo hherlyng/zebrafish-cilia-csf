@@ -25,3 +25,7 @@ output/
 
 # data folder
 data/
+
+# geometries
+geometries/ventricles/
+geometries/cylinder/
