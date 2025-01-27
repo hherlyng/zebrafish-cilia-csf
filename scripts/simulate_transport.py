@@ -37,26 +37,6 @@ ANTERIOR_CILIA       = 7
 ANTERIOR_CILIA2      = 8
 SLIP                 = 9
 
-# Mesh tags for transport
-ANTERIOR_DORSAL         = 11
-POSTERIOR_DORSAL        = 12
-MIDDLE_DORSAL_POSTERIOR = 13
-MIDDLE_DORSAL_ANTERIOR  = 14
-POSTERIOR_VENTRAL       = 15
-ANTERIOR_VENTRAL        = 16
-MIDDLE_VENTRAL          = 17
-
-# Injection site tags
-transport_tags = {
-    11 : 'anterior_dorsal',
-    12 : 'posterior_dorsal',
-    13 : 'middle_dorsal_posterior',
-    14 : 'middle_dorsal_anterior',
-    15 : 'posterior_ventral',
-    16 : 'anterior_ventral',
-    17 : 'middle_ventral'
-}
-
 # Diffusion coefficients
 D_coeffs = {
     'D1'  : 1.63e-6,
@@ -81,7 +61,6 @@ class TransportSolver:
                        T: float,
                        dt: float,
                        period: float,
-                       injection_site_tag: int,
                        molecule: str,
                        element_degree: int,
                        relative: bool,
@@ -99,8 +78,6 @@ class TransportSolver:
 
         self.model_version = model_version
         self.mesh_version = mesh_version
-        self.injection_site_tag = injection_site_tag
-        self.injection_site_str = transport_tags[injection_site_tag]
         self.molecule = molecule
         self.D_value = D_coeffs[molecule]
         self.write_data = write_data
@@ -116,9 +93,6 @@ class TransportSolver:
         self.relative = relative
         self.flux_BC = flux_BC
         self.tau_version = tau_version
-
-        self.D_value = 10e-6
-        self.molecule = "D4"
         
         self.mesh = a4d.read_mesh(comm=self.comm, filename=data_fname, engine='BP4', ghost_mode=self.ghost_mode)
         print(f"Total # of cells in mesh: {self.mesh.topology.index_map(3).size_global}")
@@ -429,13 +403,13 @@ class TransportSolver:
                 self.assemble_RHS()
 
                 # Compute solution to the Advection-Diffusion equation and perform ghost update
-                self.solver.solve(self.b, self.c_h.vector)
+                self.solver.solve(self.b, self.c_h.x.petsc_vec)
                 self.c_h.x.scatter_forward()
                 self.c_.interpolate(self.c_h)
 
                 # Update solution at previous time step
-                with self.c_h.vector.localForm() as c_h_loc, \
-                     self.c_.vector.localForm()  as c_loc:
+                with self.c_h.x.petsc_vec.localForm() as c_h_loc, \
+                     self.c_.x.petsc_vec.localForm()  as c_loc:
                     
                     idx = np.where(c_h_loc.array < 0)[0].astype(np.int32)
                     c_h_loc[idx] = np.zeros(idx.shape[0])
@@ -504,13 +478,13 @@ class TransportSolver:
                 self.assemble_RHS()
                 
                 # Compute solution to the Advection-Diffusion equation and perform ghost update
-                self.solver.solve(self.b, self.c_h.vector)
+                self.solver.solve(self.b, self.c_h.x.petsc_vec)
                 self.c_h.x.scatter_forward()
 
                 # Update solution at previous time step. Force negative concentrations
                 # to being zero (as they are in the order of -1e-15) to avoid numerical issues.
-                with self.c_h.vector.localForm() as c_h_loc, \
-                     self.c_.vector.localForm()  as c_loc:
+                with self.c_h.x.petsc_vec.localForm() as c_h_loc, \
+                     self.c_.x.petsc_vec.localForm()  as c_loc:
                     
                     idx = np.where(c_h_loc.array < 0)[0].astype(np.int32)
                     c_h_loc[idx] = np.zeros(idx.shape[0])
@@ -581,13 +555,13 @@ class TransportSolver:
 if __name__ == '__main__':
 
     model_version = 'C'
-    write_data = True
+    write_data = False
     write_output_vtx = False
     write_output_xdmf = False
     write_checkpoint  = False
     write_peclet_vtx = False
     write_peclet_checkpoint = False
-    write_snapshot_checkpoint = True
+    write_snapshot_checkpoint = False
     use_direct_solver = False
     relative = False
     flux_BC = True # if True, periodic in-/outflow BCs. Else, J.n=0 everywhere
@@ -606,19 +580,9 @@ if __name__ == '__main__':
         molecule = 'D3'
     else:
         raise ValueError('Error in molecule number input. Choose 1, 2, or 3.')
-    
-    inj_site_input = int(argv[2])
-    if inj_site_input==1:
-        injection_site = ANTERIOR_DORSAL
-    elif inj_site_input==2:
-        injection_site = MIDDLE_DORSAL_POSTERIOR
-    elif inj_site_input==3:
-        injection_site = POSTERIOR_DORSAL
-    else:
-        raise ValueError('Error in injection site input. Choose 1, 2 or 3.')
 
     # Set mesh version from input
-    mesh_version_input = int(argv[3])
+    mesh_version_input = int(argv[2])
     if mesh_version_input==0:
         mesh_version = 'original'
     elif mesh_version_input==1:
@@ -646,15 +610,14 @@ if __name__ == '__main__':
     # Set velocity data filename
     tau_version = 'variable_tau'
     if relative:
-        data_fname = f'./output/flow/checkpoints/{tau_version}/relative+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252'
+        data_fname = f'../output/flow/checkpoints/{tau_version}/relative+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252'
     else:
-        data_fname = f'./output/flow/checkpoints/{tau_version}/pressure+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252'
+        data_fname = f'../output/flow/checkpoints/{tau_version}/pressure+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252'
 
     # Create and set up solver object
     transport_sim = TransportSolver(data_fname=data_fname, model_version=model_version,
                                     mesh_version=mesh_version,
                                     T=T, dt=dt, period=period,
-                                    injection_site_tag=injection_site,
                                     molecule=molecule,
                                     element_degree=k, 
                                     relative=relative,

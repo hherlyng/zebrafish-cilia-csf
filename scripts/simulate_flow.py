@@ -465,7 +465,7 @@ class FlowSolver:
         if self.model_version=='A': # The velocity field is a steady state solution => no timeloop
             # Perform linear solve 
             tic = time.perf_counter()
-            self.ksp.solve(self.b, self.wh.vector)
+            self.ksp.solve(self.b, self.wh.x.petsc_vec)
             print(f"Solved linear system in {time.perf_counter() - tic:.2f} seconds.")
 
             # Parallel communication, ghost update
@@ -563,7 +563,7 @@ class FlowSolver:
 
                 # Perform linear solve
                 tic = time.perf_counter()
-                self.ksp.solve(self.b, self.wh.vector)
+                self.ksp.solve(self.b, self.wh.x.petsc_vec)
                 print(f"Solved linear system in {time.perf_counter() - tic:.2f} seconds.")
                 
                 # Parallel communication, ghost update
@@ -695,7 +695,7 @@ if __name__ == '__main__':
     else:
         raise ValueError('Error in mesh version input. Choose an integer in the interval [0, 6].')
 
-    mesh_filename = f'./geometries/{mesh_version}_ventricles.xdmf'
+    mesh_filename = f'../geometries/standard/{mesh_version}_ventricles.xdmf'
     with dfx.io.XDMFFile(MPI.COMM_WORLD, mesh_filename, "r") as xdmf: mesh = xdmf.read_mesh()
     
     # Determine whether to mark pressure boundaries

@@ -259,7 +259,7 @@ class CiliaForce:
     def __init__(self, A: float) -> None:
         self.A = A # Amplitude (maximum force)
     
-    def __call__(self, x: numpy.typing.NDArray[np.float_]) -> numpy.typing.NDArray[np.float_]:
+    def __call__(self, x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.float64]:
         return np.stack((np.ones (x.shape[1]) * self.A,
                          np.zeros(x.shape[1]),
                          np.zeros(x.shape[1])))
@@ -273,5 +273,5 @@ class OscillatoryPressure:
         self.omega = 2 * np.pi * f # Angular frequency
         self.c_net = c_net         # Constant reflecting net flow
 
-    def __call__(self, x: numpy.typing.NDArray[np.float_]) -> numpy.typing.NDArray[np.float_]:
+    def __call__(self, x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.float64]:
         return np.ones(x.shape[1]) * (- self.A * np.sin(self.omega * self.t) + self.c_net)
