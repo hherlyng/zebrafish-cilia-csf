@@ -1,6 +1,6 @@
 import dolfinx as dfx
 
-from imports.mesh import read_msh_parallel
+from utilities.mesh import read_msh_parallel
 from mpi4py import MPI
 
 # for i in range(9):

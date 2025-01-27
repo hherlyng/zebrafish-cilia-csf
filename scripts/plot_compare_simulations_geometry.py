@@ -6,7 +6,7 @@ import adios4dolfinx     as a4d
 import matplotlib.pyplot as plt
 
 from mpi4py       import MPI
-from imports.mesh import create_ventricle_volumes_meshtags
+from utilities.mesh import create_ventricle_volumes_meshtags
 
 """
 Plot and compare results for the original ventricles mesh and the (more) shrunk ventricles mesh. The original ventricles mesh
@@ -43,12 +43,12 @@ k = 1 # element degree
 model_version = 'C'
 molecule = 'D3'
 tau_version = 'variable_tau'
-transport_dir = f"./output/transport/results/{tau_version}/"
-mesh1_input_filename = f"output/flow/checkpoints/{tau_version}/pressure+original/model_{model_version}/velocity_data_dt=0.02252"
-mesh2_input_filename = f"output/flow/checkpoints/{tau_version}/pressure+shrunk/model_{model_version}/velocity_data_dt=0.02252"
-mesh3_input_filename = f"output/flow/checkpoints/{tau_version}/pressure+middle_shrunk/model_{model_version}/velocity_data_dt=0.02252"
-mesh4_input_filename = f"output/flow/checkpoints/{tau_version}/pressure+hind_shrunk/model_{model_version}/velocity_data_dt=0.02252"
-mesh5_input_filename = f"output/flow/checkpoints/{tau_version}/pressure+fore_middle_hind_shrunk/model_{model_version}/velocity_data_dt=0.02252"
+transport_dir = f"../output/transport/results/{tau_version}/"
+mesh1_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+original/model_{model_version}/velocity_data_dt=0.02252"
+mesh2_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+shrunk/model_{model_version}/velocity_data_dt=0.02252"
+mesh3_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+middle_shrunk/model_{model_version}/velocity_data_dt=0.02252"
+mesh4_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+hind_shrunk/model_{model_version}/velocity_data_dt=0.02252"
+mesh5_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+fore_middle_hind_shrunk/model_{model_version}/velocity_data_dt=0.02252"
 mesh1 = a4d.read_mesh(comm=comm, filename=mesh1_input_filename, engine="BP4", ghost_mode=gm)
 mesh2 = a4d.read_mesh(comm=comm, filename=mesh2_input_filename, engine="BP4", ghost_mode=gm)
 mesh3 = a4d.read_mesh(comm=comm, filename=mesh3_input_filename, engine="BP4", ghost_mode=gm)
@@ -101,6 +101,8 @@ for i in ROI_tags:
     c_bar3[:, i-1] /= volumes3[i-1]
     c_bar4[:, i-1] /= volumes4[i-1]
     c_bar5[:, i-1] /= volumes5[i-1]
+    print(f"Tag {i}")
+    print(f"Final concentrations: ", [c_bar[-1, i-1] for c_bar in [c_bar1, c_bar2, c_bar3, c_bar4, c_bar5]])
 
 # Get the number of timesteps
 num_timesteps = c_bar1.shape[0]
@@ -148,5 +150,5 @@ for row_idx in range(ax_c.shape[0]):
 
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
-if save_figs: fig_c.savefig(f"output/illustrations/compare_geometry/all_ROIs_model{model_version}.png")
+if save_figs: fig_c.savefig(f"../output/illustrations/compare_geometry/all_ROIs_model{model_version}.png")
 plt.show()

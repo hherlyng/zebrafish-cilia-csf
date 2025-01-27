@@ -13,4 +13,7 @@ dependencies:
   - git
   - vtk
   - mpich
+  - tabulate
+  - meshio
+  - colormaps
   - conda-ecosystem-user-package-isolation

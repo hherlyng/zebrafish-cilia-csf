@@ -667,7 +667,7 @@ if __name__ == '__main__':
 
     # Input parameters
     direct = True # Use direct solver if True, else use iterative solver
-    model = 'B' # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
+    model = 'C' # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
     f = 2.22 # Cardiac frequency [Hz]
     period = 1 / f # The cardiac period [s]
     T  = 1*period # Simulation end time [s]

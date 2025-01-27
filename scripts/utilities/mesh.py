@@ -1,5 +1,4 @@
 import ufl
-import gmsh
 import meshio
 import numpy.typing
 
@@ -204,104 +203,6 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
     for i in reversed(ROI_tags): volume_marker[ROI_cells[i]] = ROI_tags[i-1] # Mark the cells in each ROI with the corresponding ROI tag
 
     return (dfx.mesh.meshtags(mesh, tdim, np.arange(num_volumes, dtype=np.int32), volume_marker), ROI_tags)
-
-def mesh_rectangle(mesh0: dfx.mesh.Mesh, ghost_mode: dfx.mesh.GhostMode):
-    """ Mesh a rectangle slice that lies in the yz-plane of the ventricles.
-
-    Parameters
-    ----------
-    mesh0 : dfx.mesh.Mesh
-        The brain ventricles mesh.
-
-    Returns
-    -------
-    dfx.mesh.Mesh
-        Rectangle slice mesh.
-    """
-    comm = mesh0.comm # MPI communicator
-    rank = comm.rank  # MPI process rank
-    gmsh.initialize()
-    
-    x_min = comm.allreduce(mesh0.geometry.x[:, 0].min(), op=MPI.MIN)
-    x_max = comm.allreduce(mesh0.geometry.x[:, 0].max(), op=MPI.MAX)
-    x_mid = .5*(x_min+x_max)
-    y_min = comm.allreduce(mesh0.geometry.x[:, 1].min(), op=MPI.MIN)
-    y_max = comm.allreduce(mesh0.geometry.x[:, 1].max(), op=MPI.MAX)
-    z_min = comm.allreduce(mesh0.geometry.x[:, 2].min(), op=MPI.MIN)
-    z_max = comm.allreduce(mesh0.geometry.x[:, 2].max(), op=MPI.MAX)
-        
-    if rank==0:
-        gmsh.model.occ.addRectangle(x=z_min, y=y_max/4, z=0, dx=z_max-z_min, dy=.5*(y_max-y_min), tag=1)
-        gmsh.model.occ.rotate(dimTags=[(2, 1)], x=x_mid, y=0, z=0, ax=0, ay=1, az=0, angle=np.pi/2)
-        gmsh.model.occ.synchronize()
-        surfaces = gmsh.model.getEntities(dim=2)
-        gmsh.model.addPhysicalGroup(surfaces[0][0], [surfaces[0][1]], 1)
-        gmsh.model.setPhysicalName(surfaces[0][0], 1, "Slice")
-        gmsh.option.setNumber("Mesh.Algorithm", 8)
-        gmsh.option.setNumber("Mesh.RecombinationAlgorithm", 2)
-        gmsh.option.setNumber("Mesh.RecombineAll", 1)
-        gmsh.option.setNumber("Mesh.SubdivisionAlgorithm", 1)
-        gmsh.model.mesh.generate(dim=2)
-        gmsh.model.mesh.setOrder(1)
-        gmsh.model.mesh.optimize("Netgen")
-        gmsh.model.mesh.refine()
-        gmsh.model.mesh.refine()
-        gmsh.model.mesh.refine()
-
-    partitioner = dfx.mesh.create_cell_partitioner(ghost_mode)
-    rectangle_mesh = dfx.io.gmshio.model_to_mesh(gmsh.model, MPI.COMM_WORLD, 0, gdim=3, partitioner=partitioner)[0]
-    rectangle_mesh.geometry.x[:, 0] -= 0.05
-
-    return rectangle_mesh
-
-def create_dolfinx_mesh(msh_mesh, comm: MPI.Comm, cell_type: str, convert_3D_to_2D: bool=False) -> dfx.mesh.Mesh:
-    """ Convert .msh file and return the mesh as a dolfinx mesh.
-
-    Parameters
-    ----------
-    msh_file : .msh file
-        File containing the mesh
-    cell_type : string
-        Type of cells, e.g. "triangle", "line"
-    convert_3D_to_2D : bool, optional
-        Convert 3D to 2D mesh if True, by default False
-
-    Returns
-    -------
-    out_mesh
-        Dolfinx mesh
-    """
-    # Extract cells and points from the .msh mesh
-    cells  = msh_mesh.get_cells_type(cell_type)
-    points = msh_mesh.points[:, :2] if convert_3D_to_2D else msh_mesh.points
-    
-    mesh_geometry  = points
-    mesh_geometry /= 1000  # Divide geometry by thousand to get millimeters
-    mesh_topology  = cells 
-
-    print("Total # cells in mesh: {0}.\n".format(mesh_topology.shape[0]))
-    print("Coordinate system limits:")
-    x_max = max(mesh_geometry[:, 0])
-    x_min = min(mesh_geometry[:, 0])
-    print(f"x_max, x_min: {x_max:.4f} {x_min:.4f}")
-
-    y_max = max(mesh_geometry[:, 1])
-    y_min = min(mesh_geometry[:, 1])
-    print(f"y_max, y_min: {y_max:.4f} {y_min:.4f}")
-
-    z_max = max(mesh_geometry[:, 2])
-    z_min = min(mesh_geometry[:, 2])
-    print(f"z_max, z_min: {z_max:.4f} {z_min:.4f}")
-
-    # Create DOLFINx mesh
-    cell_type = cell_type if cell_type != "tetra" else "tetrahedron"
-    element   = ufl.VectorElement("Lagrange", cell_type, 1)
-    domain    = ufl.Mesh(element)
-    out_mesh  = dfx.mesh.create_mesh(comm, mesh_topology, 
-                                     mesh_geometry, domain,
-                                     partitioner=dfx.cpp.mesh.create_cell_partitioner(dfx.mesh.GhostMode.shared_facet))
-                                    
-    return out_mesh
 
 def read_msh_parallel(filename: str|Path, comm: MPI.Comm, rank: int=0, num_refinements: int=0) -> dfx.mesh.Mesh:
     """ Read mesh file of type .msh and return a dolfinx.mesh.Mesh mesh.

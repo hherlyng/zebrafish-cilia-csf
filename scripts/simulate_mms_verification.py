@@ -157,7 +157,7 @@ SLIP                 = 8
 
 def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bool):
 
-    from imports.mesh import mark_boundaries_flow
+    from utilities.mesh import mark_boundaries_flow
     bdry_facets = mark_boundaries_flow(mesh=msh, inflow_outflow=False)
     k  = 1
     cell = msh.basix_cell()
@@ -336,11 +336,11 @@ if __name__ == '__main__':
         eu_div_prev = 0
         ep_L2_prev  = 0
 
-        for i in [0, 1, 2]:#, 3, 4, 5]:
+        for i in [0, 1, 2, 3, 4, 5]:
 
             with dfx.io.XDMFFile(MPI.COMM_WORLD, f'./geometries/cylinder_{i}.xdmf', "r") as xdmf:
                 mesh = xdmf.read_mesh()
-            mesh.geometry.x[:] *= 1000
+            mesh.geometry.x[:] *= 1000 # Scale mesh
             
             A, b, W, B, u0, p0 = get_system_mms(mesh, penalty_value, mu_value, direct)
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
@@ -371,7 +371,7 @@ if __name__ == '__main__':
             u0_mag_max = u0_mag.max()
             u0_Linf = mesh.comm.allreduce(u0_mag_max, op=MPI.MAX)
 
-            from imports.utilities import calc_error_H1, calc_error_L2, calc_error_Hdiv
+            from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
             eu_H1  = calc_error_H1(u_approx=uh, u_exact=u0, dX=dx)
             eu_L2  = calc_error_L2(u_approx=uh, u_exact=u0, dX=dx)
             ep_L2  = calc_error_L2(u_approx=ph, u_exact=p0, dX=dx)
@@ -427,7 +427,7 @@ if __name__ == '__main__':
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
 
             # Calculate mean pressure and subtract it from the calculated pressure
-            from imports.mesh import mark_boundaries_flow
+            from utilities.mesh import mark_boundaries_flow
             ft = mark_boundaries_flow(mesh, inflow_outflow=False)
             dx = ufl.Measure('dx', domain=mesh)
             ds = ufl.Measure('ds', domain=mesh, subdomain_data=ft)
@@ -509,7 +509,7 @@ if __name__ == '__main__':
             u0_mag_max = u0_mag.max()
             u0_Linf = mesh.comm.allreduce(u0_mag_max, op=MPI.MAX)
 
-            from imports.utilities import calc_error_H1, calc_error_L2, calc_error_Hdiv
+            from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
             eu_H1  = calc_error_H1(u_approx=uh_out, u_exact=u0_out, dX=dx, vector_elements=True)
             eu_L2  = calc_error_L2(u_approx=uh_out, u_exact=u0_out, dX=dx, vector_elements=True)
             ep_L2  = calc_error_L2(u_approx=ph, u_exact=p0, dX=dx)
@@ -595,7 +595,7 @@ if __name__ == '__main__':
             u0_mag_max = u0_mag.max()
             u0_Linf = mesh.comm.allreduce(u0_mag_max, op=MPI.MAX)
 
-            from imports.utilities import calc_error_H1, calc_error_L2, calc_error_Hdiv
+            from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
             eu_H1  = calc_error_H1(u_approx=uh, u_exact=u0, dX=dx)
             eu_L2  = calc_error_L2(u_approx=uh, u_exact=u0, dX=dx)
             ep_L2  = calc_error_L2(u_approx=ph, u_exact=p0, dX=dx)
