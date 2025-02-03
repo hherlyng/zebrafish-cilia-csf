@@ -149,7 +149,7 @@ In this paper, we present protein photoconversion experiments in zebrafish embry
 \section*{Methods}
 \label{sec:methods}
 
-\mer{@HH: I suggest you write \cref{fig:figure1}\textbf{a}, rather than \cref{fig:figure1} panel \textbf{a}, throughout. Increases signal-to-noise ratio.}
+\mer{@HH: I suggest you write \cref{fig:figure1}a, rather than \cref{fig:figure1} panel \textbf{a}, throughout. Increases signal-to-noise ratio.}
 
 \subsection*{Zebrafish maintenance and strains in photoconversion experiments}
 The zebrafish~(\emph{danio rerio}) animal facilities used are approved by the Norwegian Food Safety Authority (NFSA, Mattilsynet). Furthermore, the zebrafish were maintained in accordance with the guidelines set by the NFSA and the European Communities Council Directive. The larval and adult zebrafish were raised under standard husbandry conditions at 28.5°C in a Techniplast Zebtech Multilinking system. The fish tanks were kept at constant pH 7.0 and 685 $\mu$S with a 14/10 hr light/dark cycle. From fertilization to 3 dpf, larvae were maintained in egg water (1.2 g marine salt and 0.1\% methylene blue in 20 L reverse osmosis (RO) water) and subsequently transferred to artificial fish water (AFW) (1.2 g marine salt in 20 L RO water). The zebrafish lines used in the experiments were \emph{ccdc103(dnaaf19)\textsuperscript{tn222a}} (\emph{schmalhans (smh)})~\cite{Jau-NianChen1997Left-rightZebrafish}(received from Drummond lab, MGH) and \emph{Tg(gfap:Gal4FF)\textsuperscript{nw7Tg}}~\cite{DiazVerdugo2019Glia-neuronSeizures}, \emph{Tg(5xuas:Signal-Dendra2)\textsuperscript{nw21Tg}}. Animals were in the pigmentless \emph{nacre\textsuperscript{b692}}(\emph{mitfa\textsuperscript{-/-}})~\cite{JamesA.Lister1999NacreFate} background.
@@ -336,7 +336,7 @@ The CSF density $\rho$ and dynamic viscosity $\mu$ were set following Bloomfield
     \label{tab:parameter_table}
 \end{table}
 
-\subsection*{Computational flow scenarios}
+\subsection*{Computational modelling scenarios}
 %\label{subsec:model_versions}
 To study the impact of the motile cilia and the cardiac pulsations on the CSF flow, we consider the following computational flow scenarios, each predicting a CSF flow velocity $\uu$ and CSF pressure $p$.
 \begin{itemize}
@@ -409,38 +409,50 @@ The numerical solution schemes for the Stokes equations and the advection-diffus
 %%--------------RESULTS--------------%%
 \section*{Results}\label{sec:results}
 
-\subsection*{Cerebrospinal fluid flow in the brain ventricles is compartmentalized}
+\subsection*{Cilia induces flow compartmentalization within the brain ventricles}
 
-\mer{Why?} To characterize CSF flow patterns predicted by
-computational fluid dynamics within the brain ventricles, we consider
-the simulated CSF velocity and pressure when driven by both cilia and
-cardiac pulsations. \mer{MER: Stopped here...} With cilia forces and
-cardiac forces represented in the flow model (model version 0), we
-observe a vortex-structured flow pattern in the anterior and middle
-ventricles~(\cref{fig:figure1}, panel \textbf{e}). This rotational
-motion shows that cilia-mediated flow is dominating in these regions,
-as the vortex structures are a consequence of the applied tangential
-stresses on the ciliated boundaries combined with the assumption of
-fluid incompressibility. In the posterior ventricle, we observe
-directional flow as the pressure-driven flow is dominating in this
-region. The cardiac pressure forces induce a pulsatile motion of the
-cerebrospinal fluid synchronized with the cardiac cycle, with velocity
-magnitudes of the pulsatile motion being approximately an order of
-magnitude smaller than the velocities related to the cilia-driven
-motion. Over a cardiac cycle, the maximum velocity magnitude in the
-ventricles was 27.7 $\mu$m/s, located dorsally in the posterior part
-of the middle ventricle. This maximum velocity was attained at the
-time instant coinciding with the peak of the cardiac pulsatile flow
-flowing caudally, as a result of both the tangential stress boundary
-condition and the pulsatile pressure-driven flow being aligned with
-the rostrocaudal axis (the $x$ axis). A calculation using the observed
-maximum velocity of 27.7 $\mu$m/s, and choosing the approximate height
-of the middle ventricle $110 \ \mu$m as a characteristic length scale,
-yields a Reynolds number $\mathrm{Re} \approx 0.004$, justifying the
-assumption of Stokes flow.
+\mer{One sentence on why? - what do we not know - what do we try to
+  find out?} To characterize CSF flow patterns predicted by
+computational fluid dynamics within the brain ventricles, we begin by
+considering the simulated CSF velocity and pressure when driven by
+both cilia motion and cardiac pressure pulsations. These forces induce
+\fixme{persistent} flow features, with vortex-structures in the
+anterior and middle ventricles and \fixme{unidirectional} flow in the
+posterior ventricle (\Cref{fig:figure1}\textbf{e},
+\fixme{Supplementary video 1}). These characteristic patterns suggest
+that the flow in the anterior and middle ventricles are dominated by
+the cilia contribution, while the cardiac pressure pulsations dominate
+within the posterior ventricle. Over one cardiac cycle, the CSF flow
+speed reaches up to 27.7 \textmu m/s, dorsally in the posterior part
+of the middle ventricle. This peak is attained at the time instant
+coinciding with the time of peak caudal cardiac pulsatile flow, as a
+result of both the traction induced by the cilia and the pulsatile
+pressure-driven flow being aligned with the rostrocaudal ($x-$)
+axis. Using this maximum velocity magnitude and choosing the height of
+the middle ventricle ($110$ \textmu m) as a characteristic length
+scale, yields a Reynolds number $\mathrm{Re} \approx 0.004$,
+justifying the assumption of Stokes flow. To further examine the
+effect of the cilia, we next consider a no-cilia model variation. In
+this scenario, the simulated CSF flow is pulsatile and
+\fixme{unidirectional} (\cref{fig:figure1}g), with a peak velocity
+magnitude of \fixme{$4.8$ \textmu m/s}. On the other hand, the
+vortices (re)appear when considering a variation with cilia but no
+cardiac contribution (\cref{fig:figure1}h), in which case the highest
+velocities ($26.5$ \textmu m/s) also occur in the vicinity of the
+cilia. Thus, the bidirectional traction induced by motile cilia
+inherently leads to a partial compartmentalization of the ventricular
+system.
 
-\subsection*{Vortex structures vanish in the absence of cilia}
-The pulsatile motion is absent when disregarding cardiac motion~(model I, \cref{fig:figure1}, panel~\textbf{f}). For model I, the boundary conditions are not time-dependent, rendering the solution to the Stokes equations~\eqref{eq:stokes_eqs} a steady-state flow field. Streamlines demonstrate the compartmentalization of the cerebrospinal fluid flow driven by cilia, and we observe highest vorticity in the vicinity of cilia. Excluding the cilia tangential traction from the model (model II), vortex-structured compartmentalization of the ventricular flow does not occur, and the flow is directional and pulsatile as a result of the pressure boundary conditions imposed~(\cref{fig:figure1}, panel \textbf{g}). 
+%% %\subsection*{Vortex structures vanish in the absence of cilia}
+%% The pulsatile motion is absent when disregarding cardiac motion~(model I, \cref{fig:figure1}, panel~\textbf{f}). For model I, the boundary conditions are not time-dependent, rendering the solution to the Stokes equations~\eqref{eq:stokes_eqs} a steady-state flow field. Streamlines demonstrate the compartmentalization of the cerebrospinal fluid flow driven by cilia, and we observe highest vorticity in the vicinity of cilia.
+
+%% Excluding the cilia tangential traction from the model (model II), vortex-structured compartmentalization of the ventricular flow does not occur, and the flow is directional and pulsatile as a result of the pressure boundary conditions imposed~(\cref{fig:figure1}, panel \textbf{g}). 
+
+%% The cardiac pressure forces induce a pulsatile motion of the
+%% cerebrospinal fluid synchronized with the cardiac cycle, with velocity
+%% magnitudes of the pulsatile motion being approximately an order of
+%% magnitude smaller than the velocities related to the cilia-driven
+%% motion.
 
 \subsection*{Ventricular solute transport is advection-dominated for small molecules}
 To qualitatively analyze protein transport, we compare the solute concentration fields from simulation of photoconversion in a dorsal region of the middle ventricle. We simulate transport using the three diffusion coefficients $D_1$, $D_2$ and $D_3$, and present concentration fields in a slice of the ventricles geometry for each diffusion coefficient at three time instants~(\cref{fig:figure2_compare_diffusion_coefficients}, panel~\textbf{a}). The slices are taken in the $xz$-plane, which aligns with the rostrocaudal axis, at $y=140$ $\mu$m, the center of the geometry. Note that the colorbars colored by the value of the concentration $c$ are different for each column (corresponding to the choice of $D$). Upper limits of the colorbars are the maximum value of $c$ in the respective slice at $t=450.5$ s, for the respective $D$. 
