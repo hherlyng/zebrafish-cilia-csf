@@ -699,28 +699,32 @@ less solute has spread towards the posterior ventricle (ROI 6).
 \end{figure}
 
 \subsection*{Modification of ventricles geometry impacts protein distribution}
-We simulate flow and transport in four alternative brain ventricles meshes:
+To assess the impact of ventricular morphologies on solute distribution,
+we used four alternative brain ventricles meshes:
 one where the connection between the anterior and middle ventricles is constricted;
 one where the connection between the middle and posterior ventricles is constricted;
 one where the middle ventricle is shrunk in the lateral direction;
-the combination of the above three modifications~(\Cref{fig:figure6_sim_results_compare_geometries}a).
-We simulate CSF flow in the modified geometries with the baseline flow model and use
-the resulting velocity field to simulate transport of Dendra2.
+and the combination of the above three modifications (\Cref{fig:figure6_sim_results_compare_geometries}a).
+We simulate CSF flow in the modified geometries with the baseline flow model
+and use the resulting velocity field to simulate transport of Dendra2 (\Cref{fig:figure6_sim_results_compare_geometries}b).
 
 Constricting the connection between the anterior and middle ventricle leads to
-slower transport to region of interest (ROI) 5 located in the anterior ventricle,
+slower transport to the anterior ventricle (ROI 5),
 and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the original geometry.
 On the other hand, constricting the connection between the middle and the posterior ventricle
 leads to less transport into the posterior ventricle (ROI 6),
 and slightly more transport towards the anterior ventricle (ROI 5).
-Faster transport to ROI 5 and slower transport to ROI 6 is also
-the case for the geometry with a shrunk middle ventricle.
-Additionally, for this configuration the transport towards the anterior region of
-the middle ventricle (ROI 3) is slowed down.
+Faster transport to the anterior ventricle (ROI 5) and slower transport to the
+posterior ventricle (ROI 6) is also the case for the geometry with a shrunk middle ventricle.
+Additionally, for this configuration the transport upstream the flow fields towards the
+ventral-posterior region of the middle ventricle (ROI 3) is slowed down.
 For the mesh where all three ventricles are modified,
-we observe higher retention of solute in the middle ventricles (ROIs 2--4).
-Both the anterior and the posterior ventricles (ROIs 5 and 6) have a lower mean concentration,
-compared to the results for the original geometry.
+we observe higher retention of solute in the middle ventricle (ROIs 2--4),
+while both the anterior and the posterior ventricles (ROIs 5 and 6) have lower concentration.
+Altogether our results identify that the geometry and width of the ventricular ducts matter
+for solute transport and may explain why we observed larger differences
+in the cilia-deficient model than in the experimental data in
+\Cref{fig:figure4_compare_control_mutant}, which have different duct diameters.
 
 \lyng{HH: Quantify differences in terms of percentage changes in the final mean concentration values, maybe with a bar plot?}
 \begin{figure}[H]
@@ -737,7 +741,8 @@ compared to the results for the original geometry.
 %%--------------------------------------%%
 
 \section*{Discussion}
-We have presented a computational model of cerebrospinal fluid (CSF) flow in brain ventricles of 2 days post-fertilization (2dpf) zebrafish embryo. By imposing tangential stresses and normal traction on the CSF flow, the simulated flow fields had similar features to the flow fields observed experimentally, consisting of vortex-structured flow and pulsatile flow. The CSF flow was used to model transport of a solute by an advection-diffusion equation. Qualitatively, simulations compared well to experiments of Dendra2 fluorescent protein photoconversion. Transport in cilia-mutant fish (\emph{schmalhans} mutants) and a CSF model without cilia, was compared to control experiments and the baseline CSF model, indicating a local effect of cilia motion on protein transport. Using the computational model of flow and transport, we further studied region-specific removal of cilia and ventricles geometry modification, and how these changes affected transport.
+We have presented a computational model of cerebrospinal fluid (CSF) flow in brain ventricles of 2 days post-fertilization (2dpf) zebrafish embryo.
+By imposing tangential traction and normal pressure on the CSF flow, the simulated flow fields had similar features to the flow fields observed experimentally, consisting of vortex-structured flow and pulsatile flow. The CSF flow was used to model transport of a solute by an advection-diffusion equation. Qualitatively, simulations compared well to experiments of Dendra2 fluorescent protein photoconversion. Transport in cilia-mutant fish (\emph{schmalhans} mutants) and a CSF model without cilia, was compared to control experiments and the baseline CSF model, indicating a local effect of cilia motion on protein transport. Using the computational model of flow and transport, we further studied region-specific removal of cilia and ventricles geometry modification, and how these changes affected transport.
 
 \subsection*{The roles of diffusion and advection in transport of photoconverted proteins}
 We quantified transport in terms of fluorescence intensity change $\Delta F$ (experiments) and mean concentration $\cbar$ (simulations) as functions of time. For both measures, we observed that transport dynamics in the middle ventricle where Dendra2 fluorescent protein was photoconverted contrasted with the dynamics of the more distal regions of the anterior and posterior ventricles. In experiments, regions distal to the photoconversion site showed an approximately linear increase in $\Delta F$, probably because advection is absent in the transport to the distal regions, such that diffusion is the sole mode of transport. In regions proximal to photoconversion, advection and diffusion occur simultaneously due to the presence of cilia, leading to concave profiles for $\Delta F$. The convex diffusion-only behavior was observed in the mean concentration $\cbar_6$ profile of the posterior ventricle in the simulations, but $\cbar_5$ was concave for the anterior ventricle, opposed to the experimental results \lyng{HH: \emph{Is this the correct interpretation of convex vs. concave curves?} Include some referencing to textbook solutions of the diffusion and advection equations to explain this convex vs. concave? E.g. semi-infinite slab or boundary layer solutions to inflow/outflow problem.}. Based on the geometry modification study, the reason for this difference in behavior might be that the duct between the anterior and middle ventricle is inflated in our computational mesh, as a result of the dye-injection performed before imaging~\lyng{Cite this?}. This inflation allows for effective cilia-mediated advection from the middle ventricle to the anterior ventricle.
