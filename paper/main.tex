@@ -30,6 +30,9 @@
 \newcommand{\crefrangeconjunction}{--} % Change crefrange from "to" to dashed
 
 %% Some new commands
+% Math
+\newcommand{\cbar}{\overline{c}}
+
 % Partial derivatives
 \newcommand{\pdifft}[1]{\frac{\partial  #1}{\partial t}}
 \newcommand{\pdiffx}[1]{\frac{\partial #1}{\partial x}}
@@ -348,10 +351,10 @@ and use the resulting velocity field in transport simulations.
 \subsection*{Quantities of interest}
 We calculate the mean solute concentrations
 \begin{equation}
-    \overline{c}_i(t) = \frac{1}{|\Omega_i|}\int_{\Omega_i} c(\xx, t)\,\dx,
+    \cbar_i(t) = \frac{1}{|\Omega_i|}\int_{\Omega_i} c(\xx, t)\,\dx,
     \label{eq:c_mean_i}
 \end{equation}
-in the six regions of interest (ROIs) $\Omega_i$ ($i = 1, \dots, 6$) as functions of time, where $|\Omega_i|$ is the volume of the domain $\Omega_i$. The dynamics of ROI 1 follows directly from~\eqref{eq:injection_curve}. In addition, we report time-to-threshold: the time $\hat{t}_i$ when the mean concentration $\overline{c}_i$ first exceed a threshold value $\hat{c}_i$. We use $\hat{c}_i=0.25$ for ROI 1--4 and $\hat{c}_i=0.10$ for ROI 5--6.
+in the six regions of interest (ROIs) $\Omega_i$ ($i = 1, \dots, 6$) as functions of time, where $|\Omega_i|$ is the volume of the domain $\Omega_i$. The dynamics of ROI 1 follows directly from~\eqref{eq:injection_curve}. In addition, we report time-to-threshold: the time $\hat{t}_i$ when the mean concentration $\cbar_i$ first exceed a threshold value $\hat{c}_i$. We use $\hat{c}_i=0.25$ for ROI 1--4 and $\hat{c}_i=0.10$ for ROI 5--6.
 
 To evaluate the relative importance of advection and diffusion as transport mechanisms, we consider the Péclet number
 \begin{equation*}
@@ -571,72 +574,123 @@ to regions distal to the photoconversion site (\Cref{fig:fig2}\fixme{z}).
     \mer{MER: I think you should show on the same color scale here in a) (the range of values lets you and then it is possible to compare). Split a into a, b, c. Show e) first (so that e) becomes a)}.
     \textbf{a.} Slices in the $xz$-plane ($y=0.140$ mm, the center of the geometry) showing the concentration field simulated with diffusion coefficients $D_1$, $D_2$ and $D_3$ for three time instants $t=45.0$ s, $t=112.6$ s, $t=450.5$ s.
     Note that the colorbars indicating the magnitude of $c$ have different limits for each column.
-    \textbf{b--d.} Mean concentration $\overline{c}$ in each region of interest (ROI) as function of time for diffusion coefficient $D_1$, $D_2$ and $D_3$, respectively.
+    \textbf{b--d.} Mean concentration $\cbar$ in each region of interest (ROI) as function of time for diffusion coefficient $D_1$, $D_2$ and $D_3$, respectively.
     \textbf{e.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs.
-    \textbf{f.} The time $\hat{t}$ before the mean concentration $\overline{c}$ exceeds a threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup.
+    \textbf{f.} The time $\hat{t}$ before the mean concentration $\cbar$ exceeds a threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup.
     Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}
     \label{fig:fig2}
 \end{figure}
 
 \mer{MER: Stopped here with the editing (except commenting out), assuming that Nathalie had something to say about the next paragraph.}
 
-Transport of solute is quantified by the profile of the mean concentrations $\overline{c}_i(t)$ in the regions of interest (ROIs) $\Omega_i$ as functions of time~(\Cref{fig:fig2}b--d).
+Transport of solute is quantified by the profile of the mean concentrations $\cbar_i(t)$ in the regions of interest (ROIs) $\Omega_i$ as functions of time~(\Cref{fig:fig2}b--d).
 An illustration of the ROIs is provided in \Cref{fig:fig2}e. The dynamics of ROI 1 follow from imposing~\Cref{eq:injection_curve}.
 For ROIs 2--6, we observe more rapid concentration increases when the diffusion coefficient increases. 
 For all three diffusion coefficients, the dynamics of ROI 6 is the slowest.
 Region 5 exhibits a more rapid increase in mean concentration, and an even faster increase is observed for ROIs 2--4.
 The profiles of the latter three regions are similar, displaying only small differences in all of the three plots.
-\lyng{HH: Add some quantification in terms of percentages, e.g. final values of $\overline{c}_i$ for the different $D_i$?}
+\lyng{HH: Add some quantification in terms of percentages, e.g. final values of $\cbar_i$ for the different $D_i$?}
 In region 6, the threshold is never exceeded for $D_1$, with the mean concentration close to zero at the end of the simulation. 
 To quantify the balance of advection versus diffusion as transport mehcanisms on a global scale, we calculate the Péclet numbers $\mathrm{Pe}_1=519$, $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and $D_3$, respectively.
 Since $\mathrm{Pe}>1$, this indicates that advection is the dominant transport mechanism for the molecules considered.
  
-\subsection*{Comparing experimental and computational results}
-Transport of photoconverted proteins is quantified by the change in fluorescence intensity $\Delta F=(F(t)-F_0)/F_0$ over time~(\Cref{fig:figure3_compare_exp_and_sim_control}a).
-The solid lines are the mean values of $\Delta F$ for the fish cohort, with shaded regions covering one standard deviation.
-The first region of interest (ROI 1) is the laser-targeted region. Qualitatively, the fluorescence intensity change in this region resembles intensity dynamics observed in experiments that studied the photoconversion properties of Dendra2 fluorescent proteins~\cite{Makarov2014Steady-stateDendra2}. The transport to the other regions can be separated into two groups: the fluorescence intensity change $\Delta F$ for ROIs 2--4 in the middle ventricle are all similar, whereas the more distal regions ROI 5 and 6 (anterior and posterior ventricle, respectively) exhibit a slower increase in $\Delta F$. In ROIs 2--4, the $\Delta F$ curves are concave, similar to ROI 1, while in ROIs 5 and 6 the curves are convex. Although the fluorescence intensity increases throughout all of the experiments, the maximum $\Delta F$ is not necessarily attained at the final time of the experiments. At the final time, the mean fluorescence intensities in regions 2--4 all exceed 0.60 (0.63, 0.71, 0.67, respectively) of the final value $F_0$ in ROI 1, whereas ROIs 5 and 6 reach mean values of 0.29 and 0.18, respectively.
+\subsection*{Validation of the simulations with experimental data}
+To validate our computational model, we performed photoconversion experiments in transgenic zebrafish larvae expressing a secreted Dendra2 in their brain ventricles.
+Our photoconversion protocol consisted of the acquisition of a baseline, before localized exposure to a UV laser (at the ROI 1 location)
+that converts Dendra2 from a green to a red emitting fluorescent protein. 
+To quantify the transport of photoconverted proteins, we measured and calculated the change in fluorescence intensity $\Delta F = (F(t)-F_0)/F_0$
+over time (\Cref{fig:figure3_compare_exp_and_sim_control}a, $F_0$ being the average fluorescence at baseline). 
 
+We obtained very similar kinetics curves (\Cref{fig:figure3_compare_exp_and_sim_control}a, b)
+and time-to-threshold values (\Cref{fig:figure3_compare_exp_and_sim_control}c, d) when comparing our
+experiments (\Cref{fig:figure3_compare_exp_and_sim_control}a, c) with
+simulation (\Cref{fig:figure3_compare_exp_and_sim_control}b, d).
+Importantly, since the initial condition of the simulation is a mean concentration of zero,
+the mean concentration $\cbar$ can be interpreted as the change in mean concentration and is thus a similar metric to $\Delta F$.
+The final values of $\cbar$ were 0.76, 0.72, 0.82, 0.56 and 0.35 respectively,
+compared to 0.63, 0.71, 0.67, 0.29 and 0.18 for $\Delta F$.
+Notwithstanding similarities, we observed small differences between the experiments and simulation.
+For instance, transport dynamics in ROIs 2--6 were faster in the simulation and reached higher final values.
+Moreover, the $\cbar$ profiles of ROIs 3--4 were opposite order in the simulations as compared to the experiments.
+Despite observing small differences, the \emph{in vivo} experiments and
+simulations were similar enough to convincingly validate the model.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
+    \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F$ over time in each region of interest (ROI)
+    observed during experiments of photoconversion of Dendra2 proteins in ROI 1.
+    \textbf{b.} Mean concentration $\cbar$ as function of time in each ROI in a simulation of Dendra2 protein transport with
+    the diffusion coefficient $D_3$.
+    \textbf{c.} Time to $\Delta F$ reaches a threshold value of 0.25 in one representative zebrafish larva.
+    Time to $\cbar$ reaches a threshold value of 0.25 for a transport simulation with diffusion coefficient $D_3$.
+    We have excluded the posterior-most regions of the geometries,
+    because the values of $\Delta F$ and $\cbar$ never exceeded the threshold value of 0.25 in these regions.}
+    \label{fig:figure3_compare_exp_and_sim_control}
+\end{figure}
 % Final Delta F values
 %0.6322650156762044 ROI 2
 %0.7059449124175479 ROI 3
 %0.6694500367160006 ROI 4
 %0.28986700094045437 ROI 5
 %0.18155055624229066 ROI 6
-
-The experiment of photoconverting Dendra2 was simulated by solving the advection-diffusion equation with the diffusion coefficient $D_3$. We quantify the simulated transport with the time evolution of mean concentrations $\overline{c}$~(\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{b}). Imposing the concentration in ROI 1 mimics the fluorescence intensity change $\Delta F$ in ROI 1. Since the initial condition of the simulation is a mean concentration of zero, the mean concentration $\overline{c}$ can be interpreted as the change in mean concentration and is thus a similar metric to $\Delta F$.
-
-Comparing the simulation results with experimental results, transport dynamics of regions 2--6 are faster in the simulation. We observe higher final values of $\overline{c}$ compared to the final values of $\Delta F$ in the experiments. In simulations, the three $\overline{c}$ profiles of ROIs 2--4 behave similar as the $\Delta F$ profiles in these regions, although the orders of ROI 3 and 4 are opposite in the simulations as compared to the experiments. For all regions, the maximum mean concentration is attained at the final time of the simulations. The final value of $\overline{c}$ in regions 2--4 were 0.76, 0.72 and 0.82, respectively, compared to 0.63, 0.71 and 0.67 for $\Delta F$. As in the experiments, the transport to regions 5 and 6 is slower than the transport to the middle ventricle sites, though the final values of $\overline{c}$ are higher than those of $\Delta F$. The anterior ventricle (region 5) has a final $\overline{c}$ value of 0.56 (final $\Delta F= 0.29$), while in the posterior ventricle (region 6) the final value is 0.35 (final $\Delta F= 0.18$). Qualitatively, the $\overline{c}$ profile in the posterior ventricle compares with $\Delta F$ in this region, displaying a convex curve that has an approximately linear increase after an initial nonlinear increase. The anterior ventricle (region 5), on other hand, has an S-shaped $\overline{c}$ curve in the simulations, which differs from the linear $\Delta F$ curve in the experiments. 
 % Final mean c values ROIs 2-6: 0.7637806  0.72025859 0.81903216 0.56204164 0.34926411
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
-    \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F$ over time in each region of interest (ROI) observed during experiments of photoconversion of Dendra2 proteins in ROI 1. \textbf{b.} Mean concentration $\overline{c}$ as function of time in each ROI in a simulation of Dendra2 protein transport with the diffusion coefficient $D_3$. \textbf{c.} Time to $\Delta F$ reaches a threshold value of 0.25 in one of the animals of the dataset presented in panel \textbf{a}. \textbf{d.} Time to $\overline{c}$ reaches a threshold value of 0.25 for a transport simulation with diffusion coefficient $D_3$.}
-    \label{fig:figure3_compare_exp_and_sim_control}
-\end{figure}
-
-We qualitatively compared fluorescence intensities and mean concentrations with the time $\hat{t}$ to exceed a threshold value of 0.25~(\cref{fig:figure3_compare_exp_and_sim_control}, panels \textbf{c} and \textbf{d}). For $\Delta F$, we determined this time-to-threshold for the same downsampled dataset that was used to calculate $\Delta F$. In the simulations, we determined the time for $\overline{c}$ to reach the threshold value in each degree of freedom of the concentration finite element function. We have excluded the posterior-most regions of the geometries in~\cref{fig:figure3_compare_exp_and_sim_control}, because the values of $\Delta F$ and $c$ never exceeded the threshold value of 0.25 in these regions. 
 
 \subsection*{Absence of ciliary motion affects local protein distribution}
-We compare the time evolution of fluorescence intensity in control and \emph{schmalhans}~(\emph{smh}) mutant zebrafish, plotting the means of $\Delta F$ across the cohorts, shaded with one standard deviation regions~(\cref{fig:figure4_compare_control_mutant}, panel \textbf{a}). Additionally, we determine the time needed to reach a threshold fluorescent intensity change in each region of interest (ROI) for each fish~(\cref{fig:figure4_compare_control_mutant}, panel \textbf{b}). It is important to note that this threshold was set differently for two groups of regions: the $\Delta F$ threshold value was set to 0.25 for ROIs 1--4, whereas for ROIs 5 and 6 the threshold value was 0.10. This choice was made because of the slower dynamics of ROIs 5 and 6. For each region of interest, the individual data points of the times to threshold are presented together with the distributions and the means of the data points. Based on the times to reach a threshold value of $\Delta F$, we test the null hypothesis that the control and mutant photoconversion data are from the same population (or equivalently, have equal distributions). We report the $p$-value for this hypothesis calculated using a two-sided Mann-Whitney U test that included a continuity correction, with a confidence level of 95\%. 
+To assess the impact of cilia motion on solute distribution, we measured the movement of photoconverted Dendra2 signal
+in control and motile-cilia mutant zebrafish (\emph{schmalhans} (\emph{smh})).
+By plotting the means of $\Delta F$ (\Cref{fig:figure4_compare_control_mutant}a) and the time to threshold
+across the control and mutant cohorts (\Cref{fig:figure4_compare_control_mutant}b), we identified a significant
+difference in Dendra2 distribution in ROIs 2 and 4, but not in ROIs 3, 5, and 6. In ROIs 2 and 4,
+which measure Dendra2 distribution downstream of the photoconversion site,
+we observed a slower increase of fluorescence intensity,
+resulting in a $\sim 45\%$ higher mean time-to-threshold in the \emph{smh}
+mutant compared to controls (\Cref{fig:figure4_compare_control_mutant}b). 
 
-In ROI 2, there is a statistically significant slower fluorescence intensity increase in the \emph{smh} mutant fish compared to controls~(\cref{fig:figure4_compare_control_mutant}, panel~\textbf{b}). Compared to the control dataset, the mean time-to-threshold in ROI 2 is 45\% higher for the mutant dataset. In the other ROIs, the differences in the experimental results for controls and mutants are not significantly different. We observe that, both within the control and within the mutant dataset, there are considerable individual differences in the times to reach the threshold.
-
-To simulate protein transport in mutant fish, we used flow model II (only cardiac motion as flow mechanism, no cilia) to model the ciliary dysfunction of the \emph{smh} mutants. We visualize the time evolution of the mean concentration $\overline{c}$ in each ROI for both model II and the baseline model (model 0), in addition to a similar time-to-threshold $\hat{t}$ as computed for the experimental data~(\cref{fig:figure4_compare_control_mutant}, panel~\textbf{c}). As for the experiments, we use a threshold value of $0.25$ in regions 2--4 and a value of $0.10$ for regions 5 and 6 to calculate $\hat{t}$. For ROI 2, we observe the same dynamics in simulations as in experiments: there is a slower increase in mean concentration in ROI 2 compared to the baseline model. The difference is even greater for the simulations, with the time-to-threshold in ROI 2 for model II 90\% higher than for model 0. Additionally, ROIs 4 and 5 exhibit very different $\overline{c}$ profiles for the two different flow models. The difference is less significant for ROI 3, and for the posterior ventricle (region 6) the profiles are very similar. 
+Next, to identify whether our model would recapitulate these findings,
+we simulated protein transport by using the only-cardiac/no-cilia flow model 
+and compared it with the baseline model (both cilia and cardiac motion) (\Cref{fig:figure4_compare_control_mutant}c).
+Similar to our experiments, we observed slower dynamics in simulations for ROIs 2 and 4.
+Interestingly, the difference was even greater for the simulations,
+with the time-to-threshold in ROI 2 being 90\% higher in absence of cilia-mediated flow.
+Moreover, ROI 5 exhibits very different $\cbar$ profiles for the two configurations in our computational model,
+but not in our experimental data.
+Altogether, our findings identify that diffusion plays an important role for solute movement to regions upstream in the cilia flow fields or to distant ventricles.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
     \caption{\textbf{a.} Relative change in fluorescence intensity $F$ over time in each region of interest (ROI) for control (black lines) and \emph{smh} mutant (red lines) fish. 
-    \textbf{b.} Times when $\Delta F$ first exceeds a threshold value, equal to 0.25 (ROIs 2-4) or 0.10 (ROIs 5, 6), for control (gray dots) and \emph{smh} mutant (red dots) fish. The thick black lines denote mean values of the datasets, and $p$-values were calculated using a Mann-Whitney U test with a confidence level of 95\%.
-    \textbf{c.} Mean concentration $\overline{c}$ as function of time in each ROI, simulated using the baseline model (black lines) and the cardiac-only model (red lines). The horizontal gray lines mark the threshold value $\hat{c}$, and the time $\hat{t}$ when the threshold is first exceeded is reported in the plot legends. Note that in both panels \textbf{a} and \textbf{c}, the vertical axes have different limits in each plot.}
+    \textbf{b.} Times when $\Delta F$ first exceeds a threshold value, equal to 0.25 (ROIs 2-4) or 0.10 (ROIs 5, 6), for control (gray dots) and \emph{smh} mutant (red dots) fish.
+    The thick black lines denote mean values of the datasets, and $p$-values were calculated using a Mann-Whitney U test with a confidence level of 95\%.
+    \textbf{c.} Mean concentration $\cbar$ as function of time in each ROI, simulated using the baseline model (black lines) and the cardiac-only/no-cilia model (red lines).
+    The horizontal gray lines mark the threshold value $\hat{c}$, and the time $\hat{t}$ when the threshold is first exceeded is reported in the plot legends.
+    Note that in both panels \textbf{a} and \textbf{c}, the vertical axes have different limits in each plot.}
     \label{fig:figure4_compare_control_mutant}
 \end{figure}
 
-\subsection*{Loss of cilia can slow down transport}
-Considering removal of cilia in three different regions through modified flow boundary conditions, we simulate CSF flow modeled by the Stokes equations and use the resulting velocity field in transport simulations of Dendra2. The maximum velocity observed in the simulations when removing telencephalic, ventral diencephalic and dorsal diencephalic cilia were, respectively, 27.7 $\mu$m/s, 27.2 $\mu$m/s, and 8.0 $\mu$m/s. We remind the reader that the maximum velocity observed for the baseline model was 27.7 $\mu$m/s.
+\subsection*{Loss of cilia motility in specific subpopulation slows down transport}
+We previously identified three distinct ciliated cell lineages in the
+zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain}.
+To identify the role of these lineages on CSF transport, we modified flow boundary conditions
+in the three different ciliated regions (\Cref{fig:figure5_compare_cilia_modifications}a) and simulated
+CSF flow using the Stokes equations. We identified that the velocities were most strongly
+affected when removing cilia in the dorsal diencephalic cilia,
+as the maximum velocity dropped from 27.7 $\mu$m/s to 8.0 $\mu$m/s.
+In contrast, removing telencephalic and ventral diencephalic had minimalno to little impact and resulted in maximum velocities of 27.7 $\mu$m/s or 27.2 $\mu$m/s, respectively.
 
-Upon removal of telencephalic cilia, the evolution of the mean concentration $\overline{c}$ with time is essentially unaltered~(\cref{fig:figure5_compare_cilia_modifications}, panel \textbf{b}). Without ventral cilia in the diencephalic ventricle, $\overline{c}$ increases slightly slower in region of interest (ROI) 3 compared to the baseline model. Furthermore, there is a higher mean concentration in the anterior ventricle (ROI 5) and a lower mean concentration in the posterior ventricle (ROI 6) in the absence of ventral cilia when comparing to the baseline model, meaning more solute has spread towards the anterior ventricle and less solute has spread towards the posterior ventricle.
+With the resulting velocity fields, we simulated transport of Dendra2.
+Changes in the transport dynamics were most prominent when removing the dorsal cilia
+in the diencephalic ventricle, which produces the strongest flow at this developmental stage.
+All ROIs (except ROI 1, where we locally released solutes) exhibit significant changes
+in the dynamics of $\cbar$ (\Cref{fig:figure5_compare_cilia_modifications}b).
+Compared to the baseline model results, we observed a slower increase and lower final concentration
+in the middle and anterior ventricles (ROIs 2--5),
+and a faster transport to the posterior ventricle (ROI 6).
+In contrast, removal of telencephalic cilia did not alter the evolution of the
+mean concentration $\cbar$ with time (\Cref{fig:figure5_compare_cilia_modifications}b).
+Finally, without ventral cilia in the diencephalic ventricle,
+more solute has spread towards the anterior ventricle (ROI 5) and
+less solute has spread towards the posterior ventricle (ROI 6).
 
-Changes in the transport dynamics are most prominent when removing the dorsal cilia in the diencephalic ventricle. For this setup, all ROIs (except ROI 1, for which we impose the concentration dynamics) exhibit significant changes in the dynamics of $\overline{c}$. Compared to the baseline model results, there is a slower increase in, and lower final values of, the mean concentration in middle and anterior ventricles (ROIs 2--5). In contrast, the transport to the posterior ventricle (ROI 6) is more rapid upon removal of the dorsal diencephalic ventricle cilia. It is evident from the final values of $\overline{c}$ that there is less total mass added to the system in the absence of dorsal cilia. \lyng{HH:This is due to the lower velocities in the vicinity of ROI 1, resulting in less ability to carry away mass from the volume where the concentration is imposed. \emph{Is this correct?}}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
@@ -645,22 +699,36 @@ Changes in the transport dynamics are most prominent when removing the dorsal ci
 \end{figure}
 
 \subsection*{Modification of ventricles geometry impacts protein distribution}
+We simulate flow and transport in four alternative brain ventricles meshes:
+one where the connection between the anterior and middle ventricles is constricted;
+one where the connection between the middle and posterior ventricles is constricted;
+one where the middle ventricle is shrunk in the lateral direction;
+the combination of the above three modifications~(\Cref{fig:figure6_sim_results_compare_geometries}a).
+We simulate CSF flow in the modified geometries with the baseline flow model and use
+the resulting velocity field to simulate transport of Dendra2.
 
-The brain ventricular geometry varies significantly across zebrafish individuals, both healthy and sick animals. Motivated by an interest in how these variations can impact solute transport in the brain ventricles, we study the impact on simulation results when modifying the computational geometry and mesh in four different scenarios. Because our computational mesh is inflated by the dye-injection performed before image segmentation, we study four different mesh versions where we shrink: the fore-mid brain connection; the middle ventricle; the mid-hind brain connection; and all of the three above simultaneously. We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricles geometry.
-
-We simulate flow and transport in four alternative brain ventricles meshes: one where the connection between the anterior and middle ventricles is constricted; one where the connection between the middle and posterior ventricles is constricted; one where the middle ventricle is shrunk in the lateral direction; the combination of the above three modifications~(\cref{fig:figure6_sim_results_compare_geometries}, panel \textbf{a}). We simulate CSF flow in the modified geometries with the baseline flow model and use the resulting velocity field to simulate transport of Dendra2.
-
-Constricting the connection between the anterior and middle ventricle leads to slower transport to region of interest (ROI) 5 located in the anterior ventricle, and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the original geometry. On the other hand, constricting the connection between the middle and the posterior ventricle leads to less transport into the posterior ventricle (ROI 6), and slightly more transport towards the anterior ventricle (ROI 5). Faster transport to ROI 5 and slower transport to ROI 6 is also the case for the geometry with a shrunk middle ventricle. Additionally, for this configuration the transport towards the anterior region of the middle ventricle (ROI 3) is slowed down. For the mesh where all three ventricles are modified, we observe higher retention of solute in the middle ventricles (ROIs 2--4). Both the anterior and the posterior ventricles (ROIs 5 and 6) have a lower mean concentration, compared to the results for the original geometry.
+Constricting the connection between the anterior and middle ventricle leads to
+slower transport to region of interest (ROI) 5 located in the anterior ventricle,
+and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the original geometry.
+On the other hand, constricting the connection between the middle and the posterior ventricle
+leads to less transport into the posterior ventricle (ROI 6),
+and slightly more transport towards the anterior ventricle (ROI 5).
+Faster transport to ROI 5 and slower transport to ROI 6 is also
+the case for the geometry with a shrunk middle ventricle.
+Additionally, for this configuration the transport towards the anterior region of
+the middle ventricle (ROI 3) is slowed down.
+For the mesh where all three ventricles are modified,
+we observe higher retention of solute in the middle ventricles (ROIs 2--4).
+Both the anterior and the posterior ventricles (ROIs 5 and 6) have a lower mean concentration,
+compared to the results for the original geometry.
 
 \lyng{HH: Quantify differences in terms of percentage changes in the final mean concentration values, maybe with a bar plot?}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
-    \caption{Caption. \mk{MK: How do the different geometries compare in terms of volume, areas where cilia are active?} \lyng{HH: Good question, will add this information.}}
+    \caption{Caption. \mk{MK: How do the different geoemtries compare in terms of volume, areas where cilia are active?} \lyng{HH: Good question, will add this information.}}
     \label{fig:figure6_sim_results_compare_geometries}
 \end{figure}
-
-\cleardoublepage
 
 %%--------------------------------------%%
 %%--------------------------------------%%
@@ -672,13 +740,13 @@ Constricting the connection between the anterior and middle ventricle leads to s
 We have presented a computational model of cerebrospinal fluid (CSF) flow in brain ventricles of 2 days post-fertilization (2dpf) zebrafish embryo. By imposing tangential stresses and normal traction on the CSF flow, the simulated flow fields had similar features to the flow fields observed experimentally, consisting of vortex-structured flow and pulsatile flow. The CSF flow was used to model transport of a solute by an advection-diffusion equation. Qualitatively, simulations compared well to experiments of Dendra2 fluorescent protein photoconversion. Transport in cilia-mutant fish (\emph{schmalhans} mutants) and a CSF model without cilia, was compared to control experiments and the baseline CSF model, indicating a local effect of cilia motion on protein transport. Using the computational model of flow and transport, we further studied region-specific removal of cilia and ventricles geometry modification, and how these changes affected transport.
 
 \subsection*{The roles of diffusion and advection in transport of photoconverted proteins}
-We quantified transport in terms of fluorescence intensity change $\Delta F$ (experiments) and mean concentration $\overline{c}$ (simulations) as functions of time. For both measures, we observed that transport dynamics in the middle ventricle where Dendra2 fluorescent protein was photoconverted contrasted with the dynamics of the more distal regions of the anterior and posterior ventricles. In experiments, regions distal to the photoconversion site showed an approximately linear increase in $\Delta F$, probably because advection is absent in the transport to the distal regions, such that diffusion is the sole mode of transport. In regions proximal to photoconversion, advection and diffusion occur simultaneously due to the presence of cilia, leading to concave profiles for $\Delta F$. The convex diffusion-only behavior was observed in the mean concentration $\overline{c}_6$ profile of the posterior ventricle in the simulations, but $\overline{c}_5$ was concave for the anterior ventricle, opposed to the experimental results \lyng{HH: \emph{Is this the correct interpretation of convex vs. concave curves?} Include some referencing to textbook solutions of the diffusion and advection equations to explain this convex vs. concave? E.g. semi-infinite slab or boundary layer solutions to inflow/outflow problem.}. Based on the geometry modification study, the reason for this difference in behavior might be that the duct between the anterior and middle ventricle is inflated in our computational mesh, as a result of the dye-injection performed before imaging~\lyng{Cite this?}. This inflation allows for effective cilia-mediated advection from the middle ventricle to the anterior ventricle.
+We quantified transport in terms of fluorescence intensity change $\Delta F$ (experiments) and mean concentration $\cbar$ (simulations) as functions of time. For both measures, we observed that transport dynamics in the middle ventricle where Dendra2 fluorescent protein was photoconverted contrasted with the dynamics of the more distal regions of the anterior and posterior ventricles. In experiments, regions distal to the photoconversion site showed an approximately linear increase in $\Delta F$, probably because advection is absent in the transport to the distal regions, such that diffusion is the sole mode of transport. In regions proximal to photoconversion, advection and diffusion occur simultaneously due to the presence of cilia, leading to concave profiles for $\Delta F$. The convex diffusion-only behavior was observed in the mean concentration $\cbar_6$ profile of the posterior ventricle in the simulations, but $\cbar_5$ was concave for the anterior ventricle, opposed to the experimental results \lyng{HH: \emph{Is this the correct interpretation of convex vs. concave curves?} Include some referencing to textbook solutions of the diffusion and advection equations to explain this convex vs. concave? E.g. semi-infinite slab or boundary layer solutions to inflow/outflow problem.}. Based on the geometry modification study, the reason for this difference in behavior might be that the duct between the anterior and middle ventricle is inflated in our computational mesh, as a result of the dye-injection performed before imaging~\lyng{Cite this?}. This inflation allows for effective cilia-mediated advection from the middle ventricle to the anterior ventricle.
 
 In general, the mean concentration dynamics of the simulations was more rapid than the fluorescence intensity dynamics of the photoconversion experiments. This is strongly related to our definition of the photoconversion site (region of interest 1) in the simulations, and whether this corresponds well to the region used in experiments, because the volume of the photoconversion region used in the simulations determines the total amount of solute, and thus impacts the rate of transport. The alignment of the computational and experimental region of interest definition is hard to quantify. Additionally, a source of discrepancy in the results is the fact that the brain ventricles might be permeable, such that some Dendra2 diffuses out of the brain ventricles in the experiments. An assay has shown that the neuroepithelium lining the walls of brain ventricles in embryonic zebrafish 24 hours post-fertilization is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}. Dendra2 are almost 26 kDa in size~\cite{Gurskaya2006EngineeringLight}, and are thus under this reported limit. If such permeability also is the case for 2 days post-fertilization zebrafish embryo ventricles, this would lead to Dendra2 leaking out of the brain ventricles in the experiments, making the dynamics appear slower. 
 
-Transport of Dendra2 fluorescent protein appears to be a balance of advection and diffusion. Advection is the strongest transport mechanism on a global scale (global Péclet number 7.4), but for shorter distances diffusion is balancing out advection. Simulating transport of larger molecules (thus with smaller diffusion coefficients) proved advection to be increasingly important as molecule size increased. For the smallest diffusion coefficient used, $D_1$, which represented 200 nm exosomes, there was essentially zero solute in the posterior ventricle at the final simulation time (around 850 s). This is consistent with the statement above that transport to the posterior ventricle from the middle ventricle is driven by diffusion, based on estimated transport times of diffusion and advection: For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance $L=200$ $\mu$m from the middle to the posterior ventricle is approximately 24500 s. Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same distance would happen on a timescale of the order of $t_a=L/\overline{U}=141$ s. Comparing this with the minuscule values of $\overline{c}_6$ after simulating transport with $D_1$ for 850 s, one can conclude that if advection played a role in transporting solute from the photoconversion site in the middle ventricle to the posterior ventricle, values of $\overline{c}_6$ would be higher than those observed.
+Transport of Dendra2 fluorescent protein appears to be a balance of advection and diffusion. Advection is the strongest transport mechanism on a global scale (global Péclet number 7.4), but for shorter distances diffusion is balancing out advection. Simulating transport of larger molecules (thus with smaller diffusion coefficients) proved advection to be increasingly important as molecule size increased. For the smallest diffusion coefficient used, $D_1$, which represented 200 nm exosomes, there was essentially zero solute in the posterior ventricle at the final simulation time (around 850 s). This is consistent with the statement above that transport to the posterior ventricle from the middle ventricle is driven by diffusion, based on estimated transport times of diffusion and advection: For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance $L=200$ $\mu$m from the middle to the posterior ventricle is approximately 24500 s. Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same distance would happen on a timescale of the order of $t_a=L/\overline{U}=141$ s. Comparing this with the minuscule values of $\cbar_6$ after simulating transport with $D_1$ for 850 s, one can conclude that if advection played a role in transporting solute from the photoconversion site in the middle ventricle to the posterior ventricle, values of $\cbar_6$ would be higher than those observed.
 
-The changes in the times to threshold when changing the diffusion coefficient are greatest for regions of interest (ROIs) 4--6, further indicating that, relative to advection, diffusion has a greater impact in these regions than compared to regions 1--3. In region of interest 2 (anterior, dorsal region of the middle ventricle), the time to threshold is lower for $D_2$ than $D_3$. This is probably a result of less solute diffusing away from ROI 1 for $D_2$ than for $D_3$, meaning that more solute can be transported by advection along the ciliated walls of the ventricles towards ROI 2. We also note that, for regions of interest 3 and 4, the order of the $\Delta F$ and $\overline{c}$ profiles are opposite. This could be related to the difference in the exact location of ROIs 3 and 4 in simulations and experiments, or due to cilia-advection being more prominent in the simulations (cf. the discussion on differences in transport to the anterior ventricle).
+The changes in the times to threshold when changing the diffusion coefficient are greatest for regions of interest (ROIs) 4--6, further indicating that, relative to advection, diffusion has a greater impact in these regions than compared to regions 1--3. In region of interest 2 (anterior, dorsal region of the middle ventricle), the time to threshold is lower for $D_2$ than $D_3$. This is probably a result of less solute diffusing away from ROI 1 for $D_2$ than for $D_3$, meaning that more solute can be transported by advection along the ciliated walls of the ventricles towards ROI 2. We also note that, for regions of interest 3 and 4, the order of the $\Delta F$ and $\cbar$ profiles are opposite. This could be related to the difference in the exact location of ROIs 3 and 4 in simulations and experiments, or due to cilia-advection being more prominent in the simulations (cf. the discussion on differences in transport to the anterior ventricle).
 
 \subsection*{Simulation studies: modifying cilia and geometry}
 We studied the impacts of removing cilia in specific regions of our model~(\cref{fig:figure5_compare_cilia_modifications}). Removing the dorsal cilia has a strong impact on the resulting CSF flow field and the mean solute concentration. Removing the dorsal cilia decreased the maximum velocity in the ventricles roughly by a factor of three from 27.7 $\mu$m/s to 8.0 $\mu$m/s. The impactful changes to the flow field is because the total force applied on the dorsal cilia boundary is great in magnitude in our model, and the dorsal cilia are thus important to establishing the CSF flow structures. With weaker flow in the dorsal region of the middle ventricle, there is less advective transport. \lyng{HH: Quantify the difference in force applied in the dorsal region: $\int_{c, dorsal}\btau\cdot\mathbf{t}\,\mathrm ds$.}
@@ -690,9 +758,9 @@ Absence of ventral cilia in the middle ventricle did not greatly impact flow dyn
 
 \lyng{HH: Discuss cilia serving as an "enhanced mixing factor" on small scales, refer to this~\cite{Siyahhan2014FlowVentricles} and this~\cite{Yoshida2022EffectVentricles} paper that studied this in human brain ventricles. Include a discussion of what happened when these papers removed cilia.}
 
-Modifying the ventricular geometry had varying impact on transport~(\cref{fig:figure6_sim_results_compare_geometries}). Both when (separately) shrinking the connection between the fore- and mid-brain and the mid- and hind-brain, we observe a slight increase in the mean concentration $\overline{c}$ of regions of interests 2--4. In regions 5 and 6, we observe a decrease in $\overline{c}$ in the region that we shrink the connection from the middle ventricle to. Meanwhile, the other region has an increase in $\overline{c}$, a result of mass conservation. When shrinking the middle ventricle, the mean concentration decreases in regions 2--4. The effect on $\overline{c}$ in regions 5 and 6 is similar to when the mid-hind connection is shrunk: less solute is transported towards the hind-brain and more solute is transported towards the fore-brain. 
+Modifying the ventricular geometry had varying impact on transport~(\cref{fig:figure6_sim_results_compare_geometries}). Both when (separately) shrinking the connection between the fore- and mid-brain and the mid- and hind-brain, we observe a slight increase in the mean concentration $\cbar$ of regions of interests 2--4. In regions 5 and 6, we observe a decrease in $\cbar$ in the region that we shrink the connection from the middle ventricle to. Meanwhile, the other region has an increase in $\cbar$, a result of mass conservation. When shrinking the middle ventricle, the mean concentration decreases in regions 2--4. The effect on $\cbar$ in regions 5 and 6 is similar to when the mid-hind connection is shrunk: less solute is transported towards the hind-brain and more solute is transported towards the fore-brain. 
 
-Combining all three geometry modifications, we see an increase in $\overline{c}$ in regions 2--4. Now, there is a decrease in both region 5 and 6, which is more similar to the experimental $\Delta F$ curves (\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{a}) in these regions compared to the simulated $\overline{c}$ on the standard geometry (\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{b}). This is in line with the expectation that shrinking the geometry is closer to replicating the geometries of the fish used in experiments, because the ventricular geometry is inflated by the injection procedure performed during image segmentation.
+Combining all three geometry modifications, we see an increase in $\cbar$ in regions 2--4. Now, there is a decrease in both region 5 and 6, which is more similar to the experimental $\Delta F$ curves (\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{a}) in these regions compared to the simulated $\cbar$ on the standard geometry (\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{b}). This is in line with the expectation that shrinking the geometry is closer to replicating the geometries of the fish used in experiments, because the ventricular geometry is inflated by the injection procedure performed during image segmentation.
 
 \subsection*{Computational model assumptions and boundary conditions}
 To model flow of cerebrospinal fluid, we employed slip boundary conditions at the ventricular walls, contrasting the classical choice of a noslip boundary condition. The use of slip boundary conditions is motivated by experimental observations of the flow field in zebrafish embryo brain ventricles~\cite{Olstad2019CiliaryDevelopment}. It has been observed that the fluid velocity increases towards the wall~(this is also evident in~\cref{fig:figure1}, panel~\textbf{c}). Using slip boundary conditions allows for this behavior. A couple of previous continuum model simulation studies of cilia-mediated flow~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal} have modeled cilia as body forces. We chose to model the cilia as a force exerted tangentially on the boundary. First, we deem this a good representation of the real nature of cilia, since they are in reality microscale structures confined to the ventricular walls that generate flow through collective motion. Second, it avoids the need of excessive mesh refinement near the ciliated boundaries in the case that a body force were to be applied in a $\sim$ 5 $\mu$m~\cite{Salman2022ComputationalEmbryo} deep cilia layer.
