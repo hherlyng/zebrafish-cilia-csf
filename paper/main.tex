@@ -186,8 +186,8 @@ Anesthetized 2 dpf control zebrafish were injected with 1 nl of a mixture contai
 
 Following injection, the zebrafish was directly placed under the confocal microscope and 1200 images were acquired at a frequency of 13.1 Hz. A single optical section was obtained. Particle tracking was done using TrackMate~\cite{Tinevez2017TrackMate:Tracking} in Fiji/ImageJ~\cite{Schindelin2012Fiji:Analysis} and plotted using MATLAB, as described by Jeong~\emph{et al.}~\cite{Jeong2022MeasurementTelencephalon}. The parameters for TrackMate were as follows. The DoG detector was used with the settings: threshold: 2.0, with median filtering; radius: 2.0, with subpixel localization. Next, the Simple LAP tracker was used with settings: max frame gap: 2; alternative linking cost factor: 1.05; linking max distance: 5.0; gap closing max distance: 2.0; splitting max distance: 15.0; allow gap closing: true; allow track splitting: false; allow track merging: false; merging max distance: 15.0; cutoff percentile: 0.9. Only the particle tracks with at least 30 data points, while simultaneously covering a distance of at least 8.8 $\mu$m, were shown (\cref{fig:figure1}, panels \textbf{b} and \textbf{c}).
 
-\subsection*{Image-based computational geometry of zebrafish brain ventricles}
-We generated a 3D representation of the brain ventricular walls using confocal imaging data of a zebrafish embryo injected intraventricularly with a 70 kDa dye at 2 dpf~\cite{Olstad2019CiliaryDevelopment}. From the imaging data, we constructed a computational mesh of the ventricles (\cref{fig:figure1}, panel \textbf{d}). The interior volume was meshed with fTetWild~\cite{Hu2020FastWild}. The standard mesh consisted of 132 134 tetrahedral cells and had a maximal (minimal) \mer{edge length} of 14.9 $\mu$m (4.68 $\mu$m). At 2 dpf, the ventricular system consists mainly of 3 cavities: the telencephalic  (anterior), the di-/mesencephalic  (middle) and the rhombencephalic (posterior) ventricles, which are connected by ducts. Parts of the ventricular surfaces were marked to be lined with motile cilia~\cite{Olstad2019CiliaryDevelopment} (\cref{fig:figure1}\textbf{d}, pink markers).
+\subsection*{Image-based computational geometries of zebrafish brain ventricles}
+We generated a 3D representation of the brain ventricular walls using confocal imaging data of a zebrafish embryo injected intraventricularly with a 70 kDa dye at 2 dpf~\cite{Olstad2019CiliaryDevelopment}. From the imaging data, we constructed a computational mesh of the ventricles (\cref{fig:figure1}, panel \textbf{d}). The interior volume was meshed with fTetWild~\cite{Hu2020FastWild}. The \emph{standard} mesh consisted of 132 134 tetrahedral cells and had a maximal (minimal) \mer{edge length} of 14.9 $\mu$m (4.68 $\mu$m). At 2 dpf, the ventricular system consists mainly of 3 cavities: the telencephalic  (anterior), the di-/mesencephalic  (middle) and the rhombencephalic (posterior) ventricles, which are connected by ducts. Parts of the ventricular surfaces were marked to be lined with motile cilia~\cite{Olstad2019CiliaryDevelopment} (\cref{fig:figure1}\textbf{d}, pink markers).
 \mer{MER: @HH: Check if you mean edge length or mesh cell size here.}
 \begin{figure}%[hbt!]
     \centering
@@ -196,14 +196,23 @@ We generated a 3D representation of the brain ventricular walls using confocal i
     \label{fig:figure1}
 \end{figure}
 
+%\subsection*{Computational geometry variations}
+The morphology and geometry of the brain ventricles vary across zebrafish individuals, and under physiological and pathological conditions. Motivated by an interest in how geometry impacts solute distribution, we also consider four variations in the ventricular geometry: by shrinking the fore-mid brain connection, the middle ventricle, the mid-hind brain connection, and all three simultaneously. We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricles geometry. \mer{MER: More specifics (i.e.~1 sentence and/or inserted info) here on how much these were shrunk and how.}
+
+%% The brain ventricular geometry varies significantly across zebrafish individuals, both healthy and sick animals. Motivated by an interest in how these variations can impact solute transport in the brain ventricles, we study the impact on simulation results when modifying the computational geometry and mesh in four different scenarios. Because our computational mesh is inflated by the dye-injection performed before image segmentation, we study four different mesh versions where we shrink: the fore-mid brain connection; the middle ventricle; the mid-hind brain connection; and all of the three above simultaenously. We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricles geometry.
+
+
 
 \subsection*{Computational CSF dynamics}
 
 The beating motion of the cilia generates CSF flow with steady rotational structures~\cite{Olstad2019CiliaryDevelopment} within the brain ventricles (\cref{fig:figure1}, panels \textbf{a}--\textbf{c}). In addition, cardiac pulsations induces pulsatile CSF flow. We model this flow of CSF in the brain ventricles by the time-dependent, incompressible Stokes equations which read as follows. Find the CSF velocity $\uu = \uu(\xx, t) = (u_x(\xx, t), u_y(\xx, t), u_z(\xx, t))$ and the CSF pressure $p = p(\xx, t)$ for $\xx \in \Omega$ and time $t>0$, such that
 \begin{subequations}
     \begin{align}
-  \rho\pdifft{\uu} - \nabla \cdot \bsig &= \mathbf{0}\mbox{ in }\Omega,\label{eq:stokes_eq_mom}\\
-  \nabla \cdot \uu &= 0\mbox{ in }\Omega,
+      \rho \pdifft{\uu} - \nabla \cdot \bsig &= \mathbf{0}
+      \quad \text{in } \Omega,
+      \label{eq:stokes_eq_mom}\\
+      \nabla \cdot \uu &= 0
+      \quad  \text{in } \Omega,
   \end{align}
   \label{eq:stokes_eqs}% 
 \end{subequations}%
@@ -232,40 +241,81 @@ To drive a cardiac-induced pulsatile flow inside the brain ventricles, we set $\
 %% We then solve for the velocity $\mathbf{w} = \uu - \uuref$ in the moving reference frame, where $\uu$ is the velocity in the fixed reference frame. The amplitude $A_{\mathrm{ref}}=919$ $\mu$m/s, calibrated based on experimental data, determines the magnitude of the pulsatile flow, and $\omega=2\pi f$ is the angular cardiac frequency. In the ALE formulation, we consider the impermeability boundary condition $\mathbf{w}\cdot\nn=0$ in the normal direction and the free-slip boundary condition $\bsigpar(\mathbf{w}, p) = \mathbf{0}$ in the tangential direction.
 %% \fi
 
-\subsection*{Computational model of solute transport}
-We simulate transport of photoconverted proteins in the brain ventricles by modeling transport of a solute with concentration $c(\xx, t)$ for $\xx\in\Omega$ and time $t > 0$ by the advection-diffusion equation
+\subsection*{Computational model of solute transport after photoconversion}
+We simulate transport of photoconverted proteins within the brain ventricles by modeling transport of a solute with concentration $c(\xx, t)$ for $\xx\in\Omega$ and time $t > 0$ by the advection-diffusion equation
 \begin{equation}
-    \pdifft{c} + \nabla\cdot\JJ = 0\mbox{  in }\Omega,
+    \pdifft{c} + \nabla\cdot\JJ = 0 \quad \text{in } \Omega,
     \label{eq:adv_diff_strong}
 \end{equation}
-where $\mathbf{J}$ is the total concentration flux. The total concentration flux is assumed to consist of an advective flux and a diffusive flux:
+where the total concentration flux $\mathbf{J}$ is assumed to consist of an advective and a diffusive flux:
 \begin{equation*}
-    \JJ = c\uu - D\nabla c\mbox{ in }\Omega.
+    \JJ = c\uu - D\nabla c .
 \end{equation*}
-Here, $\uu$ is the cerebrospinal fluid velocity field, governed by the Stokes equations~\eqref{eq:stokes_eqs}, and $D$ is the molecular diffusion coefficient of the solute. The diffusion coefficient was estimated through extrapolation of previous measurements~\cite{GuraSadovsky2017MeasurementExpansion, Mahmood2023ExosomeTemperature, Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} via the Stokes-Einstein relation. We elaborate on the extrapolation in a later section.
+Here, $\uu$ is the cerebrospinal fluid velocity field, governed by the Stokes equations~\eqref{eq:stokes_eqs}, and $D$ is the molecular diffusion coefficient of the solute. Initially, we set $c(\xx, 0)=0$ for all $\xx\in\Omega$. The ventricular walls are assumed to be impermeable (admitting \emph{no flux} i.e.~$\JJ\cdot\nn=0$), except at the anterior/posterior boundary $\Gamma_p$. \fixme{There, we consider either prescribed \emph{influx} in the form of a time-periodic condition on the total flux $(\JJ\cdot\nn)|_{\mathrm{in}}^{n+1}=(\JJ\cdot\nn)|_{\mathrm{out}}^{n}$ and/or \emph{outflux} with zero diffusive flux $D\nabla c\cdot\nn=0$.}
+\mer{MER: Could we make this section about the boundary conditions easier to read? I've had a go at it, please check.}
 
-We set the initial condition $c(\xx, 0)=0$ for all $\xx\in\Omega$. The ventricular walls are assumed to be impermeable, except for at the pressure boundary $\Gamma_p$. We consider three different boundary conditions: (i) \emph{no flux} ($\JJ\cdot\nn=0$), (ii) \emph{influx} (time-periodic condition on the total flux $(\JJ\cdot\nn)|_{\mathrm{in}}^{n+1}=(\JJ\cdot\nn)|_{\mathrm{out}}^{n}$) and (iii) \emph{outflux} (zero diffusive flux $D\nabla c\cdot\nn=0$). Unless stated otherwise, the no-flux condition $\JJ\cdot\nn=0$ was applied on the boundary.
+\fixme{Additionally, when considering pulsatile motion, the in- and outflow on the pressure boundary $\Gp$ must be accounted for. We split $\Gp$ in two parts; $\Gin$ denotes the part of $\Gp$ where $\uu\cdot\nn < 0$; $\Gout$ denotes the part where $\uu\cdot\nn > 0$. On $\Gin$, a total flux boundary condition was set: the inflow flux at a given timestep was set equal to the outflow boundary flux at the previous timestep. This was done to approximate a periodic boundary condition. On $\Gout$, we considered the diffusive flux normal to the boundary to be zero.}
+\mer{MER: I moved this paragraph from the section below, because it seemed to belong here. But needs edits.} 
+
+%Unless stated otherwise, the no-flux condition $\JJ\cdot\nn=0$ was applied on the boundary.
 %(ii) \emph{injection site} (imposing the Dirichlet boundary condition $c=\Tilde{c}$),
-\subsection*{Modeling protein photoconversion in the brain ventricles}
-To represent protein photoconversion in a region $\Omega_{\mathrm{pc}}\subset\Omega$, we prescribe a time-dependent value to the solute concentration in $\Omega_{\mathrm{pc}}$, such that $c(\xx, t)$ for all $\xx\in\Omega_{\mathrm{pc}}$ and $t>0$. The subdomain $\Omega_{\mathrm{pc}}$ is a region in the dorsal part of the diencephalic ventricle that corresponds to the region where photoconversion was performed in experiments. Specifically, for all $\xx\in\Omega_{\mathrm{pc}}$, we set the concentration to 
+
+%\subsection*{Modeling protein photoconversion}
+
+To computationally represent protein photoconversion in a region $\Omega_{\mathrm{pc}} \subset \Omega$ (corresponding to ROI 1), we prescribe a given time-dependent value to the solute concentration in this region. 
+% in $\Omega_{\mathrm{pc}}$.
+%, such that $c(\xx, t)$ for all $\xx\in\Omega_{\mathrm{pc}}$ and $t>0$.
+Mimicking the experimental protocol, we consider the dorsal part of the diencephalic ventricle as the subdomain $\Omega_{\mathrm{pc}}$, and set
 \begin{equation}
-c(\xx, t)=\frac{\log{(1+t/a)}}{\log{(1+T/a)}}.
+  c(\xx, t)=\frac{\log{(1+t/a)}}{\log{(1+T/a)}}
+  \qquad \xx \in \Omega_{\mathrm{pc}}, \quad \fixme{t > 0}.
 \label{eq:injection_curve}
 \end{equation}
-The value $a=65$ was chosen so that~\eqref{eq:injection_curve} is similar to the fluorescence intensity curve observed in the physical photoconversion experiments.
-
-
-Additionally, when considering pulsatile motion, the in- and outflow on the pressure boundary $\Gp$ must be accounted for. We split $\Gp$ in two parts; $\Gin$ denotes the part of $\Gp$ where $\uu\cdot\nn < 0$; $\Gout$ denotes the part where $\uu\cdot\nn > 0$. On $\Gin$, a total flux boundary condition was set: the inflow flux at a given timestep was set equal to the outflow boundary flux at the previous timestep. This was done to approximate a periodic boundary condition. On $\Gout$, we considered the diffusive flux normal to the boundary to be zero. 
+The value $a=65$ was chosen to fit the fluorescence intensity curve observed in the physical photoconversion experiments.
 
 %To represent the solute injection at $\Ginj$ (cf.~\cref{fig:injection_sites}), we impose a constant Dirichlet boundary condition $c=\Tilde{c}$. Additionally, when considering pulsatile motion, the in- and outflow on the pressure boundary $\Gp$ must be accounted for. We split $\Gp$ in two parts; $\Gin$ denotes the part of $\Gp$ where $\uu\cdot\nn < 0$; $\Gout$ denotes the part where $\uu\cdot\nn > 0$. On $\Gin$, a total flux boundary condition was set: the inflow flux at a given timestep was set equal to the outflow boundary flux at the previous timestep. This was done to approximate a periodic boundary condition. On $\Gout$, we considered the diffusive flux normal to the boundary to be zero. 
 %\lyng{MOVE? Following previous works~\cite{papanastasiou1992new, griffiths1997no, lynch2020numerical}, the advective flux $c\uu$ on $\Gout$ was left as an unknown in the variational form.}
 
-\subsection*{Physical parameters}\label{subsec:parameters}
-The cerebrospinal fluid density $\rho$ and dynamic viscosity $\mu$ were set following the work of Bloomfield \textit{et al.}~\cite{Bloomfield1998EffectsFluid}~(\cref{tab:parameter_table}). We considered a range of small, medium and large molecules with three different diffusion coefficients $D_1, D_2$ and $D_3$ (cf. the following section for details on determining their values). Experimental data~\cite{Olstad2019CiliaryDevelopment} indicate velocities proximate to the ventricular walls of $27.4 \pm 5.4 \ \mu$m/s and $2.6 \pm 0.6 \ \mu$m/s in the dorsal and ventral regions of the diencephalic ventricle, respectively. In the telencephalic ventricle, the velocities were estimated at $4.7 \pm 1.3 \ \mu$m/s. We calibrated $\tau$ and $A$ heuristically by comparing these experimental velocity values with the simulated, maximum velocity magnitude. In addition, particle tracking data of pulsatile motion~(\cref{sec:appC_particle_transport}) was used in the calibration process to determine the relative contributions of the cardiac pulsations, as compared to the cilia-driven flow, to the velocity magnitude.
+\subsection*{Estimation of diffusion coefficients via the Stokes-Einstein relation}
+%\label{subsec:diff_coeffs}
+
+Motivated by an interest in molecules that are significant in neural development, we study the transport of molecules resembling Dendra2 Fluorescent Protein (Dendra2), Starmaker+Green Fluorescent Protein (STM+GFP) and Exosomes. To estimate the diffusion coefficients of these, when and if not available in the literature, we use the Stokes--Einstein relation:
+\begin{equation}
+    D = \frac{k_B T}{6\pi \mu R} ,
+    \label{eq:D_stokes_einstein}
+\end{equation}
+which is an expression for the diffusion coefficient of a spherical molecule suspended in a viscous fluid~\cite{Einstein1905UberTeilchen}. In~\eqref{eq:D_stokes_einstein}, $k_B = \num{1.38e-23}$ J/K is the Boltzmann constant, $T = 310$ K is the absolute temperature, $\mu$ is the dynamic viscosity of the solvent (in this case the CSF), and $R$ is the radius of the molecule. For the exosomes, we calculate $D$ using~\eqref{eq:D_stokes_einstein} with $R=200$ nm. This radius covers the slowest diffusing exosomes, since the smaller exosomes would have diffusion coefficients similar to the other molecules. For STM+GFP, we estimated the diffusion coefficient by extrapolating the experimentally observed diffusion coefficient of GFP~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells}, assuming that if $D$ scales with $1/R$ according to~\eqref{eq:D_stokes_einstein}, $D$ would scale with the cube root of the molecule mass~\cite{Goodhill1997DiffusionGuidance}. The resulting diffusion coefficients used in the simulations are summarized in \cref{tab:parameter_table}.
+
+%% In summary, in the simulations, we use the diffusion coefficients $D_1$, $D_2$ and $D_3$ (\cref{tab:parameter_table}) for these three molecules
+
+%Implicit in this approach is the assumption that the proteins all have the same density.
+
+%% The molecular diffusion coefficients were estimated in part based on values reported in the literature, and in part via extrapolation with the Stokes--Einstein relation (\cref{tab:diff_coeff_table}). The Stokes-Einstein relation
 \begin{table}[h!]
     \centering
-    \caption{Physical parameters of the flow and transport models. (*) Calibrated based on experimental data~\cite{Olstad2019CiliaryDevelopment}. (\textdagger) Estimated based on experimental data~\cite{GuraSadovsky2017MeasurementExpansion, Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells}.}
-    \label{tab:parameter_table}
+    \label{tab:diff_coeff_table}
+    \begin{tabular}{l|ccc}
+        \toprule
+        Molecule & Mass [kDa] & $D \ [\mathrm{m^2/s}]$ & Reference \\ 
+        \midrule 
+        Dendra2 Fluorescent Protein & 25.6~\cite{Gurskaya2006EngineeringLight} & $\num{1.15e-10}$  & \cite{GuraSadovsky2017MeasurementExpansion}\\
+        GFP (saline aqueous solution) & 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
+        STM+GFP & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{5.75e-11}$ & * \\
+        Exosomes (radius of 200 nm) & -- & $\num{1.63e-12}$ & \textdagger \\
+        \bottomrule
+    \end{tabular}
+    \caption{Molecular mass and diffusion coefficients of simulated solutes. STM and GFP denote Starmaker Protein and Green Fluorescent Protein, respectively. (*) The value was extrapolated based on the value of $D$ for GFP reported in the literature~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells}, assuming that $D$ scales with the cube root of the molecule mass. (\textdagger) The value was estimated using the Stokes-Einstein relation~\eqref{eq:D_stokes_einstein}.}
+\end{table}
+
+%% The diffusion coefficient was estimated through extrapolation of previous measurements~\cite{GuraSadovsky2017MeasurementExpansion, Mahmood2023ExosomeTemperature, Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} via the Stokes-Einstein relation
+
+\subsection*{Physical parameters}
+%\label{subsec:parameters}
+The cerebrospinal fluid density $\rho$ and dynamic viscosity $\mu$ were set following Bloomfield \textit{et al.}~\cite{Bloomfield1998EffectsFluid}~(\cref{tab:parameter_table}). We considered small, medium and large-sized molecules by three different diffusion coefficients $D_1, D_2$ and $D_3$ (\Cref{tab:parameter_table}). Experimental data~\cite{Olstad2019CiliaryDevelopment} indicate \fixme{velocities} proximate to the ventricular walls of $27.4 \pm 5.4$ \textmu m/s and $2.6 \pm 0.6$ \textmu m/s in the dorsal and ventral regions of the diencephalic ventricle, respectively. In the telencephalic ventricle, the velocities were estimated at $4.7 \pm 1.3$ \textmu m/s. We calibrated $\tau$ and $A$ heuristically by comparing these experimental velocity values with the simulated, maximum velocity magnitude. In addition, particle tracking data of pulsatile motion~(\cref{sec:appC_particle_transport}) was used in the calibration process to determine the relative contributions of the cardiac pulsations, as compared to the cilia-driven flow, to the velocity magnitude.
+\mer{MER: What velocities? Net velocities? Velocity magnitude aka speed? Also, haven't you said this part about the experimental data already? Either place the details there, or all here. I suggest there.}
+\mer{MER: I suggest you move the parts relevant for cilia/cardiac flow to where you mentioned it first, and then merge this section with the Estimation of diffusion .... Just refer to \cref{tab:parameter_table}. Actually, unsure if you need it. You say everything in the text or in the other Table right?}
+\begin{table}[h!]
+    \centering
     \begin{tabular}{lcccc}
     \toprule
         Parameter & Symbol & Value & Unit & Reference \\
@@ -282,63 +332,45 @@ The cerebrospinal fluid density $\rho$ and dynamic viscosity $\mu$ were set foll
         Dendra2 diffusion coefficient  & $D_3$ & $\num{1.15e-10}$ & $\mathrm{m^2/s}$ & \textdagger\\
     \bottomrule
     \end{tabular}
+    \caption{Physical parameters of the flow and transport models. (*) Calibrated based on experimental data~\cite{Olstad2019CiliaryDevelopment}. (\textdagger) Estimated based on experimental data~\cite{GuraSadovsky2017MeasurementExpansion, Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells}.}
+    \label{tab:parameter_table}
 \end{table}
 
-\subsection*{Estimation of diffusion coefficients with the Stokes-Einstein relation}\label{subsec:diff_coeffs}
-Motivated by an interest in molecules that are significant in neural development, we study the transport of molecules resembling Dendra2 Fluorescent Protein (Dendra2), Starmaker+Green Fluorescent Protein (STM+GFP) and Exosomes. In simulations, we use the diffusion coefficients $D_1$, $D_2$ and $D_3$ (\cref{tab:parameter_table}) for these three molecules, respectively. The molecular diffusion coefficients were estimated in part based on values reported in the literature, and in part via extrapolation with the Stokes--Einstein relation (\cref{tab:diff_coeff_table}). The Stokes-Einstein relation
-\begin{equation}
-    D = \frac{k_B T}{6\pi \mu R}
-    \label{eq:D_stokes_einstein}
-\end{equation}
-is an expression for the diffusion coefficient of a spherical molecule suspended in a viscous fluid~\cite{Einstein1905UberTeilchen}. In~\eqref{eq:D_stokes_einstein}, $k_B = \num{1.38e-23}$ J/K is the Boltzmann constant, $T = 310$ K is the absolute temperature, $\mu$ is the dynamic viscosity of the solvent (in this case the cerebrospinal fluid), and $R$ is the radius of the molecule. For the exosomes, we calculate $D$ using~\eqref{eq:D_stokes_einstein} with $R=200$ nm. We chose this radius to cover the slowest diffusing exosomes, since the smaller exosomes would have diffusion coefficients similar to the other molecules. For STM+GFP, we estimated the diffusion coefficient by extrapolating the experimentally observed diffusion coefficient of GFP~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells}, assuming that if $D$ scales with $1/R$ according to~\eqref{eq:D_stokes_einstein}, $D$ should scale roughly with the cube root of the molecule mass~\cite{Goodhill1997DiffusionGuidance}. Implicit in this approach is the assumption that the proteins all have the same density.
-\begin{table}[h!]
-    \centering
-    \caption{Estimated diffusion coefficients and diffusion coefficients reported in the literature. STM and GFP denote Starmaker Protein and Green Fluorescent Protein, respectively.  (*) The value was extrapolated based on the value of $D$ for GFP reported in the literature~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells}, assuming that $D$ scales with the cube root of the molecule mass. (\textdagger) The value was estimated using the Stokes-Einstein relation~\eqref{eq:D_stokes_einstein}.}
-    \label{tab:diff_coeff_table}
-    \begin{tabular}{l|ccc}
-        \toprule
-        Molecule & Mass [kDa] & $D \ [\mathrm{m^2/s}]$ & Reference \\ 
-        \midrule 
-        Dendra2 Fluorescent Protein & 25.6~\cite{Gurskaya2006EngineeringLight} & $\num{1.15e-10}$  & \cite{GuraSadovsky2017MeasurementExpansion}\\
-        GFP (saline aqueous solution) & 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
-        STM+GFP & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{5.75e-11}$ & * \\
-        Exosomes (radius of 200 nm) & -- & $\num{1.63e-12}$ & \textdagger \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-\subsection*{Model versions and physiological scenarios}\label{subsec:model_versions}
-We have introduced boundary conditions to model two separate driving forces of cerebrospinal fluid (CSF) flow, namely motile cilia and cardiac pulsations. To distinguish the impact of each component, three different setups for the flow model were considered~(\cref{tab:flow_model_versions}): 
+\subsection*{Computational flow scenarios}
+%\label{subsec:model_versions}
+To study the impact of the motile cilia and the cardiac pulsations on the CSF flow, we consider the following computational flow scenarios, each predicting a CSF flow velocity $\uu$ and CSF pressure $p$.
 \begin{itemize}
-    \item Model 0: The baseline model representing a wild-type zebrafish. Both cilia forces and cardiac pulsations are included in the model.
+    \item A \emph{baseline} flow model representing a wild-type zebrafish including contributions both from the cilia forces and the cardiac pulsations. In this scenario, we apply the tangential traction $\btau$ on the cilia boundary $\Gc$ and prescribe the normal pressure $\Tilde{p}$ on the anterior/posterior boundary $\Gp$. % Model 0
 
-    \item Model I: Only cilia forces are modeled, no cardiac pulsations.
+    \item A \emph{no-cardiac/cilia-only} flow model including contributions from the cilia forces but no cardiac pulsations. Here, we apply the tangential traction $\btau$ on the cilia boundary $\Gc$, and \mer{XXX on the anterior/posterior boundary $\Gp$.} % Model I
 
-    \item Model II: Only cardiac pulsations are modeled, no cilia forces.
+    \item A \emph{no-cilia/cardiac-only} flow model including contributions from the cardiac pulstaions but no cilia forces. Here, we set the tangential traction to zero on the cilia boundary $\Gc$, while prescribing the normal pressure $\Tilde{p}$ on the anterior/posterior boundary $\Gp$.  % Model II
+    %\item Model II: Only cardiac pulsations are modeled, no cilia forces.
 
     %\item Model IIb: Only cardiac pulsations are modeled, using the domain movement approach. No cilia forces.
 \end{itemize}
-\begin{table}[h!]
-    \centering
-    \caption{A summary of the flow model versions. For all model versions, we consider a free slip boundary condition on $\Gs=\Gamma\setminus\left(\Gc\cup\Gp\right)$.}
-    \label{tab:flow_model_versions}
-    \begin{tabular}{c|c@{\hskip 0.4in}c}
-       \toprule
-       Model & Driving force & Flow BCs \\ %& Domain motion \\
-       \midrule
-       Baseline (0)   & Cilia and cardiac & \makecell[l]{Impermeability $\uu\cdot\nn=0$ and tangential traction $\bsigpar=\btau$ on $\Gc$, \\ normal pressure $\Tilde{p}(t)$ on $\Gp$} \\[0.3in] %& No\\[0.3in]
-       No cardiac (I) & Cilia   & \makecell[l]{Impermeability $\uu\cdot\nn=0$ and tangential traction $\bsigpar=\btau$ on $\Gc$} \\[0.3in]%& No\\[0.3in]
-       No cilia (II) & Cardiac & \makecell[c]{Normal pressure $\Tilde{p}(t)$ on $\Gp$} \\% & No\\[0.3in]
-       %No cilia (IIb) & Cardiac & \makecell[l]{Impermeability $\mathbf{w}\cdot\nn=0$ and \\ free slip $\bsigpar(\mathbf{w}, p)=\mathbf{0}$ on $\Gamma$}  & Yes \\
-       \bottomrule
-    \end{tabular}
-\end{table}
 
+%% \begin{table}[h!]
+%%     \centering
+%%     \caption{A summary of the flow model versions. For all model versions, we consider a free slip boundary condition on $\Gs=\Gamma\setminus\left(\Gc\cup\Gp\right)$.}
+%%     \label{tab:flow_model_versions}
+%%     \begin{tabular}{c|c@{\hskip 0.4in}c}
+%%        \toprule
+%%        Model & Driving force & Flow BCs \\ %& Domain motion \\
+%%        \midrule
+%%        Baseline (0)   & Cilia and cardiac & \makecell[l]{Impermeability $\uu\cdot\nn=0$ and tangential traction $\bsigpar=\btau$ on $\Gc$, \\ normal pressure $\Tilde{p}(t)$ on $\Gp$} \\[0.3in] %& No\\[0.3in]
+%%        No cardiac (I) & Cilia   & \makecell[l]{Impermeability $\uu\cdot\nn=0$ and tangential traction $\bsigpar=\btau$ on $\Gc$} \\[0.3in]%& No\\[0.3in]
+%%        No cilia (II) & Cardiac & \makecell[c]{Normal pressure $\Tilde{p}(t)$ on $\Gp$} \\% & No\\[0.3in]
+%%        %No cilia (IIb) & Cardiac & \makecell[l]{Impermeability $\mathbf{w}\cdot\nn=0$ and \\ free slip $\bsigpar(\mathbf{w}, p)=\mathbf{0}$ on $\Gamma$}  & Yes \\
+%%        \bottomrule
+%%     \end{tabular}
+%% \end{table}
+
+\mer{MER: Let's discuss the paragraphs below and see where they fit best.}
 When simulating transport of solute in the ventricles, we consider the same six different regions of interest that were considered in the photoconversion experiments. In region number one (the photoconversion region), we use the function~\eqref{eq:injection_curve} to enforce the concentration such that it represents the experimental data of photoconversion of proteins. We consider the three different diffusion coefficients introduced in previous sections to simulate and compare results for transport of molecules of varying sizes.
 
 To simulate transport in the pathological case of region-specific cilia absence, we consider three scenarios where we modify the boundary conditions of the CSF flow model. The cilia tangential stress boundary condition for the boundary where we remove cilia is changed to a free-slip boundary condition, prescribing zero tangential forces to represent absence of cilia motion in the region where we consider cilia removal. We consider removal of cilia in the three separate cilia-covered regions of the telencephalic (anterior) ventricle, the dorsal part of the diencephalic (middle) ventricle, and the ventral part of the diencephalic ventricle~(\cref{fig:figure1}, panel~\textbf{d}). For the three scenarios, we simulate CSF flow modeled by the Stokes equations~\eqref{eq:stokes_eqs} with the modified boundary conditions, and use the resulting velocity field in transport simulations.
 
-The brain ventricular geometry varies significantly across zebrafish individuals, both healthy and sick animals. Motivated by an interest in how these variations can impact solute transport in the brain ventricles, we study the impact on simulation results when modifying the computational geometry and mesh in four different scenarios. Because our computational mesh is inflated by the dye-injection performed before image segmentation, we study four different mesh versions where we shrink: the fore-mid brain connection; the middle ventricle; the mid-hind brain connection; and all of the three above simultaenously. We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricles geometry.
 
 \subsection*{Quantities of interest}
 We quantify the transport of solute by calculating the mean concentrations
@@ -463,6 +495,9 @@ Changes in the transport dynamics are most prominent when removing the dorsal ci
 \end{figure}
 
 \subsection*{Modification of ventricles geometry impacts protein distribution}
+
+The brain ventricular geometry varies significantly across zebrafish individuals, both healthy and sick animals. Motivated by an interest in how these variations can impact solute transport in the brain ventricles, we study the impact on simulation results when modifying the computational geometry and mesh in four different scenarios. Because our computational mesh is inflated by the dye-injection performed before image segmentation, we study four different mesh versions where we shrink: the fore-mid brain connection; the middle ventricle; the mid-hind brain connection; and all of the three above simultaenously. We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricles geometry.
+
 We simulate flow and transport in four alternative brain ventricles meshes: one where the connection between the anterior and middle ventricles is constricted; one where the connection between the middle and posterior ventricles is constricted; one where the middle ventricle is shrunk in the lateral direction; the combination of the above three modifications~(\cref{fig:figure6_sim_results_compare_geometries}, panel \textbf{a}). We simulate CSF flow in the modified geometries with the baseline flow model and use the resulting velocity field to simulate transport of Dendra2.
 
 Constricting the connection between the anterior and middle ventricle leads to slower transport to region of interest (ROI) 5 located in the anterior ventricle, and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the original geometry. On the other hand, constricting the connection between the middle and the posterior ventricle leads to less transport into the posterior ventricle (ROI 6), and slightly more transport towards the anterior ventricle (ROI 5). Faster transport to ROI 5 and slower transport to ROI 6 is also the case for the geometry with a shrunk middle ventricle. Additionally, for this configuration the transport towards the anterior region of the middle ventricle (ROI 3) is slowed down. For the mesh where all three ventricles are modified, we observe higher retention of solute in the middle ventricles (ROIs 2--4). Both the anterior and the posterior ventricles (ROIs 5 and 6) have a lower mean concentration, compared to the results for the original geometry.
