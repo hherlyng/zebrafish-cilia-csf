@@ -311,7 +311,7 @@ which is an expression for the diffusion coefficient of a spherical molecule sus
 
 \subsection*{Physical parameters}
 %\label{subsec:parameters}
-The CSF density $\rho$ and dynamic viscosity $\mu$ were set following Bloomfield \textit{et al.}~\cite{Bloomfield1998EffectsFluid}~(\cref{tab:parameter_table}). We considered small, medium and large-sized molecules by three different diffusion coefficients $D_1, D_2$ and $D_3$ (\Cref{tab:parameter_table}). Experimental data~\cite{Olstad2019CiliaryDevelopment} indicate \fixme{velocities} proximate to the ventricular walls of $27.4 \pm 5.4$ \textmu m/s and $2.6 \pm 0.6$ \textmu m/s in the dorsal and ventral regions of the diencephalic ventricle, respectively. In the telencephalic ventricle, the velocities were estimated at $4.7 \pm 1.3$ \textmu m/s. We calibrated $\tau$ and $A$ heuristically by comparing these experimental velocity values with the simulated, maximum velocity magnitude. In addition, particle tracking data of pulsatile motion~(\cref{sec:appC_particle_transport}) was used in the calibration process to determine the relative contributions of the cardiac pulsations, as compared to the cilia-driven flow, to the velocity magnitude.
+The CSF density $\rho$ and dynamic viscosity $\mu$ were set following Bloomfield \textit{et al.}~\cite{Bloomfield1998EffectsFluid}~(\cref{tab:parameter_table}). We considered large, medium and small-sized molecules by three different diffusion coefficients $D_1, D_2$ and $D_3$ (\Cref{tab:parameter_table}). Experimental data~\cite{Olstad2019CiliaryDevelopment} indicate \fixme{velocities} proximate to the ventricular walls of $27.4 \pm 5.4$ \textmu m/s and $2.6 \pm 0.6$ \textmu m/s in the dorsal and ventral regions of the diencephalic ventricle, respectively. In the telencephalic ventricle, the velocities were estimated at $4.7 \pm 1.3$ \textmu m/s. We calibrated $\tau$ and $A$ heuristically by comparing these experimental velocity values with the simulated, maximum velocity magnitude. In addition, particle tracking data of pulsatile motion~(\cref{sec:appC_particle_transport}) was used in the calibration process to determine the relative contributions of the cardiac pulsations, as compared to the cilia-driven flow, to the velocity magnitude.
 \mer{MER: What velocities? Net velocities? Velocity magnitude aka speed? Also, haven't you said this part about the experimental data already? Either place the details there, or all here. I suggest there.}
 \mer{MER: I suggest you move the parts relevant for cilia/cardiac flow to where you mentioned it first, and then merge this section with the Estimation of diffusion .... Just refer to \cref{tab:parameter_table}. Actually, unsure if you need it. You say everything in the text or in the other Table right?}
 \begin{table}[h!]
@@ -384,7 +384,13 @@ To evaluate the relative importance of advection and diffusion as transport mech
 \begin{equation*}
     \mathrm{Pe} = \frac{\mathrm{diffusion \ timescale}}{\mathrm{advection \ timescale}} = \frac{t_d}{t_a} = \frac{L_p^2/D}{L_p/U_p} = \frac{L_p U_p}{D}.
 \end{equation*}
-Here, $L_p$ and $U_p$ are characteristic length and velocity scales, respectively, and $D$ is the solute diffusion coefficient. To assess the assumption that the CSF flow is governed by the Stokes equations, we also compute the Reynolds number
+Here, $L_p$ and $U_p$ are characteristic length and velocity scales, respectively, and $D$ is the solute diffusion coefficient. \fixme{Thus, if $\mathrm{Pe} > 1$, transport is dominated by advection, and if $\mathrm{Pe} < 1$ transport is dominated by diffusion. As a length scale $L_p$, we choose the approximate length of the ventricles geometry in the $x$-direction, $L_p=600$ \textmu m. We use a mean velocity $\overline{U}$ as the characteristic velocity $U_p$. The mean velocity $\overline{U}$ is calculated by first averaging the velocity in space:
+\begin{equation*}
+    \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
+\end{equation*}
+and then averaging $\overline{u}$ in time over one cardiac cycle.}
+
+To assess the assumption that the CSF flow is governed by the Stokes equations, we also compute the Reynolds number
 \begin{equation*}
     \mathrm{Re} = \frac{\mathrm{inertial \ forces}}{\mathrm{viscous \ forces}} = \frac{\rho U_r L_r}{\mu},
 \end{equation*}
@@ -404,12 +410,12 @@ The advection-diffusion equation~\eqref{eq:adv_diff_strong} is discretized with 
 \subsection*{Solution strategy and software implementation}
 Because of the one-way coupling between the velocity field $\uu$ and the concentration $c$, the governing equations for the CSF flow and the concentration can be solved sequentially when modeling solute transport. \fixme{For the no-cardiac/cilia-only flow scenario, the velocity quickly reaches steady-state.} In this case, we first solve the \fixme{steady-state} Stokes equations~\eqref{eq:stokes_eqs} for $\uu$ and $p$, and then use the velocity field $\uu$ as input when solving the advection-diffusion equation~\eqref{eq:adv_diff_strong}. For the other flow scenarios, the Stokes equations are solved for one period of the pulsatile cardiac motion. The solution of this one period is then used periodically as input for the advection-diffusion equation.
 
-The numerical solution schemes for the Stokes equations and the advection-diffusion equation were implemented and solved numerically with DOLFINx, the Python interface of the finite element software FEniCSx~\cite{TheFEniCSProject2024FEniCSxDocumentation}, with petsc4py~\cite{Dalcin2011ParallelPython} as linear algebra backend. A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the linear systems resulting from the discretized Stokes equations. For the discretized advection-diffusion equation, we used an iterative linear solver based on GMRES~\cite{Saad1986GMRES:Systems} with block Jacobi preconditioning~\cite{Jacobi1845UeberGleichungen}. Numerical experiments verified the accuracy of the model implementation (\cref{sec:appB_verification}). This simulation software is openly available~\cite{zenodo-link-to-all-code}. 
+The numerical solution schemes for the Stokes equations and the advection-diffusion equation were implemented and solved numerically with DOLFINx, the Python interface of the finite element software FEniCSx~\cite{TheFEniCSProject2024FEniCSxDocumentation}, with petsc4py~\cite{Dalcin2011ParallelPython} as linear algebra backend. A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the linear systems resulting from the discretized Stokes equations. For the discretized advection-diffusion equation, we used an iterative linear solver based on GMRES~\cite{Saad1986GMRES:Systems} with block Jacobi preconditioning~\cite{Jacobi1845UeberGleichungen}. Numerical experiments verified the accuracy of the model implementation (\cref{sec:appB_verification}). The simulation code is openly available~\cite{zenodo-link-to-all-code}. 
 
 %%--------------RESULTS--------------%%
 \section*{Results}\label{sec:results}
 
-\subsection*{Cilia induces flow compartmentalization within the brain ventricles}
+\subsection*{Motile cilia induce flow compartmentalization within the brain ventricles}
 
 \mer{One sentence on why? - what do we not know - what do we try to
   find out?} To characterize CSF flow patterns predicted by
@@ -455,31 +461,59 @@ system.
 %% motion.
 
 \subsection*{Ventricular solute transport is advection-dominated for small molecules}
-To qualitatively analyze protein transport, we compare the solute concentration fields from simulation of photoconversion in a dorsal region of the middle ventricle. We simulate transport using the three diffusion coefficients $D_1$, $D_2$ and $D_3$, and present concentration fields in a slice of the ventricles geometry for each diffusion coefficient at three time instants~(\cref{fig:figure2_compare_diffusion_coefficients}, panel~\textbf{a}). The slices are taken in the $xz$-plane, which aligns with the rostrocaudal axis, at $y=140$ $\mu$m, the center of the geometry. Note that the colorbars colored by the value of the concentration $c$ are different for each column (corresponding to the choice of $D$). Upper limits of the colorbars are the maximum value of $c$ in the respective slice at $t=450.5$ s, for the respective $D$. 
-
-Overall, transport occurs more rapidly with increasing diffusion coefficient. For the smallest diffusion coefficient $D_1$ (representing exosomes), advective transport by the cilia-driven cerebrospinal fluid flow dominates diffusion in the distribution of solute concentration~(\cref{fig:figure2_compare_diffusion_coefficients}, panel~\textbf{a}, left column). The rotational flow structures of the velocity field are apparent in the concentration field, indicating that transport along the streamlines of the flow field is more rapid than the diffusion across the streamlines. Diffusive transport becomes more rapid with increasing diffusion coefficient, and the flow structures of the cerebrospinal fluid flow become more obfuscated. This is evident in the concentration fields calculated with the medium ($D_2$, representing STM+GFP) and high ($D_3$, representing Dendra2) diffusion coefficients (\cref{fig:figure2_compare_diffusion_coefficients}, panel \textbf{a}, middle and right column). Compared to the $D_1$ case, for $D_2$ and $D_3$ solute spreads more uniformly throughout the ventricular geometry. Also, for $D_2$ and $D_3$, the solute spreads more quickly to regions distal to the photoconversion site. 
-\begin{figure}[H]
+We next ask what is the impact of these CSF flow patterns and
+magnitudes on solute transport generally within the brain ventricles?
+To address this question, we simulate the distribution and evolution
+of different solutes subject to photoconversion within a region of
+interest in the dorsal region of the middle ventricle (ROI 1)
+(\Cref{fig:fig2}\fixme{e/x}). In particular, we consider the spread of
+a solute concentration with a given molecular diffusion coefficient,
+corresponding to Exosomes ($D_1 = 1.63 \times 10^{-12}$ m$^2$/s),
+STM+GFP ($D_2 = 5.75 \times 10^{-11}$ m$^2$/s), and Dendra2 ($D_3 =
+1.15 \times 10^{-10}$ m$^2$/s). As expected, transport occurs more
+rapidly with increasing diffusion coefficient. Interestingly, the
+distribution patterns differ between the different-characteristics
+solutes. For the smallest diffusion coefficient, representing
+Exosomes, the advection induced by the CSF flow dominates diffusion
+(\Cref{fig:fig2}a). The vortex structures of the velocity field
+carries over into the concentration field, indicating that transport
+along the streamlines is more rapid than the diffusion across the
+streamlines. The balance between diffusion and advection shifts with
+increasing diffusion coefficients, the CSF flow structures become more
+obfuscated, and the solute spreads more uniformly throughout the
+ventricular geometry (\Cref{fig:fig2}\fixme{x-y}). Interestingly, the
+smaller solutes with higher diffusion coefficients spread more quickly
+to regions distal to the photoconversion site (\Cref{fig:fig2}\fixme{z}).
+\begin{figure}%[H]
     \centering
     \includegraphics[width=0.95\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
-    \caption{\textbf{a.} Slices in the $xz$-plane ($y=0.140$ mm, the center of the geometry) showing the concentration field simulated with diffusion coefficients $D_1$, $D_2$ and $D_3$ for three time instants $t=45.0$ s, $t=112.6$ s, $t=450.5$ s. Note that the colorbars indicating the magnitude of $c$ have different limits for each column. \textbf{b--d.} Mean concentration $\overline{c}$ in each region of interest (ROI) as function of time for diffusion coefficient $D_1$, $D_2$ and $D_3$, respectively. \textbf{e.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs. \textbf{f.} The time $\hat{t}$ before the mean concentration $\overline{c}$ exceeds a threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup. Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}
-    \label{fig:figure2_compare_diffusion_coefficients}
+    \caption{Simulated distribution and evolution after photoconversion of Dendra ($D_1$), STM+GFP ($D_2$) and Exosomes ($D_3$). \mer{MER: I think you should show on the same color scale here in a) (the range of values lets you and then it is possible to compare). Split a into a, b, c. Show e) first (so that e) becomes a)}. \textbf{a.} Slices in the $xz$-plane ($y=0.140$ mm, the center of the geometry) showing the concentration field simulated with diffusion coefficients $D_1$, $D_2$ and $D_3$ for three time instants $t=45.0$ s, $t=112.6$ s, $t=450.5$ s. Note that the colorbars indicating the magnitude of $c$ have different limits for each column. \textbf{b--d.} Mean concentration $\overline{c}$ in each region of interest (ROI) as function of time for diffusion coefficient $D_1$, $D_2$ and $D_3$, respectively. \textbf{e.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs. \textbf{f.} The time $\hat{t}$ before the mean concentration $\overline{c}$ exceeds a threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup. Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}
+    \label{fig:fig2}
 \end{figure}
 
-Transport of solute is quantified by the profile of the mean concentrations $\overline{c}_i(t)$ in the regions of interest (ROIs) $\Omega_i$ as functions of time~(\cref{fig:figure2_compare_diffusion_coefficients}, panels \textbf{b--d}).  An illustration of the ROIs is provided in \cref{fig:figure2_compare_diffusion_coefficients}, panel~\textbf{e}. The dynamics of ROI 1 follow from imposing~\cref{eq:injection_curve}. For ROIs 2--6, we observe more rapid concentration increases when the diffusion coefficient increases.  For all three diffusion coefficients, the dynamics of ROI 6 is the slowest. Region 5 exhibits a more rapid increase in mean concentration, and an even faster increase is observed for ROIs 2--4. The profiles of the latter three regions are similar, displaying only small differences in all of the three plots. \lyng{HH: Add some quantification in terms of percentages, e.g. final values of $\overline{c}_i$ for the different $D_i$?}
+\mer{MER: Stopped here with the editing (except commenting out), assuming that Nathalie had something to say about the next paragraph.}
+
+Transport of solute is quantified by the profile of the mean concentrations $\overline{c}_i(t)$ in the regions of interest (ROIs) $\Omega_i$ as functions of time~(\cref{fig:fig2}, panels \textbf{b--d}).  An illustration of the ROIs is provided in \cref{fig:fig2}, panel~\textbf{e}. The dynamics of ROI 1 follow from imposing~\cref{eq:injection_curve}. For ROIs 2--6, we observe more rapid concentration increases when the diffusion coefficient increases.  For all three diffusion coefficients, the dynamics of ROI 6 is the slowest. Region 5 exhibits a more rapid increase in mean concentration, and an even faster increase is observed for ROIs 2--4. The profiles of the latter three regions are similar, displaying only small differences in all of the three plots. \lyng{HH: Add some quantification in terms of percentages, e.g. final values of $\overline{c}_i$ for the different $D_i$?}
 %\lyng{HH: is this really true?: Note that the total mass added to the system is not exactly the same for all three diffusion coefficients, since the total mass added depends on how fast the mass added in ROI 1 is transported away from that region.} 
+%
+%
+%\mer{MER: This belongs in Methods (and is written there) or does not need to be stated.}
+%% We report the times $\hat{t}$ when the mean concentrations $\overline{c}_i$ first exceed a threshold value $\hat{c}$~(\cref{fig:fig2}, panel \textbf{f}). Recall that $\hat{c}=0.25$ for regions of interest 1--4 and $\hat{c}=0.10$ for regions 5 and 6. The choice of different threshold values is because of the slower dynamics in ROIs 5 and 6. 
+In region 6, the threshold is never exceeded for $D_1$, with the mean concentration close to zero at the end of the simulation. 
 
-We report the times $\hat{t}$ when the mean concentrations $\overline{c}_i$ first exceed a threshold value $\hat{c}$~(\cref{fig:figure2_compare_diffusion_coefficients}, panel \textbf{f}). Recall that $\hat{c}=0.25$ for regions of interest 1--4 and $\hat{c}=0.10$ for regions 5 and 6. The choice of different threshold values is because of the slower dynamics in ROIs 5 and 6. In region 6, the threshold is never exceeded for $D_1$, with the mean concentration close to zero at the end of the simulation. 
-
-Finally, we calculate Péclet numbers for the entire ventricular geometry using estimates of the diffusion and advection timescales $t_d=L_p^2/D$ and $t_a=L_p/U_p$. Recall that
-\begin{equation*}
-    \mathrm{Pe} = \frac{\mathrm{diffusion \ timescale}}{\mathrm{advection \ timescale}} = \frac{t_d}{t_a},
-\end{equation*}
-so that if $\mathrm{Pe} > 1$, transport is dominated by advection, and if $\mathrm{Pe} < 1$ transport is dominated by diffusion. For the length scale $L_p$ we choose the approximate length of the ventricles geometry in the $x$-direction, $L_p=600 \ \mu$m. We use a mean velocity $\overline{U}$ as the characteristic velocity $U_p$. The mean velocity $\overline{U}$ is calculated by first averaging the velocity in space:
-\begin{equation*}
-    \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
-\end{equation*}
-and then averaging $\overline{u}$ in time over one cardiac cycle to obtain $\overline{U}=1.41 \ \mu$m/s. This yields the three Péclet numbers $\mathrm{Pe}_1=519$, $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and $D_3$, respectively. \lyng{HH: move choice of length scale/calculation of velocity scale to Methods? Same question for Reynolds number calculation.} 
-
+%% \mer{Moved this to Methods.}
+%% Finally, we calculate Péclet numbers for the entire ventricular geometry using estimates of the diffusion and advection timescales $t_d=L_p^2/D$ and $t_a=L_p/U_p$.
+%% Recall that
+%% \begin{equation*}
+%%     \mathrm{Pe} = \frac{\mathrm{diffusion \ timescale}}{\mathrm{advection \ timescale}} = \frac{t_d}{t_a},
+%% \end{equation*}
+%% so that if $\mathrm{Pe} > 1$, transport is dominated by advection, and if $\mathrm{Pe} < 1$ transport is dominated by diffusion. For the length scale $L_p$ we choose the approximate length of the ventricles geometry in the $x$-direction, $L_p=600 \ \mu$m. We use a mean velocity $\overline{U}$ as the characteristic velocity $U_p$. The mean velocity $\overline{U}$ is calculated by first averaging the velocity in space:
+%% \begin{equation*}
+%%     \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
+%% \end{equation*}
+%% and then averaging $\overline{u}$ in time over one cardiac cycle to obtain $\overline{U}=1.41 \ \mu$m/s.
+This yields the three Péclet numbers $\mathrm{Pe}_1=519$, $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and $D_3$, respectively. \lyng{HH: move choice of length scale/calculation of velocity scale to Methods? Same question for Reynolds number calculation.} \mer{MER: Yes, definitely.}
+ 
 \subsection*{Comparing experimental and computational results}
 Transport of photoconverted proteins is quantified by the change in fluorescence intensity $\Delta F=(F(t)-F_0)/F_0$ over time~(\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{a}). The solid lines are the mean values of $\Delta F$ for the fish cohort, with shaded regions covering one standard deviation. The first region of interest (ROI 1) is the laser-targeted region. Qualitatively, the fluorescence intensity change in this region resembles intensity dynamics observed in experiments that studied the photoconversion properties of Dendra2 fluorescent proteins~\cite{Makarov2014Steady-stateDendra2}. The transport to the other regions can be separated into two groups: the fluorescence intensity change $\Delta F$ for ROIs 2--4 in the middle ventricle are all similar, whereas the more distal regions ROI 5 and 6 (anterior and posterior ventricle, respectively) exhibit a slower increase in $\Delta F$. In ROIs 2--4, the $\Delta F$ curves are concave, similar to ROI 1, while in ROIs 5 and 6 the curves are convex. Although the fluorescence intensity increases throughout all of the experiments, the maximum $\Delta F$ is not necessarily attained at the final time of the experiments. At the final time, the mean fluorescence intensities in regions 2--4 all exceed 0.60 (0.63, 0.71, 0.67, respectively) of the final value $F_0$ in ROI 1, whereas ROIs 5 and 6 reach mean values of 0.29 and 0.18, respectively.
 
@@ -570,7 +604,7 @@ The changes in the times to threshold when changing the diffusion coefficient ar
 \subsection*{Simulation studies: modifying cilia and geometry}
 We studied the impacts of removing cilia in specific regions of our model~(\cref{fig:figure5_compare_cilia_modifications}). Removing the dorsal cilia has a strong impact on the resulting CSF flow field and the mean solute concentration. Removing the dorsal cilia decreased the maximum velocity in the ventricles roughly by a factor of three from 27.7 $\mu$m/s to 8.0 $\mu$m/s. The impactful changes to the flow field is because the total force applied on the dorsal cilia boundary is great in magnitude in our model, and the dorsal cilia are thus important to establishing the CSF flow structures. With weaker flow in the dorsal region of the middle ventricle, there is less advective transport. \lyng{HH: Quantify the difference in force applied in the dorsal region: $\int_{c, dorsal}\btau\cdot\mathbf{t}\,\mathrm ds$.}
 
-Absence of ventral cilia in the middle ventricle did not greatly impact flow dynamics and transport, but lead to slightly less transport towards the posterior ventricle, and slightly more transport towards the anterior ventricle. This is because the ventral cilia help induce flow towards the posterior ventricles. Removing the cilia in the anterior ventricle leaves the transport results virtually unaltered, although the CSF flow vortex structure in the anterior ventricle vanishes. This would then probably have a greater impact for smaller diffusion coefficients, as it is evident in~\cref{fig:figure2_compare_diffusion_coefficients} that transport with $D_1$ is mainly advective.
+Absence of ventral cilia in the middle ventricle did not greatly impact flow dynamics and transport, but lead to slightly less transport towards the posterior ventricle, and slightly more transport towards the anterior ventricle. This is because the ventral cilia help induce flow towards the posterior ventricles. Removing the cilia in the anterior ventricle leaves the transport results virtually unaltered, although the CSF flow vortex structure in the anterior ventricle vanishes. This would then probably have a greater impact for smaller diffusion coefficients, as it is evident in~\cref{fig:fig2} that transport with $D_1$ is mainly advective.
 
 \lyng{HH: Compare numerical results with transport results in Figure 7 in \cite{Olstad2019CiliaryDevelopment}.}
 
