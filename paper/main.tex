@@ -741,42 +741,192 @@ in the cilia-deficient model than in the experimental data in
 %%--------------------------------------%%
 
 \section*{Discussion}
-We have presented a computational model of cerebrospinal fluid (CSF) flow in brain ventricles of 2 days post-fertilization (2dpf) zebrafish embryo.
-By imposing tangential traction and normal pressure on the CSF flow, the simulated flow fields had similar features to the flow fields observed experimentally, consisting of vortex-structured flow and pulsatile flow. The CSF flow was used to model transport of a solute by an advection-diffusion equation. Qualitatively, simulations compared well to experiments of Dendra2 fluorescent protein photoconversion. Transport in cilia-mutant fish (\emph{schmalhans} mutants) and a CSF model without cilia, was compared to control experiments and the baseline CSF model, indicating a local effect of cilia motion on protein transport. Using the computational model of flow and transport, we further studied region-specific removal of cilia and ventricles geometry modification, and how these changes affected transport.
+We have presented a computational model of CSF flow and solute transport within the brain ventricles.
+In this study, we used the larval zebrafish brain ventricles since its geometry,
+flow components and kinetics are well described, thereby allowing us to validate
+our simulation experimentally. Nevertheless, our simulations can be implemented in
+other systems in the future when their flow parameters are comprehensively resolved.  
+By imposing tangential traction and normal pressure on the CSF flow, we achieved to reproduce
+flow fields with similar features as observed experimentally, consisting of vortex-structured flow,
+mediated by cilia, and pulsatile flow, mediated by the cardiac cycle.
 
-\subsection*{The roles of diffusion and advection in transport of photoconverted proteins}
-We quantified transport in terms of fluorescence intensity change $\Delta F$ (experiments) and mean concentration $\cbar$ (simulations) as functions of time. For both measures, we observed that transport dynamics in the middle ventricle where Dendra2 fluorescent protein was photoconverted contrasted with the dynamics of the more distal regions of the anterior and posterior ventricles. In experiments, regions distal to the photoconversion site showed an approximately linear increase in $\Delta F$, probably because advection is absent in the transport to the distal regions, such that diffusion is the sole mode of transport. In regions proximal to photoconversion, advection and diffusion occur simultaneously due to the presence of cilia, leading to concave profiles for $\Delta F$. The convex diffusion-only behavior was observed in the mean concentration $\cbar_6$ profile of the posterior ventricle in the simulations, but $\cbar_5$ was concave for the anterior ventricle, opposed to the experimental results \lyng{HH: \emph{Is this the correct interpretation of convex vs. concave curves?} Include some referencing to textbook solutions of the diffusion and advection equations to explain this convex vs. concave? E.g. semi-infinite slab or boundary layer solutions to inflow/outflow problem.}. Based on the geometry modification study, the reason for this difference in behavior might be that the duct between the anterior and middle ventricle is inflated in our computational mesh, as a result of the dye-injection performed before imaging~\lyng{Cite this?}. This inflation allows for effective cilia-mediated advection from the middle ventricle to the anterior ventricle.
+Using the simulated CSF flow, we modeled solute transport by an advection-diffusion equation.
+These results compared well with experimental data performed \emph{in vivo} in zebrafish.
+Next, by using both a model and zebrafish mutants with paralyzed cilia,
+we identified that even though advection by cilia is dominant,
+diffusion plays a significant role  in protein transport. Finally, we report how local
+flow patterns and ventricular geometries affect solute distribution.
+Altogether our results provide not only new findings on the role of
+diffusion and advection but also offer a new framework to study CSF transport in complex geometries.
 
-In general, the mean concentration dynamics of the simulations was more rapid than the fluorescence intensity dynamics of the photoconversion experiments. This is strongly related to our definition of the photoconversion site (region of interest 1) in the simulations, and whether this corresponds well to the region used in experiments, because the volume of the photoconversion region used in the simulations determines the total amount of solute, and thus impacts the rate of transport. The alignment of the computational and experimental region of interest definition is hard to quantify. Additionally, a source of discrepancy in the results is the fact that the brain ventricles might be permeable, such that some Dendra2 diffuses out of the brain ventricles in the experiments. An assay has shown that the neuroepithelium lining the walls of brain ventricles in embryonic zebrafish 24 hours post-fertilization is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}. Dendra2 are almost 26 kDa in size~\cite{Gurskaya2006EngineeringLight}, and are thus under this reported limit. If such permeability also is the case for 2 days post-fertilization zebrafish embryo ventricles, this would lead to Dendra2 leaking out of the brain ventricles in the experiments, making the dynamics appear slower. 
+\subsection*{The roles of advection and diffusion in intraventricular solute transport}
+To determine the roles of advection and diffusion in solute transport, we quantified transport
+based on changes in fluorescence intensity $\Delta F$ (experiments) and
+mean concentration $\cbar$ (simulations) as functions of time.
+Even though we identified very similar dynamics in simulations and
+\emph{in vivo} experiments, the dynamics of the simulations were generally
+more rapid and resulted in higher total amounts.
+Differences between experiments and simulations may relate to
+ventricular size, as we showed that modifying the duct volumes impacts
+solute distribution and the geometry used for the model was larger than in experiments.
+Alternatively, it may relate to the way we defined the photoconversion site (region of interest 1)
+in the simulations, since the volume of the photoconversion region determines
+the total amount of solute, and thereby the rate of transport. Another source
+of discrepancy may relate to the permeability of the ventricular wall,
+which we have ignored in our simulation. Reports have shown that the
+neuroepithelium lining the walls of brain ventricles in 24h old zebrafish
+is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}.
+Since Dendra2 is around 26 kDa in size~\cite{Gurskaya2006EngineeringLight},
+and thus under this reported limit, one could assume that if Dendra2
+leaks out of the brain ventricles, the dynamics become slower.
 
-Transport of Dendra2 fluorescent protein appears to be a balance of advection and diffusion. Advection is the strongest transport mechanism on a global scale (global Péclet number 7.4), but for shorter distances diffusion is balancing out advection. Simulating transport of larger molecules (thus with smaller diffusion coefficients) proved advection to be increasingly important as molecule size increased. For the smallest diffusion coefficient used, $D_1$, which represented 200 nm exosomes, there was essentially zero solute in the posterior ventricle at the final simulation time (around 850 s). This is consistent with the statement above that transport to the posterior ventricle from the middle ventricle is driven by diffusion, based on estimated transport times of diffusion and advection: For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance $L=200$ $\mu$m from the middle to the posterior ventricle is approximately 24500 s. Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same distance would happen on a timescale of the order of $t_a=L/\overline{U}=141$ s. Comparing this with the minuscule values of $\cbar_6$ after simulating transport with $D_1$ for 850 s, one can conclude that if advection played a role in transporting solute from the photoconversion site in the middle ventricle to the posterior ventricle, values of $\cbar_6$ would be higher than those observed.
+In general, the mean concentration dynamics of the simulations was 
+more rapid than the fluorescence intensity dynamics of the photoconversion experiments.
+This is strongly related to our definition of the photoconversion site
+(ROI 1) in the simulations, and whether this corresponds well to the
+region used in experiments, because the volume of the photoconversion
+region used in the simulations determines the total amount of solute,
+and thus impacts the rate of transport. The alignment of the computational
+and experimental region of interest definition is hard to quantify.
+Additionally, a source of discrepancy in the results is the fact that the
+brain ventricles might be permeable, such that some Dendra2 diffuses out
+of the brain ventricles in the experiments. An assay has shown that the neuroepithelium
+lining the walls of brain ventricles in embryonic zebrafish 24 hours post-fertilization
+is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}.
+Dendra2 are almost 26 kDa in size~\cite{Gurskaya2006EngineeringLight},
+and are thus under this reported limit. If such permeability also is the case for 2 days
+post-fertilization zebrafish embryo ventricles, this would lead to Dendra2 leaking
+out of the brain ventricles in the experiments, making the dynamics appear slower. 
 
-The changes in the times to threshold when changing the diffusion coefficient are greatest for regions of interest (ROIs) 4--6, further indicating that, relative to advection, diffusion has a greater impact in these regions than compared to regions 1--3. In region of interest 2 (anterior, dorsal region of the middle ventricle), the time to threshold is lower for $D_2$ than $D_3$. This is probably a result of less solute diffusing away from ROI 1 for $D_2$ than for $D_3$, meaning that more solute can be transported by advection along the ciliated walls of the ventricles towards ROI 2. We also note that, for regions of interest 3 and 4, the order of the $\Delta F$ and $\cbar$ profiles are opposite. This could be related to the difference in the exact location of ROIs 3 and 4 in simulations and experiments, or due to cilia-advection being more prominent in the simulations (cf. the discussion on differences in transport to the anterior ventricle).
+Nevertheless, our results convincingly show that intraventricular transport of proteins
+depends on a balance of advection and diffusion. While advection is the strongest transport
+mechanism on a global scale for Dendra2 (global Péclet number 7.4), diffusion is balancing out
+advection especially for shorter distances and for regions devoid of motile cilia activity.
+Indeed, we identified that the diffusion coefficient had a greater impact on transport to
+regions located upstream in the CSF flow field (ROI 4\lyng{ actually 3?}) or in different ventricles (ROIs 5--6),
+than the regions located downstream of cilia-mediated flow (ROI 2).
 
-\subsection*{Simulation studies: modifying cilia and geometry}
-We studied the impacts of removing cilia in specific regions of our model~(\cref{fig:figure5_compare_cilia_modifications}). Removing the dorsal cilia has a strong impact on the resulting CSF flow field and the mean solute concentration. Removing the dorsal cilia decreased the maximum velocity in the ventricles roughly by a factor of three from 27.7 $\mu$m/s to 8.0 $\mu$m/s. The impactful changes to the flow field is because the total force applied on the dorsal cilia boundary is great in magnitude in our model, and the dorsal cilia are thus important to establishing the CSF flow structures. With weaker flow in the dorsal region of the middle ventricle, there is less advective transport. \lyng{HH: Quantify the difference in force applied in the dorsal region: $\int_{c, dorsal}\btau\cdot\mathbf{t}\,\mathrm ds$.}
+In contrast, we identified that transport of larger molecules
+(thus with smaller diffusion coefficients),
+such as 200 nm exosomes, are almost entirely dependent on advection.
+Indeed, there was essentially zero solute in the posterior ventricle at the
+final simulation time (around 850 s), where transport is largely driven by diffusion.
+For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance
+$L=200$ $\mu$m from the middle to the posterior ventricle is approximately 24500 s.
+Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same distance would happen
+on a timescale of the order of $t_a=L/\overline{U}=141$ s. Comparing this with the minuscule values of
+$\cbar_6$ after simulating transport with $D_1$ for 850 s, one can conclude that if advection
+played a role in transporting solute from the photoconversion site in the middle ventricle
+to the posterior ventricle, values of $\cbar_6$ would be higher than those observed.
 
-Absence of ventral cilia in the middle ventricle did not greatly impact flow dynamics and transport, but lead to slightly less transport towards the posterior ventricle, and slightly more transport towards the anterior ventricle. This is because the ventral cilia help induce flow towards the posterior ventricles. Removing the cilia in the anterior ventricle leaves the transport results virtually unaltered, although the CSF flow vortex structure in the anterior ventricle vanishes. This would then probably have a greater impact for smaller diffusion coefficients, as it is evident in~\cref{fig:fig2} that transport with $D_1$ is mainly advective.
+\subsection*{Impact of cilia properties and ventricular geometry}
+To gain further insights into how CSF distribution depends on cilia properties and geometries,
+we manipulated certain parameters in our models. First, we removed cilia in specific regions of
+our model (\Cref{fig:figure5_compare_cilia_modifications}). We identified that the cilia in the
+dorsal middle ventricle contribute the most to solute distribution, which aligns well with the fact
+that these cilia generate the strongest flow field \emph{in vivo} and in our model.
+In contrast, removing the ventral cilia in the middle ventricle did not greatly impact flow dynamics.
+However, it lead to reduced transport towards the posterior ventricle,
+and increased transport towards the anterior ventricle, as the ventral cilia help induce
+flow towards the posterior ventricles. Removing the cilia in the anterior ventricle did not affect the transport.
+
+Next, we modified the ventricular geometry and identified varying impact on transport.
+Notably, shrinking ducts reduced movement between the ventricles, while shrinking the middle ventricle
+reduced diffusive transport upstream of the flow field (ROI 4).
+We previously identified large inter-individual variation in ventricular size and
+CSF velocities between larva at given developmental stages and throughout development~\fixme{Add some citation here? Olstad/D'Gama}.
+Our results suggest that these two parameters may well co-vary and explain the variation.
+
+Altogether, our model is flexible and thereby allows \emph{in silico} testing of
+further hypotheses on the contribution of ciliated lineages and geometries.
+We trust that it will be useful as a basis for future analysis of CSF dynamics in more complex geometries.
 
 \lyng{HH: Compare numerical results with transport results in Figure 7 in \cite{Olstad2019CiliaryDevelopment}.}
 
-
 \lyng{HH: Discuss cilia serving as an "enhanced mixing factor" on small scales, refer to this~\cite{Siyahhan2014FlowVentricles} and this~\cite{Yoshida2022EffectVentricles} paper that studied this in human brain ventricles. Include a discussion of what happened when these papers removed cilia.}
 
-Modifying the ventricular geometry had varying impact on transport~(\cref{fig:figure6_sim_results_compare_geometries}). Both when (separately) shrinking the connection between the fore- and mid-brain and the mid- and hind-brain, we observe a slight increase in the mean concentration $\cbar$ of regions of interests 2--4. In regions 5 and 6, we observe a decrease in $\cbar$ in the region that we shrink the connection from the middle ventricle to. Meanwhile, the other region has an increase in $\cbar$, a result of mass conservation. When shrinking the middle ventricle, the mean concentration decreases in regions 2--4. The effect on $\cbar$ in regions 5 and 6 is similar to when the mid-hind connection is shrunk: less solute is transported towards the hind-brain and more solute is transported towards the fore-brain. 
-
-Combining all three geometry modifications, we see an increase in $\cbar$ in regions 2--4. Now, there is a decrease in both region 5 and 6, which is more similar to the experimental $\Delta F$ curves (\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{a}) in these regions compared to the simulated $\cbar$ on the standard geometry (\cref{fig:figure3_compare_exp_and_sim_control}, panel \textbf{b}). This is in line with the expectation that shrinking the geometry is closer to replicating the geometries of the fish used in experiments, because the ventricular geometry is inflated by the injection procedure performed during image segmentation.
-
 \subsection*{Computational model assumptions and boundary conditions}
-To model flow of cerebrospinal fluid, we employed slip boundary conditions at the ventricular walls, contrasting the classical choice of a noslip boundary condition. The use of slip boundary conditions is motivated by experimental observations of the flow field in zebrafish embryo brain ventricles~\cite{Olstad2019CiliaryDevelopment}. It has been observed that the fluid velocity increases towards the wall~(this is also evident in~\cref{fig:figure1}, panel~\textbf{c}). Using slip boundary conditions allows for this behavior. A couple of previous continuum model simulation studies of cilia-mediated flow~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal} have modeled cilia as body forces. We chose to model the cilia as a force exerted tangentially on the boundary. First, we deem this a good representation of the real nature of cilia, since they are in reality microscale structures confined to the ventricular walls that generate flow through collective motion. Second, it avoids the need of excessive mesh refinement near the ciliated boundaries in the case that a body force were to be applied in a $\sim$ 5 $\mu$m~\cite{Salman2022ComputationalEmbryo} deep cilia layer.
+To model CSF, we employed slip boundary conditions at the ventricular walls,
+contrasting the classical choice of a noslip boundary condition.
+The use of slip boundary conditions is motivated by experimental observations of the
+flow field in zebrafish embryo brain ventricles~\cite{Olstad2019CiliaryDevelopment}.
+It has been observed, both previously and in this work, that the fluid velocity increases towards the wall~(\Cref{fig:figure1}c).
+Using slip boundary conditions allows for this behavior.
+A couple of previous continuum model simulation studies of cilia-mediated flow~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal}
+have modeled cilia as body forces. We chose to model the cilia as a force exerted tangentially on the boundary.
+First, we deem this a good representation of the real nature of cilia,
+since they are in reality microscale structures confined to the ventricular walls that
+generate flow through collective motion. Second, it avoids the need of excessive mesh
+refinement near the ciliated boundaries in the case that a
+body force were to be applied in a $\sim$ 5 $\mu$m~\cite{Salman2022ComputationalEmbryo} deep cilia layer.
 
-In our CSF flow model, the ciliated boundaries are homogeneous, whereas in reality, cilia populate the ventricle walls in a heterogeneous manner~\cite{Olstad2019CiliaryDevelopment}. Heterogeneous spatial arrangement of cilia, both in location and beating direction, has been shown to enhance particle clearance in airway cilia arrays in mice~\cite{Ramirez-SanJuan2020Multi-scaleArrays}. Incorporating spatial arrangement heterogeneity in our model could possibly result in different transport timescales, but we would not expect notable changes to the general trends of the macroscopic transport that we study here, since the effects of introducing heterogeneous spacing of cilia would alter the magnitude of cilia forces, but not their direction. On the other hand, introducing more heterogeneous beating directionality could alter the transport timescales as well as the directionality. In our model, all of the applied cilia tangential traction is aligned with the rostrocaudal axis, and more heterogeneity in this alignment to reflect heterogeneity in the beating directionality of cilia would presumably affect both magnitude and directionality of advective transport. Previous studies have demonstrated that changes to beating directionality affects transport, and that specific coordination of the ciliary beating is important in the brain ventricles for flow and signaling processes~\cite{Eichele2020Cilia-drivenVentricle, Olstad2019CiliaryDevelopment, Faubel2016Cilia-basedVentricles, Guirao2010CouplingCilia, Afzelius2004Cilia-relatedDiseases}, but also in other phenomena such as maintaining healthy functioning of mucous transport in airways~\cite{Rayner1996CiliarySyndrome, Schneiter2021Multi-scaleFunction, Bustamante-Marin2019LackClearance, Tsukita2012CoordinatedFeet} and in nodal flow which establishes left-right symmetry in mammals~\cite{Yoshiba2014RolesSymmetry, Hirokawa2006NodalAsymmetry, Sawamoto2006NewBrain}. Although these studies were mostly on spatial scales resolving individual cilia, we could envision the same effects in our continuum model, similar to the results of previous numerical studies~\cite{Ramirez-SanJuan2020Multi-scaleArrays, Thouvenin2020OriginCanal, Yoshida2022EffectVentricles}. 
+In our CSF flow model, the ciliated boundaries are homogeneous,
+whereas in reality, cilia populate the ventricle walls in a
+heterogeneous manner~\cite{Olstad2019CiliaryDevelopment}. Heterogeneous spatial
+arrangement of cilia, both in location and beating direction,
+has been shown to enhance particle clearance in airway cilia arrays
+in mice~\cite{Ramirez-SanJuan2020Multi-scaleArrays}. Incorporating spatial arrangement heterogeneity
+in our model could possibly result in different transport timescales,
+but we would not expect notable changes to the general trends of the macroscopic
+transport that we study here, since the effects of introducing heterogeneous spacing
+of cilia would alter the magnitude of cilia forces, but not their direction.
+On the other hand, introducing more heterogeneous beating directionality could
+alter the transport timescales as well as the directionality. In our model, all of the applied cilia
+tangential traction is aligned with the rostrocaudal axis, and more heterogeneity
+in this alignment to reflect heterogeneity in the beating directionality of
+cilia would presumably affect both magnitude and directionality of advective transport.
+Previous studies have demonstrated that changes to beating directionality affects transport,
+and that specific coordination of the ciliary beating is important in the brain ventricles for
+flow and signaling processes~\cite{Eichele2020Cilia-drivenVentricle, Olstad2019CiliaryDevelopment,
+Faubel2016Cilia-basedVentricles, Guirao2010CouplingCilia, Afzelius2004Cilia-relatedDiseases},
+but also in other phenomena such as maintaining healthy functioning of mucous transport in
+airways~\cite{Rayner1996CiliarySyndrome, Schneiter2021Multi-scaleFunction,
+Bustamante-Marin2019LackClearance, Tsukita2012CoordinatedFeet} and in nodal flow which establishes
+left-right symmetry in mammals~\cite{Yoshiba2014RolesSymmetry, Hirokawa2006NodalAsymmetry,
+Sawamoto2006NewBrain}. Although these studies were mostly on spatial scales resolving individual cilia,
+we could envision the same effects in our continuum model,
+similar to the results of previous numerical studies~\cite{Ramirez-SanJuan2020Multi-scaleArrays,
+Thouvenin2020OriginCanal, Yoshida2022EffectVentricles}. 
 
-We used an advection-diffusion equation to simulate protein transport in the brain ventricles. Except for where we imposed a normal pressure boundary condition on the CSF flow, we imposed a no-flux condition on the concentration. Imposing a pressure-driven cardiac-related flow on certain parts of the CSF flow boundary leads to in- and outflow, and the advective transport then requires handling of in- and outflux boundary conditions. Reflecting our assumption that the ventricular system is closed, we set boundary conditions such that the total mass is conserved in the limit that the timestep size is zero. We handle the outflux by leaving the advective flux term as an unknown in the weak formulation of the advection-diffusion equation. This has been referred to with different names in previous works, names such as the ``free boundary condition"~\cite{Papanastasiou1992ACondition}, the ``no boundary condition"~\cite{Griffiths1997TheCondition}, and the ``consistent flux boundary condition"~\cite{Lynch2020NumericalHemodynamics}. In leaving the advective flux term in the weak form we are lacking a boundary condition, so the approach seems problematic in the continuous sense of the problem. However, the discrete problem is well-posed, because the approach represents constraining higher-order derivatives of the concentration~\cite{Griffiths1997TheCondition}. 
+We used an advection-diffusion equation to simulate protein transport in the brain ventricles.
+Except for where we imposed a normal pressure boundary condition on the CSF flow,
+we imposed a no-flux condition on the concentration. Imposing a pressure-driven
+cardiac-related flow on certain parts of the CSF flow boundary leads to in- and outflow,
+and the advective transport then requires handling of in- and outflux boundary conditions.
+Reflecting our assumption that the ventricular system is closed, we set boundary conditions such
+that the total mass is conserved in the limit that the timestep size is zero.
+We handle the outflux by leaving the advective flux term as an unknown in the weak formulation
+of the advection-diffusion equation. This has been referred to with different names in previous works,
+names such as the ``free boundary condition"~\cite{Papanastasiou1992ACondition},
+the ``no boundary condition"~\cite{Griffiths1997TheCondition}, and the 
+``consistent flux boundary condition"~\cite{Lynch2020NumericalHemodynamics}. 
+In leaving the advective flux term in the weak form we are lacking a boundary condition,
+so the approach seems problematic in the continuous sense of the problem.
+However, the discrete problem is well-posed, because the approach represents
+constraining higher-order derivatives of the concentration~\cite{Griffiths1997TheCondition}. 
 
-On the inflow boundary, we applied an approximate periodic boundary condition by setting the inflow boundary flux at timestep $n$ equal to the outflow boundary flux at the previous timestep $n-1$. This is expected to be of low-order accuracy, and for high Péclet numbers, the boundary condition affects the concentration field in the vicinity of the in- and outflow boundaries due to large advective fluxes. For the simulation scenarios we considered, both in terms of model parameters and time span, the photoconversion region where solute originates is far enough away from the in- and outflow boundaries for the flux boundary condition to not significantly impact the results. Nevertheless, we deliberately excluded the space proximal to in- and outflow boundaries in the anterior and posterior regions of interest (5 and 6) to limit adverse effects. 
+On the inflow boundary, we applied an approximate periodic boundary condition by setting
+the inflow boundary flux at timestep $n$ equal to the outflow boundary flux at the previous
+timestep $n-1$. This is expected to be of low-order accuracy, and for high Péclet numbers,
+the boundary condition affects the concentration field in the vicinity of the in- and outflow boundaries
+due to large advective fluxes. For the simulation scenarios we considered, both in terms of model parameters
+and time span, the photoconversion region where solute originates is far enough away from the in- and outflow
+boundaries for the flux boundary condition to not significantly impact the results. Nevertheless,
+we deliberately excluded the space proximal to in- and outflow boundaries in
+the anterior and posterior regions of interest (5 and 6) to limit adverse effects. 
 
-A possible improvement to the in- and outflow boundary conditions we employed would be to consider a 3D-0D coupling of the in- and outflow boundaries using ordinary differential equations, similar to what has been done in cardiac modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}. However, if the ventricular system in reality is a closed system, one should rather seek out a way of modeling the CSF flow without open boundaries to avoid handling in- and outflow boundary conditions. A more appropriate way of handling the beating cardiac motion could be to impose a ventricular wall deformation, assumed to result from pulsatile motion of the heart and/or cardiac vessels surrounding the ventricles. This wall deformation would induce CSF flow while simultaneously permitting enforcement of the impermeability condition $\uu\cdot\nn=0$ on the ventricular walls. Such wall-motion induced CSF flow has been modeled and simulated successfully in the human brain ventricular system~\cite{Causemann2022HumanFramework, Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
+A possible improvement to the in- and outflow boundary conditions we employed would be
+to consider a 3D-0D coupling of the in- and outflow boundaries using ordinary differential equations,
+similar to what has been done in cardiac modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
+However, if the ventricular system in reality is a closed system,
+one should rather seek out a way of modeling the CSF flow without open boundaries to avoid
+handling in- and outflow boundary conditions. A more appropriate way of handling the beating
+cardiac motion could be to impose a ventricular wall deformation, assumed to result from pulsatile
+motion of the heart and/or cardiac vessels surrounding the ventricles. This wall deformation would
+induce CSF flow while simultaneously permitting enforcement of the impermeability condition
+$\uu\cdot\nn=0$ on the ventricular walls. Such wall-motion induced CSF flow has been modeled and
+simulated successfully in the human brain ventricular system~\cite{Causemann2022HumanFramework,
+Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
 
 \subsection*{Estimation of computational model parameters}
 The diffusion coefficients used in this study were partially based on values from experiments and partially estimated. The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$ is based on the value $\num{1.15e-10} \pm 0.11 \ \mathrm{m^2/s}$ reported in an experiment~\cite{GuraSadovsky2017MeasurementExpansion}, while the values $D_2$ and $D_1$ were extrapolated based on experimental data~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells, Mahmood2023ExosomeTemperature} using the Stokes-Einstein relation~\cite{Einstein1905UberTeilchen}~(\cref{eq:D_stokes_einstein}). This extrapolation assumes the diffusing substance is of spherical shape, which proteins are not, and the relation does not necessarily hold in CSF. Consequently, there is uncertainty in the values used. We note that Sadovsky~\emph{et al.}~\cite{GuraSadovsky2017MeasurementExpansion} reported that Dendra2 satisfies the Stokes-Einstein in the solution they used, a solution which had similar viscosity to water. We used CSF density and viscosity values measured in humans~\cite{Bloomfield1998EffectsFluid}, and because embryonic CSF in zebrafish is high in proteins, nutrients and other substances, the CSF in which photoconverted Dendra2 are transport in our experiments may be more viscous than what we consider. This would reduce the diffusion coefficient~(cf.~\cref{eq:D_stokes_einstein}), but based on reports of protein concentration having a limited impact on the viscosity of CSF~\cite{Bloomfield1998EffectsFluid, Brydon1995PhysicalViscosity}, this reduction is presumably limited. Merely the presence of other proteins and nutrients may also reduce the diffusion coefficient by reduction of mean-free path lengths of molecules~\cite{Cussler2009Diffusion:Systems}. Considering the diffusion coefficients $D_1$ and $D_2$ both smaller than $D_3$ in our transport analysis provides information about how the simulation results of Dendra2 transport would be altered if the diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is underestimated, we assume the results would follow the same trend as the differences between results for $D_2$ and $D_3$: diffusion becomes more important, and is almost balancing advective transport for $D_3$. Thus for a higher diffusion coefficient, we would see transport that is mostly explained by diffusive behavior.
@@ -841,7 +991,7 @@ Halvor Herlyng acknowledges support from the national infrastructure for computa
 %%--------------APPENDIX--------------%%
 \appendix
 \section{Supplementary Theory}
-\subsection{Weak Formulation of the Stokes Equations}\label{subsec:appendixA1}
+\subsection{Weak formulation of the Stokes equations}\label{subsec:appendixA1}
 We consider the time-dependent Stokes equations
 \begin{subequations}
 \begin{alignat}{2}
@@ -971,40 +1121,6 @@ Also considering the weak form of the continuity equation, the weak formulation 
 To simulate the back-and-forth motion induced by the cardiac cycle observed in previous work~\cite{Olstad2019CiliaryDevelopment}, we apply sinusoidal forcing. The boundary $\Gamma_p$ has two separate regions: one located on the anterior ventricle and one on the posterior ventricle~(\cref{fig:figure1}, panel \textbf{b}). For the normal pressure boundary condition, we set $\Tilde{p}(t) = 0$ on the anterior part and
 $\Tilde{p}(t) = p_c(t) = -A\sin{\omega t}$ on the posterior part. The value of the amplitude $A$ was based on heuristics and $\omega = 2\pi f$, where $f=2.22$ Hz is the cardiac cycle frequency. 
 
-\iffalse
-\textbf{Model Version IIb.} A second approach to modeling the pulsatile flow generated by the cardiac cycle was applying a rigid motion to the geometry, and then solving for the velocity defined in the reference frame attached to the geometry. We consider an approach similar to San Mart{\'\i}n \emph{et al.}~\cite{san2009convergence}, based on the framework commonly referred to as an Arbitrary Lagrangian Eulerian formulation of the governing equations. Consider the Stokes equations 
-\begin{subequations}
-    \begin{alignat}{2}
-        \rho\pdifft{\uu} - \nabla\cdot\bm{\sigma}(\uu, p) &= \mathbf{0}, \\
-        \nabla\cdot\uu &= 0,
-    \end{alignat}
-    \label{eq:stokes_eqs_moving_ref}%
-\end{subequations}%
-in a time-dependent, moving domain $\Omega_t$, and define the coordinates $\hat{\xx} = (\hat{x}, \hat{y}, \hat{z})$ as the reference frame attached to $\Omega_t$. In $\Omega_t$, we consider the variables $\psi(\hat{\xx}, t)$, so that we have $\uu(\hat{\xx}, t)$ and $p(\hat{\xx}, t)$ in~\eqref{eq:stokes_eqs_moving_ref}. As before, we denote $\Omega$ the domain in the absolute, fixed reference frame with coordinates $\xx = (x, y, z)$ and variables $\psi(\xx, t)$. To determine the velocity inside the brain ventricles without moving the computational mesh, we can solve the Stokes equations for the velocity $\ww$ defined in the moving reference frame. This is done by first solving for $\uu$ in the fixed reference frame, whilst accounting for the mesh motion $\uuref$. Then, with $\uu$ and $\ww$ defined in separate coordinate systems that move with a velocity $\uuref$ relative to each other, the velocities are related by $\uu = \ww + \uuref$~\cite{meriam2012engineering}. After solving for $\uu$, we thus calculate $\ww = \uu - \uuref$.  To rewrite the variables in~\eqref{eq:stokes_eqs_moving_ref} into variables of $\xx$ instead of $\hat{\xx}$, nothing has to be done with the divergence operators since we consider a rigid motion, rendering spatial differentiation unchanged. The temporal derivative is not the same in the two coordinate systems, however. Differentiation with respect to time and application of the chain rule yields
-\begin{equation*}
-    \begin{aligned}
-        \pdifft{\psi}(\hat{\xx}, t) &= \pdifft{\psi}(\xx, t) + \frac{\partial \psi}{\partial\hat{\xx}}\pdifft{\hat{\xx}} \\
-        &= \pdifft{\psi}(\xx, t) + \frac{\partial \psi}{\partial\xx}\frac{\partial\xx}{\partial\hat{\xx}}\pdifft{\hat{\xx}} \\
-        &= \pdifft{\psi}(\xx, t) + \frac{\partial \psi}{\partial\xx}\pdifft{\hat{\xx}}.
-    \end{aligned}
-\end{equation*}
-The last equality follows from the fact that the motion of the moving reference frame is rigid, such that the differences in $\hat{\xx}$ and $\xx$ are only due to translation, and not dilatation, of the coordinate systems. We can recognize $\partial\hat{\xx}/\partial t = \uu_{\mathrm{ref}}$ as the velocity of the domain $\Omega_t$. Since $\partial\psi/\partial\xx = \nabla\psi$, we get
-\begin{equation}
-    \pdifft{\psi}(\hat{\xx}, t) = \pdifft{\psi}(\xx, t) + \uu_{\mathrm{ref}}\cdot\nabla\psi,
-    \label{eq:temporal_derivative_relation}
-\end{equation}
-where the second term leads to the interpretation that the variable $\psi(\xx, t)$ in the fixed reference frame is advected with the velocity $\uu_{\mathrm{ref}}$ of the moving reference frame. Using the relation~\eqref{eq:temporal_derivative_relation}, we can rewrite~\eqref{eq:stokes_eqs_moving_ref} in the fixed reference frame:
-\begin{subequations}
-    \begin{alignat}{2}
-        \rho\bigg(\pdifft{\uu} + (\uu_{\mathrm{ref}}\cdot\nabla)\uu\bigg) &= \nabla\cdot\bm{\sigma}(\uu, p), \label{eq:mom_eq_fixed}\\
-        \nabla\cdot\uu &= 0,
-    \end{alignat}
-    \label{eq:stokes_eqs_fixed}%
-\end{subequations}%
-where the variables in~\eqref{eq:stokes_eqs_fixed} are variables of $\xx$ and $t$. The boundary conditions also change slightly for this formulation. Since the impermeability condition $\ww\cdot\nn=0$ is now supposed to hold in the moving reference frame, we get the boundary condition $\uu\cdot\nn = \uuref\cdot\nn$. To simulate the oscillatory motion arising from the cardiac cycle, we applied the motion $\uuref = (A_{\mathrm{ref}}\sin{\omega t}, 0, 0)$, where the amplitude $A_{\mathrm{ref}}$ was calibrated with experimental data and $\omega = 2\pi f$ was determined by the cardiac frequency $f$~\cite{Olstad2019CiliaryDevelopment}. Since the domain movement is rigid, we have $\beps(\uuref) = \mathbf{0}$, such that the stress boundary condition $P_{\nn}(\bsig(\ww, p)) = \mathbf{0}$ directly translates to $P_{\nn}(\bsig(\uu, p)) = \mathbf{0}$. Solving~\eqref{eq:stokes_eqs_fixed} with the boundary conditions $\uu\cdot\nn = \uuref\cdot\nn$ and $P_{\nn}(\bsig(\uu, p)) = \mathbf{0}$, we obtain the velocity in the moving reference frame by calculating $\ww = \uu - \uuref$.
-\fi
-
-
 \textbf{Model Version 0.} This model version, regarded as the baseline model, considers both cilia and cardiac beating as driving mechanisms of fluid flow. We therefore consider the boundary conditions
 \begin{subequations}
     \begin{alignat}{2}
@@ -1028,7 +1144,7 @@ with the definitions
     \mathcal{L}(\vv) &= \intGc{\btau\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}. \label{eq:stokes_linear_form}
 \end{align}
 
-\subsection{Discretization of the Stokes Equations}
+\subsection{Discretization of the Stokes equations}
 We will outline the discretization of the weak formulation~\cref{eq:abstract_weak_form_modelC,eq:stokes_bilinear_form,eq:stokes_skew_form,eq:stokes_linear_form} of the Stokes equations for model version 0. A similar approach can be used to discretize the weak formulation for the other model versions. First, we consider the spatial discretization of the weak formulation. We rewrite the weak form in terms of the discretized variables, denoted with the subscript $h$:
 \begin{subequations}
     \begin{alignat}{2}
@@ -1059,7 +1175,7 @@ We solved~\eqref{eq:abstract_semi_discrete_weak_form_modelC} numerically with th
 
 In time, we discretize the weak formulation~\eqref{eq:abstract_semi_discrete_weak_form_modelC} with the implicit Euler method.
 
-\subsection{Weak Formulation of the Advection-Diffusion Equation}
+\subsection{Weak formulation of the advection-diffusion equation}
 Recall the strong form of the advection-diffusion equation:
 \begin{equation}
     \pdifft{c} + \nabla\cdot\JJ = 0 \quad\mathrm{in} \ \Omega,
@@ -1127,7 +1243,7 @@ with the definitions
 
 \textbf{Model Version 0.} Since both free-slip and cilia tangential traction boundaries have the same no-flux boundary condition in the advection-diffusion equation, the weak formulation of the advection-diffusion equation for model version 0 is identical to that of model version II, defined by~\eqref{eq:adv_diff_weak_formB}--\eqref{eq:adv_diff_linear_form}.
 
-\subsection{Discretization of the Advection-Diffusion Equation}
+\subsection{Discretization of the advection-diffusion equation}
 We outline the discretization of the advection-diffusion weak formulation for model version 0, defined by~\eqref{eq:adv_diff_weak_formB}--\eqref{eq:adv_diff_linear_form}. The weak formulation is discretized with a symmetric interior-penalty method using discontinuous Galerkin finite elements~\cite{Arnold1982AnElements}. Let the subscript $h$ denote discrete variables. Exchanging the variables in~\eqref{eq:adv_diff_weak_formB} with their discrete counterparts yields the discrete weak form: find $c_h\in W_h$ such that
 \begin{equation*}
     a(c_h, \phi_h) + b(c_h, \phi_h) = L(\phi_h), \quad\forall\phi_h\in W_h.
@@ -1163,22 +1279,28 @@ In time, we discretized~\eqref{eq:discrete_weak_form_adv_diff} with the implicit
 %--------------VERIFICATION--------------%
 \section{Verification}\label{sec:appB_verification}
 \subsection{Method of Manufactured Solutions}\label{subsec:mms}
-Let $\hat{\xx} = (\hat{x}, \hat{y}, \hat{z}) = \frac{1}{L}(x, y, z)$ be the spatial coordinates scaled by the length $L$, which is the length of the computational domain $\Omega$ in the $x$-direction. Letting $\bm{\phi}$ be the vector-valued function
+Let $\hat{\xx} = (\hat{x}, \hat{y}, \hat{z}) = \frac{1}{L}(x, y, z)$
+be the spatial coordinates scaled by the length $L$, which is the length of
+the computational domain $\Omega$ in the $x$-direction. Letting $\bm{\phi}$ be the vector-valued function
 \begin{equation*}
     \bm{\phi} = \left(\sin{(\pi(\hat{x} - \hat{y}))}, \sin{(\pi(\hat{y} + \hat{z}))}, \sin{(\pi(\hat{x} - \hat{z}))}\right)
-    %\label{eq:velocity_potential_mms}
 \end{equation*}
 and defining the velocity as 
 \begin{equation}
     \uu_{\mathrm{mms}} = \nabla\times\bm{\phi},
     \label{eq:velocity_mms}
 \end{equation}
-we have by construction that the velocity is divergence-free, owing to the identity $\nabla\cdot(\nabla\times\mathbf{F}) = 0$ for an arbitrary vector field $\mathbf{F}$. The pressure was defined as
+we have by construction that the velocity is divergence-free,
+owing to the identity $\nabla\cdot(\nabla\times\mathbf{F}) = 0$ for
+an arbitrary vector field $\mathbf{F}$. The pressure was defined as
 \begin{equation}
     p_{\mathrm{mms}} = \cos{(\pi(\hat{x} + \hat{y} + \hat{z}))}.
     \label{eq:pressure_mms}
 \end{equation}
-Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}, we construct a Stokes problem where~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms} are the solutions. To this end, we consider the general form of the steady Stokes equations
+Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions},
+we construct a problem with the Stokes equations where~\eqref{eq:velocity_mms}
+and~\eqref{eq:pressure_mms} are the solutions.
+To this end, we consider the general form of the steady Stokes equations
 \begin{subequations}
     \begin{align}
         -\nabla\cdot\bsig &= \ff \qquad\mathrm{in \ }\Omega,\\
@@ -1186,14 +1308,25 @@ Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}, we co
     \end{align}
     \label{eq:stokes_mms}%
 \end{subequations}%
-with $\bsig(\uu, p) = 2\mu\beps(\uu) - p\mathbf{I}$ and $\beps(\uu) = \frac{1}{2}\left(\nabla\uu + (\nabla\uu)^T\right)$, and the boundary condition
+with $\bsig(\uu, p) = 2\mu\beps(\uu) - p\mathbf{I}$ and
+$\beps(\uu) = \frac{1}{2}\left(\nabla\uu + (\nabla\uu)^T\right)$, and the boundary condition
 \begin{alignat}{2}
     \uu &= \uu_{\mathrm{mms}} \qquad&&\mathrm{on \ }\Gamma,
 \end{alignat}
-where $\Gamma=\partial\Omega$ is the boundary of the domain. Since the velocity field~\eqref{eq:velocity_mms} is divergence free by construction, $g = 0$. Setting the external force $\ff=-\nabla\cdot\bsig(\uu_{\mathrm{mms}}, p_{\mathrm{mms}})$  using~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms}, the solutions $\uu$ and $p$ to~\eqref{eq:stokes_mms} will be the ones defined by~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms}, as long as we enforce equality in the mean pressures, i.e. $\intO{(p_h - p_{\mathrm{mms}})}=0$. Convergence rates are then readily calculated by comparing the numerical approximations of $\uu$ and $p$ with $\uu_{\mathrm{mms}}$ and $p_{\mathrm{mms}}$ on meshes of varying grid resolution.
+where $\Gamma=\partial\Omega$ is the boundary of the domain.
+Since the velocity field~\eqref{eq:velocity_mms} is divergence free by construction,
+$g = 0$. Setting the external force $\ff=-\nabla\cdot\bsig(\uu_{\mathrm{mms}}, p_{\mathrm{mms}})$
+using~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms},
+the solutions $\uu$ and $p$ to~\eqref{eq:stokes_mms} will be the ones
+defined by~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms},
+as long as we enforce equality in the mean pressures, i.e. $\intO{(p_h - p_{\mathrm{mms}})}=0$.
+Convergence rates are then readily calculated by comparing the numerical approximations of
+$\uu$ and $p$ with $\uu_{\mathrm{mms}}$ and $p_{\mathrm{mms}}$ on meshes of varying grid resolution.
 
-\subsection{Norms and Convergence Order}\label{subsec:norms_and_eoc}
-Errors of the velocity $\uu_h$ and pressure $p_h$ approximated with finite elements were measured in the $\mathbf{H}^1$ and $L^2$ error norms, respectively. With the exact velocity field $\uu_{\mathrm{ex}}$, the $\mathbf{H}^1$ error norm was calculated as
+\subsection{Norms and convergence order}\label{subsec:norms_and_eoc}
+Errors of the velocity $\uu_h$ and pressure $p_h$ approximated with finite elements
+were measured in the $\mathbf{H}^1$ and $L^2$ error norms, respectively.
+With the exact velocity field $\uu_{\mathrm{ex}}$, the $\mathbf{H}^1$ error norm was calculated as
 \begin{equation*}
     \Hnorm{\uu_h - \uu_{\mathrm{ex}}}^2 = \intO{\nabla(\uu_h - \uu_{\mathrm{ex}}) : \nabla(\uu_h - \uu_{\mathrm{ex}})}.
 \end{equation*}
@@ -1201,9 +1334,17 @@ The $L^2$ error norms for the pressure were calculated as
 \begin{equation*}
     \normltwo{p_h - p_{\mathrm{ex}}}^2 = \intO{(p_h - p_{\mathrm{ex}})^2}.
 \end{equation*}
-The approximated functions were interpolated onto elements in a space of piecewise-continuous Lagrange polynomials of three polynomial degrees higher than the elements used to approximate the functions, meaning that polynomial degrees 5 and 4 were used for the velocity and pressure errors, respectively. Numerical integration was performed with a Gauss quadrature rule, with the quadrature rule degree equal to the polynomial degree of the integrated finite element functions. 
+The approximated functions were interpolated onto elements in a space of piecewise-continuous
+Lagrange polynomials of three polynomial degrees higher than the elements used to approximate
+the functions, meaning that polynomial degrees 5 and 4 were used for the velocity and pressure
+errors, respectively. Numerical integration was performed with a Gauss quadrature rule,
+with the quadrature rule degree equal to the polynomial degree of the integrated finite element functions. 
 
-Convergence rates reported in~\cref{subsec:numerical_verification} were approximated in the following way. Define the error $e_k$ for a given mesh resolution $h_k$. Based on the assumption that the error scales as $e_k \approx C{h_k}^l$, where $C$ is a constant independent of $h_k$, the convergence order $l$ was approximated as
+Convergence rates reported in~\Cref{subsec:numerical_verification} were
+approximated in the following way. Define the error $e_k$ for a given mesh
+resolution $h_k$. Based on the assumption that the error scales as
+$e_k \approx C{h_k}^l$, where $C$ is a constant independent of $h_k$,
+the convergence order $l$ was approximated as
 \begin{equation}
     l = \frac{\log{(e_k/e_{k+1}})}{\log{(h_k/h_{k+1}})}.
     \label{eq:convergence_order_estimate}
@@ -1212,14 +1353,28 @@ Consider a finite element function
 \begin{equation*}
     \phi = \phi_i\psi_i(\xx)
 \end{equation*}
-with basis functions $\psi_i$, where $i$ are the degrees of freedom and Einstein summation is employed. The infinity norm of $\phi$ was approximated from the vector
+with basis functions $\psi_i$, where $i$ are the degrees of freedom and Einstein summation is employed.
+The infinity norm of $\phi$ was approximated from the vector
 of coefficients $\left\{\phi_i\right\}$, which represent point evaluations of $\phi$ as
 \begin{equation*}
     \normlinf{\phi} = \max_i{\vert \phi_i\vert}.
 \end{equation*}
 
-\subsection{Numerical Verification of Model Implementation}\label{subsec:numerical_verification}
-A cylinder geometry meshed with varying degrees of refinement was used to perform convergence analysis of the numerical methods used to solve the Stokes equations. The cylinder had unit length and a diameter of one half length unit. For the analysis, we used tangential traction boundary conditions on all of the cylinder surface. Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions} with the velocity and pressure expressions defined in~\cref{subsec:mms} for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated $\mathbf{H}(\mathrm{div};\Omega)$ and $\mathbf{H}^1$ error norms for $\uu_h$, and the $L^2$ error norm for $p_h$~(\cref{tab:cylinder_error_rates}). Based on the error norm calculations, we also calculated the experimental order of convergence~(\cref{subsec:norms_and_eoc}). We observe convergence in all of the reported error norms. Furthermore, we report the error in calculation of the maximum velocities, and observe convergence in this error as well. Lastly, we calculated the $L^2$ norm of the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
+\subsection{Numerical verification of model implementation}\label{subsec:numerical_verification}
+A cylinder geometry meshed with varying degrees of refinement was used to
+perform convergence analysis of the numerical methods used to solve the Stokes equations.
+The cylinder had unit length and a diameter of one half length unit.
+For the analysis, we used tangential traction boundary conditions on all
+of the cylinder surface. Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}
+with the velocity and pressure expressions defined in~\Cref{subsec:mms}
+for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated $\mathbf{H}(\mathrm{div};\Omega)$
+and $\mathbf{H}^1$ error norms for $\uu_h$, and the $L^2$ error norm for
+$p_h$~(\cref{tab:cylinder_error_rates}). Based on the error norm calculations,
+we also calculated the experimental order of convergence~(\Cref{subsec:norms_and_eoc}).
+We observe convergence in all of the reported error norms. Furthermore,
+we report the error in calculation of the maximum velocities, and observe
+convergence in this error as well. Lastly, we calculated the $L^2$ norm of
+the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
 \begin{table}[!htbp]
     \small
     \centering
@@ -1236,10 +1391,30 @@ A cylinder geometry meshed with varying degrees of refinement was used to perfor
     \end{tabular}
 \end{table}
 
-To verify the model implementation with the zebrafish brain ventricles mesh, we compared velocity norms for varying degrees of refinement of the brain ventricles mesh~(\cref{tab:ventricles_norms_BDM}). For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$. For a velocity vector $\uu=(u_x, u_y, u_z)$, the velocity magnitude is $u = \sqrt{u_x^2 + u_y^2 + u_z^2}$. We also report the maximum value $\normlinf{u_h}$ scaled by the area $|\Gc|=\intGc{}$ over which tangential traction $\btau$ was applied. We chose this measure using $|\Gc|$ as a scale because the regions of the mesh marked as cilia-populated changes slightly with every mesh refinement, owing to the unstructured organization of the mesh cells. This change in the surface area over which the tangential traction was applied directly affected the maximum velocity magnitude, since the maximum velocity magnitude is a result of the total amount of force $\intGc{\btau\cdot P_{\nn}(\rr)}$ applied on the ciliated boundary, where the cilia vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ as introduced in~\cref{subsec:appendixA1}. In the numerical experiments, we set a constant $\tau = 6.5\times 10^{-4}$ Pa and $\lambda(\xx)=1$. We set $\rr = (1, 0, 1)$ in the ventral middle ventricle cilia region and $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and the anterior ventricle cilia regions. We used $\gamma=10$ for the BDM penalty parameter.
+To verify the model implementation with the zebrafish brain ventricles mesh,
+we compared velocity norms for varying degrees of refinement of the brain ventricles mesh~(\Cref{tab:ventricles_norms_BDM}).
+For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$.
+For a velocity vector $\uu=(u_x, u_y, u_z)$, the velocity magnitude is
+$u = \sqrt{u_x^2 + u_y^2 + u_z^2}$. We also report the maximum value
+$\normlinf{u_h}$ scaled by the area $|\Gc|=\intGc{}$ over which tangential traction
+$\btau$ was applied. We chose this measure using $|\Gc|$ as a scale because the regions
+of the mesh marked as cilia-populated changes slightly with every mesh refinement,
+owing to the unstructured organization of the mesh cells. This change in the surface
+area over which the tangential traction was applied directly affected the maximum velocity magnitude,
+since the maximum velocity magnitude is a result of the total amount of force
+$\intGc{\btau\cdot P_{\nn}(\rr)}$ applied on the ciliated boundary, where the cilia
+vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ as introduced in~\Cref{subsec:appendixA1}.
+In the numerical experiments, we set a constant $\tau = 6.5\times 10^{-4}$ Pa and
+$\lambda(\xx)=1$. We set $\rr = (1, 0, 1)$ in the ventral middle ventricle cilia region
+and $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and the anterior ventricle cilia
+regions. We used $\gamma=10$ for the BDM penalty parameter.
 
-To account for the fact that the volume $|\Omega|=\intO{}$ also changes slightly with mesh refinement, we report the $\mathbf{L}^2$ norm of $\uu_h$ scaled by $|\Omega|$.
-Finally, we provide verification of mass conservation by reporting the $\mathbf{L}^2$ norms of the divergence $\nabla\cdot\uu_h$. We remark that the units used in the model implementation was millimeters, which is why~\cref{tab:ventricles_norms_BDM} reports units in millimeters, instead of micrometers which has been used elsewhere in the paper. 
+To account for the fact that the volume $|\Omega|=\intO{}$ also changes
+slightly with mesh refinement, we report the $\mathbf{L}^2$ norm of $\uu_h$ scaled by $|\Omega|$.
+Finally, we provide verification of mass conservation by reporting the $\mathbf{L}^2$ norms of
+the divergence $\nabla\cdot\uu_h$. We remark that the units used in the model
+implementation was millimeters, which is why~\Cref{tab:ventricles_norms_BDM}
+reports units in millimeters, instead of micrometers which has been used elsewhere in the paper. 
 \begin{table}[!htbp]
     \centering
     \caption{Velocity norms under mesh refinement on the brain ventricles mesh using model version I with $\btau = \tau P_{\nn}(\rr)$, using $\tau = 6.5\times 10^{-4}$ Pa, $\rr = (1, 0, 1)$ in the ventral middle ventricle and, $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and the anterior ventricle.}\label{tab:ventricles_norms_BDM}
@@ -1255,19 +1430,28 @@ Finally, we provide verification of mass conservation by reporting the $\mathbf{
         \bottomrule
     \end{tabular}
 \end{table}
-\iffalse
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{graphics/cylinder_mesh.png}
-    \caption{The cylinder geometry used for convergence analysis. The cylinder had unit length and a diameter of half a unit length. Illustrated here is the mesh of highest resolution, with $h/h_0 = 1/8$ and a total of 1 855 337 degrees of freedom.}
-    \label{fig:cylinder_mesh}
-\end{figure}
-\fi
 
-\section{Quantification of Particle Transport}\label{sec:appC_particle_transport}
-Particle tracking data~\cite{Olstad2019CiliaryDevelopment} was analyzed. For four zebrafish, five recordings with a few particles for each fish were carried out. The particles tracked were in the duct between the rhombencephalic ventricle and the diencephalic ventricle. Frequency of image acquisition was 20.22 Hz. The collected data constituted $x$ and $y$ positions of the particles at every time instant of image acquisition. The velocities $\uu_x$ and $\uu_y$ were determined by calculating the change in positions $\Delta x$ and $\Delta y$ relative to the change in time $\Delta t$ between two subsequent images, $\Delta t$ being equal to the frequency of acquisition. Mean velocities $\overline{u}_x$~(\cref{fig:meanx}) and $\overline{u}_y$~(\cref{fig:meany}), which serve as a quantification of particle drift, were calculated by taking the difference between the last and first positions of a particle.
+\section{Quantification of particle transport}\label{sec:appC_particle_transport}
+Particle tracking data~\cite{Olstad2019CiliaryDevelopment} was analyzed.
+For four zebrafish, five recordings with a few particles for each fish were carried out.
+The particles tracked were in the duct between the rhombencephalic ventricle and the
+diencephalic ventricle. Frequency of image acquisition was 20.22 Hz.
+The collected data constituted $x$ and $y$ positions of the particles at every time
+instant of image acquisition. The velocities $\uu_x$ and $\uu_y$ were determined by
+calculating the change in positions $\Delta x$ and $\Delta y$ relative to the change
+in time $\Delta t$ between two subsequent images, $\Delta t$ being equal to the frequency of acquisition.
+Mean velocities $\overline{u}_x$~(\Cref{fig:meanx}) and $\overline{u}_y$~(\Cref{fig:meany}),
+which serve as a quantification of particle drift, were calculated
+by taking the difference between the last and first positions of a particle.
 
-Particle movement varied over the different measurements. The mean of $\overline{u}_x$ was 0.26 $\mu$m/s and the mean of $\overline{u}_y$ was 0.08 $\mu$m/s. The maximum mean velocities in absolute values were 10.2 $\mu$m/s and 2.4 $\mu$m/s for $\overline{u}_x$ and $\overline{u}_y$, respectively. We used flow model II (only cardiac forces) to tune the pressure boundary condition amplitude $A$. The choice of $A=0.0015$ Pa was used since: (i) it yields a maximum velocity magnitude of 4.8 $\mu$m/s, which is close to the maximum observed in the particle tracking data when rejecting the outlier at around 10 $\mu$m/s; (ii) it yields a time-averaged mean velocity of 0.89 $\mu$m/s, which is close to the mean observed in the particle tracking data.
+Particle movement varied over the different measurements. The mean of $\overline{u}_x$ was
+0.26 $\mu$m/s and the mean of $\overline{u}_y$ was 0.08 $\mu$m/s. The maximum mean velocities
+in absolute values were 10.2 $\mu$m/s and 2.4 $\mu$m/s for $\overline{u}_x$ and $\overline{u}_y$,
+respectively. We used flow model II (only cardiac forces) to tune the pressure boundary condition
+amplitude $A$. The choice of $A=0.0015$ Pa was used since: (i) it yields a maximum velocity magnitude
+of 4.8 $\mu$m/s, which is close to the maximum observed in the particle tracking data when
+rejecting the outlier at around 10 $\mu$m/s; (ii) it yields a time-averaged mean velocity
+of 0.89 $\mu$m/s, which is close to the mean observed in the particle tracking data.
 \begin{figure}[H]
     \begin{minipage}[t]{0.49\textwidth}
         \includegraphics[width=\textwidth]{graphics/mean_velocities_x.png}
