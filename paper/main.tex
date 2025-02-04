@@ -479,7 +479,8 @@ element~\cite{Boffi2008FiniteProblem}, ensuring mass conservation.
 The advection-diffusion equation~\eqref{eq:adv_diff_strong} is discretized
 with a first-order implicit Euler method in time, and a first-order,
 symmetric interior penalty discontinuous Galerkin (DG)
-method in space~\cite{Arnold1982AnElements}.
+method in space~\cite{Arnold1982AnElements}, chosen due to its favorable
+conservation properties.
 To accurately approximate the solute concentrations even
 in the presence of strong advection (high Péclet numbers),
 we use an upwind scheme for the velocity when calculating the
@@ -884,24 +885,33 @@ role for solute movement to regions upstream in the cilia flow fields or to dist
 \subsection*{Loss of cilia motility in specific subpopulation slows down transport}
 We previously identified three distinct ciliated cell lineages in the
 zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain}.
-To identify the role of these lineages on CSF transport, we modified flow boundary conditions
-in the three different ciliated regions
-(\Cref{fig:figure5_compare_cilia_modifications}a, magenta markers)
-and simulated CSF flow using the Stokes equations.
+To identify the role of these lineages on CSF transport, we simulate transport
+upon region-specific cilia paralysis by modifying the boundary conditions
+of the CSF flow model. Three separate cilia-covered regions were considered separately:
+the telencephalic (anterior) ventricle, the dorsal part and the ventral part
+of the diencephalic (middle) ventricle (\Cref{fig:figure5_compare_cilia_modifications}a).
+The cilia tangential traction boundary condition is for each case
+changed to a free-slip boundary condition in paralyzed region,
+prescribing zero tangential forces to
+represent absence of cilia motion.
+We simulate CSF flow modeled by the Stokes equations with the
+modified boundary conditions, and use the resulting
+velocity fields in transport simulations.
+
 We identified that the velocities were most strongly
 affected when removing cilia in the dorsal diencephalic cilia,
 as the maximum velocity dropped from 27.7 $\mu$m/s to 8.0 $\mu$m/s.
+\emph{In vivo}, these cilia generate the strongest flow at
+this developmental stage of the fish~\cite{Olstad2019CiliaryDevelopment}.
 In contrast, removing telencephalic and ventral diencephalic had minimal
 impact and resulted in maximum velocities of 27.7 $\mu$m/s or 27.2 $\mu$m/s, respectively.
-
-With the resulting velocity fields, we simulated transport of Dendra2.
-Changes in the transport dynamics were most prominent when removing the dorsal cilia
-in the diencephalic ventricle, which produces the strongest flow at this developmental stage.
-All ROIs (except ROI 1, where we locally released solutes) exhibit significant changes
-in the dynamics of $\cbar$ (\Cref{fig:figure5_compare_cilia_modifications}b).
+Changes in the transport dynamics of Dendra2 were most prominent when removing the dorsal cilia
+in the diencephalic ventricle. All ROIs (except ROI 1, where we impose the photoconversion curve)
+exhibit significant changes in the dynamics of $\cbar$
+(\Cref{fig:figure5_compare_cilia_modifications}b).
 Compared to the baseline model results, we observed a slower increase and lower final concentration
 in the middle and anterior ventricles (ROIs 2--5),
-and a faster transport to the posterior ventricle (ROI 6).
+and more rapid transport to the posterior ventricle (ROI 6).
 In contrast, removal of telencephalic cilia did not alter the evolution of the
 mean concentration $\cbar$ with time (\Cref{fig:figure5_compare_cilia_modifications}b).
 Finally, without ventral cilia in the diencephalic ventricle,
@@ -920,6 +930,7 @@ less solute has spread towards the posterior ventricle (ROI 6).
 \end{figure}
 
 \subsection*{Modification of ventricles geometry impacts protein distribution}
+Variations in ventricular morphology impacts the CSF flow patterns.
 To assess the impact of ventricular morphologies on solute distribution,
 we used four alternative brain ventricles meshes:
 one where the connection between the anterior and middle ventricles is constricted;
@@ -927,7 +938,8 @@ one where the connection between the middle and posterior ventricles is constric
 one where the middle ventricle is shrunk in the lateral direction;
 and the combination of the above three modifications (\Cref{fig:figure6_sim_results_compare_geometries}a).
 We simulate CSF flow in the modified geometries with the baseline flow model
-and use the resulting velocity field to simulate transport of Dendra2 (\Cref{fig:figure6_sim_results_compare_geometries}b).
+and use the resulting velocity field to simulate transport of Dendra2
+(\Cref{fig:figure6_sim_results_compare_geometries}b).
 
 Constricting the connection between the anterior and middle ventricle leads to
 slower transport to the anterior ventricle (ROI 5),
