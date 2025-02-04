@@ -416,14 +416,29 @@ are $D_1$ (Exosomes), $D_2$ (STM+GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_
 
 \subsection*{Computational flow modelling scenarios}
 
-\mer{MER: @Halvor I suggest you move these two paragraphs into their respective Results sections (Results 2 and 5). Putting the bullet points above at the end of the Stokes equations is a great idea!}
-When simulating transport of solute in the ventricles, we consider the same six different regions of interest that were considered in the photoconversion experiments. In region number one (the photoconversion region), we use the function~\eqref{eq:photoconversion_curve} to enforce the concentration such that it represents the experimental data of photoconversion of proteins. We consider the three different diffusion coefficients introduced in previous sections to simulate and compare results for transport of molecules of varying sizes.
+\mer{MER: @Halvor I suggest you move these two paragraphs into their respective
+Results sections (Results 2 and 5).}
+When simulating transport of solute in the ventricles,
+we consider the same six different regions of interest that were
+considered in the photoconversion experiments.
+In region number one (the photoconversion region),
+we use the function~\eqref{eq:photoconversion_curve} to enforce
+the concentration such that it represents the experimental data
+of photoconversion of proteins. We consider the three different diffusion
+coefficients introduced in previous sections to simulate and compare results
+for transport of molecules of varying sizes.
 
-To simulate transport in the pathological case of region-specific cilia absence, we consider three scenarios where we modify the boundary conditions of the CSF flow model.
-The cilia tangential stress boundary condition for the boundary where we remove cilia is changed to a free-slip boundary condition,
-prescribing zero tangential forces to represent absence of cilia motion in the region where we consider cilia removal.
-We consider removal of cilia in the three separate cilia-covered regions of the telencephalic (anterior) ventricle, the dorsal part of the diencephalic (middle) ventricle,
-and the ventral part of the diencephalic ventricle~(\Cref{fig:figure1}d). For the three scenarios, we simulate CSF flow modeled by the Stokes equations~\eqref{eq:stokes_eqs} with the modified boundary conditions,
+To simulate transport in the pathological case of region-specific cilia absence,
+we consider three scenarios where we modify the boundary conditions of the CSF flow model.
+The cilia tangential stress boundary condition for the boundary where we
+remove cilia is changed to a free-slip boundary condition,
+prescribing zero tangential forces to represent absence of cilia motion
+in the region where we consider cilia removal.
+We consider removal of cilia in the three separate cilia-covered regions
+of the telencephalic (anterior) ventricle, the dorsal part of the diencephalic (middle) ventricle,
+and the ventral part of the diencephalic ventricle~(\Cref{fig:figure1}d).
+For the three scenarios, we simulate CSF flow modeled by the Stokes
+equations~\eqref{eq:stokes_eqs} with the modified boundary conditions,
 and use the resulting velocity field in transport simulations.
 
 
@@ -433,19 +448,34 @@ We calculate the mean solute concentrations
     \cbar_i(t) = \frac{1}{|\Omega_i|}\int_{\Omega_i} c(\xx, t)\,\dx,
     \label{eq:c_mean_i}
 \end{equation}
-in the six regions of interest (ROIs) $\Omega_i$ ($i = 1, \dots, 6$) as functions of time, where $|\Omega_i|$ is the volume of the domain $\Omega_i$. The dynamics of ROI 1 follows directly from~\eqref{eq:photoconversion_curve}. In addition, we report time-to-threshold: the time $\hat{t}_i$ when the mean concentration $\cbar_i$ first exceed a threshold value $\hat{c}_i$. We use $\hat{c}_i=0.25$ for ROI 1--4 and $\hat{c}_i=0.10$ for ROI 5--6.
+in the six regions of interest (ROIs) $\Omega_i$ ($i = 1, \dots, 6$)
+as functions of time, where $|\Omega_i|$ is the volume of
+the domain $\Omega_i$. The dynamics of ROI 1 follows directly
+from~\eqref{eq:photoconversion_curve}. In addition,
+we report time-to-threshold: the time $\hat{t}_i$ when
+the mean concentration $\cbar_i$ first exceed a threshold
+value $\hat{c}_i$. We use $\hat{c}_i=0.25$ for ROI 1--4 and
+$\hat{c}_i=0.10$ for ROI 5--6.
 
-To evaluate the relative importance of advection and diffusion as transport mechanisms, we consider the Péclet number
+To evaluate the relative importance of advection and
+diffusion as transport mechanisms, we consider the Péclet number
 \begin{equation*}
-    \mathrm{Pe} = \frac{\mathrm{diffusion \ timescale}}{\mathrm{advection \ timescale}} = \frac{t_d}{t_a} = \frac{L_p^2/D}{L_p/U_p} = \frac{L_p U_p}{D}.
+    \mathrm{Pe} = \frac{\mathrm{diffusion \ timescale}}{\mathrm{advection \ timescale}}
+    = \frac{t_d}{t_a} = \frac{L_p^2/D}{L_p/U_p} = \frac{L_p U_p}{D}.
 \end{equation*}
-Here, $L_p$ and $U_p$ are characteristic length and velocity scales, respectively, and $D$ is the solute diffusion coefficient. \fixme{Thus, if $\mathrm{Pe} > 1$, transport is dominated by advection, and if $\mathrm{Pe} < 1$ transport is dominated by diffusion. As a length scale $L_p$, we choose the approximate length of the ventricles geometry in the $x$-direction, $L_p=600$ \textmu m. We use a mean velocity $\overline{U}$ as the characteristic velocity $U_p$. The mean velocity $\overline{U}$ is calculated by first averaging the velocity in space:
+Thus, if $\mathrm{Pe} > 1$, transport is dominated by advection,
+and if $\mathrm{Pe} < 1$ transport is dominated by diffusion.
+Here, $L_p$ and $U_p$ are characteristic length and velocity scales,
+respectively, and $D$ is the solute diffusion coefficient.
+In calculating a global Péclet number, we use $L_p=600$ \textmu m, the approximate length of the
+ventricles geometry along the rostrocaudal ($x$-) axis.
+We use a mean velocity $\overline{U}$ as the characteristic velocity $U_p$.
+The mean velocity $\overline{U}$ is calculated by first averaging the velocity in space:
 \begin{equation*}
     \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
 \end{equation*}
-and then averaging $\overline{u}$ in time over one cardiac cycle.}
-
-To assess the assumption that the CSF flow is governed by the Stokes equations, we also compute the Reynolds number
+and then averaging $\overline{u}$ in time over one cardiac cycle. To assess the assumption that the CSF flow is governed by the Stokes equations,
+we also compute the Reynolds number
 \begin{equation*}
     \mathrm{Re} = \frac{\mathrm{inertial \ forces}}{\mathrm{viscous \ forces}} = \frac{\rho U_r L_r}{\mu},
 \end{equation*}
@@ -454,139 +484,249 @@ with $L_r$ and $U_r$ as length and velocity scales characteristic of the flow.
 %-----DISCRETIZATION AND MODEL IMPLEMENTATION-----%
 \subsection*{Numerical approximation of the Stokes equations}
 
-The Stokes equations~\eqref{eq:stokes_eqs} are discretized with a finite element method in space, while in time, we employ a first-order implicit Euler discretization.
-We set the timestep size $\Delta t = 0.02252$ s such that 20 timesteps represent one cardiac cycle. For the spatial discretization, we use piecewise linear Brezzi-Douglas-Marini (BDM) elements for the velocity.
-The BDM elements have degrees of freedom associated with integral moments of the velocity component normal to the facets of elements~\cite{Brezzi1985TwoProblems}, thus we enforce the impermeability condition $\uu\cdot\nn=0$ strongly.
-We impose the boundary conditions for both the tangential traction $\bsigpar$ and the normal pressure $\Tilde{p}(t)$ weakly.
+The Stokes equations~\eqref{eq:stokes_eqs} are discretized with a finite element method
+in space, while in time, we employ a first-order implicit Euler discretization.
+We set the timestep size $\Delta t = 0.02252$ s such that 20 timesteps represent one cardiac cycle.
+For the spatial discretization, we use piecewise linear Brezzi-Douglas-Marini (BDM) elements for the velocity.
+The BDM elements have degrees of freedom associated with integral moments of the
+velocity component normal to the facets of elements~\cite{Brezzi1985TwoProblems},
+thus we enforce the impermeability condition $\uu\cdot\nn=0$ strongly.
+We impose the boundary conditions for both the tangential traction $\bsigpar$ and
+the normal pressure $\Tilde{p}(t)$ weakly.
 For the pressure, we use piecewise constant (zeroth order discontinuous Galerkin (DG)) elements.
 The resulting total number of degrees of freedom at each time step is 943 820.
-\fixme{The element combination $\mathrm{BDM}_1$--$\mathrm{DG}_{0}$ yields a non-conforming but stable discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}.
-The discretization includes a penalty parameter $\gamma$ which needs to be chosen large enough to ensure stability of the finite element method. We set $\gamma=10$.}
-Since the divergence of the velocity is a subspace of the pressure space for this scheme, the divergence-free condition of the velocity is satisfied exactly on each element~\cite{Boffi2008FiniteProblem}, ensuring mass conservation. 
+\fixme{The element combination $\mathrm{BDM}_1$--$\mathrm{DG}_{0}$ yields a non-conforming
+discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}.
+To ensure stability of the scheme, continuity in tangential velocities on interior facets
+is weakly enforced with a penalty parameter $\gamma=10$~\cite{Hong2016AEquations}.}
+Since the divergence of the velocity is a subspace of the pressure space for this scheme,
+the divergence-free condition of the velocity is satisfied exactly on each
+element~\cite{Boffi2008FiniteProblem}, ensuring mass conservation. 
 
 \subsection*{Numerical approximation of the advection-diffusion equation}
-The advection-diffusion equation~\eqref{eq:adv_diff_strong} is discretized with a first-order implicit Euler method in time, and a first-order,
-symmetric interior penalty discontinuous Galerkin (DG) method in space~\cite{Arnold1982AnElements}.
-To accurately approximate the solute concentrations even in the presence of strong advection (high Péclet numbers), we use an upwind scheme for the velocity when calculating the advective flux~\cite{Patankar2018NumericalFlow}.
-As for the flow equations, we use a timestep size of $\Delta t = 0.02252$ s. We simulate transport for 1900 cardiac cycles, with a final time of simulation $T = 856$ s.
+The advection-diffusion equation~\eqref{eq:adv_diff_strong} is discretized
+with a first-order implicit Euler method in time, and a first-order,
+symmetric interior penalty discontinuous Galerkin (DG)
+method in space~\cite{Arnold1982AnElements}.
+To accurately approximate the solute concentrations even
+in the presence of strong advection (high Péclet numbers),
+we use an upwind scheme for the velocity when calculating the
+advective flux~\cite{Patankar2018NumericalFlow}.
+As for the flow equations, we use a timestep size of
+$\Delta t = 0.02252$ s. We simulate transport for 1900 cardiac cycles,
+with a final time of simulation $T = 856$ s.
 A DG penalty parameter $\alpha = 25$ was chosen to ensure stability of the method. 
 
 \subsection*{Solution strategy and software implementation}
-Because of the one-way coupling between the velocity field $\uu$ and the concentration $c$, the governing equations for the CSF flow and the concentration can be solved sequentially when modeling solute transport.
-\fixme{For the cilia-only/no-cardiac flow scenario, the velocity quickly reaches steady-state.} In this case, we first solve the \fixme{steady-state} Stokes equations~\eqref{eq:stokes_eqs} for $\uu$ and $p$,
-and then use the velocity field $\uu$ as input when solving the advection-diffusion equation~\eqref{eq:adv_diff_strong}.
-For the other flow scenarios, the Stokes equations are solved for one period of the pulsatile cardiac motion. The solution of this one period is then used periodically as input for the advection-diffusion equation.
+Owing to the one-way coupling between the velocity field $\uu$
+and the concentration $c$, the governing equations for the
+CSF flow and the concentration can be solved sequentially when modeling solute transport.
+\fixme{For the cilia-only/no-cardiac flow scenario, the velocity quickly reaches steady-state.}
+In this case, we first solve the \fixme{steady-state} Stokes equations~\eqref{eq:stokes_eqs}
+for $\uu$ and $p$, and then use the velocity field $\uu$ as input when solving
+the advection-diffusion equation~\eqref{eq:adv_diff_strong}.
+For the other flow scenarios, the Stokes equations are solved for one
+period of the pulsatile cardiac motion. The solution of this one period
+is then used periodically as input for the advection-diffusion equation.
 
-The numerical solution schemes for the Stokes equations and the advection-diffusion equation were implemented and solved numerically with DOLFINx,
-the Python interface of the finite element software FEniCSx~\cite{TheFEniCSProject2024FEniCSxDocumentation}, with petsc4py~\cite{Dalcin2011ParallelPython} as linear algebra backend.
-A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the linear systems resulting from the discretized Stokes equations.
-For the discretized advection-diffusion equation, we used an iterative linear solver based on GMRES~\cite{Saad1986GMRES:Systems} with block Jacobi preconditioning~\cite{Jacobi1845UeberGleichungen}.
-Numerical experiments verified the accuracy of the model implementation (\Cref{sec:appB_verification}). The simulation code is openly available~\cite{zenodo-link-to-all-code}. 
+The numerical solution schemes for the Stokes equations and the
+advection-diffusion equation were implemented and solved numerically with DOLFINx,
+the Python interface of the finite element software
+FEniCSx~\cite{TheFEniCSProject2024FEniCSxDocumentation}, with
+petsc4py~\cite{Dalcin2011ParallelPython} as linear algebra backend.
+A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the
+linear systems resulting from the discretized Stokes equations.
+For the discretized advection-diffusion equation, we used an iterative
+linear solver based on GMRES~\cite{Saad1986GMRES:Systems} with block Jacobi
+preconditioning~\cite{Jacobi1845UeberGleichungen}.
+Numerical experiments verified the accuracy of the model implementation
+(\Cref{sec:appB_verification}). The simulation code is openly
+available~\cite{zenodo-link-to-all-code}. 
 
 %%------PHYSICAL EXPERIMENTS------%%
 \subsection*{Zebrafish maintenance and strains in photoconversion experiments}
-The animal facilities for zebrafish~(\emph{danio rerio}) are approved by the Norwegian Food Safety Authority (NFSA, Mattilsynet).
-The zebrafish were maintained in accordance with the guidelines set by the NFSA and the European Communities Council Directive.
+The animal facilities for zebrafish~(\emph{danio rerio}) are approved by the
+Norwegian Food Safety Authority (NFSA, Mattilsynet).
+The zebrafish were maintained in accordance with the guidelines set by the
+NFSA and the European Communities Council Directive.
 
-The larval and adult zebrafish were raised under standard husbandry conditions at 28.5°C in a Techniplast Zebtech Multilinking system.
-The fish tanks were kept at constant pH 7.0 and 685 $\mu$S with a 14/10 hr light/dark cycle.
-From fertilization to 3 dpf, larvae were maintained in egg water (1.2 g marine salt and 0.1\% methylene blue in 20 L reverse osmosis (RO) water)
-and subsequently transferred to artificial fish water (AFW) (1.2 g marine salt in 20 L RO water).
-The zebrafish lines used in the experiments were \emph{ccdc103(dnaaf19)\textsuperscript{tn222a}} (\emph{schmalhans (smh)})~\cite{Jau-NianChen1997Left-rightZebrafish}
-and \emph{Tg(gfap:Gal4FF)\textsuperscript{nw7Tg}}~\cite{DiazVerdugo2019Glia-neuronSeizures}, \emph{Tg(5xuas:Signal-Dendra2)\textsuperscript{nw21Tg}}.
-Animals were in the pigmentless \emph{nacre\textsuperscript{b692}}(\emph{mitfa\textsuperscript{-/-}})~\cite{JamesA.Lister1999NacreFate} background.
+The larval and adult zebrafish were raised under standard husbandry
+conditions at 28.5°C in a Techniplast Zebtech Multilinking system.
+The fish tanks were kept at constant pH 7.0 and 685 $\mu$S with a
+14/10 hr light/dark cycle.
+From fertilization to 3 dpf, larvae were maintained in egg
+water (1.2 g marine salt and 0.1\% methylene blue in 20 L reverse osmosis (RO) water)
+and subsequently transferred to artificial fish water (AFW)
+(1.2 g marine salt in 20 L RO water). The zebrafish lines used in the experiments were
+\emph{ccdc103(dnaaf19)\textsuperscript{tn222a}}
+(\emph{schmalhans (smh)})~\cite{Jau-NianChen1997Left-rightZebrafish}
+and \emph{Tg(gfap:Gal4FF)\textsuperscript{nw7Tg}}~\cite{DiazVerdugo2019Glia-neuronSeizures},
+\emph{Tg(5xuas:Signal-Dendra2)\textsuperscript{nw21Tg}}.
+Animals were in the pigmentless \emph{nacre\textsuperscript{b692}}
+(\emph{mitfa\textsuperscript{-/-}})~\cite{JamesA.Lister1999NacreFate} background.
 
-Wholemount~\emph{in vivo} live imaging and photoconversion experiments were performed with zebrafish larvae at 2 days post-fertilization (dpf) stage obtained from inbreeding of heterozygous
-\emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xuas:Signal-Dendra2}) adult animals, as described in D'Gama~\emph{et al.}~\cite{DGama2024Cilia-mediatedBrain}.
-Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+}) or \emph{smh}\textsuperscript{+/-} heterozygous zebrafish from the same breeding.
+Wholemount~\emph{in vivo} live imaging and photoconversion
+experiments were performed with zebrafish larvae at 2 days post-fertilization (dpf) stage obtained from inbreeding of heterozygous
+\emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xuas:Signal-Dendra2})
+adult animals, as described in D'Gama~\emph{et al.}~\cite{DGama2024Cilia-mediatedBrain}.
+Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+})
+or \emph{smh}\textsuperscript{+/-} heterozygous zebrafish from the same breeding.
 The mutants were identified based on their curved body~\cite{Jau-NianChen1997Left-rightZebrafish}.
 
 \subsection*{Genotyping of adult zebrafish}
-Genomic DNA (gDNA) was isolated from clipped fins of anesthetized adult fish using 100 $\mu$L of PCR lysis buffer (containing 1M tris pH 7--9, 0.5 M EDTA, tritonX-100, and Proteinase K 0.1 mg/ml) overnight at 50°C.
-To stop the lysis reaction, the samples were heated to 95°C for 10 minutes and then centrifuged at 13000 rpm for 2 minutes.
+Genomic DNA (gDNA) was isolated from clipped fins of anesthetized adult
+fish using 100 $\mu$L of PCR lysis buffer (containing 1M tris pH 7--9, 0.5 M EDTA,
+tritonX-100, and Proteinase K 0.1 mg/ml) overnight at 50°C.
+To stop the lysis reaction, the samples were heated to 95°C for 10 minutes
+and then centrifuged at 13000 rpm for 2 minutes.
 The supernatant containing gDNA was utilized for KASP assays-based analysis.
-The gDNAs were diluted (1:2) with water, and 3 $\mu$L of the diluted gDNA was used to perform the KASP assay following the guidelines of the manufacturer (LGC Biosearch Technologies™).
-For each sample well, the master mix contained: 5 $\mu$L of master mix; 0.14 $\mu$L of assay mix; 1.86 $\mu$L of RO water.
+The gDNAs were diluted (1:2) with water, and 3 $\mu$L of the diluted gDNA was
+used to perform the KASP assay following the guidelines of the manufacturer (LGC Biosearch Technologies™).
+For each sample well, the master mix contained: 5 $\mu$L of master mix; 0.14
+$\mu$L of assay mix; 1.86 $\mu$L of RO water.
 
 \subsection*{Generation of \emph{Tg(5xuas:Signal-Dendra2)\textsuperscript{nw21Tg}} line}
 \lyng{Needs a more understandable title.}
-The open reading frame (ORF) of the neuropeptide y (npy) signal peptide (\emph{npy}: ENSDARG00000036222, Q1LW93) was fused with the N-terminal of zebrafish codon optimized Dendra2 DNA sequence.
-The DNA sequence was synthesized with EcoR1 enzyme sites at the 5’ and 3’ ends (GenScript Biotech),
-and inserted into the pT2MUASMCS vector~\cite{Asakawa2008GeneticZebrafish} through restriction enzyme cloning (GenScript Biotech). 
+The open reading frame (ORF) of the neuropeptide y (npy) signal peptide
+(\emph{npy}: ENSDARG00000036222, Q1LW93) was fused with the N-terminal
+of zebrafish codon optimized Dendra2 DNA sequence.
+The DNA sequence was synthesized with EcoR1 enzyme sites at the 5’ and
+3’ ends (GenScript Biotech), and inserted into the
+pT2MUASMCS vector~\cite{Asakawa2008GeneticZebrafish}
+through restriction enzyme cloning (GenScript Biotech). 
 
 To generate the transgenic line, the 5xuas:Signal-Dendra2 plasmid DNA was used.
-A volume of 2 nl of a mixture of the plasmid DNA (60 pg) and tol2 mRNA (10 pg) was microinjected into one-cell stage embryos,
-as described in Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}. The injected embryos were raised to adulthood (F0).
-Germline-transmitted founder zebrafish were identified by breeding with multiple Gal4 transgenic lines. Stable F1 embryos expressing the Gal4-driven Dendra2 signals were screened and raised to adult zebrafish.
+A volume of 2 nl of a mixture of the plasmid DNA (60 pg) and tol2 mRNA (10 pg)
+was microinjected into one-cell stage embryos,
+as described in Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}. The injected
+embryos were raised to adulthood (F0).
+Germline-transmitted founder zebrafish were identified by breeding with
+multiple Gal4 transgenic lines. Stable F1 embryos expressing the Gal4-driven
+Dendra2 signals were screened and raised to adult zebrafish.
 
 \subsection*{Wholemount zebrafish \emph{in vivo} live time-lapse imaging and photoconversion of Dendra2}
-Two dpf larval zebrafish were anesthetized in 0.013\% MS222 (Ethyl 3-aminobenzoate methanesulfonate, Sigma) in AFW and mounted laterally in 1.5\% low melting agarose in a Flurodish (VWR, FD35PDL-100),
-to obtain a lateral view of the brain ventricles. After the fish were positioned in the agarose, the dish stood for 5 min to allow the agarose to solidify.
-After solidification, AFW containing 0.013\% MS222 was added, and then the fish were transferred to the confocal microscope (LSM880 Examiner, Zeiss)
-and imaged using a 20x water-immersion objective (Zeiss, NA 1.0, Plan-Apochromat) at room temperature.
+Two dpf larval zebrafish were anesthetized in 0.013\% MS222
+(Ethyl 3-aminobenzoate methanesulfonate, Sigma) in AFW and
+mounted laterally in 1.5\% low melting agarose in a Flurodish (VWR, FD35PDL-100),
+to obtain a lateral view of the brain ventricles. After the
+fish were positioned in the agarose, the dish stood for 5 min to allow the agarose to solidify.
+After solidification, AFW containing 0.013\% MS222 was added,
+and then the fish were transferred to the confocal microscope (LSM880 Examiner, Zeiss)
+and imaged using a 20x water-immersion objective (Zeiss, NA 1.0, Plan-Apochromat)
+at room temperature.
 
-The time-lapse images were acquired in a single plane, covering the telencephalic, diencephalic and rhombencephalic ventricles simultaneously,
-with a frequency of 0.37--0.38 Hz (2.60--2.68 sec / frame). The size of the images was $1024\times400$ pixels. In total, 300 images were acquired per fish.
-The first 10 images were scanned without photoconversion to obtain a baseline value of fluorescence intensity, and the next 290 images were scanned while performing photoconversion. 
+The time-lapse images were acquired in a single plane, covering the
+telencephalic, diencephalic and rhombencephalic ventricles simultaneously,
+with a frequency of 0.37--0.38 Hz (2.60--2.68 sec / frame). The size
+of the images was $1024\times400$ pixels. In total, 300 images were acquired per fish.
+The first 10 images were scanned without photoconversion to obtain a
+baseline value of fluorescence intensity, and the next 290 images were
+scanned while performing photoconversion. 
 
-For photoconversion, ‘Bleaching’ and ‘Region’ in the ZEN software were used. A 405 nm laser was focused into a circular area (diameter: 16 $\mu$m, scan 0.77 $\mu$sec/pixel)
-of the dorsoposterior diencephalic ventricle with 100\% laser power. The laser was illuminated in the area repeatedly between each scanning.
+For photoconversion, ‘Bleaching’ and ‘Region’ in the ZEN software
+were used. A 405 nm laser was focused into a circular area (diameter: 16 $\mu$m, scan 0.77 $\mu$sec/pixel)
+of the dorsoposterior diencephalic ventricle with 100\% laser power.
+The laser was illuminated in the area repeatedly between each scanning.
 After imaging, the fish health was checked and only data from healthy fish were analyzed.
-Data were collected and analyzed from three separate experiments, with a total of 8 controls and 6 mutants.
+Data were collected and analyzed from three separate experiments,
+with a total of 8 controls and 6 mutants.
 
 \subsection*{Photoconversion data analysis}
-All data analysis was performed in MATLAB and the codes are available in the repository of this article: \url{repo-link}.
+All data analysis was performed in MATLAB and the codes are available in
+the repository of this article: \url{repo-link}.
 
-Following import of the image data, the photoconverted channel was aligned to correct for drift
-in $x,y$ directions using previously developed codes~\cite{Reiten2017Motile-Cilia-MediatedComputations, Ringers2023NovelEpithelia}. Only stable recordings were further analyzed. 
-To increase the signal to noise ratio, the images were downsampled by a block average using a resampling factor of 6 (using the MATLAB function blockproc).
-The change of fluorescence $($$(F-F_0)/F_0$, hereafter referred to as $\Delta F$$)$ was calculated for each pixel at each time point of the data.
-Here, the value $F_0$ is the average fluorescence intensity for the baseline (the first 10 time-lapse images) acquired before photoconversion. 
+Following import of the image data, the photoconverted channel
+was aligned to correct for drift in $x,y$ directions using previously
+developed codes~\cite{Reiten2017Motile-Cilia-MediatedComputations, Ringers2023NovelEpithelia}.
+Only stable recordings were further analyzed. 
+To increase the signal to noise ratio, the images were downsampled by
+a block average using a resampling factor of 6 (using the MATLAB function blockproc).
+The change of fluorescence $($$(F-F_0)/F_0$, hereafter referred to as
+$\Delta F$$)$ was calculated for each pixel at each time point of the data.
+Here, the value $F_0$ is the average fluorescence intensity for the
+baseline (the first 10 time-lapse images) acquired before photoconversion. 
 
-To identify the time needed to pass a certain threshold value, $\Delta F$ values were first smoothened.
-The first timepoint when values surpassed the threshold was reported per pixel (in the downsampled images).
-A mask for the image was generated using the green (not photoconverted) channel and calculated on the block-averaged data based on the intensity being higher than 1.5x median intensity of all the frames.
+To identify the time needed to pass a certain threshold value,
+$\Delta F$ values were first smoothened.
+The first timepoint when values surpassed the threshold was reported
+per pixel (in the downsampled images).
+A mask for the image was generated using the green (not photoconverted)
+channel and calculated on the block-averaged data based on the intensity
+being higher than 1.5x median intensity of all the frames.
 
-To obtain $\Delta F$ values for a region of interest (ROI), ROIs were first drawn on the aligned and block-averaged time series.
-Six ROIs were drawn manually: ROI 1 around the location of photoconversion, and ROIs 2--6 in different regions of the ventricular system.
-The pixel values of the fluorescence intensity within one ROI were averaged for each time point, and the relative change $\Delta F$ calculated with this averaged value.
-To normalize the data with respect to photoconversion efficiency, the $\Delta F$ curves for all ROIs were divided by the $\Delta F$ values obtained for ROI 1 at the end of the experiment,
-so that $\Delta F$ values for the photoconverted site ROI 1 ranged from zero to one. Finally, we averaged the $\Delta F$ data from controls and from mutants.
+To obtain $\Delta F$ values for a region of interest (ROI), ROIs were
+first drawn on the aligned and block-averaged time series.
+Six ROIs were drawn manually: ROI 1 around the location of photoconversion,
+and ROIs 2--6 in different regions of the ventricular system.
+The pixel values of the fluorescence intensity within one ROI were
+averaged for each time point, and the relative change $\Delta F$ calculated with this averaged value.
+To normalize the data with respect to photoconversion efficiency, the
+$\Delta F$ curves for all ROIs were divided by the $\Delta F$ values
+obtained for ROI 1 at the end of the experiment,
+so that $\Delta F$ values for the photoconverted site ROI 1 ranged from
+zero to one. Finally, we averaged the $\Delta F$ data from controls and from mutants.
 We report these mean values together with a one-standard deviation error band.
 
 \subsection*{Intraventricular injection of microbeads and particle tracking}
-To recover the flow fields shown in~\Cref{fig:figure1}b, c, we carried out particle tracking in a larval zebrafish injected with fluorescent beads.
-As described in Olstad~\emph{et al.}~\cite{Olstad2019CiliaryDevelopment}, anesthetized 2 dpf zebrafish were injected with 1 nl of a mixture containing 0.1\% w/v fluorescent beads
-(SPHERO Fluorescent Yellow Particles 1\% w/v, F = 0.16 mm) diluted in 7.5 mg/ml 70 kDa rhodamine B isothiocyanate-dextran (RITCdextran; Sigma-Aldrich, R9379)
-dissolved in artificial CSF. Artificial CSF composition was as follows: 124 mM NaCl, 22 mM D-(+)-Glucose, 2.0 mM KCl, 1.6 mM MgSO\textsubscript{4} $\cdot$ 7 H\textsubscript{2}O,
-1.3 mM KH\textsubscript{2}PO\textsubscript{4}, 24 mM NaHCO\textsubscript{3}, 2.0 mM CaCl\textsubscript{2} $\cdot$ 2 H\textsubscript{2}O.
-The needles used for the injections were pulled with a Sutter Instrument Co. Model P-2000 from thin-walled glass capillaries (1.00 mm; VWR) and cut open with a forceps.
-A volume of 1 nl of the solution was injected with a pressure injector (Eppendorf Femtojet 4i) in the rostral rhombencephalic ventricle.
+To recover the flow fields shown in~\Cref{fig:figure1}b, c, we carried out
+particle tracking in a larval zebrafish injected with fluorescent beads.
+As described in Olstad~\emph{et al.}~\cite{Olstad2019CiliaryDevelopment},
+anesthetized 2 dpf zebrafish were injected with 1 nl of a mixture containing 0.1\% w/v fluorescent beads
+(SPHERO Fluorescent Yellow Particles 1\% w/v, F = 0.16 mm) diluted
+in 7.5 mg/ml 70 kDa rhodamine B isothiocyanate-dextran (RITCdextran; Sigma-Aldrich, R9379)
+dissolved in artificial CSF. Artificial CSF composition was as follows:
+124 mM NaCl, 22 mM D-(+)-Glucose, 2.0 mM KCl, 1.6 mM MgSO\textsubscript{4} $\cdot$ 7 H\textsubscript{2}O,
+1.3 mM KH\textsubscript{2}PO\textsubscript{4}, 24 mM NaHCO\textsubscript{3},
+2.0 mM CaCl\textsubscript{2} $\cdot$ 2 H\textsubscript{2}O.
+The needles used for the injections were pulled with a
+Sutter Instrument Co. Model P-2000 from thin-walled glass
+capillaries (1.00 mm; VWR) and cut open with a forceps.
+A volume of 1 nl of the solution was injected with a pressure injector
+(Eppendorf Femtojet 4i) in the rostral rhombencephalic ventricle.
 The pressure and time were calibrated for each needle using a 0.01 mm calibration slide.
 
-Following injection, the zebrafish was directly placed under the confocal microscope and 1200 images were acquired at a frequency of 13.1 Hz.
-A single optical section was obtained. Particle tracking was done using TrackMate~\cite{Tinevez2017TrackMate:Tracking} in Fiji/ImageJ~\cite{Schindelin2012Fiji:Analysis}
-and plotted using MATLAB, as described in Jeong~\emph{et al.}~\cite{Jeong2022MeasurementTelencephalon}. The parameters for TrackMate were as follows.
-The DoG detector was used with the settings: threshold: 2.0, with median filtering; radius: 2.0, with subpixel localization.
-Next, the Simple LAP tracker was used with settings: max frame gap: 2; alternative linking cost factor: 1.05; linking max distance: 5.0; gap closing max distance: 2.0;
-splitting max distance: 15.0; allow gap closing: true; allow track splitting: false; allow track merging: false; merging max distance: 15.0; cutoff percentile: 0.9.
-Only the particle tracks with at least 30 data points, while simultaneously covering a distance of at least 8.8 $\mu$m, were plotted in~\Cref{fig:figure1}b, c.
+Following injection, the zebrafish was directly placed under the confocal
+microscope and 1200 images were acquired at a frequency of 13.1 Hz.
+A single optical section was obtained. Particle tracking was done using
+TrackMate~\cite{Tinevez2017TrackMate:Tracking} in Fiji/ImageJ~\cite{Schindelin2012Fiji:Analysis}
+and plotted using MATLAB, as described in Jeong~\emph{et al.}~\cite{Jeong2022MeasurementTelencephalon}.
+The parameters for TrackMate were as follows.
+The DoG detector was used with the settings: threshold: 2.0, with
+median filtering; radius: 2.0, with subpixel localization.
+Next, the Simple LAP tracker was used with settings: max frame gap: 2;
+alternative linking cost factor: 1.05; linking max distance: 5.0; gap closing max distance: 2.0;
+splitting max distance: 15.0; allow gap closing: true; allow track splitting:
+false; allow track merging: false; merging max distance: 15.0; cutoff percentile: 0.9.
+Only the particle tracks with at least 30 data points, while simultaneously
+covering a distance of at least 8.8 $\mu$m, were plotted in~\Cref{fig:figure1}b, c.
 
 %%--------------RESULTS--------------%%
-\section*{Results}\label{sec:results}
+\section*{Results}
 
 \subsection*{Motile cilia induce flow compartmentalization within the brain ventricles}
 
-\mer{One sentence on why? - what do we not know - what do we try to
-  find out?} \mer{@Halvor: If you want, try to revamp this paragraph
-  as suggested by Nathalie. First cilia. Then pulsatile. Then
-  combined.} To characterize CSF flow patterns predicted by
+We seek to model the compartimentalized and pulsatile CSF flow observed \emph{in vivo}~(\Cref{fig:figure1}b--c).
+To characterize CSF flow patterns predicted by
 computational fluid dynamics within the brain ventricles, we begin by
-considering the simulated CSF velocity and pressure when driven by
-both cilia motion and cardiac pressure pulsations. These forces induce
-\fixme{persistent} flow features, with vortex-structures in the
-anterior and middle ventricles and \fixme{unidirectional} flow in the
-posterior ventricle (\Cref{fig:figure1}e,
+considering the simulated CSF velocity and pressure when only considering
+cilia motion, disregarding cardiac pressure pulsations. The
+bidirectional traction induced by the motile cilia
+inherently leads to a partial compartmentalization of the ventricular
+system, with large-scale vortex structures in the anterior and middle
+ventricles~(\Cref{fig:figure1}e). The highest velocities ($26.5$ \textmu m/s)
+occur in the vicinity of the dorsal cilia in the middle ventricle. 
+
+To examine the effect of cardiac pressure pulsations,
+we next consider a no-cilia model variation. In this scenario, the simulated CSF
+flow is pulsatile as a result of the sinusoidal pressure gradient (\Cref{fig:figure1}g),
+with a peak velocity magnitude of $4.8$ \textmu m/s. At each time instant, the flow
+is unidirectional, with CSF initially flowing rostrocaudally (positive $x-$axis) before changing
+direction to caudorostral in the middle of the cardiac cycle.
+
+We now consider the baseline model, simulating flow driven by both cilia
+and cardiac pulsations. We observe \fixme{persistent} flow features,
+with vortex-structures in the anterior and middle ventricles
+and directional flow in the posterior ventricle (\Cref{fig:figure1}e,
 \fixme{Supplementary video 1}). These characteristic patterns suggest
 that the flow in the anterior and middle ventricles are dominated by
 the cilia contribution, while the cardiac pressure pulsations dominate
@@ -595,32 +735,12 @@ speed reaches up to 27.7 \textmu m/s, dorsally in the posterior part
 of the middle ventricle. This peak is attained at the time instant
 coinciding with the time of peak caudal cardiac pulsatile flow, as a
 result of both the traction induced by the cilia and the pulsatile
-pressure-driven flow being aligned with the rostrocaudal ($x-$)
-axis. Using this maximum velocity magnitude and choosing the height of
+pressure-driven flow being aligned with the rostrocaudal 
+axis. Using the observed maximum velocity magnitude and choosing the height of
 the middle ventricle ($110$ \textmu m) as a characteristic length
 scale, yields a Reynolds number $\mathrm{Re} \approx 0.004$,
-justifying the assumption of Stokes flow. To further examine the
-effect of the cilia, we next consider a no-cilia model variation. In
-this scenario, the simulated CSF flow is pulsatile and
-\fixme{unidirectional} (\Cref{fig:figure1}g), with a peak velocity
-magnitude of \fixme{$4.8$ \textmu m/s}. On the other hand, the
-vortices (re)appear when considering a variation with cilia but no
-cardiac contribution (\Cref{fig:figure1}h), in which case the highest
-velocities ($26.5$ \textmu m/s) also occur in the vicinity of the
-cilia. Thus, the bidirectional traction induced by motile cilia
-inherently leads to a partial compartmentalization of the ventricular
-system.
-
-%% %\subsection*{Vortex structures vanish in the absence of cilia}
-%% The pulsatile motion is absent when disregarding cardiac motion~(model I, \cref{fig:figure1}, panel~\textbf{f}). For model I, the boundary conditions are not time-dependent, rendering the solution to the Stokes equations~\eqref{eq:stokes_eqs} a steady-state flow field. Streamlines demonstrate the compartmentalization of the cerebrospinal fluid flow driven by cilia, and we observe highest vorticity in the vicinity of cilia.
-
-%% Excluding the cilia tangential traction from the model (model II), vortex-structured compartmentalization of the ventricular flow does not occur, and the flow is directional and pulsatile as a result of the pressure boundary conditions imposed~(\cref{fig:figure1}, panel \textbf{g}). 
-
-%% The cardiac pressure forces induce a pulsatile motion of the
-%% cerebrospinal fluid synchronized with the cardiac cycle, with velocity
-%% magnitudes of the pulsatile motion being approximately an order of
-%% magnitude smaller than the velocities related to the cilia-driven
-%% motion.
+justifying the assumption of Stokes flow. In summary, the computational
+CSF flow model reproduces the flow features observed \emph{in vivo}.
 
 \subsection*{Ventricular solute transport is advection-dominated for larger molecules}
 We next ask what is the impact of these CSF flow patterns and
@@ -697,14 +817,19 @@ simulations were similar enough to convincingly validate the model.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
-    \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F$ over time in each region of interest (ROI)
+    \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F$ over time
+    in each region of interest (ROI)
     observed during experiments of photoconversion of Dendra2 proteins in ROI 1.
-    \textbf{b.} Mean concentration $\cbar$ as function of time in each ROI in a simulation of Dendra2 protein transport with
+    \textbf{b.} Mean concentration $\cbar$ as function of time in each ROI in a
+    simulation of Dendra2 protein transport with
     the diffusion coefficient $D_3$.
-    \textbf{c.} Time to $\Delta F$ reaches a threshold value of 0.25 in one representative zebrafish larva.
-    Time to $\cbar$ reaches a threshold value of 0.25 for a transport simulation with diffusion coefficient $D_3$.
+    \textbf{c.} Time to $\Delta F$ reaches a threshold value of 0.25 in
+    one representative zebrafish larva.
+    Time to $\cbar$ reaches a threshold value of 0.25 for
+    a transport simulation with diffusion coefficient $D_3$.
     We have excluded the posterior-most regions of the geometries,
-    because the values of $\Delta F$ and $\cbar$ never exceeded the threshold value of 0.25 in these regions.}
+    because the values of $\Delta F$ and $\cbar$ never exceeded the threshold
+    value of 0.25 in these regions.}
     \label{fig:figure3_compare_exp_and_sim_control}
 \end{figure}
 % Final Delta F values
@@ -716,34 +841,48 @@ simulations were similar enough to convincingly validate the model.
 % Final mean c values ROIs 2-6: 0.7637806  0.72025859 0.81903216 0.56204164 0.34926411
 
 \subsection*{Absence of ciliary motion affects local protein distribution}
-To assess the impact of cilia motion on solute distribution, we measured the movement of photoconverted Dendra2 signal
+To assess the impact of cilia motion on solute distribution,
+we measured the movement of photoconverted Dendra2 signal
 in control and motile-cilia mutant zebrafish (\emph{schmalhans} (\emph{smh})).
-By plotting the means of $\Delta F$ (\Cref{fig:figure4_compare_control_mutant}a) and the time to threshold
-across the control and mutant cohorts (\Cref{fig:figure4_compare_control_mutant}b), we identified a significant
+By plotting the means of $\Delta F$ (\Cref{fig:figure4_compare_control_mutant}a)
+and the time to threshold
+across the control and mutant cohorts (\Cref{fig:figure4_compare_control_mutant}b),
+we identified a significant
 difference in Dendra2 distribution in ROIs 2 and 4, but not in ROIs 3, 5, and 6. In ROIs 2 and 4,
 which measure Dendra2 distribution downstream of the photoconversion site,
 we observed a slower increase of fluorescence intensity,
-resulting in a $\sim 45\%$ higher mean time-to-threshold in the \emph{smh}
-mutant compared to controls (\Cref{fig:figure4_compare_control_mutant}b). 
+resulting in $\sim X\%$ (ROI 2) and $\sim 45\%$ (ROI 4)
+higher mean times-to-threshold in the \emph{smh}
+mutants compared to controls (\Cref{fig:figure4_compare_control_mutant}b). 
 
 Next, to identify whether our model would recapitulate these findings,
 we simulated protein transport by using the only-cardiac/no-cilia flow model 
-and compared it with the baseline model (both cilia and cardiac motion) (\Cref{fig:figure4_compare_control_mutant}c).
+and compared it with the baseline model
+(both cilia and cardiac motion) (\Cref{fig:figure4_compare_control_mutant}c).
 Similar to our experiments, we observed slower dynamics in simulations for ROIs 2 and 4.
 Interestingly, the difference was even greater for the simulations,
 with the time-to-threshold in ROI 2 being 90\% higher in absence of cilia-mediated flow.
-Moreover, ROI 5 exhibits very different $\cbar$ profiles for the two configurations in our computational model,
+Moreover, ROI 5 exhibits very different $\cbar$ profiles for the two
+configurations in our computational model,
 but not in our experimental data.
-Altogether, our findings identify that diffusion plays an important role for solute movement to regions upstream in the cilia flow fields or to distant ventricles.
+Altogether, our findings identify that diffusion plays an important
+role for solute movement to regions upstream in the cilia flow fields or to distant ventricles.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
-    \caption{\textbf{a.} Relative change in fluorescence intensity $F$ over time in each region of interest (ROI) for control (black lines) and \emph{smh} mutant (red lines) fish. 
-    \textbf{b.} Times when $\Delta F$ first exceeds a threshold value, equal to 0.25 (ROIs 2-4) or 0.10 (ROIs 5, 6), for control (gray dots) and \emph{smh} mutant (red dots) fish.
-    The thick black lines denote mean values of the datasets, and $p$-values were calculated using a Mann-Whitney U test with a confidence level of 95\%.
-    \textbf{c.} Mean concentration $\cbar$ as function of time in each ROI, simulated using the baseline model (black lines) and the cardiac-only/no-cilia model (red lines).
-    The horizontal gray lines mark the threshold value $\hat{c}$, and the time $\hat{t}$ when the threshold is first exceeded is reported in the plot legends.
-    Note that in both panels \textbf{a} and \textbf{c}, the vertical axes have different limits in each plot.}
+    \caption{\textbf{a.} Relative change in fluorescence intensity $F$ over
+    time in each region of interest (ROI) for control (black lines) and \emph{smh} mutant (red lines) fish. 
+    \textbf{b.} Times when $\Delta F$ first exceeds a threshold value,
+    equal to 0.25 (ROIs 2--4) or 0.10 (ROIs 5, 6), for control (gray dots) and
+    \emph{smh} mutant (red dots) fish.
+    The thick black lines denote mean values of the datasets, and $p$-values
+    were calculated using a Mann-Whitney U test with a confidence level of 95\%.
+    \textbf{c.} Mean concentration $\cbar$ as function of time in each ROI,
+    simulated using the baseline model (black lines) and the cardiac-only/no-cilia model (red lines).
+    The horizontal gray lines mark the threshold value $\hat{c}$, and the time
+    $\hat{t}$ when the threshold is first exceeded is reported in the plot legends.
+    Note that in both panels \textbf{a} and \textbf{c}, the vertical axes have
+    different limits in each plot.}
     \label{fig:figure4_compare_control_mutant}
 \end{figure}
 
@@ -751,8 +890,10 @@ Altogether, our findings identify that diffusion plays an important role for sol
 We previously identified three distinct ciliated cell lineages in the
 zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain}.
 To identify the role of these lineages on CSF transport, we modified flow boundary conditions
-in the three different ciliated regions (\Cref{fig:figure5_compare_cilia_modifications}a) and simulated
-CSF flow using the Stokes equations. We identified that the velocities were most strongly
+in the three different ciliated regions
+(\Cref{fig:figure5_compare_cilia_modifications}a, magenta markers)
+and simulated CSF flow using the Stokes equations.
+We identified that the velocities were most strongly
 affected when removing cilia in the dorsal diencephalic cilia,
 as the maximum velocity dropped from 27.7 $\mu$m/s to 8.0 $\mu$m/s.
 In contrast, removing telencephalic and ventral diencephalic had minimal
@@ -771,11 +912,15 @@ mean concentration $\cbar$ with time (\Cref{fig:figure5_compare_cilia_modificati
 Finally, without ventral cilia in the diencephalic ventricle,
 more solute has spread towards the anterior ventricle (ROI 5) and
 less solute has spread towards the posterior ventricle (ROI 6).
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
-    \caption{Caption}
+    \caption{\textbf{a.} The three separate ciliated regions where loss of cilia motility is simulated
+    by imposing a zero tangential traction boundary condition in the respective region.
+    \textbf{b.} Mean concentration $\cbar(t)$ for the six regions of interest in the three 
+    loss-of-cilia-motility scenarios considered. The region named in the legend is the region
+    where we modify the cilia tangential traction boundary condition to a free-slip condition
+    in the CSF flow model.}
     \label{fig:figure5_compare_cilia_modifications}
 \end{figure}
 
