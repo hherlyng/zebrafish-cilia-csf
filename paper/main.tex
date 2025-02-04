@@ -414,34 +414,6 @@ are $D_1$ (Exosomes), $D_2$ (STM+GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_
     \label{tab:diff_coeff_table}
 \end{table}
 
-\subsection*{Computational flow modelling scenarios}
-
-\mer{MER: @Halvor I suggest you move these two paragraphs into their respective
-Results sections (Results 2 and 5).}
-When simulating transport of solute in the ventricles,
-we consider the same six different regions of interest that were
-considered in the photoconversion experiments.
-In region number one (the photoconversion region),
-we use the function~\eqref{eq:photoconversion_curve} to enforce
-the concentration such that it represents the experimental data
-of photoconversion of proteins. We consider the three different diffusion
-coefficients introduced in previous sections to simulate and compare results
-for transport of molecules of varying sizes.
-
-To simulate transport in the pathological case of region-specific cilia absence,
-we consider three scenarios where we modify the boundary conditions of the CSF flow model.
-The cilia tangential stress boundary condition for the boundary where we
-remove cilia is changed to a free-slip boundary condition,
-prescribing zero tangential forces to represent absence of cilia motion
-in the region where we consider cilia removal.
-We consider removal of cilia in the three separate cilia-covered regions
-of the telencephalic (anterior) ventricle, the dorsal part of the diencephalic (middle) ventricle,
-and the ventral part of the diencephalic ventricle~(\Cref{fig:figure1}d).
-For the three scenarios, we simulate CSF flow modeled by the Stokes
-equations~\eqref{eq:stokes_eqs} with the modified boundary conditions,
-and use the resulting velocity field in transport simulations.
-
-
 \subsection*{Quantities of interest}
 We calculate the mean solute concentrations
 \begin{equation}
@@ -743,7 +715,7 @@ justifying the assumption of Stokes flow. In summary, the computational
 CSF flow model reproduces the flow features observed \emph{in vivo}.
 
 \subsection*{Ventricular solute transport is advection-dominated for larger molecules}
-We next ask what is the impact of these CSF flow patterns and
+We next ask: what is the impact of these CSF flow patterns and
 magnitudes on solute transport generally within the brain ventricles?
 To address this question, we simulate the distribution and evolution
 of different solutes subject to photoconversion within a region of
@@ -754,7 +726,7 @@ corresponding to Exosomes ($D_1 = 1.63 \times 10^{-12}$ m$^2$/s),
 STM+GFP ($D_2 = 5.75 \times 10^{-11}$ m$^2$/s), and Dendra2 ($D_3 =
 1.15 \times 10^{-10}$ m$^2$/s). As expected, transport occurs more
 rapidly with increasing diffusion coefficient. Interestingly, the
-distribution patterns differ between the different-characteristics
+distribution patterns differ between the \fixme{different-characteristics}
 solutes. For the smallest diffusion coefficient, representing
 Exosomes, the advection induced by the CSF flow dominates diffusion
 (\Cref{fig:fig2}a). The vortex structures of the velocity field
@@ -763,55 +735,77 @@ along the streamlines is more rapid than the diffusion across the
 streamlines. The balance between diffusion and advection shifts with
 increasing diffusion coefficients, the CSF flow structures become more
 obfuscated, and the solute spreads more uniformly throughout the
-ventricular geometry (\Cref{fig:fig2}\fixme{x-y}). Interestingly, the
+ventricular geometry (\Cref{fig:fig2}\fixme{x-y}). Notably, the
 smaller solutes with higher diffusion coefficients spread more quickly
 to regions distal to the photoconversion site (\Cref{fig:fig2}\fixme{z}).
 \begin{figure}%[H]
     \centering
     \includegraphics[width=0.95\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
-    \caption{Simulated distribution and evolution after photoconversion of Dendra ($D_1$), STM+GFP ($D_2$) and Exosomes ($D_3$).
-    \mer{MER: I think you should show on the same color scale here in a) (the range of values lets you and then it is possible to compare). Split a into a, b, c. Show e) first (so that e) becomes a)}.
-    \textbf{a.} Slices in the $xz$-plane ($y=0.140$ mm, the center of the geometry) showing the concentration field simulated with diffusion coefficients $D_1$, $D_2$ and $D_3$ for three time instants $t=45.0$ s, $t=112.6$ s, $t=450.5$ s.
+    \caption{Simulated distribution and evolution after photoconversion of
+    Dendra ($D_1$), STM+GFP ($D_2$) and Exosomes ($D_3$).
+    \mer{MER: I think you should show on the same color scale here in a)
+    (the range of values lets you and then it is possible to compare).
+    Split a into a, b, c. Show e) first (so that e) becomes a)}.
+    \textbf{a.} Slices in the $xz$-plane ($y=0.140$ mm,
+    the center of the geometry) showing the concentration field simulated
+    with diffusion coefficients $D_1$, $D_2$ and $D_3$ for three
+    time instants $t=45.0$ s, $t=112.6$ s, $t=450.5$ s.
     Note that the colorbars indicating the magnitude of $c$ have different limits for each column.
-    \textbf{b--d.} Mean concentration $\cbar$ in each region of interest (ROI) as function of time for diffusion coefficient $D_1$, $D_2$ and $D_3$, respectively.
+    \textbf{b--d.} Mean concentration $\cbar$ in each region of interest (ROI)
+    as function of time for diffusion coefficient $D_1$, $D_2$ and $D_3$, respectively.
     \textbf{e.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs.
-    \textbf{f.} The time $\hat{t}$ before the mean concentration $\cbar$ exceeds a threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup.
+    \textbf{f.} The time $\hat{t}$ before the mean concentration $\cbar$ exceeds a
+    threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup.
     Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}
     \label{fig:fig2}
 \end{figure}
 
-\mer{MER: Stopped here with the editing (except commenting out), assuming that Nathalie had something to say about the next paragraph.}
-
-Transport of solute is quantified by the profile of the mean concentrations $\cbar_i(t)$ in the regions of interest (ROIs) $\Omega_i$ as functions of time~(\Cref{fig:fig2}b--d).
-An illustration of the ROIs is provided in \Cref{fig:fig2}e. The dynamics of ROI 1 follow from imposing~\Cref{eq:photoconversion_curve}.
-For ROIs 2--6, we observe more rapid concentration increases when the diffusion coefficient increases. 
-For all three diffusion coefficients, the dynamics of ROI 6 is the slowest.
-Region 5 exhibits a more rapid increase in mean concentration, and an even faster increase is observed for ROIs 2--4.
-The profiles of the latter three regions are similar, displaying only small differences in all of the three plots.
-\lyng{HH: Add some quantification in terms of percentages, e.g. final values of $\cbar_i$ for the different $D_i$?}
-In region 6, the threshold is never exceeded for $D_1$, with the mean concentration close to zero at the end of the simulation. 
-To quantify the balance of advection versus diffusion as transport mehcanisms on a global scale,
-we calculate the Péclet numbers $\mathrm{Pe}_1=519$, $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and $D_3$, respectively.
-Since $\mathrm{Pe}>1$, this indicates that advection is the dominant transport mechanism for the molecules considered.
+To quantify the transport of solute, we plot the profile of the mean
+concentrations $\cbar_i(t)$ as functions of time
+(\cref{fig:figure2_compare_diffusion_coefficients}\fixme{b--d}) and
+the times $\hat{t}$ when the mean concentrations $\cbar_i$ first exceed
+a threshold value $\hat{c}$ (\cref{fig:figure2_compare_diffusion_coefficients}\fixme{f})
+in 6 regions of interest (ROIs) (\cref{fig:figure2_compare_diffusion_coefficients}\fixme{e}).
+The dynamics at the site of photoconversion (ROI 1)
+is logarithmic and follows from imposing \eqref{eq:photoconversion_curve}.
+For ROIs 2--6, we observe faster kinetics with higher diffusion coefficients
+(\Cref{fig:figure2_compare_diffusion_coefficients}\fixme{b--d}),
+which results in smaller time to threshold
+(\Cref{fig:figure2_compare_diffusion_coefficients}\fixme{f}).
+For all three diffusion coefficients, the dynamics of ROI 5
+is significantly delayed compared to ROI 2--4,
+and ROI 6 is the slowest. Notably, for $D_1$ the mean concentration
+in ROI 6 is close to zero at the end of simulation.
+To quantify the balance of advection versus diffusion as transport mehcanisms,
+we calculate the Péclet numbers $\mathrm{Pe}_1=519$,
+$\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and $D_3$, respectively.
+Since $\mathrm{Pe}>1$, this indicates that advection is the
+dominant transport mechanism on a \fixme{global} scale.
  
 \subsection*{Validation of the simulations with experimental data}
-To validate our computational model, we performed photoconversion experiments in transgenic zebrafish larvae expressing a secreted Dendra2 in their brain ventricles.
-Our photoconversion protocol consisted of the acquisition of a baseline, before localized exposure to a UV laser (at the ROI 1 location)
+To validate our computational model, we performed photoconversion experiments
+in transgenic zebrafish larvae expressing a secreted Dendra2 in their brain ventricles.
+Our photoconversion protocol consisted of the acquisition of a baseline,
+before localized exposure to a UV laser (at the ROI 1 location)
 that converts Dendra2 from a green to a red emitting fluorescent protein. 
-To quantify the transport of photoconverted proteins, we measured and calculated the change in fluorescence intensity $\Delta F = (F(t)-F_0)/F_0$
-over time (\Cref{fig:figure3_compare_exp_and_sim_control}a, $F_0$ being the average fluorescence at baseline). 
+To quantify the transport of photoconverted proteins, we measured and
+calculated the change in fluorescence intensity $\Delta F = (F(t)-F_0)/F_0$
+over time (\Cref{fig:figure3_compare_exp_and_sim_control}a,
+$F_0$ being the average fluorescence at baseline). 
 
 We obtained very similar kinetics curves (\Cref{fig:figure3_compare_exp_and_sim_control}a, b)
 and time-to-threshold values (\Cref{fig:figure3_compare_exp_and_sim_control}c, d) when comparing our
 experiments (\Cref{fig:figure3_compare_exp_and_sim_control}a, c) with
 simulation (\Cref{fig:figure3_compare_exp_and_sim_control}b, d).
 Importantly, since the initial condition of the simulation is a mean concentration of zero,
-the mean concentration $\cbar$ can be interpreted as the change in mean concentration and is thus a similar metric to $\Delta F$.
+the mean concentration $\cbar$ can be interpreted as the change in mean concentration and
+is thus a similar metric to $\Delta F$.
 The final values of $\cbar$ were 0.76, 0.72, 0.82, 0.56 and 0.35 respectively,
 compared to 0.63, 0.71, 0.67, 0.29 and 0.18 for $\Delta F$.
 Notwithstanding similarities, we observed small differences between the experiments and simulation.
 For instance, transport dynamics in ROIs 2--6 were faster in the simulation and reached higher final values.
-Moreover, the $\cbar$ profiles of ROIs 3--4 were opposite order in the simulations as compared to the experiments.
+Moreover, the $\cbar$ profiles of ROIs 3--4 were opposite order in
+the simulations as compared to the experiments.
 Despite observing small differences, the \emph{in vivo} experiments and
 simulations were similar enough to convincingly validate the model.
 \begin{figure}[H]
@@ -841,7 +835,8 @@ simulations were similar enough to convincingly validate the model.
 % Final mean c values ROIs 2-6: 0.7637806  0.72025859 0.81903216 0.56204164 0.34926411
 
 \subsection*{Absence of ciliary motion affects local protein distribution}
-To assess the impact of cilia motion on solute distribution,
+Since CSF flow is highly disturbed in the absence of motile cilia, we
+want to assess the impact of cilia motion on solute distribution. To this end,
 we measured the movement of photoconverted Dendra2 signal
 in control and motile-cilia mutant zebrafish (\emph{schmalhans} (\emph{smh})).
 By plotting the means of $\Delta F$ (\Cref{fig:figure4_compare_control_mutant}a)
