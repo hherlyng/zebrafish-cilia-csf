@@ -10,10 +10,11 @@ dependencies:
   - pyvista 
   - scipy
   - pandas
+  - seaborn
+  - colormaps
+  - meshio
+  - tabulate
   - git
   - vtk
   - mpich
-  - tabulate
-  - meshio
-  - colormaps
   - conda-ecosystem-user-package-isolation

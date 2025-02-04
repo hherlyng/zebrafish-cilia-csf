@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 from mpi4py       import MPI
 from basix.ufl    import element
-from imports.mesh import create_ventricle_volumes_meshtags
+from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set latex text properties
 plt.rcParams.update({
@@ -20,7 +20,7 @@ gm   = dfx.mesh.GhostMode.shared_facet
 k = 1 # element degree
 model_version = 'C'
 molecule = 'D3'
-mesh_input_filename = "output/flow/checkpoints/pressure+original/model_C/velocity_data_dt=0.02252"
+mesh_input_filename = "../output/flow/checkpoints/pressure+original/model_C/velocity_data_dt=0.02252"
 mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine="BP4", ghost_mode=gm)
 
 # Get mesh properties
@@ -52,9 +52,9 @@ volumes = [comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*dx(tag))), op=M
 # Load data c_hat, the total concenctration in each ROI
 # with open(f'output/transport/model_B_{molecule}_DG1_pressureBC/injection_site_middle_dorsal_posterior/npy_data/c_hats.npy', 'rb') as file:
 #     c_hats_B = np.load(file)
-with open("./output/transport/original+mod_ROI/log_model_C_D3_DG1_pressureBC/injection_site_middle_dorsal_posterior/npy_data/c_hats.npy", "rb") as file:
+with open("../output/transport/original+mod_ROI/log_model_C_D3_DG1_pressureBC/injection_site_middle_dorsal_posterior/npy_data/c_hats.npy", "rb") as file:
     c_hats_B = np.load(file)
-with open(f"./output/transport/original/log_model_C_D3_DG1_pressureBC/injection_site_middle_dorsal_posterior/npy_data/c_hats.npy", "rb") as file:
+with open(f"../output/transport/original/log_model_C_D3_DG1_pressureBC/injection_site_middle_dorsal_posterior/npy_data/c_hats.npy", "rb") as file:
     c_hats_C = np.load(file)
 
 # Scale the total concentrations in the ROIs by the volume of the respective ROI
@@ -106,12 +106,13 @@ for idx, tag in enumerate(ROI_tags):
     ca.scatter(0.75, t_hats_B[idx], color='r', label='model B', linewidths=msize)
     ca.scatter(0.25, t_hats_C[idx], color='k', label='model C', linewidths=msize)
     ca.set_xticks([0, 0.25, 0.75, 1])
-    ca.set_xticklabels(['', 'model C', 'model B', ''])
+    ca.set_xticklabels(['', 'Baseline model', 'Cardiac-only', ''])
     ca.set_title(rf'{t_str} in ROI {tag}', fontsize=25)
     ca.tick_params(labelsize=15)
     ca.set_ylabel(r"Time [s]", fontsize=20)
     ca.set_ylim(0, ca.get_ylim()[1]*1.25)
 
 fig.tight_layout()
-# fig.savefig(f"ROI_time_to_threshold_{molecule}.png")
+save_fig = 0
+if save_fig: fig.savefig(f"ROI_time_to_threshold_{molecule}.png")
 plt.show()

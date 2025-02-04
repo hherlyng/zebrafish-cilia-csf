@@ -13,7 +13,7 @@ plt.rcParams.update({
 plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 # Set data directory and load .mat files
-data_dir = "./data_photoconversion/aggregated_data/"
+data_dir = "../data/data_photoconversion/aggregated_data/"
 metadata = loadmat(data_dir+"metadata") # Metadata, e.g. FPS and pixel size
 colors   = loadmat(data_dir+"colors")['color'] # The colors used for plotting
 control = loadmat(data_dir+"control_data")['control'] # The control fish cohort photoconversion data
@@ -54,10 +54,12 @@ ax2.set_xlabel("Time [s]", fontsize=60, labelpad=25)
 ax2.set_ylabel(r"Fluoresc. intensity change $\Delta F$ [-]", fontsize=60, labelpad=25)
 ax2.legend(loc='upper left', fontsize=50, frameon=True, fancybox=False, edgecolor='k')
 ax2.tick_params(labelsize=60)
+
 fig1.tight_layout()
 fig2.tight_layout()
-save_figs = 1
+
+save_figs = 0
 if save_figs:
-    fig1.savefig(f"output/illustrations/experimental_time_evolution_control.png")
-    fig2.savefig(f"output/illustrations/experimental_time_evolution_mutant.png")
+    fig1.savefig(f"../output/illustrations/experimental_time_evolution_control.png")
+    fig2.savefig(f"../output/illustrations/experimental_time_evolution_mutant.png")
 plt.show()

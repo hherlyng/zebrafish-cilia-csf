@@ -6,7 +6,7 @@ import adios4dolfinx     as a4d
 import matplotlib.pyplot as plt
 
 from mpi4py       import MPI
-from imports.mesh import create_ventricle_volumes_meshtags
+from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
@@ -24,7 +24,7 @@ molecule = 'D3'
 tau_version  = 'original_tau'
 tau_version  = 'variable_tau'
 mesh_version = 'original'
-mesh_input_filename = f"output/flow/checkpoints/{tau_version}/pressure+{mesh_version}/model_C/velocity_data_dt=0.02252"
+mesh_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+{mesh_version}/model_C/velocity_data_dt=0.02252"
 mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine="BP4", ghost_mode=gm)
 
 # Create meshtags and calculate ROI volumes
@@ -34,9 +34,9 @@ volumes = [comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*dx(tag))), op=M
 volumes[3] += volumes[2]+volumes[1]+volumes[0] # Add ROI 1, 2, 3 volumes to ROI 4 volume
 
 # Load data c_bar, the total concenctration in each ROI
-with open(f"./output/transport/results/original_tau/{mesh_version}/log_model_B_{molecule}_DG1_pressureBC/data/c_hats.npy", "rb") as file:
+with open(f"../output/transport/results/original_tau/{mesh_version}/log_model_B_{molecule}_DG1_pressureBC/data/c_hats.npy", "rb") as file:
     c_bar_B = np.load(file)
-with open(f"./output/transport/results/{tau_version}/{mesh_version}/log_model_C_{molecule}_DG1_pressureBC/data/c_hats.npy", "rb") as file:
+with open(f"../output/transport/results/{tau_version}/{mesh_version}/log_model_C_{molecule}_DG1_pressureBC/data/c_hats.npy", "rb") as file:
     c_bar_C = np.load(file)
 
 # Scale the total concentrations in the ROIs by the volume of the respective ROI
@@ -141,6 +141,6 @@ for idx, tag in enumerate(ROI_tags):
 fig_c.tight_layout(); fig_t.tight_layout()
 save_figs = 1
 if save_figs:
-    fig_c.savefig(f"output/illustrations/original/{tau_version}/compare_models_concentrations_{molecule}.png")
-    fig_t.savefig(f"output/illustrations/original/{tau_version}/compare_models_time_to_threshold{molecule}.png")
+    fig_c.savefig(f"../output/illustrations/original/{tau_version}/compare_models_concentrations_{molecule}.png")
+    fig_t.savefig(f"../output/illustrations/original/{tau_version}/compare_models_time_to_threshold{molecule}.png")
 plt.show()

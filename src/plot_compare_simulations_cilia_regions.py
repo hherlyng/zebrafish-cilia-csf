@@ -7,7 +7,7 @@ import adios4dolfinx     as a4d
 import matplotlib.pyplot as plt
 
 from mpi4py       import MPI
-from imports.mesh import create_ventricle_volumes_meshtags
+from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
@@ -22,7 +22,7 @@ comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
 k = 1 # element degree
 model_version = 'C'
-original_mesh_input_filename = f"output/flow/checkpoints/variable_tau/pressure+original/model_{model_version}/velocity_data_dt=0.02252"
+original_mesh_input_filename = f"../output/flow/checkpoints/variable_tau/pressure+original/model_{model_version}/velocity_data_dt=0.02252"
 mesh = a4d.read_mesh(comm=comm, filename=original_mesh_input_filename, engine="BP4", ghost_mode=gm)
 ct, ROI_tags = create_ventricle_volumes_meshtags(mesh)
 dx = ufl.Measure('dx', domain=mesh, subdomain_data=ct)
@@ -30,10 +30,10 @@ volumes = [comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*dx(tag))), op=M
 volumes[3] += volumes[2]+volumes[1]+volumes[0]
 
 # Load data c_hat, the total concenctration in each ROI
-with open(f"output/transport/results/variable_tau/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_original    = np.load(file)
-with open(f"output/transport/results/variable_tau+rm_dorsal/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_dorsal  = np.load(file)
-with open(f"output/transport/results/variable_tau+rm_ventral/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_ventral = np.load(file)
-with open(f"output/transport/results/variable_tau+rm_telencephalic/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_telenc = np.load(file)
+with open(f"../output/transport/results/variable_tau/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_original    = np.load(file)
+with open(f"../output/transport/results/variable_tau+rm_dorsal/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_dorsal  = np.load(file)
+with open(f"../output/transport/results/variable_tau+rm_ventral/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_ventral = np.load(file)
+with open(f"../output/transport/results/variable_tau+rm_telencephalic/original/log_model_{model_version}_D3_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar_telenc = np.load(file)
 
 # Divide the total concentrations in the ROIs by the volume of the respective ROI
 for i in ROI_tags: 
@@ -114,5 +114,5 @@ for row_idx in range(ax_c.shape[0]):
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
 save_fig = 1
-if save_fig: fig_c.savefig(f"output/illustrations/original/variable_tau/compare_cilia_concentration_model{model_version}.png")
+if save_fig: fig_c.savefig(f"../output/illustrations/original/variable_tau/compare_cilia_concentration_model{model_version}.png")
 plt.show()

@@ -21,19 +21,19 @@ plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-seri
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
-colors = loadmat("./data_photoconversion/aggregated_data/colors")['color'] # The colors used for plotting
+colors = loadmat("../data/data_photoconversion/aggregated_data/colors")['color'] # The colors used for plotting
 fig_num = 1 # Figure number index
 
 # Directories
-flow_dir = './output/flow/checkpoints/'
-transport_dir = './output/transport/results/'
+flow_dir = '../output/flow/checkpoints/'
+transport_dir = '../output/transport/results/'
 
 # Problem version
 model_version = 'C'
 molecules = ['D1', 'D2', 'D3']
 tau_version  = 'variable_tau'
 mesh_version = 'original'
-output_dir = f'output/illustrations/{mesh_version}/{tau_version}/'
+output_dir = f'../output/illustrations/{mesh_version}/{tau_version}/'
 
 # Read mesh
 mesh_input_filename = flow_dir+f"{tau_version}/pressure+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252"
@@ -70,7 +70,7 @@ for idx, molecule in enumerate(molecules):
 
     # Scale the total concentrations in the ROIs by the volume of the respective ROI
     for i in ROI_tags: c_bars[:, i-1] /= volumes[i-1]
-    print("end_C: ", c_bars[-1, :])
+    print("c_bar at final time: ", c_bars[-1, :])
 
     # Write final concentration values to file
     with open(file=output_dir+f"final_c_bar_values.txt", mode="w+" if idx==0 else "a+") as file:

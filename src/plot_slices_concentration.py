@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 from mpi4py    import MPI
 from basix.ufl import element
+from utilities.create_colormap import register_colormaps
 
 """ Visualize concentration slices in a 3x3 figure. """
 
@@ -82,7 +83,6 @@ plot_shape = (3, 3)
 plotter = pv.Plotter(shape=plot_shape, window_size=[1600, 900], border=False)
 
 # Set colormap
-from create_colormap import register_colormaps
 register_colormaps()
 cmap = "wgk"
 
@@ -120,8 +120,8 @@ for i in range(plot_shape[0]):
         m += 1
         
 # Display the plot and save to file
-save_plot = 0
-if save_plot:
+save_fig = 0
+if save_fig:
     output_filename = f'../output/illustrations/original/{tau_version}/concentration_slices_DG{k}_varying_D'
     plotter.show(screenshot=output_filename+'.png')
 else:

@@ -16,7 +16,7 @@ plt.rcParams.update({
 plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 # Set data directory and load .mat files
-data_dir = "./data_photoconversion/aggregated_data/"
+data_dir = "../data/data_photoconversion/aggregated_data/"
 metadata = loadmat(data_dir+"metadata") # Metadata, e.g. FPS and pixel size
 colors   = loadmat(data_dir+"colors")['color'] # The colors used for plotting
 control = loadmat(data_dir+"control_data")['control'] # The control fish cohort photoconversion data
@@ -94,6 +94,8 @@ for idx, tag in enumerate(ROI_tags):
     # Plot horizontal line at means
     control_mean = df['control'].mean()
     mutant_mean = df['mutant'].mean()
+    print("Control mean: ", control_mean)
+    print("Mutant mean: ", mutant_mean)
     ca_ttt.axhline(y=control_mean, xmin=0.1, xmax=0.4, color='k', linewidth=3)
     ca_ttt.axhline(y=mutant_mean, xmin=0.6, xmax=0.9, color='k', linewidth=3)
 
@@ -115,8 +117,8 @@ for idx, tag in enumerate(ROI_tags):
 
 # Set tight layout and show (and optionally save)
 fig_dff.tight_layout(); fig_ttt.tight_layout()
-save_figs = 1
+save_figs = 0
 if save_figs:
-    fig_dff.savefig(f"output/illustrations/experiments_dff_compare_control_mutant.png")
-    fig_ttt.savefig(f"output/illustrations/experiments_ttt_compare_control_mutant.png")
+    fig_dff.savefig(f"../output/illustrations/experiments_dff_compare_control_mutant.png")
+    fig_ttt.savefig(f"../output/illustrations/experiments_ttt_compare_control_mutant.png")
 plt.show()
