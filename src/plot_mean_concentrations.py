@@ -86,13 +86,13 @@ for idx, molecule in enumerate(molecules):
 
     [ax.plot(times, c_bars[:, i-1], label=f'ROI {i}', color=colors[i-1], linewidth=lw) for i in ROI_tags]
     
-    ax.set_xlabel("Time [s]", fontsize=65, labelpad=25)
+    ax.set_xlabel("Time [s]", fontsize=60, labelpad=25)
     if molecule=='D1': 
         # Add legend 
         ax.legend(loc='best', fontsize=50, frameon=True, fancybox=False, edgecolor='k')
     # Add y-axis label
-    ax.set_ylabel(r"Mean concentration $\overline{c}$ [-]", fontsize=75, labelpad=25)
-    ax.tick_params(labelsize=65)
+    ax.set_ylabel(r"Mean concentration $\overline{c}$ [-]", fontsize=60, labelpad=25)
+    ax.tick_params(labelsize=55)
     fig.tight_layout()
 
     if save_figs: fig.savefig(f"{output_dir}/simulations_time_evolution_model{model_version}_{molecule}.png")
@@ -114,15 +114,17 @@ for idx, molecule in enumerate(molecules):
 
 fig2, ax2 = plt.subplots(num=4, figsize=[13, 8])
 t_hat_df.reset_index(inplace=True)
-bars = t_hat_df.plot.bar(x='index', y=molecules, color=[[0.6, 0.752941, 0.145098], [0.294118, 0.564706, 0], [0, 0.376471, 0]], ax=ax2, rot=True, width=0.75)
+bars = t_hat_df.plot.bar(x='index', y=molecules,
+                         color=[[0.6, 0.752941, 0.145098], [0.294118, 0.564706, 0], [0, 0.376471, 0]],
+                         ax=ax2, rot=True, width=0.75)
 hatches = ['/', '\\', 'x']
 for bar_container, hatch in zip(bars.containers, hatches):
     for bar in bar_container:
         bar.set_hatch(hatch)
 
-ax2.set_xlabel("ROI number", fontsize=40, labelpad=25)
-ax2.set_ylabel(r"Time to threshold $\hat{t}$ [s]", fontsize=40, labelpad=50)
-ax2.tick_params(labelsize=40)
+ax2.set_xlabel("ROI number", fontsize=35, labelpad=25)
+ax2.set_ylabel(r"Time to threshold $\hat{t}$ [s]", fontsize=35, labelpad=50)
+ax2.tick_params(labelsize=35)
 ax2.legend(labels=[r'$D_1$', r'$D_2$', r'$D_3$'], loc='upper left', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
 ax2.yaxis.tick_right()
 ax2.yaxis.label_position = ['Right']
