@@ -740,7 +740,7 @@ magnitudes on solute transport generally within the brain ventricles?
 To address this question, we simulate the distribution and evolution
 of different solutes subject to photoconversion within a region of
 interest in the dorsal region of the middle ventricle (ROI 1)
-(\Cref{fig:fig2}\fixme{e/x}). In particular, we consider the spread of
+(\Cref{fig:fig2}a). In particular, we consider the spread of
 a solute concentration with a given molecular diffusion coefficient,
 corresponding to Exosomes ($D_1 = 1.63 \times 10^{-12}$ m$^2$/s),
 STM+GFP ($D_2 = 5.75 \times 10^{-11}$ m$^2$/s), and Dendra2 ($D_3 =
@@ -749,15 +749,15 @@ rapidly with increasing diffusion coefficient. Interestingly, the
 distribution patterns differ between the \fixme{different-characteristics}
 solutes. For the smallest diffusion coefficient, representing
 Exosomes, the advection induced by the CSF flow dominates diffusion
-(\Cref{fig:fig2}a). The vortex structures of the velocity field
+(\Cref{fig:fig2}b). The vortex structures of the velocity field
 carry over into the concentration field, indicating that transport
 along the streamlines is more rapid than the diffusion across the
 streamlines. The balance between diffusion and advection shifts with
 increasing diffusion coefficients, the CSF flow structures become more
 obfuscated, and the solute spreads more uniformly throughout the
-ventricular geometry (\Cref{fig:fig2}\fixme{x-y}). Notably, the
+ventricular geometry (\Cref{fig:fig2}c, d). Notably, the
 smaller solutes with higher diffusion coefficients spread more quickly
-to regions distal to the photoconversion site (\Cref{fig:fig2}\fixme{z}).
+to regions distal to the photoconversion site.
 \begin{figure}%[H]
     \centering
     \includegraphics[width=0.95\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
@@ -780,16 +780,16 @@ to regions distal to the photoconversion site (\Cref{fig:fig2}\fixme{z}).
 
 To quantify the transport of solute, we plot the profile of the mean
 concentrations $\cbar_i(t)$ as functions of time
-(\Cref{fig:fig2}\fixme{b--d}) and
+(\Cref{fig:fig2}e--g) and
 the times $\hat{t}$ when the mean concentrations $\cbar_i$ first exceed
-a threshold value $\hat{c}$ (\Cref{fig:fig2}\fixme{f})
-in 6 regions of interest (ROIs) (\Cref{fig:fig2}\fixme{e}).
+a threshold value $\hat{c}$ (\Cref{fig:fig2}h)
+in 6 regions of interest (ROIs) (\Cref{fig:fig2}a).
 The dynamics at the site of photoconversion (ROI 1)
 is logarithmic and follows from imposing \eqref{eq:photoconversion_curve}.
 For ROIs 2--6, we observe faster kinetics with higher diffusion coefficients
-(\Cref{fig:fig2}\fixme{b--d}),
-which results in smaller time to threshold
-(\Cref{fig:fig2}\fixme{f}).
+(\Cref{fig:fig2}e--g),
+which results in smaller times-to-threshold
+(\Cref{fig:fig2}h).
 For all three diffusion coefficients, the dynamics of ROI 5
 is significantly delayed compared to ROI 2--4,
 and ROI 6 is the slowest. Notably, for $D_1$ the mean concentration
@@ -808,13 +808,13 @@ before localized exposure to a UV laser (at the ROI 1 location)
 that converts Dendra2 from a green to a red emitting fluorescent protein. 
 To quantify the transport of photoconverted proteins, we measured and
 calculated the change in fluorescence intensity $\Delta F = (F(t)-F_0)/F_0$
-over time (\Cref{fig:figure3_compare_exp_and_sim_control}a,
+over time (\Cref{fig:fig3}a,
 $F_0$ being the average fluorescence at baseline). 
 
-We obtained very similar kinetics curves (\Cref{fig:figure3_compare_exp_and_sim_control}a, b)
-and time-to-threshold values (\Cref{fig:figure3_compare_exp_and_sim_control}c, d) when comparing our
-experiments (\Cref{fig:figure3_compare_exp_and_sim_control}a, c) with
-simulation (\Cref{fig:figure3_compare_exp_and_sim_control}b, d).
+We obtained very similar kinetics curves (\Cref{fig:fig3}a, b)
+and time-to-threshold values (\Cref{fig:fig3}c, d) when comparing our
+experiments (\Cref{fig:fig3}a, c) with
+simulation (\Cref{fig:fig3}b, d).
 Importantly, since the initial condition of the simulation is a mean concentration of zero,
 the mean concentration $\cbar$ can be interpreted as the change in mean concentration and
 is thus a similar metric to $\Delta F$.
@@ -842,7 +842,7 @@ simulations were similar enough to convincingly validate the model.
     We have excluded the posterior-most regions of the geometries,
     because the values of $\Delta F$ and $\cbar$ never exceeded the threshold
     value of 0.25 in these regions.}
-    \label{fig:figure3_compare_exp_and_sim_control}
+    \label{fig:fig3}
 \end{figure}
 % Final Delta F values
 %0.6322650156762044 ROI 2
@@ -857,21 +857,21 @@ Since CSF flow is highly disturbed in the absence of motile cilia, we
 want to assess the impact of cilia motion on solute distribution. To this end,
 we measured the movement of photoconverted Dendra2 signal
 in control and motile-cilia mutant zebrafish (\emph{schmalhans} (\emph{smh})).
-By plotting the means of $\Delta F$ (\Cref{fig:figure4_compare_control_mutant}a)
+By plotting the means of $\Delta F$ (\Cref{fig:fig4}a)
 and the time to threshold
-across the control and mutant cohorts (\Cref{fig:figure4_compare_control_mutant}b),
+across the control and mutant cohorts (\Cref{fig:fig4}b),
 we identified a significant
 difference in Dendra2 distribution in ROIs 2 and 4, but not in ROIs 3, 5, and 6. In ROIs 2 and 4,
 which measure Dendra2 distribution downstream of the photoconversion site,
 we observed a slower increase of fluorescence intensity,
 resulting in $\sim 45\%$ (ROI 2) and $\sim 25\%$ (ROI 4)
 higher mean times-to-threshold in the \emph{smh}
-mutants compared to controls (\Cref{fig:figure4_compare_control_mutant}b). 
+mutants compared to controls (\Cref{fig:fig4}b). 
 
 Next, to identify whether our model would recapitulate these findings,
 we simulated protein transport by using the only-cardiac/no-cilia flow model 
 and compared it with the baseline model
-(both cilia and cardiac motion) (\Cref{fig:figure4_compare_control_mutant}c).
+(both cilia and cardiac motion) (\Cref{fig:fig4}c).
 Similar to our experiments, we observed slower dynamics in simulations for ROIs 2 and 4.
 Interestingly, the difference was even greater for the simulations,
 with the time-to-threshold in ROI 2 being 90\% higher in absence of cilia-mediated flow.
@@ -896,7 +896,7 @@ role for solute movement to regions upstream in the cilia flow fields or to dist
     $\hat{t}$ when the threshold is first exceeded is reported in the plot legends.
     Note that in both panels \textbf{a} and \textbf{c}, the vertical axes have
     different limits in each plot.}
-    \label{fig:figure4_compare_control_mutant}
+    \label{fig:fig4}
 \end{figure}
 
 \subsection*{Loss of cilia motility in specific subpopulation slows down transport}
@@ -906,7 +906,7 @@ To identify the role of these lineages on CSF transport, we simulate transport
 upon region-specific cilia paralysis by modifying the boundary conditions
 of the CSF flow model. Three separate cilia-covered regions were considered separately:
 the telencephalic (anterior) ventricle, the dorsal part and the ventral part
-of the diencephalic (middle) ventricle (\Cref{fig:figure5_compare_cilia_modifications}a).
+of the diencephalic (middle) ventricle (\Cref{fig:fig5}a).
 The cilia tangential traction boundary condition is for each case
 changed to a free-slip boundary condition in paralyzed region,
 prescribing zero tangential forces to
@@ -925,12 +925,12 @@ impact and resulted in maximum velocities of 27.7 \textmu m/s or 27.2 \textmu m/
 Changes in the transport dynamics of Dendra2 were most prominent when removing the dorsal cilia
 in the diencephalic ventricle. All ROIs (except ROI 1, where we impose the photoconversion curve)
 exhibit significant changes in the dynamics of $\cbar$
-(\Cref{fig:figure5_compare_cilia_modifications}b).
+(\Cref{fig:fig5}b).
 Compared to the baseline model results, we observed a slower increase and lower final concentration
 in the middle and anterior ventricles (ROIs 2--5),
 and more rapid transport to the posterior ventricle (ROI 6).
 On the other hand, removal of telencephalic cilia did not alter the evolution of the
-mean concentration $\cbar$ with time (\Cref{fig:figure5_compare_cilia_modifications}b).
+mean concentration $\cbar$ with time (\Cref{fig:fig5}b).
 Finally, without ventral cilia in the diencephalic ventricle,
 more solute has spread towards the anterior ventricle (ROI 5) and
 less solute has spread towards the posterior ventricle (ROI 6).
@@ -943,7 +943,7 @@ less solute has spread towards the posterior ventricle (ROI 6).
     loss-of-cilia-motility scenarios considered. The region named in the legend is the region
     where we modify the cilia tangential traction boundary condition to a free-slip condition
     in the CSF flow model.}
-    \label{fig:figure5_compare_cilia_modifications}
+    \label{fig:fig5}
 \end{figure}
 
 \subsection*{Modification of ventricles geometry impacts protein distribution}
@@ -953,10 +953,10 @@ we used four alternative brain ventricles meshes:
 one where the connection between the anterior and middle ventricles is constricted;
 one where the connection between the middle and posterior ventricles is constricted;
 one where the middle ventricle is shrunk in the lateral direction;
-and the combination of the above three modifications (\Cref{fig:figure6_sim_results_compare_geometries}a).
+and the combination of the above three modifications (\Cref{fig:fig6}a).
 We simulate CSF flow in the modified geometries with the baseline flow model
 and use the resulting velocity field to simulate transport of Dendra2
-(\Cref{fig:figure6_sim_results_compare_geometries}b).
+(\Cref{fig:fig6}b).
 
 Constricting the connection between the anterior and middle ventricle leads to
 slower transport to the anterior ventricle (ROI 5),
@@ -974,7 +974,7 @@ while both the anterior and the posterior ventricles (ROIs 5 and 6) have lower c
 Altogether our results identify that the geometry and width of the ventricular ducts matter
 for solute transport and may explain why we observed larger differences
 in the cilia-deficient model than in the experimental data in
-\Cref{fig:figure4_compare_control_mutant}, which have different duct diameters.
+\Cref{fig:fig4}, which have different duct diameters.
 
 \lyng{HH: Quantify differences in terms of percentage changes in the
 final mean concentration values, maybe with a bar plot?}
@@ -983,7 +983,7 @@ final mean concentration values, maybe with a bar plot?}
     \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
     \caption{Caption. \mk{MK: How do the different geoemtries compare in terms of volume,
     areas where cilia are active?} \lyng{HH: Good question, will add this information.}}
-    \label{fig:figure6_sim_results_compare_geometries}
+    \label{fig:fig6}
 \end{figure}
 
 %%--------------------------------------%%
@@ -1075,7 +1075,7 @@ to the posterior ventricle, values of $\cbar_6$ would be higher than those obser
 To gain further insights into how CSF distribution depends on cilia \fixme{properties (@Nathalie: do we really
 investigate properties? Rather location or population?)} and geometries,
 we manipulated certain parameters in our models. First, we removed cilia in specific regions of
-our model (\Cref{fig:figure5_compare_cilia_modifications}). We identified that the cilia in the
+our model (\Cref{fig:fig5}). We identified that the cilia in the
 dorsal middle ventricle contribute the most to solute distribution, which aligns well with the fact
 that these cilia generate the strongest flow field \emph{in vivo} and in our model.
 In contrast, removing the ventral cilia in the middle ventricle did not greatly impact flow dynamics.
