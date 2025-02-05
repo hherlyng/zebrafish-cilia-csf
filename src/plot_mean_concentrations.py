@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 from mpi4py       import MPI
 from scipy.io     import loadmat
-from imports.mesh import create_ventricle_volumes_meshtags
+from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
@@ -88,9 +88,10 @@ for idx, molecule in enumerate(molecules):
     
     ax.set_xlabel("Time [s]", fontsize=65, labelpad=25)
     if molecule=='D1': 
-        # Add legend and y-axis label
+        # Add legend 
         ax.legend(loc='best', fontsize=50, frameon=True, fancybox=False, edgecolor='k')
-        ax.set_ylabel(r"Mean concentration $\overline{c}$ [-]", fontsize=75, labelpad=25)
+    # Add y-axis label
+    ax.set_ylabel(r"Mean concentration $\overline{c}$ [-]", fontsize=75, labelpad=25)
     ax.tick_params(labelsize=65)
     fig.tight_layout()
 
