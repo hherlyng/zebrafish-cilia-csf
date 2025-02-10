@@ -152,7 +152,7 @@ class TransportSolver:
         a2  = self.D('+') * alpha('+') / avg(self.hf) * dot(jump(w, self.n), jump(c, self.n)) * dS
         a2 -= self.D('+') * dot(avg(grad(w)), jump(c, self.n)) * dS
         a2 -= self.D('+') * dot(jump(w, self.n), avg(grad(c))) * dS
-
+        
         # Advective term
         a3  = dot(jump(w), self.un('+') * c('+') - self.un('-') * c('-')) * dS
 
