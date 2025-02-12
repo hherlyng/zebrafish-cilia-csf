@@ -110,7 +110,7 @@ Simula Research Laboratory, Oslo, Norway}
 \affil[2]{Department of Clinical and Molecular Medicine,
 Norwegian University of Science and Technology, Trondheim, Norway}
 \affil[3]{K.~G.~Jebsen Center for Brain Fluid Research}
-\affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}
+\affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no},
 \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
 \affil[+]{these authors contributed equally to this work}
 % Optional PDF information
@@ -217,18 +217,18 @@ particles within the brain ventricles.
 To model flow and transport in zebrafish larval brain ventricles, we generated a
 3D representation of the brain ventricular walls using confocal imaging data of a zebrafish embryo
 injected intraventricularly with a 70 kDa dye at 2 dpf~\cite{Olstad2019CiliaryDevelopment}. 
-From the imaging data, we constructed a computational mesh of the ventricles (\Cref{fig:fig1}\fixme{d}).
+From the imaging data, we constructed a computational mesh of the ventricles (\Cref{fig:fig1}d).
 The interior volume was meshed with fTetWild~\cite{Hu2020FastWild}. 
 The \emph{standard} mesh consisted of 132 134 tetrahedral cells and had a
 maximal (minimal) edge length of 14.9 \textmu m (4.68 \textmu m). 
 At 2 dpf, the ventricular system consists mainly of 3 cavities: the telencephalic (anterior),
 the di-/mesencephalic (middle) and the rhombencephalic (posterior) ventricles, which are connected by ducts. 
 Parts of the ventricular surfaces were marked to be lined with
-motile cilia~\cite{Olstad2019CiliaryDevelopment} (\Cref{fig:fig1}\fixme{d}, magenta markers).
+motile cilia~\cite{Olstad2019CiliaryDevelopment} (\Cref{fig:fig1}d, magenta markers).
 \begin{figure}%[hbt!]
     \centering
     \includegraphics[width=\linewidth]{graphics/figure1.png}
-    \caption{\fixme{Reorder panels.} 
+    \caption{
     \textbf{a.} Schematic illustration of the two cerebrospinal fluid (CSF) flow components modeled,
     motile cilia and cardiac pulsations, and their contributions to the flow patterns.
     \textbf{b.} Particle tracking data visualizing flow directionality in the middle ventricle.
@@ -240,9 +240,13 @@ motile cilia~\cite{Olstad2019CiliaryDevelopment} (\Cref{fig:fig1}\fixme{d}, mage
     \textbf{f.} Streamlines of the CSF flow field simulated with the cardiac-only/no-cilia flow
     model at a time 25\% into the cardiac cycle. %t=0.112613 s, period=0.45045 s
     \textbf{g.} Streamlines simulated with the baseline flow model at
-    a time 50\% into the cardiac cycle. %t=0.225225 s
+    a time 25\% into the cardiac cycle. %t=0.112613 s
     \textbf{h.} Streamlines simulated with the baseline flow model at
-    a time 70\% into the cardiac cycle. %t=0.315315 s
+    a time 50\% into the cardiac cycle. %t=0.225225 s
+    \textbf{i.} Streamlines simulated with the baseline flow model at
+    a time 75\% into the cardiac cycle. %t=0.315315 s
+    \textbf{j.} Illustration of the cardiac-related normal pressure forcing imposed on the
+    anterior/posterior boundaries. Time instants of panels \textbf{f, h--j} are indicated.
     }
     \label{fig:fig1}
 \end{figure}
@@ -263,7 +267,7 @@ We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricle
 \subsection*{Computational CSF dynamics}
 The beating motion of the cilia generates CSF flow with steady rotational
 structures~\cite{Olstad2019CiliaryDevelopment}
-within the brain ventricles (\Cref{fig:fig1}\fixme{a--c}).
+within the brain ventricles (\Cref{fig:fig1}a--c).
 In addition, cardiac pulsations induce pulsatile CSF flow.
 We model this flow of CSF in the brain ventricles by the time-dependent,
 incompressible Stokes equations which read as follows.
@@ -323,7 +327,7 @@ each predicting a CSF flow velocity $\uu$ and CSF pressure $p$.
 \end{itemize}
 
 \subsection*{Cilia-driven flow}
-On the ciliated regions of the ventricle walls $\Gc$ (\Cref{fig:fig1}\fixme{d}, magenta markers),
+On the ciliated regions of the ventricle walls $\Gc$ (\Cref{fig:fig1}d, magenta markers),
 we impose a constant-in-time tangential traction $\bsigpar=\btau$ to represent the net forces
 of the cilia acting on the CSF.
 We set $\btau(\xx, \rr) = \tau \lambda(\xx) P_{\nn}(\rr)$, where the function $\lambda(\xx)$
@@ -340,7 +344,7 @@ with the simulated, maximum velocity magnitude.
 \subsection*{Flow induced by cardiac pulsations}\label{subsec:pressure_bcs}
 To drive a cardiac-induced pulsatile flow inside the brain ventricles, we set $\Tilde{p}(t)=0$ and
 $\Tilde{p}(t)=-A\sin{\omega t}$ on anterior and posterior parts, respectively, of the
-boundary $\Gp$~(\Cref{fig:fig1}\fixme{d}, blue markers).
+boundary $\Gp$~(\Cref{fig:fig1}d, blue markers).
 Based on a measured cardiac frequency of $f=2.22$ Hz~\cite{Olstad2019CiliaryDevelopment},
 the angular cardiac frequency $\omega=2\pi f=6.97$ rad/s.
 The amplitude $A=1.5\times 10^{-3}$ Pa determines the magnitude of the pulsatile flow,
@@ -619,7 +623,7 @@ The first 10 images were scanned without photoconversion to obtain a
 baseline value of fluorescence intensity, and the next 290 images were
 scanned while performing photoconversion. 
 
-For photoconversion, ‘Bleaching’ and ‘Region’ in the ZEN software
+For photoconversion, ``Bleaching" and ``Region" in the ZEN software
 were used. A 405 nm laser was focused into a circular area (diameter: 16 \textmu m, scan 0.77 \textmu sec/pixel)
 of the dorsoposterior diencephalic ventricle with 100\% laser power.
 The laser was illuminated in the area repeatedly between each scanning.
@@ -664,7 +668,7 @@ zero to one. Finally, we averaged the $\Delta F$ data from controls and from mut
 We report these mean values together with a one-standard deviation error band.
 
 \subsection*{Intraventricular injection of microbeads and particle tracking}
-To recover the flow fields shown in~\Cref{fig:fig1}\fixme{b, c}, we carried out
+To recover the flow fields shown in~\Cref{fig:fig1}b, c, we carried out
 particle tracking in a larval zebrafish injected with fluorescent beads.
 As described in Olstad~\emph{et al.}~\cite{Olstad2019CiliaryDevelopment},
 anesthetized 2 dpf zebrafish were injected with 1 nl of a mixture containing 0.1\% w/v fluorescent beads
@@ -694,14 +698,14 @@ alternative linking cost factor: 1.05; linking max distance: 5.0; gap closing ma
 splitting max distance: 15.0; allow gap closing: true; allow track splitting:
 false; allow track merging: false; merging max distance: 15.0; cutoff percentile: 0.9.
 Only the particle tracks with at least 30 data points, while simultaneously
-covering a distance of at least 8.8 \textmu m, were plotted in~\Cref{fig:fig1}\fixme{b, c}.
+covering a distance of at least 8.8 \textmu m, were plotted in~\Cref{fig:fig1}b, c.
 
 %%--------------RESULTS--------------%%
 \section*{Results}
 
 \subsection*{Motile cilia induce flow compartmentalization within the brain ventricles}
 
-We model the compartmentalized and pulsatile CSF flow observed \emph{in vivo}~(\Cref{fig:fig1}\fixme{b--c})
+We model the compartmentalized and pulsatile CSF flow observed \emph{in vivo}~(\Cref{fig:fig1}b, c)
 by the Stokes equations, and solve the equations numerically using a finite element method.
 To characterize CSF flow patterns predicted by
 computational fluid dynamics within the brain ventricles, we first
@@ -710,13 +714,13 @@ cilia motion, disregarding cardiac pressure pulsations. The
 bidirectional traction induced by the motile cilia
 inherently leads to a partial compartmentalization of the ventricular
 system, with large-scale vortex structures in the anterior and middle
-ventricles~(\Cref{fig:fig1}\fixme{e}). The highest velocities ($26.5$ \textmu m/s)
+ventricles~(\Cref{fig:fig1}e). The highest velocities ($26.5$ \textmu m/s)
 occur in the vicinity of the dorsal cilia in the middle ventricle. 
 
 To examine the effect of cardiac pressure pulsations,
 we next consider a no-cilia model variation. In this scenario, the vortex structures
 generated by the ciliary motion vanish. The simulated CSF
-flow is pulsatile as a result of the sinusoidal pressure gradient (\Cref{fig:fig1}\fixme{g}),
+flow is pulsatile as a result of the sinusoidal pressure gradient (\Cref{fig:fig1}f, g),
 with a peak velocity magnitude of $4.8$ \textmu m/s. At each time instant, the flow
 is unidirectional, with CSF initially flowing rostrocaudally (positive $x-$axis) before changing
 direction to caudorostral in the middle of the cardiac cycle.
@@ -724,7 +728,7 @@ direction to caudorostral in the middle of the cardiac cycle.
 Next we consider the baseline model, simulating flow driven by both cilia
 and cardiac pulsations. We observe persistent flow features,
 with vortex-structures in the anterior and middle ventricles
-and directional flow in the posterior ventricle (\Cref{fig:fig1}\fixme{e},
+and directional flow in the posterior ventricle (\Cref{fig:fig1}h--j,
 \fixme{Supplementary video 1}). These characteristic patterns suggest
 that the flow in the anterior and middle ventricles is majorly driven
 by cilia, while the cardiac pressure pulsations dominate
@@ -837,7 +841,7 @@ simulations were similar enough to convincingly validate the model.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
-    \caption{\fixme{Create common legend.}
+    \caption{
     \textbf{a.} Relative change in fluorescence intensity $\Delta F$ over time
     in each region of interest (ROI)
     observed during experiments of photoconversion of Dendra2 proteins in ROI 1.
