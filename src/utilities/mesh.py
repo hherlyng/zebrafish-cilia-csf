@@ -1,12 +1,9 @@
-import ufl
-import meshio
 import numpy.typing
 
 import numpy     as np
 import dolfinx   as dfx
 
 from mpi4py   import MPI
-from pathlib  import Path
 
 # Mesh tags
 NOSLIP    = 1
@@ -18,7 +15,6 @@ UPPER     = 6
 ANTERIOR  = 7
 ANTERIOR2 = 8
 SLIP      = 9
-
 
 # Mesh tags for flow
 ANTERIOR_PRESSURE    = 2
@@ -38,83 +34,6 @@ MIDDLE_DORSAL_ANTERIOR  = 14
 POSTERIOR_VENTRAL       = 15
 ANTERIOR_VENTRAL        = 16
 MIDDLE_VENTRAL          = 17
-
-def old_create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.MeshTags, list[int])):
-    """ Create cell meshtags for the different regions of interest (ROI)
-        used in the analysis and comparison with experimental data.
-
-    Parameters
-    ----------
-    mesh : dfx.mesh.Mesh
-        The brain ventricles mesh.
-
-    Returns
-    -------
-    tuple(dfx.mesh.MeshTags, list[int])
-        The celltags and a list of the integer tag values for each ROI.
-    """
-    
-    # Define the planes that separate the anterior, middle and posterior ventricles
-    z_min = mesh.comm.allreduce(mesh.geometry.x[:, 2].min(), op=MPI.MIN)
-    z_max = mesh.comm.allreduce(mesh.geometry.x[:, 2].max(), op=MPI.MAX)
-    z_mid = (z_min + z_max) / 2
-    a1 = [0.165, 0.0, z_mid]
-    b1 = [0.125, 0.0, z_max*0.78]
-
-    a2 = [0.33, 0.0, z_mid*0.8]
-    b2 = [0.345, 0.0, z_max*0.75]
-
-    line1 = lambda t: a1[2] + (b1[2] - a1[2])/(b1[0] - a1[0])*(t - a1[0])
-    line2 = lambda t: a2[2] + (b2[2] - a2[2])/(b2[0] - a2[0])*(t - a2[0])
-
-    # Define locator functions for each region of interest (ROI)
-    def ROI_1(x):
-        """ The dorsal posterior region of the middle ventricle. """
-        x_range = np.logical_and(x[0] > 0.295, x[0] < 0.325)
-        z_range = np.logical_and(x[2] > 0.200, x[2] < 0.225)
-        return np.logical_and(x_range, z_range)
-
-    def ROI_2(x):
-        """ The dorsal anterior region of the middle ventricle. """
-        x_range = np.logical_and(x[0] > 0.135, x[0] < 0.165)
-        z_range = np.logical_and(x[2] > 0.200, x[2] < 0.225)
-        return np.logical_and(x_range, z_range)
-
-    def ROI_3(x):
-        """ The ventral posterior region of the middle ventricle. """
-        x_range = np.logical_and(x[0] > 0.265, x[0] < 0.295)
-        z_range = np.logical_and(x[2] > 0.110, x[2] < 0.135)
-        return np.logical_and(x_range, z_range)
-
-    def ROI_4(x):
-        """ The entire middle ventricle. """
-        return np.logical_and(x[2] >= line1(x[0]), x[2] >= line2(x[0]))
-
-    def ROI_5(x):
-        """ The anterior ventricle. """
-        return x[2] < line1(x[0])
-
-    def ROI_6(x):
-        """ The posterior ventricle. """
-        return x[2] < line2(x[0])
-
-
-    tdim = mesh.topology.dim
-    ## TODO: update to using midpoint coordinate of cells located
-    ROI_cells = {1 : dfx.mesh.locate_entities(mesh, tdim, ROI_1),
-                 2 : dfx.mesh.locate_entities(mesh, tdim, ROI_2),
-                 3 : dfx.mesh.locate_entities(mesh, tdim, ROI_3),
-                 4 : dfx.mesh.locate_entities(mesh, tdim, ROI_4),
-                 5 : dfx.mesh.locate_entities(mesh, tdim, ROI_5),
-                 6 : dfx.mesh.locate_entities(mesh, tdim, ROI_6)
-    }
-    num_volumes   = mesh.topology.index_map(tdim).size_local + mesh.topology.index_map(tdim).num_ghosts # Total number of volumes
-    DEFAULT  = 9 # default cell tag value
-    ROI_tags = [1, 2, 3, 4, 5, 6]
-    volume_marker = np.full(num_volumes, DEFAULT, dtype=np.int32)
-    for i in reversed(ROI_tags): volume_marker[ROI_cells[i]] = ROI_tags[i-1] # Mark the cells in each ROI with the corresponding ROI tag
-
-    return (dfx.mesh.meshtags(mesh, tdim, np.arange(num_volumes, dtype=np.int32), volume_marker), ROI_tags)
 
 def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.MeshTags, list[int])):
     """ Create cell meshtags for the different regions of interest (ROI)
@@ -203,53 +122,6 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
     for i in reversed(ROI_tags): volume_marker[ROI_cells[i]] = ROI_tags[i-1] # Mark the cells in each ROI with the corresponding ROI tag
 
     return (dfx.mesh.meshtags(mesh, tdim, np.arange(num_volumes, dtype=np.int32), volume_marker), ROI_tags)
-
-def read_msh_parallel(filename: str|Path, comm: MPI.Comm, rank: int=0, num_refinements: int=0) -> dfx.mesh.Mesh:
-    """ Read mesh file of type .msh and return a dolfinx.mesh.Mesh mesh.
-        
-        Possibly in parallel and possibly with refinements.
-
-    Parameters
-    ----------
-    filename : str | Path
-        Filename of .msh mesh as string or path.
-    comm : MPI.Comm
-        MPI communicator.
-    rank : int, optional
-        Rank owning mesh, by default 0
-    num_refinements : int, optional
-        Number of mesh refinements to perform, by default 0
-
-    Returns
-    -------
-    mesh : dolfinx.mesh.Mesh
-
-    """
-
-    if comm.rank == rank:
-        msh = meshio.read(filename)
-        # Extract cells and points from the .msh mesh
-        cells  = msh.get_cells_type("tetra")
-        points = msh.points
-        points /= 1000  # Divide geometry by thousand to get millimeters
-    
-    else:
-        cells  = np.empty((0, 4), dtype=np.int64)
-        points = np.empty((0, 3), dtype=np.float64)
-    element = ufl.VectorElement("Lagrange", ufl.tetrahedron, 1)
-    domain = ufl.Mesh(element)
-    mesh = dfx.mesh.create_mesh(comm, cells, points, domain, partitioner=dfx.cpp.mesh.create_cell_partitioner(dfx.mesh.GhostMode.shared_facet))
-    if comm.rank == rank: print("Total # cells in mesh: {0}.\n".format(mesh.topology.index_map(3).size_global))
-
-    if num_refinements != 0:
-        print(f"Refining the mesh {num_refinements} times.")
-        for _ in range(num_refinements):
-            mesh.topology.create_entities(1)
-            mesh = dfx.mesh.refine(mesh)
-    
-        if comm.rank==rank: print("Total # cells in refined mesh: {0}.\n".format(mesh.topology.index_map(3).size_global))
-    
-    return mesh
 
 ## Mesh utility functions
 def mark_boundaries_flow_and_transport(mesh: dfx.mesh.Mesh, inflow_outflow: bool) -> dfx.mesh.MeshTags:
