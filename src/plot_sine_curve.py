@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.style.use('petroff10')
+
 # Set matplotlib properties
 plt.rcParams.update({
     "font.family" : "Arial",
