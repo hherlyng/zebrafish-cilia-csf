@@ -1,6 +1,7 @@
 import ufl
 
 import numpy   as np
+import pandas  as pd
 import dolfinx as dfx
 import adios4dolfinx     as a4d
 import matplotlib.pyplot as plt
@@ -151,4 +152,28 @@ for row_idx in range(ax_c.shape[0]):
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
 if save_figs: fig_c.savefig(f"../output/illustrations/compare_geometry/all_ROIs_model{model_version}.png")
+
+cols = range(5)
+final_c = pd.DataFrame(index=ROI_tags, columns=cols)
+for i, c_bar in enumerate([c_bar1, c_bar2, c_bar3, c_bar4, c_bar5]):
+    final_c[i] = c_bar[-1, :]
+
+fig_bars, ax_bars = plt.subplots(num=4, figsize=[18, 8])
+final_c.reset_index(inplace=True)
+bars = final_c.plot.bar(x='index', y=cols,
+                         color=colors,
+                         ax=ax_bars, rot=True, width=0.75)
+hatches = ['', '\\', 'x', '/', '^']
+for bar_container, hatch in zip(bars.containers, hatches):
+    for bar in bar_container:
+        bar.set_hatch(hatch)
+
+ax_bars.set_xlabel("ROI number", fontsize=35, labelpad=25)
+ax_bars.set_ylabel(r"Final mean concentration $\bar{c}(T)$ [-]", fontsize=35, labelpad=50)
+ax_bars.tick_params(labelsize=35)
+ax_bars.get_legend().remove()
+# ax_bars.legend(labels=['Original', 'Fore', 'Middle', 'Hind', 'Fore+middle+hind'], loc='right', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
+fig_bars.tight_layout()
+
+if save_figs: fig_bars.savefig(f"../output/illustrations/compare_geometry/final_concentrations_model{model_version}.png")
 plt.show()
