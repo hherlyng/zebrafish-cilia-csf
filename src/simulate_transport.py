@@ -1,5 +1,5 @@
 from utilities.local_imports import *
-from utilities.mesh          import mark_boundaries_flow_and_transport, create_ventricle_volumes_meshtags
+from utilities.mesh          import create_ventricle_volumes_meshtags, mark_facets
 
 import os
 import time
@@ -99,7 +99,7 @@ class TransportSolver:
 
         # Set mesh and facet tags
         io_boundaries = False if model_version=='A' else True
-        self.ft = mark_boundaries_flow_and_transport(mesh=self.mesh, inflow_outflow=io_boundaries)
+        self.ft = mark_facets(mesh=self.mesh, inflow_outflow=io_boundaries)
 
         # Temporal parameters
         self.T  = T # Final simulation time

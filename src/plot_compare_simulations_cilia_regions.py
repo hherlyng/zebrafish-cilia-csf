@@ -7,7 +7,7 @@ import dolfinx as dfx
 import adios4dolfinx     as a4d
 import matplotlib.pyplot as plt
 
-from mpi4py       import MPI
+from mpi4py         import MPI
 from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties

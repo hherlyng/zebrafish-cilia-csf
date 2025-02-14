@@ -5,35 +5,16 @@ import dolfinx   as dfx
 
 from mpi4py   import MPI
 
-# Mesh tags
-NOSLIP    = 1
-INLET     = 2
-OUTLET    = 3
-VOLUME    = 4
-LOWER     = 5
-UPPER     = 6
-ANTERIOR  = 7
-ANTERIOR2 = 8
-SLIP      = 9
-
 # Mesh tags for flow
 ANTERIOR_PRESSURE    = 2
 POSTERIOR_PRESSURE   = 3
 VOLUME               = 4
 MIDDLE_VENTRAL_CILIA = 5
 MIDDLE_DORSAL_CILIA  = 6
-ANTERIOR_CILIA       = 7
+ANTERIOR_CILIA1      = 7
 ANTERIOR_CILIA2      = 8
 SLIP                 = 9
 
-# Mesh tags for transport
-ANTERIOR_DORSAL         = 11
-POSTERIOR_DORSAL        = 12
-MIDDLE_DORSAL_POSTERIOR = 13
-MIDDLE_DORSAL_ANTERIOR  = 14
-POSTERIOR_VENTRAL       = 15
-ANTERIOR_VENTRAL        = 16
-MIDDLE_VENTRAL          = 17
 
 def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.MeshTags, list[int])):
     """ Create cell meshtags for the different regions of interest (ROI)
@@ -105,9 +86,8 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
         z_range = np.logical_and(z_range1, z_range2)
         return np.logical_and(x_range, z_range)
 
-
     tdim = mesh.topology.dim
-    ## TODO: update to using midpoint coordinate of cells located
+
     ROI_cells = {1 : dfx.mesh.locate_entities(mesh, tdim, ROI_1),
                  2 : dfx.mesh.locate_entities(mesh, tdim, ROI_2),
                  3 : dfx.mesh.locate_entities(mesh, tdim, ROI_3),
@@ -115,7 +95,8 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
                  5 : dfx.mesh.locate_entities(mesh, tdim, ROI_5),
                  6 : dfx.mesh.locate_entities(mesh, tdim, ROI_6)
     }
-    num_volumes   = mesh.topology.index_map(tdim).size_local + mesh.topology.index_map(tdim).num_ghosts # Total number of volumes
+    num_volumes = mesh.topology.index_map(tdim).size_local \
+                + mesh.topology.index_map(tdim).num_ghosts # Total number of volumes = local + ghosts
     DEFAULT  = 9 # default cell tag value
     ROI_tags = [1, 2, 3, 4, 5, 6]
     volume_marker = np.full(num_volumes, DEFAULT, dtype=np.int32)
@@ -123,15 +104,32 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
 
     return (dfx.mesh.meshtags(mesh, tdim, np.arange(num_volumes, dtype=np.int32), volume_marker), ROI_tags)
 
-## Mesh utility functions
-def mark_boundaries_flow_and_transport(mesh: dfx.mesh.Mesh, inflow_outflow: bool) -> dfx.mesh.MeshTags:
-    facet_dim = mesh.topology.dim - 1 # Facets dimension
+def mark_facets(mesh: dfx.mesh.Mesh, inflow_outflow: bool) -> dfx.mesh.MeshTags:
+    """ Function that marks the boundaries of the mesh with integer tags and returns them as dolfinx meshtags.
+        The markings are used for flow simulations.
 
-    # Generate mesh topology
+    Parameters
+    ----------
+    mesh : dolfinx.mesh.Mesh object
+        A mesh object of the dolfinx Mesh class type
+
+    inflow_outflow : bool
+        If True, mark pressure BC regions for inflow/outflow of the boundary.
+
+    Returns
+    -------
+    facet_tags
+        Dolfinx meshtags for boundary facets
+    """
+
+    facet_dim = mesh.topology.dim-1 # Facets dimension
+
+    # Generate mesh entities and connectivity between facets and cells
     mesh.topology.create_entities(facet_dim)
     mesh.topology.create_connectivity(facet_dim, facet_dim+1)
 
-    num_facets   = mesh.topology.index_map(facet_dim).size_local + mesh.topology.index_map(facet_dim).num_ghosts # Total number of facets
+    num_facets   = mesh.topology.index_map(facet_dim).size_local \
+                 + mesh.topology.index_map(facet_dim).num_ghosts # Number of facets = local + ghosts
     facet_marker = np.full(num_facets, VOLUME, dtype=np.int32) # Default facet marker value
     
     # Facets of the boundary of the mesh where noslip condition is imposed
@@ -141,8 +139,10 @@ def mark_boundaries_flow_and_transport(mesh: dfx.mesh.Mesh, inflow_outflow: bool
     facet_marker[boundary_facets] = SLIP
 
     # Facets of the anterior ventricle boundary
-    anterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_cilia_volume)
-    facet_marker[anterior_boundary_facets] = ANTERIOR_CILIA
+    anterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_cilia_volume1)
+    facet_marker[anterior_boundary_facets] = ANTERIOR_CILIA1
+    anterior_boundary_facets2 = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_cilia_volume2)
+    facet_marker[anterior_boundary_facets2] = ANTERIOR_CILIA2
 
     # Facets of the upper part of the middle ventricle boundary
     upper_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, middle_dorsal_cilia_volume)
@@ -152,18 +152,6 @@ def mark_boundaries_flow_and_transport(mesh: dfx.mesh.Mesh, inflow_outflow: bool
     lower_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, middle_ventral_cilia_volume)
     facet_marker[lower_boundary_facets] = MIDDLE_VENTRAL_CILIA
 
-    # Facets of the dorsal anterior ventricle boundary
-    anterior_dorsal_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_dorsal_injection_site)
-    facet_marker[anterior_dorsal_boundary_facets] = ANTERIOR_DORSAL
-
-    # Facets of the dorsal posterior middle ventricle boundary
-    middle_dorsal_posterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, middle_dorsal_posterior_injection_site)
-    facet_marker[middle_dorsal_posterior_boundary_facets] = MIDDLE_DORSAL_POSTERIOR
-
-    # Facets of the dorsal posterior ventricle boundary
-    posterior_dorsal_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, posterior_dorsal_injection_site)
-    facet_marker[posterior_dorsal_boundary_facets] = POSTERIOR_DORSAL
-
     if inflow_outflow:
         # Facets of the inlet boundary of the mesh
         inlet_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_pressure_boundary)
@@ -176,258 +164,6 @@ def mark_boundaries_flow_and_transport(mesh: dfx.mesh.Mesh, inflow_outflow: bool
     facet_tags = dfx.mesh.meshtags(mesh, facet_dim, np.arange(num_facets, dtype=np.int32), facet_marker)
 
     return facet_tags
-
-def mark_boundaries_flow(mesh: dfx.mesh.Mesh, inflow_outflow: bool, modify: int=0) -> dfx.mesh.MeshTags:
-    """ Function that marks the boundaries of the mesh with integer tags and returns them as dolfinx meshtags.
-        The markings are used for flow simulations.
-
-    Parameters
-    ----------
-    mesh : dolfinx.mesh.Mesh object
-        A mesh object of the dolfinx Mesh class type
-
-    inflow_outflow : bool
-        If True, mark pressure BC regions for inflow/outflow of the boundary.
-
-    Returns
-    -------
-    facet_tags
-        Dolfinx meshtags for boundary facets
-    """
-
-    # Decide whether to use modified mesh markers
-    markers = [anterior_cilia_volume, middle_dorsal_cilia_volume, middle_ventral_cilia_volume]
-    if modify!=0:
-        if modify in [1, 2, 3, 4]:
-            # Shrunk ventricles
-            markers = [shrunk_anterior_cilia_volume, shrunk_middle_dorsal_cilia_volume, shrunk_middle_ventral_cilia_volume]
-        elif modify==5:
-            # Modify middle-dorsal cilia
-            markers[1] = mod_middle_dorsal_cilia_volume
-        elif modify==6:
-            # Modify middle-ventral cilia
-            markers[2] = mod_middle_ventral_cilia_volume
-
-
-    facet_dim = mesh.topology.dim - 1 # Facets dimension
-
-    # Generate mesh entities
-    mesh.topology.create_entities(facet_dim)
-    mesh.topology.create_connectivity(facet_dim, facet_dim+1)
-
-    num_facets   = mesh.topology.index_map(facet_dim).size_local + mesh.topology.index_map(facet_dim).num_ghosts # Total number of facets
-    facet_marker = np.full(num_facets, VOLUME, dtype=np.int32) # Default facet marker value
-    
-    # Facets of the boundary of the mesh where noslip condition is imposed
-    boundary_facets = dfx.mesh.exterior_facet_indices(mesh.topology)
-    
-    # Default facet marker values = SLIP
-    facet_marker[boundary_facets] = SLIP
-
-    # Facets of the anterior ventricle boundary
-    anterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[0])
-    facet_marker[anterior_boundary_facets] = ANTERIOR_CILIA
-
-    # Facets of the upper part of the middle ventricle boundary
-    upper_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[1])
-    facet_marker[upper_boundary_facets] = MIDDLE_DORSAL_CILIA
-
-    # Facets of the lower part of the middle ventricle boundary
-    lower_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[2])
-    facet_marker[lower_boundary_facets] = MIDDLE_VENTRAL_CILIA
-
-    if inflow_outflow:
-        # Facets of the inlet boundary of the mesh
-        inlet_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_pressure_boundary)
-        facet_marker[inlet_boundary_facets] = ANTERIOR_PRESSURE # Tags for the inlet boundary
-
-        # Facets of the outlet boundary of the mesh
-        outlet_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, posterior_pressure_boundary)
-        facet_marker[outlet_boundary_facets] = POSTERIOR_PRESSURE # Tags for the inlet boundary
-
-    facet_tags = dfx.mesh.meshtags(mesh, facet_dim, np.arange(num_facets, dtype=np.int32), facet_marker)
-
-    return facet_tags
-
-def recal_mark_boundaries_flow(mesh: dfx.mesh.Mesh, inflow_outflow: bool, modify: int=0) -> dfx.mesh.MeshTags:
-    """ Function that marks the boundaries of the mesh with integer tags and returns them as dolfinx meshtags.
-        The markings are used for flow simulations.
-
-    Parameters
-    ----------
-    mesh : dolfinx.mesh.Mesh object
-        A mesh object of the dolfinx Mesh class type
-
-    inflow_outflow : bool
-        If True, mark pressure BC regions for inflow/outflow of the boundary.
-
-    Returns
-    -------
-    facet_tags
-        Dolfinx meshtags for boundary facets
-    """
-
-    # Decide whether to use modified mesh markers
-    markers = [recal_anterior_cilia_volume, recal_anterior_cilia_volume2, recal_middle_dorsal_cilia_volume, recal_middle_ventral_cilia_volume]
-
-
-    facet_dim = mesh.topology.dim-1 # Facets dimension
-
-    # Generate mesh entities
-    mesh.topology.create_entities(facet_dim)
-    mesh.topology.create_connectivity(facet_dim, facet_dim+1)
-
-    num_facets   = mesh.topology.index_map(facet_dim).size_local + mesh.topology.index_map(facet_dim).num_ghosts # Total number of facets
-    facet_marker = np.full(num_facets, VOLUME, dtype=np.int32) # Default facet marker value
-    
-    # Facets of the boundary of the mesh where noslip condition is imposed
-    boundary_facets = dfx.mesh.exterior_facet_indices(mesh.topology)
-    
-    # Default facet marker values = SLIP
-    facet_marker[boundary_facets] = SLIP
-
-    # Facets of the anterior ventricle boundary
-    anterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[0])
-    facet_marker[anterior_boundary_facets] = ANTERIOR_CILIA
-    anterior_boundary_facets2 = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[1])
-    facet_marker[anterior_boundary_facets2] = ANTERIOR_CILIA2
-
-    # Facets of the upper part of the middle ventricle boundary
-    upper_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[2])
-    facet_marker[upper_boundary_facets] = MIDDLE_DORSAL_CILIA
-
-    # Facets of the lower part of the middle ventricle boundary
-    lower_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, markers[3])
-    facet_marker[lower_boundary_facets] = MIDDLE_VENTRAL_CILIA
-
-    if inflow_outflow:
-        # Facets of the inlet boundary of the mesh
-        inlet_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_pressure_boundary)
-        facet_marker[inlet_boundary_facets] = ANTERIOR_PRESSURE # Tags for the inlet boundary
-
-        # Facets of the outlet boundary of the mesh
-        outlet_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, posterior_pressure_boundary)
-        facet_marker[outlet_boundary_facets] = POSTERIOR_PRESSURE # Tags for the inlet boundary
-
-    facet_tags = dfx.mesh.meshtags(mesh, facet_dim, np.arange(num_facets, dtype=np.int32), facet_marker)
-
-    return facet_tags
-
-
-def mark_boundaries_transport(mesh: dfx.mesh.Mesh) -> dfx.mesh.MeshTags:
-    """ Function that marks the boundaries of the mesh with integer tags and returns them as dolfinx meshtags.
-        The markings are used for transport simulations.
-
-    Parameters
-    ----------
-    mesh : dolfinx.mesh.Mesh object
-        A mesh object of the dolfinx Mesh class type
-
-    Returns
-    -------
-    facet_tags
-        Dolfinx meshtags for boundary facets
-    """
-
-    facet_dim = mesh.topology.dim - 1 # Facets dimension
-
-    # Generate mesh topology
-    mesh.topology.create_entities(facet_dim)
-    mesh.topology.create_connectivity(facet_dim, facet_dim+1)
-
-    num_facets   = mesh.topology.index_map(facet_dim).size_local + mesh.topology.index_map(facet_dim).num_ghosts # Total number of facets
-    facet_marker = np.full(num_facets, VOLUME, dtype=np.int32) # Default facet marker value
-    
-    # Facets of the boundary of the mesh where noslip condition is imposed
-    boundary_facets = dfx.mesh.exterior_facet_indices(mesh.topology)
-    
-    # Default facet marker values = SLIP
-    facet_marker[boundary_facets] = SLIP
-
-    # Facets of the dorsal anterior ventricle boundary
-    anterior_dorsal_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_dorsal_injection_site)
-    facet_marker[anterior_dorsal_boundary_facets] = ANTERIOR_DORSAL
-
-    # Facets of the ventral anterior ventricle boundary
-    anterior_ventral_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, anterior_ventral_injection_site)
-    facet_marker[anterior_ventral_boundary_facets] = ANTERIOR_VENTRAL
-
-    # Facets of the ventral middle ventricle boundary
-    middle_ventral_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, middle_ventral_injection_site)
-    facet_marker[middle_ventral_boundary_facets] = MIDDLE_VENTRAL
-
-    # Facets of the dorsal anterior middle ventricle boundary
-    middle_dorsal_anterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, middle_dorsal_anterior_injection_site)
-    facet_marker[middle_dorsal_anterior_boundary_facets] = MIDDLE_DORSAL_ANTERIOR
-
-    # Facets of the dorsal posterior middle ventricle boundary
-    middle_dorsal_posterior_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, middle_dorsal_posterior_injection_site)
-    facet_marker[middle_dorsal_posterior_boundary_facets] = MIDDLE_DORSAL_POSTERIOR
-
-    # Facets of the dorsal posterior ventricle boundary
-    posterior_dorsal_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, posterior_dorsal_injection_site)
-    facet_marker[posterior_dorsal_boundary_facets] = POSTERIOR_DORSAL
-
-    # Facets of the ventral posterior ventricle boundary
-    posterior_ventral_boundary_facets = dfx.mesh.locate_entities_boundary(mesh, facet_dim, posterior_ventral_injection_site)
-    facet_marker[posterior_ventral_boundary_facets] = POSTERIOR_VENTRAL
-
-
-    facet_tags = dfx.mesh.meshtags(mesh, facet_dim, np.arange(num_facets, dtype=np.int32), facet_marker)
-
-    return facet_tags
-
-def mark_volumes(mesh: dfx.mesh.Mesh) -> dfx.mesh.MeshTags:
-    """ Function that marks volume segments of the mesh with integer tags and returns them as dolfinx meshtags.
-
-    Parameters
-    ----------
-    mesh : dolfinx.mesh.Mesh object
-        A mesh object of the dolfinx Mesh class type
-
-    Returns
-    -------
-    volume_tags
-        Dolfinx meshtags for volume segments
-    """
-
-    mesh_dim = mesh.topology.dim # Mesh dimension
-
-    # Generate mesh topology
-    mesh.topology.create_entities(mesh_dim)
-    mesh.topology.create_entities(mesh_dim-1)
-    mesh.topology.create_entities(mesh_dim-2)
-    mesh.topology.create_connectivity(mesh_dim-1, mesh_dim)     # Connectivity facets   <-> cells
-    mesh.topology.create_connectivity(mesh_dim-2, mesh_dim)     # Connectivity vertices <-> cells
-    mesh.topology.create_connectivity(mesh_dim-1, mesh_dim-2) # Connectivity facets   <-> vertices
-
-    num_volumes   = mesh.topology.index_map(mesh_dim).size_local + mesh.topology.index_map(mesh_dim).num_ghosts # Total number of volumes
-    volume_marker = np.full(num_volumes, VOLUME, dtype=np.int32) # Default volume marker value
-
-    boundary_facets = dfx.mesh.exterior_facet_indices(mesh.topology)
-    bndry_vertices  = dfx.mesh.compute_incident_entities(mesh.topology, boundary_facets, mesh_dim-1, mesh_dim-2)
-    bndry_cells     = dfx.mesh.compute_incident_entities(mesh.topology, bndry_vertices, mesh_dim-2, mesh_dim)
-
-    ## Marking of volumes; only those that have a facet that is the boundary of the mesh
-    # Volume segment in anterior ventricle
-    anterior_cells = dfx.mesh.locate_entities(mesh, mesh_dim, anterior_cilia_volume)
-    anterior_cell_indices = np.intersect1d(bndry_cells, anterior_cells)
-    volume_marker[anterior_cell_indices] = ANTERIOR
-
-    # Upper volume segment in middle ventricle
-    lower_volumes = dfx.mesh.locate_entities(mesh, mesh_dim, middle_ventral_cilia_volume)
-    lower_cell_indices = np.intersect1d(bndry_cells, lower_volumes)
-    volume_marker[lower_cell_indices] = LOWER
-
-    # Lower volume segment in middle ventricle
-    upper_volumes = dfx.mesh.locate_entities(mesh, mesh_dim, middle_dorsal_cilia_volume)
-    upper_cell_indices = np.intersect1d(bndry_cells, upper_volumes)
-    volume_marker[upper_cell_indices] = UPPER
-
-    # Create meshtags with volume tags
-    volume_tags = dfx.mesh.meshtags(mesh, mesh_dim, np.arange(num_volumes, dtype=np.int32), volume_marker)
-
-    return volume_tags
 
 def posterior_pressure_boundary(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
     """ Marker function for the boundary where pressure BCs are applied in the posterior ventricle.
@@ -459,7 +195,7 @@ def anterior_pressure_boundary(x: numpy.typing.NDArray[np.float64]) -> numpy.typ
     """
     return np.logical_and(x[0] < 0.10, x[2] < 0.07)
 
-def recal_middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
+def middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
 
     x_range1  = np.logical_and(x[0] > 0.155, x[0] < 0.22)
     y_range1  = np.logical_and(x[1] > 0.11, x[1] < 0.18)
@@ -486,7 +222,7 @@ def recal_middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> nu
 
     return np.logical_or(or1, xyz_bool3)
 
-def recal_middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
+def middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
     x_range3 = np.logical_and(x[0]>0.14, x[0]<0.165)
     z_range3 = (x[2]>0.21)
     xz_bool3 = np.logical_and(x_range3, z_range3)
@@ -502,10 +238,7 @@ def recal_middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> num
     x_range4 = np.logical_and(x[0]>0.305, x[0]<0.335)
     z_range4 = (x[2]>0.20)
     xz_bool4 = np.logical_and(x_range4, z_range4)
-    
-    # xz_range1 = np.logical_or(xz_bool1, xz_bool2)
-    # xz_range2 = np.logical_or(xz_bool3, xz_bool4)
-    # xz_range = np.logical_or(xz_range1, xz_range2)
+
     xz_range = np.logical_or(xz_bool1, np.logical_or(xz_bool2, xz_bool4))
     y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.16825)
 
@@ -513,10 +246,7 @@ def recal_middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> num
 
     return xyz_bool
 
-def recal_anterior_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    # x_range = np.logical_and(x[0]<0.0965, x[0]>0.05)
-    # xz_bool = np.logical_and(x_range, x[2]>0.1475)
-    # y_range = np.logical_and(x[1]>-0.025, x[1]<0.025)
+def anterior_cilia_volume1(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
 
     x_range = np.logical_and(x[0]<0.0865, x[0]>0.05)
     xz_bool = np.logical_and(x_range, x[2]>0.1475)
@@ -524,198 +254,12 @@ def recal_anterior_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.ty
 
     return np.logical_and(xz_bool, y_range)
 
-def recal_anterior_cilia_volume2(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
+def anterior_cilia_volume2(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
     x_range = np.logical_and(x[0]<0.0965, x[0]>=0.075)
     xz_bool = np.logical_and(x_range, x[2]>0.143)
     y_range = np.logical_and(x[1] > 0.12, x[1] < 0.1755)
 
     return np.logical_and(xz_bool, y_range)
-
-
-
-def middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-
-    x_range1  = np.logical_and(x[0] > 0.135, x[0] < 0.22)
-    y_range1  = np.logical_and(x[1] > 0.11, x[1] < 0.18)
-    z_range1  = (x[2] < 0.1625)
-
-    xy_bool1  = np.logical_and(x_range1, y_range1)
-    xyz_bool1 = np.logical_and(xy_bool1, z_range1)
-
-    x_range2  = np.logical_and(x[0] > 0.22, x[0] < 0.3)
-    y_range2  = np.logical_and(x[1] > 0.09, x[1] < 0.2)
-    z_range2  = (x[2] < 0.15)
-
-    xy_bool2  = np.logical_and(x_range2, y_range2)
-    xyz_bool2 = np.logical_and(xy_bool2, z_range2)
-
-    x_range3  = np.logical_and(x[0] > 0.3, x[0] < 0.33)
-    y_range3  = np.logical_and(x[1] > 0.12, x[1] < 0.165)
-    z_range3  = (x[2] < 0.175)
-
-    xy_bool3  = np.logical_and(x_range3, y_range3)
-    xyz_bool3 = np.logical_and(xy_bool3, z_range3)
-
-    or1 = np.logical_or(xyz_bool1, xyz_bool2)
-
-    return np.logical_or(or1, xyz_bool3)
-
-def mod_middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-
-    x_range1  = np.logical_and(x[0] > 0.135, x[0] < 0.22)
-    y_range1  = np.logical_and(x[1] > 0.11, x[1] < 0.18)
-    z_range1  = (x[2] < 0.1625)
-
-    xy_bool1  = np.logical_and(x_range1, y_range1)
-    xyz_bool1 = np.logical_and(xy_bool1, z_range1)
-
-    x_range2  = np.logical_and(x[0] > 0.22, x[0] < 0.29)
-    y_range2  = np.logical_and(x[1] > 0.09, x[1] < 0.2)
-    z_range2  = (x[2] < 0.15)
-
-    xy_bool2  = np.logical_and(x_range2, y_range2)
-    xyz_bool2 = np.logical_and(xy_bool2, z_range2)
-
-    or1 = np.logical_or(xyz_bool1, xyz_bool2)
-
-    return or1
-
-def shrunk_middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-
-    x_range1  = np.logical_and(x[0] > 0.137, x[0] < 0.22)
-    y_range1  = np.logical_and(x[1] > 0.11, x[1] < 0.18)
-    z_range1  = (x[2] < 0.1625)
-
-    xy_bool1  = np.logical_and(x_range1, y_range1)
-    xyz_bool1 = np.logical_and(xy_bool1, z_range1)
-
-    x_range2  = np.logical_and(x[0] > 0.22, x[0] < 0.3)
-    y_range2  = np.logical_and(x[1] > 0.09, x[1] < 0.2)
-    z_range2  = (x[2] < 0.15)
-
-    xy_bool2  = np.logical_and(x_range2, y_range2)
-    xyz_bool2 = np.logical_and(xy_bool2, z_range2)
-
-    x_range3  = np.logical_and(x[0] > 0.3, x[0] < 0.33)
-    y_range3  = np.logical_and(x[1] > 0.12, x[1] < 0.165)
-    z_range3  = (x[2] < 0.175)
-
-    xy_bool3  = np.logical_and(x_range3, y_range3)
-    xyz_bool3 = np.logical_and(xy_bool3, z_range3)
-
-    or1 = np.logical_or(xyz_bool1, xyz_bool2)
-
-    return np.logical_or(or1, xyz_bool3)
-
-def middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.12075, x[0] < 0.38)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.16825)
-    z_range  = (x[2] > 0.1975)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def mod_middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.155, x[0] < 0.38)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.16825)
-    z_range  = (x[2] > 0.1975)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def shrunk_middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.131, x[0] < 0.38)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.16825)
-    z_range  = (x[2] > 0.1975)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def anterior_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range = np.logical_and(x[0] < 0.0965, x[0] > 0.05)
-    xz_bool = np.logical_and(x_range, x[2] > 0.16)
-    y_range = np.logical_and(x[1] > 0.12, x[1] < 0.1755)
-
-    return np.logical_and(xz_bool, y_range)
-
-def mod_anterior_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range = np.logical_and(x[0] < 0.0965, x[0] > 0.05)
-    xz_bool = np.logical_and(x_range, x[2] > 0.16)
-    y_range = np.logical_and(x[1] > 0.12, x[1] < 0.1755)
-
-    return np.logical_and(xz_bool, y_range)
-
-def shrunk_anterior_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range = np.logical_and(x[0] < 0.0955, x[0] > 0.05)
-    xz_bool = np.logical_and(x_range, x[2] > 0.16)
-    y_range = np.logical_and(x[1] > 0.12, x[1] < 0.1755)
-
-    return np.logical_and(xz_bool, y_range)
-
-def middle_ventral_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.15, x[0] < 0.2)
-    y_range  = np.logical_and(x[1] > 0.135, x[1] < 0.155)
-    z_range  = (x[2] < 0.17)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def middle_dorsal_anterior_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.12, x[0] < 0.175)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.165)
-    z_range  = (x[2] > 0.22)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def middle_dorsal_posterior_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.3, x[0] < 0.375)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.17)
-    z_range  = (x[2] > 0.22)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def posterior_dorsal_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.42, x[0] < 0.48)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.16)
-    z_range  = (x[2] > 0.12)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def posterior_ventral_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range  = np.logical_and(x[0] > 0.425, x[0] < 0.475)
-    y_range  = np.logical_and(x[1] > 0.13, x[1] < 0.16)
-    z_range  = (x[2] < 0.1)
-
-    xy_bool  = np.logical_and(x_range, y_range)
-    xyz_bool = np.logical_and(xy_bool, z_range)
-
-    return xyz_bool
-
-def anterior_dorsal_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    return np.logical_and(x[0] < 0.1, x[2] > 0.1825)
-
-def anterior_ventral_injection_site(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range = np.logical_and(x[0] > 0.05, x[0] < 0.1)
-    y_range = np.logical_and(x[1] > 0.132, x[1] < 0.155)
-    xy_bool = np.logical_and(x_range, y_range)
-    return np.logical_and(xy_bool, x[2] < 0.07)
 
 
 ###########################
@@ -733,17 +277,10 @@ def create_square_mesh_with_tags(N_cells: int) -> tuple((dfx.mesh.Mesh, dfx.mesh
                                            cell_type = dfx.mesh.CellType.triangle,
                                            ghost_mode = dfx.mesh.GhostMode.shared_facet)
 
-        def left(x):
-            return np.isclose(x[0], 0.0)
-        
-        def right(x):
-            return np.isclose(x[0], 1.0)
-
-        def bottom(x):
-            return np.isclose(x[1], 0.0)
-
-        def top(x):
-            return np.isclose(x[1], 1.0)
+        def left(x):   return np.isclose(x[0], 0.0)
+        def right(x):  return np.isclose(x[0], 1.0)
+        def bottom(x): return np.isclose(x[1], 0.0)
+        def top(x):    return np.isclose(x[1], 1.0)
 
         # Facet tags
         bc_facet_indices, bc_facet_markers = [], []
@@ -779,23 +316,12 @@ def create_cube_mesh_with_tags(N_cells: int) -> tuple((dfx.mesh.Mesh, dfx.mesh.M
                                            cell_type = dfx.mesh.CellType.tetrahedron,
                                            ghost_mode = dfx.mesh.GhostMode.shared_facet)
 
-        def left(x):
-            return np.isclose(x[0], 0.0)
-        
-        def right(x):
-            return np.isclose(x[0], 1.0)
-
-        def front(x):
-            return np.isclose(x[1], 0.0)
-
-        def back(x):
-            return np.isclose(x[1], 1.0)
-
-        def bottom(x):
-            return np.isclose(x[2], 0.0)
-
-        def top(x):
-            return np.isclose(x[2], 1.0)
+        def left(x):   return np.isclose(x[0], 0.0)
+        def right(x):  return np.isclose(x[0], 1.0)
+        def front(x):  return np.isclose(x[1], 0.0)
+        def back(x):   return np.isclose(x[1], 1.0)
+        def bottom(x): return np.isclose(x[2], 0.0)
+        def top(x):    return np.isclose(x[2], 1.0)
 
         # Facet tags
         bc_facet_indices, bc_facet_markers = [], []
