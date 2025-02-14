@@ -192,8 +192,8 @@ propulsion and locomotion of ciliated organisms~\cite{BLAKE1974MechanicsMotion,
 Jahn1972LocomotionProtozoa, Brennen1977FluidFlagella},
 coral reefs~\cite{Pacherres2022CiliaryProduction}, and the brain~\cite{Siyahhan2014FlowVentricles,
 Yoshida2022EffectVentricles, Salman2022ComputationalEmbryo, Thouvenin2020OriginCanal}.
-These simulation studies have provided valuable insights on how cilia \fixme{pump fluids}
-and may contribute to tissue physiology.
+These simulation studies have provided valuable insights on how cilia mediate complex
+biological flows, and how cilia may contribute to tissue physiology.
 
 In this study, we combined computational and experimental approaches to investigate
 the role of motile cilia in CSF flow and solute transport.
@@ -287,7 +287,7 @@ where the stress tensor is defined as $\bsig(\uu, p) = 2\mu\beps(\uu) - p\mathbf
 and $\beps(\uu) = \frac{1}{2}\left(\nabla \uu + (\nabla\uu)^T\right)$ is the strain-rate tensor. 
 Bold-face characters denote vectors or tensors, and $\mathbf{I}$ is the identity tensor in three dimensions.
 Furthermore, $\rho=1000 \ \mathrm{kg/m^3}$ is the CSF density
-and $\mu=6.97\times 10^{-4} \ \mathrm{Pa\cdot s}$ is the dynamic viscosity
+and $\mu=0.70 \ \mathrm{mPa\cdot s}$ is the dynamic viscosity
 of the CSF~\cite{Bloomfield1998EffectsFluid}.
 We introduce the tangential traction $\bsigpar$ as the
 tangential component of the traction $\hat{\bsig}=\bsig\nn$:
@@ -334,7 +334,7 @@ of the cilia acting on the CSF.
 We set $\btau(\xx, \rr) = \tau \lambda(\xx) P_{\nn}(\rr)$, where the function $\lambda(\xx)$
 and the sign of the vector $\rr=\pm(1, 0, 1)$ varies depending on the
 cilia region (see~\Cref{subsec:appendixA1}).
-Both $\rr$ and the value $\tau=6.5\times 10^{-4}$ Pa were chosen by 
+Both $\rr$ and the value $\tau=0.65$ mPa were chosen by 
 model calibration using experimental data~\cite{Olstad2019CiliaryDevelopment}.
 The data indicate speeds proximate to the ventricular walls of $27.4 \pm 5.4$ \textmu m/s and
 $2.6 \pm 0.6$ \textmu m/s in the dorsal and ventral regions of the middle ventricle, respectively.
@@ -348,7 +348,7 @@ $\Tilde{p}(t)=-A\sin{\omega t}$ on anterior and posterior parts, respectively, o
 boundary $\Gp$~(\Cref{fig:fig1}d, blue markers).
 Based on a measured cardiac frequency of $f=2.22$ Hz~\cite{Olstad2019CiliaryDevelopment},
 the angular cardiac frequency $\omega=2\pi f=6.97$ rad/s.
-The amplitude $A=1.5\times 10^{-3}$ Pa determines the magnitude of the pulsatile flow,
+The amplitude $A=1.5$ mPa determines the magnitude of the pulsatile flow,
 and was calibrated based on experimental data~\cite{Olstad2019CiliaryDevelopment}.
 Similar to $\tau$, the amplitude $A$ was chosen by comparing experimental and simulated velocities.
 Particle tracking data of pulsatile motion was used to determine the contributions of the
@@ -392,7 +392,7 @@ observed in the physical photoconversion experiments.
 \subsection*{Estimation of diffusion coefficients via the Stokes-Einstein relation}
 Motivated by an interest in molecules that are significant in neural development,
 we study the transport of molecules resembling the Dendra2 Fluorescent Protein (Dendra2)
-used in this study, the Starmaker+Green Fluorescent Protein (STM+GFP) reported in
+used in this study, the Starmaker+Green Fluorescent Protein (STM-GFP) reported in
 Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}, and exosomes.
 To estimate the diffusion coefficients of these, when not
 available in the literature, we use the Stokes--Einstein relation:
@@ -408,13 +408,13 @@ solvent (in this case the CSF), and $R$ is the radius of the molecule.
 For the exosomes, we calculate $D$ using~\eqref{eq:D_stokes_einstein}
 with $R=200$ nm. This radius covers the slowest diffusing exosomes,
 since the smaller exosomes would have diffusion coefficients similar to the other molecules.
-For STM+GFP, we estimated the diffusion coefficient by extrapolating
+For STM-GFP, we estimated the diffusion coefficient by extrapolating
 the experimentally observed diffusion coefficient of
 GFP~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells},
 assuming that if $D$ scales with $1/R$ according to~\eqref{eq:D_stokes_einstein},
 $D$ would scale with the cube root of the molecule mass~\cite{Goodhill1997DiffusionGuidance}.
 The resulting diffusion coefficients used in the simulations
-are $D_1$ (exosomes), $D_2$ (STM+GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_table}).
+are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_table}).
 
 %Implicit in this approach is the assumption that the proteins all have the same density.
 
@@ -428,7 +428,7 @@ are $D_1$ (exosomes), $D_2$ (STM+GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_
         & $\num{1.15e-10}$  & \cite{GuraSadovsky2017MeasurementExpansion}\\
         GFP (saline aqueous solution) & 26.9~\cite{UniProt2024GFPUniProtKB}
         & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
-        STM+GFP & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB}
+        STM-GFP & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB}
         & $\num{5.75e-11}$ & * \\
         Exosomes (radius of 200 nm) & -- & $\num{1.63e-12}$ & \textdagger \\
         \bottomrule
@@ -777,7 +777,7 @@ to regions distal to the photoconversion site.
     \centering
     \includegraphics[width=0.95\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
     \caption{Simulated distribution and evolution after photoconversion of
-    exosomes ($D_1$), STM+GFP ($D_2$) and Dendra2 ($D_3$). \\
+    exosomes ($D_1$), STM-GFP ($D_2$) and Dendra2 ($D_3$). \\
     \textbf{a.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs.
     \textbf{b--d.} Slice of the concentration field simulated
     with diffusion coefficients $D_1$, $D_2$ and $D_3$ for eight time instants covering the
@@ -1027,18 +1027,19 @@ In this study, we used the larval zebrafish brain ventricles since its geometry,
 flow components and kinetics are well described, thereby allowing us to validate
 our simulation experimentally. Nevertheless, our simulations can be implemented in
 other systems in the future when their flow parameters are comprehensively resolved.  
-By imposing tangential traction and normal pressure on the CSF flow, we achieved to reproduce
+By imposing tangential traction and normal pressure on the CSF flow, we were able to reproduce
 flow fields with similar features as observed experimentally, consisting of vortex-structured flow,
 mediated by cilia, and pulsatile flow, mediated by the cardiac cycle.
 
 Using the simulated CSF flow, we modeled solute transport by an advection-diffusion equation.
 These results compared well with experimental data performed \emph{in vivo} in zebrafish.
-Next, by using both a model and zebrafish mutants with paralyzed cilia,
+Then, by using both a computational model and zebrafish mutants with paralyzed cilia,
 we identified that even though advection by cilia is dominant,
-diffusion plays a significant role  in protein transport. Finally, we report how local
-flow patterns and ventricular geometries affect solute distribution.
-Altogether our results provide not only new findings on the role of
-diffusion and advection but also offer a new framework to study CSF transport in complex geometries.
+diffusion plays a significant role in protein transport.
+Finally, we reported how local cilia paralysis and ventricular geometries
+affect solute distribution. Altogether, we present not only new findings on the role of
+diffusion and advection, but also provide a novel framework to
+study CSF flow and transport in complex geometries.
 
 \subsection*{The roles of advection and diffusion in intraventricular solute transport}
 To investigate the roles of advection and diffusion in solute transport, we quantified transport
