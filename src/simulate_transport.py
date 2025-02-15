@@ -111,7 +111,6 @@ class TransportSolver:
 
         # Penalty parameters
         self.alpha_val = 25.0  # DG interior penalty parameter
-        self.beta_val  = 500.0 # Nitsche penalty parameter, for weak imposition of Dirichlet BC
 
         # Create meshtags for the different ventricle ROIs
         self.ROI_ct, self.ROI_tags = create_ventricle_volumes_meshtags(mesh=self.mesh)      

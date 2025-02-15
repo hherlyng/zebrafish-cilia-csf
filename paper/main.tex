@@ -532,9 +532,9 @@ period of the pulsatile cardiac motion. The solution of this one period
 is then used periodically as input for the advection-diffusion equation.
 
 The numerical solution schemes for the Stokes equations and the
-advection-diffusion equation were implemented and solved numerically with DOLFINx,
+advection-diffusion equation were implemented and solved numerically with DOLFINx~\cite{dolfinx2023preprint},
 the Python interface of the finite element software
-FEniCSx~\cite{TheFEniCSProject2024FEniCSxDocumentation}, with
+FEniCSx, with
 petsc4py~\cite{Dalcin2011ParallelPython} as linear algebra backend.
 A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the
 linear systems resulting from the discretized Stokes equations.
