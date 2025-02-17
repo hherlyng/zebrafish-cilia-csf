@@ -12,12 +12,10 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
@@ -97,9 +95,9 @@ for row_idx in range(ax_c.shape[0]):
         ca_c = ax_c[row_idx, col_idx]
         
         ca_c.plot(times, c_bar_original[:, idx], color=colors[0], label='Original', linewidth=lw)
-        ca_c.plot(times, c_bar_dorsal[:, idx]  , color=colors[1], linestyle='--', marker='o', markevery=2000, label=r'Dorsal cilia\textsuperscript{-/-}', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar_ventral[:, idx] , color=colors[2], linestyle='--', marker='^', markevery=2000, label=r'Ventral cilia\textsuperscript{-/-}', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar_telenc[:, idx] , color=colors[3], linestyle='--', marker='s', markevery=2000, label=r'Telencephalic cilia\textsuperscript{-/-}', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar_dorsal[:, idx]  , color=colors[1], linestyle='--', marker='o', markevery=2000, label=r'Dorsal paralyzed', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar_ventral[:, idx] , color=colors[2], linestyle='--', marker='^', markevery=2000, label=r'Ventral paralyzed', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar_telenc[:, idx] , color=colors[3], linestyle='--', marker='s', markevery=2000, label=r'Telencephalic paralyzed', linewidth=lw, markersize=msize)
 
         ca_c.set_title(f'ROI {tag}', fontsize=30, pad=2.0)
         ca_c.set_xticks([0, 250, 500, 750])
@@ -107,7 +105,7 @@ for row_idx in range(ax_c.shape[0]):
 
         if col_idx==0: ca_c.set_ylabel(r"Mean conc. $\overline{c}$ [-]", fontsize=32)  
         if row_idx==(ax_c.shape[0]-1): ca_c.set_xlabel("Time [s]", fontsize=35, labelpad=25)
-        if idx==0: ca_c.legend(loc='lower right', fontsize=28, frameon=True, fancybox=False, edgecolor='k')
+        if idx==0: ca_c.legend(loc='lower right', fontsize=22, frameon=True, fancybox=False, edgecolor='k')
         
         idx += 1
 

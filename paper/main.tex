@@ -944,14 +944,19 @@ as the maximum velocity magnitude drops from 27.7 \textmu m/s to 8.0 \textmu m/s
 this developmental stage of the fish~\cite{Olstad2019CiliaryDevelopment}.
 In contrast, removing telencephalic and ventral diencephalic cilia has minimal
 impact and results in maximum speeds of 27.7 \textmu m/s or 27.2 \textmu m/s, respectively.
+Of the total tangential force exerted by the cilia, ventral cilia in the middle ventricle
+contribute with 34\%, while the dorsal cilia exert 52\% of the total tangential
+force~(\Cref{fig:fig5}b). The magnitude of the force contributions are thus
+more similar than the difference in their impact on the maximum velocity magnitudes.
+
 Changes in the transport dynamics of Dendra2 are most prominent when removing the dorsal cilia
 in the diencephalic ventricle. All ROIs (except ROI 1, where we impose the photoconversion curve)
-exhibit changes in the dynamics of $\cbar$ (\Cref{fig:fig5}b).
+exhibit changes in the dynamics of $\cbar$ (\Cref{fig:fig5}c).
 Compared to the baseline model results, we observe a slower increase and lower final concentration
 in the middle and anterior ventricles (ROIs 2--5),
 and more rapid transport to the posterior ventricle (ROI 6).
 In contrast, removal of telencephalic cilia does not alter the evolution of the
-mean concentration $\cbar$ with time (\Cref{fig:fig5}b).
+mean concentration $\cbar$ with time (\Cref{fig:fig5}c).
 Finally, without ventral cilia in the diencephalic ventricle,
 more solute spreads towards the anterior ventricle (ROI 5) and
 less solute spreads towards the posterior ventricle (ROI 6).
@@ -960,7 +965,9 @@ less solute spreads towards the posterior ventricle (ROI 6).
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
     \caption{\textbf{a.} The three separate ciliated regions cilia paralysis is simulated
     by imposing a zero tangential traction boundary condition in the respective region.
-    \textbf{b.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
+    \textbf{b.} The total tangential force applied through the tangential traction
+    boundary condition in the three separate ciliated regions.
+    \textbf{c.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
     paralysis scenarios considered. The region named in the legend is the region
     where we modify the cilia tangential traction boundary condition to a free-slip condition
     in the CSF flow model.}
