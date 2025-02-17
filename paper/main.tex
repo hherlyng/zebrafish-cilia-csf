@@ -958,10 +958,10 @@ less solute spreads towards the posterior ventricle (ROI 6).
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
-    \caption{\textbf{a.} The three separate ciliated regions where loss of cilia motility is simulated
+    \caption{\textbf{a.} The three separate ciliated regions cilia paralysis is simulated
     by imposing a zero tangential traction boundary condition in the respective region.
     \textbf{b.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
-    loss-of-cilia-motility scenarios considered. The region named in the legend is the region
+    paralysis scenarios considered. The region named in the legend is the region
     where we modify the cilia tangential traction boundary condition to a free-slip condition
     in the CSF flow model.}
     \label{fig:fig5}
@@ -1573,19 +1573,31 @@ to hold on the \emph{entire} domain boundary for this model version, which leave
 pressure under-determined as a result of no boundary condition specifying the pressure.
 
 The tangential stresses $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ that represent the cilia
-motion differ for the cilia regions. We heuristically determined $\tau$ and $\lambda(\xx)$.
-As noted previously, $\tau=\num{6.5e-4}$ Pa. We set $\rr = \rr^+$ and $\rr = \rr^-$ in
-the ventral and dorsal regions of the diencephalic ventricle, respectively. In the ventral region,
-we set the linear profile $\lambda(\xx) = \frac{1}{2}\left(1 - \frac{x-x_{0, v}}{x_{e, v} - x_{0, v}}\right)$,
-where $[x_{0, v}, x_{e, v}]$ is the $x$-range of the cilia region, so the stresses decrease
-linearly towards the posterior part of the geometry. We impose a linearly increasing profile
-over the $x$-range $[x_{0, d}, x_{e, d}]$ in the dorsal region:
-$\lambda(\xx)=\frac{11}{4}\left(\frac{x-x_{0, d}}{x_{e, d} - x_{0, d}}\right)$.
-\lyng{Put all of this information on $\lambda$ choice in a table.}
-
-In the telencephalic ventricle, we set $\rr=\rr^-$ and $\lambda=\frac{2}{5}$
-in the anterior most part of the cilia region,
-and $\rr=\rr^+$ and $\lambda(\xx)=1$ in the posterior part.
+motion differ for the cilia regions. We heuristically determined the constant $\tau= 0.65$ mPa
+and the spatially varying function $\lambda(\xx)$. The definitions of $\rr$ and $\lambda(\xx)$
+for the different cilia populations are summarized in~\Cref{tab:r_vector_and_lambda_function}.
+\begingroup
+\setlength{\tabcolsep}{20pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[H]
+    \centering
+    \caption{Definitions of $\rr$ and $\lambda(\xx)$ used in for the cilia tangential 
+    traction boundary condition $\btau = \tau\lambda(\xx)P_{\nn}(\rr)$,
+    where $\tau=0.65$ mPa. The $x-$coordinates $x_{0, i}$ and $x_{e, i}$ define 
+    the cilia domain in the dorsal ($i=d$) and ventral ($i=v$) regions of 
+    the middle ventricle.}\label{tab:r_vector_and_lambda_function}
+    \begin{tabular}{lcc}
+        \toprule
+        Cilia population & $\rr$ & $\lambda(\xx)$ \\
+        \midrule 
+        Anterior region, anterior ventricle  & $-(1, 0, 1)$ & $\frac{2}{5}$ \\
+        Posterior region, anterior ventricle & $\ \ \ (1, 0, 1)$ & 1 \\
+        Dorsal region, middle ventricle      & $-(1, 0, 1)$ & $\lambda(\xx)=\frac{11}{4}\left(\frac{x-x_{0, d}}{x_{e, d} - x_{0, d}}\right)$\\
+        Ventral region, middle ventricle     & $\ \ \ (1, 0, 1)$ & $\lambda(\xx) = \frac{1}{2}\left(1 - \frac{x-x_{0, v}}{x_{e, v} - x_{0, v}}\right)$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\endgroup
 
 \textbf{Only-cardiac/no-cilia model.} For this model version,
 the only physical mechanism inducing fluid flow is the cardiac cycle.
@@ -1963,7 +1975,7 @@ The cylinder had unit length and a diameter of one half length unit.
 For the analysis, we used tangential traction boundary conditions on all
 of the cylinder surface. Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}
 with the velocity and pressure expressions defined in~\Cref{subsec:mms}
-for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated $\mathbf{H}(\mathrm{div};\Omega)$
+for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated $\mathbf{L}^2$
 and $\mathbf{H}^1$ error norms for $\uu_h$, and the $L^2$ error norm for
 $p_h$~(\Cref{tab:cylinder_error_rates}). Based on the error norm calculations,
 we also calculated the experimental order of convergence~(\Cref{subsec:norms_and_eoc}).
