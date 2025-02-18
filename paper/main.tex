@@ -32,32 +32,20 @@
 
 % Partial derivatives
 \newcommand{\pdifft}[1]{\frac{\partial  #1}{\partial t}}
-\newcommand{\pdiffx}[1]{\frac{\partial #1}{\partial x}}
-\newcommand{\pdiffy}[1]{\frac{\partial #1}{\partial y}}
-\newcommand{\pdiffxi}[1]{\frac{\partial #1}{\partial x_i}}
-\newcommand{\pdiffxj}[1]{\frac{\partial #1}{\partial x_j}}
-\newcommand{\secpdiffx}[1]{\frac{\partial^2 #1}{\partial x^2}}
-\newcommand{\secpdiffxi}[1]{\frac{\partial^2 #1}{\partial x_i \partial x_i}}
-\newcommand{\secpdiffxj}[1]{\frac{\partial^2 #1}{\partial x_j \partial x_j}}
 
 % Norms
 \newcommand{\normltwo}[1]{{ \vert\vert#1\vert\vert}_{L^2}}
 \newcommand{\normltwovec}[1]{{ \vert\vert#1\vert\vert}_{\mathbf{L}^2}}
 \newcommand{\normlinf}[1]{{\vert\vert#1\vert\vert}_{L^{\infty}}}
 \newcommand{\Hnorm}[1]{\norm{#1}_{\mathbf{H}^1}}
-\newcommand{\Hdivnorm}[1]{\norm{#1}_{\mathbf{H}(\mathrm{div};\Omega)}}
 
 % Integrals
 \newcommand{\dx}{\, \mathrm d\bm{x}}
 \newcommand{\intO}[1]{\int_{\Omega}#1 \, \mathrm d\bm{x}}
 \newcommand{\intG}[1]{\int_{\Gamma}#1 \, \mathrm ds}
 \newcommand{\intF}[1]{\int_{\mathcal{F}_k}#1 \, \mathrm dS}
-\newcommand{\intGnf}[1]{\int_{\Gamma_{\mathrm{nf}}}#1 \, \mathrm ds}
-\newcommand{\intGinj}[1]{\int_{\Gamma_{\mathrm{inj}}}#1 \, \mathrm ds}
 \newcommand{\intGin}[1]{\int_{\Gamma_{\mathrm{in}}}#1 \, \mathrm ds}
 \newcommand{\intGout}[1]{\int_{\Gamma_{\mathrm{out}}}#1 \, \mathrm ds}
-\newcommand{\intGinjout}[1]{\int_{\Gamma_{\mathrm{inj}}\cup\Gamma_{\mathrm{out}}}#1 \, \mathrm ds}
-\newcommand{\intGs}[1]{\int_{\Gamma_s}#1 \, \mathrm ds}
 \newcommand{\intGc}[1]{\int_{\Gamma_c}#1 \, \mathrm ds}
 \newcommand{\intGp}[1]{\int_{\Gamma_p}#1 \, \mathrm ds}
 
@@ -65,7 +53,6 @@
 \newcommand{\Gs}{\Gamma_{s}}
 \newcommand{\Gc}{\Gamma_{c}}
 \newcommand{\Gp}{\Gamma_{p}}
-\newcommand{\Ginj}{\Gamma_{\mathrm{inj}}}
 \newcommand{\Gnf}{\Gamma_{\mathrm{nf}}}
 \newcommand{\Gin}{\Gamma_{\mathrm{in}}}
 \newcommand{\Gout}{\Gamma_{\mathrm{out}}}
@@ -75,15 +62,14 @@
 \newcommand{\jump}[1]{\llbracket#1\rrbracket}
 
 % Bold faced math characters
-\newcommand{\ff}{\mathbf{f}}
-\newcommand{\nn}{\mathbf{n}}
-\newcommand{\rr}{\mathbf{r}}
-\newcommand{\uu}{\mathbf{u}}
-\newcommand{\vv}{\mathbf{v}}
-\newcommand{\ww}{\mathbf{w}}
+\newcommand{\ff}{\bm{f}}
+\newcommand{\nn}{\bm{n}}
+\newcommand{\rr}{\bm{r}}
+\newcommand{\uu}{\bm{u}}
+\newcommand{\vv}{\bm{v}}
 \newcommand{\xx}{\bm{x}}
-\newcommand{\JJ}{\mathbf{J}}
-\newcommand{\VV}{\mathbf{V}}
+\newcommand{\JJ}{\bm{J}}
+\newcommand{\VV}{\bm{V}}
 \newcommand{\bsig}{\bm{\sigma}}
 \newcommand{\bsigpar}{\hat{\bsig}_{\parallel}}
 \newcommand{\bsigperp}{\hat{\bsig}_{\perp}}
