@@ -120,8 +120,8 @@ Keywords: \textit{#1}
 \newcommand{\intF}[1]{\int_{\mathcal{F}_k}#1 \, \mathrm dS}
 \newcommand{\intGin}[1]{\int_{\Gamma_{\mathrm{in}}}#1 \, \mathrm ds}
 \newcommand{\intGout}[1]{\int_{\Gamma_{\mathrm{out}}}#1 \, \mathrm ds}
-\newcommand{\intGc}[1]{\int_{\Gamma_{\mathrm{c}}#1 \, \mathrm ds}}
-\newcommand{\intGp}[1]{\int_{\Gamma_{\mathrm{p}}#1 \, \mathrm ds}}
+\newcommand{\intGc}[1]{\int_{\Gamma_{\mathrm{c}}}#1 \, \mathrm ds}
+\newcommand{\intGp}[1]{\int_{\Gamma_{\mathrm{p}}}#1 \, \mathrm ds}
 
 % Norms
 \newcommand{\normltwo}[1]{{ \vert\vert#1\vert\vert}_{L^2}}
