@@ -41,7 +41,7 @@ Email Address: nathalie.jurisch-yaksi@ntnu.no
 
 % Keywords: Please provide a minimum of three and a maximum of seven keywords, separated by commas
 
-\keywords{cerebrospinal fluid, brain ventricles, transport, finite element method}
+\keywords{cerebrospinal fluid, brain ventricles, transport, finite element methods}
 
 
 % Abstract should be written in the present tense and impersonal style (i.e., avoid we), and be at most 200 words long
@@ -68,76 +68,79 @@ Please insert your abstract here
 
 \section{Introduction}
 Brain development and function depend on numerous regulatory processes,
-including interactions with cerebrospinal fluid
+including the flow of cerebrospinal fluid
 (CSF). CSF is a clear liquid produced by the choroid plexus
-that flows through the ventricular system and subarachnoid space.
-By delivering growth factors, nutrients, neurotransmitters and metabolites
+and the fluid flows through the ventricular system and subarachnoid space.
+By transporting growth factors, nutrients, neurotransmitters and metabolites
 and removing waste products, CSF regulates brain development and homeostasis.
-Disturbances of CSF circulation can lead to brain disorders, such as
+Disturbance of the CSF circulation can lead to brain disorders, such as
 hydrocephalus where accumulation of CSF often requires emergency surgical treatment. 
 
-CSF movement occurs through multiple physiological processes,
-including the action of motile cilia on the ventricular walls,
+Motion of CSF occurs through multiple physiological processes,
+including the beating motion of motile cilia lining the ventricular walls,
 CSF secretion by the choroid plexus, and pressure gradients generated
 by the cardiac cycle, respiration, and bodily movement. Motile cilia
 are microscopic hair-like structures that beat in a metachronal wave
 pattern to mediate fluid flow. Due to their microscopic size, ranging
-from 6 to 15 microns, they contribute to flow primarily at the surface
-of the brain ventricles. In contrast, pressure gradients induce fluid
-flow \fixme{further from the ventricular walls (bulk flow)} and along the
-perivascular space surrounding the major blood vessels.
+from 6 to 15 microns, the cilia contribute to flow primarily at the surface
+of the brain ventricles. In contrast, fluid flow induced by the 
+cardiac and respiratory cycles account for the bulk flow in the brain
+ventricles~\cite{Vinje2019RespiratoryMeasurements},
+as well as the CSF flow in the perivascular spaces.
 
 To date, it remains poorly understood how cilia contribute to the
-overall fluid flow and solute transport in the brain.
+overall fluid flow and solute transport within the brain.
 These questions have been challenging to tackle due to technical
 limitations. Notably, cilia are microscopic and beat at high
 frequencies ranging from 10 to 30 Hz, while other fluid dynamic
 processes in the brain are slower and span larger volumes, making
-cilia dynamics challenging to monitor. Until now, most studies have
+cilia dynamics challenging to monitor in vivo. Until now, most studies have
 analyzed one physical mechanism at a time, especially in mammals.
 For instance, studies using brain explants have convincingly shown
 that cilia generate complex flow patterns at the surface of the brain
 ventricles; however, they failed to identify the role of pressure
-gradients associated with respiration and heart pulsations in CSF
-transport. Similarly, while MRI technology can measure CSF movement
+gradients associated with respiration and cardiac pulsations in CSF flow
+and the accompanying transport. Similarly, while MRI technology can measure CSF movement
 in humans, it cannot detect the microscopic movements of cilia to
 understand their impact in the large human brain. Consequently, we
 lack a comprehensive understanding of how cilia contribute to CSF
-movement and solute transport, and whether cilia dysfunction will
+motion and solute transport, and whether cilia dysfunction will
 alter CSF composition and lead to brain disorders. This is particularly
 important since ventricular enlargement, known as hydrocephalus,
 is observed in animal models and humans with motile cilia deficiency,
-\fixme{potentially affecting brain activity and behavior.}
+indiciating that the cilia play a crucial role for healthy brain functioning.
 
 The technical limitations of studying cilia-mediated flow and transport opens the
 possibility of mathematical modeling and computational investigations. Numerous previous studies
-focused on modeling the interaction between single or several cilia and surrounding
+have focused on modeling the interaction between single or several cilia and surrounding
 fluids~\cite{Guo2020SimulatingGeometries, Ruvalcaba2021NumericalTree, Smith2009MathematicalFluids,
 Cui2019NumericalMethod, Cui2022AFlow}.
-Others considered applications such as ciliary transport of mucous in
+Others considered applications such as ciliary transport of mucous and particles in
 airways~\cite{Fulford1986Muco-ciliaryLung, Ramirez-SanJuan2020Multi-scaleArrays},
 propulsion and locomotion of ciliated organisms~\cite{BLAKE1974MechanicsMotion,
 Jahn1972LocomotionProtozoa, Brennen1977FluidFlagella},
-coral reefs~\cite{Pacherres2022CiliaryProduction}, and the brain~\cite{Siyahhan2014FlowVentricles,
+oxygen regulation in coral reefs~\cite{Pacherres2022CiliaryProduction},
+and cilia-mediated flow in the brain~\cite{Siyahhan2014FlowVentricles,
 Yoshida2022EffectVentricles, Salman2022ComputationalEmbryo, Thouvenin2020OriginCanal}.
 These simulation studies have provided valuable insights on how cilia mediate complex
 biological flows, and how cilia may contribute to tissue physiology.
 
 In this study, we combined computational and experimental approaches to investigate
-the role of motile cilia in CSF flow and solute transport.
-First, we computed flow patterns and intraventricular transport \emph{in silico}. To
+the role of motile cilia in intraventricular CSF flow and transport.
+First, we computed flow patterns and simulated solute transport with a computational model. To
 this end, we used the geometry of the zebrafish larval brain ventricles,
-for which we have detailed knowledge of cilia properties and CSF movement velocities
+for which we have detailed knowledge of cilia properties and CSF motion velocities
 and frequencies. Notably, this early developmental stage allows us to simplify our model
-by omitting CSF secretion, which starts at later stages, while still being well-conserved with mammals.
-Next, we validated our computation model with experimental data by monitoring
-the dynamics of a photoconvertible fluorescent protein Dendra2 expressed within the brain ventricles.
+by omitting CSF secretion, which starts at later stages,
+while still being well-conserved with mammals. 
+Next, we validated our computation model with experimental data by monitoring in vivo
+the dynamics of a photoconvertible fluorescent protein Dendra2
+expressed within the brain ventricles.
 Our results show that diffusion plays a major role in the transport of small solutes,
 whereas cilia majorly contribute to the movement of larger particles.
 We also found that the location of cilia, as well as the ventricular geometry, greatly
 impact solute distribution. Altogether, our work presents a computational
-framework together with new concepts of how cilia
-collaborate with other factors to distribute molecules and
+framework together with new concepts of how cilia contribute to distribution of molecules and
 particles within the brain ventricles. 
 
 % Experimental section
@@ -273,7 +276,7 @@ We calibrated $\tau$ heuristically by comparing these experimental velocity valu
 with the simulated, maximum velocity magnitude.
 
 \subsubsection{Flow induced by cardiac pulsations}
-To drive a cardiac-induced pulsatile flow inside the brain ventricles, we set $\Tilde{p}(t)=0$ and
+To generate a cardiac-induced pulsatile flow inside the brain ventricles, we set $\Tilde{p}(t)=0$ and
 $\Tilde{p}(t)=-A\sin{\omega t}$ on anterior and posterior parts, respectively, of the
 boundary $\Gp$~(\Crefpanels{fig:fig1}{d}, blue markers).
 Based on a measured cardiac frequency of $f=2.22$ Hz~\cite{Olstad2019CiliaryDevelopment},
@@ -283,7 +286,7 @@ and was calibrated based on experimental data~\cite{Olstad2019CiliaryDevelopment
 Similar to $\tau$, the amplitude $A$ was chosen by comparing experimental and simulated velocities.
 Particle tracking data of pulsatile motion was used to determine the contributions of the
 cardiac pulsations to the velocity magnitude,
-as compared to the effect of cilia motion on the flow (see~\Cref{sec:appC_particle_transport}).
+as compared to the effect of cilia motion on the flow (cf.~\Cref{sec:appC_particle_transport}).
 
 \subsection{Computational model of solute transport after photoconversion}
 We simulate transport of photoconverted proteins within the brain ventricles by
@@ -336,9 +339,11 @@ In~\Cref{eq:D_stokes_einstein}, $k_B = \num{1.38e-23}$ J/K is the Boltzmann cons
 $T = 310$ K is the absolute temperature, $\mu$ is the dynamic viscosity of the
 solvent (in this case the CSF), and $R$ is the radius of the molecule.
 For the exosomes, we calculate $D$ using~\Cref{eq:D_stokes_einstein}
-with $R=200$ nm. This radius covers the slowest diffusing exosomes,
+with $R=150$ nm, which represents exosomes at the larger end of the
+scale~\cite{Moghassemi2024ExtracellularDecade}.
+Hence this radius covers the slowest diffusing exosomes,
 a choice made because smaller exosomes would have diffusion coefficients
-similar to the other molecules.
+similar to the other molecules we consider.
 For STM-GFP, we estimated the diffusion coefficient by extrapolating
 the experimentally observed diffusion coefficient of
 GFP~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells},
@@ -368,7 +373,7 @@ are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_
         & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
         STM-GFP & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB}
         & $\num{5.75e-11}$ & * \\
-        Exosomes (radius of 200 nm) & -- & $\num{1.63e-12}$ & \textdagger \\
+        Exosomes (radius of 150 nm) & -- & $\num{2.17e-12}$ & \textdagger \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -406,7 +411,8 @@ The mean velocity $\overline{U}$ is calculated by first averaging the velocity i
     \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
 \end{equation*}
 and then averaging $\overline{u}$ in time over one cardiac cycle.
-To assess the assumption that the CSF flow is governed by the Stokes equations,
+To assess the assumption that inertial forces are negligible compared to
+viscous forces in the CSF flow, such that the flow is governed by the Stokes equations,
 we also compute the Reynolds number
 \begin{equation*}
     \mathrm{Re} = \frac{\mathrm{inertial \ forces}}{\mathrm{viscous \ forces}} = \frac{\rho U_r L_r}{\mu},
@@ -730,7 +736,7 @@ the times $\hat{t}$ when the mean concentrations $\cbar_i$ first exceed
 a threshold value $\hat{c}$ (\Crefpanels{fig:fig2}{h})
 in 6 ROIs (\Crefpanels{fig:fig2}{a}).
 The dynamics at the site of photoconversion (ROI 1)
-is logarithmic and follows from imposing \eqref{eq:photoconversion_curve}.
+is logarithmic and follows from imposing \Cref{eq:photoconversion_curve}.
 For ROIs 2--6, we observe faster kinetics with higher diffusion coefficients
 (\Crefpanels{fig:fig2}{e--g}),
 which results in smaller times-to-threshold
@@ -1008,7 +1014,7 @@ than the regions located downstream of cilia-mediated flow (ROI 2).
 
 Meanwhile, we identified that transport of larger molecules
 (thus with smaller diffusion coefficients),
-such as 200 nm exosomes, are almost entirely dependent on advection.
+such as 150 nm exosomes, are almost entirely dependent on advection.
 Indeed, there was essentially zero solute in the posterior ventricle at the
 final simulation time (around 850 s), a ventricle where transport is largely driven
 by diffusion due to the absence of motile cilia.
@@ -1021,10 +1027,29 @@ with $D_1$ for 850 s, one can conclude that if advection
 played a role in transporting solute from the photoconversion site in the middle ventricle
 to the posterior ventricle, values of $\cbar_6$ would be higher than those observed.
 
-\subsection{Impact of cilia motility and ventricular morphology}
+\subsection{Effects of cilia motility and ventricular morphology}
 To gain further insights into how CSF flow and intraventricular transport depend on cilia
 motility and ventricular morphology, we manipulated certain
-parameters in our models. First, we paralyzed cilia in specific regions of
+parameters in our models. First, we investigated how complete loss of cilia motility
+impacted the transport dynamics. Simulations with a cardiac-only/no-cilia lead to
+slower transport when compared to the baseline model that included cilia. Especially
+the middle-ventricular region downstream of CSF flow (ROI 2) and the anterior ventricle (ROI 5)
+experienced substantially increased times-to-threshold. We also observed
+slower dynamics in the rest of the middle ventricle (ROIs 3 and 4), whereas the
+posterior ventricle (ROI 6) was unaffected by the loss
+of cilia motility, indicating that transport from the middle to the posterior ventricle is
+purely driven by diffusion. We also performed photoconversion experiments on cilia mutant
+zebrafish larva (\emph{smh}), observing statistically signifcant slower transport in 
+ROIs 2 and 4. The results provide not only confidence in that our computational model
+well represents the physics, but also valuable quantification of the impact of cilia motility
+on intraventricular transport. Interestingly, a previous simulation study of reduced cilia motility
+also observed a drastic reduction in CSF mixing in specific regions of the brain
+ventricles~\cite{Yoshida2022EffectVentricles}, similar to our results. Since impaired brain 
+clearance of tracers has been demonstrated in idiopathic normal pressure hydrocephalus
+patients~\cite{Eide2020MagneticHydrocephalus}, cilia-enhanced mixing in the brain might be
+fundamental to physiological transport within the brain.
+
+Next, we paralyzed cilia in specific regions of
 our model. We identified that the cilia in the dorsal middle ventricle contribute
 the most to solute distribution, which aligns well with the fact
 that these cilia generate the strongest flow field in vivo~\cite{Olstad2019CiliaryDevelopment}
@@ -1036,7 +1061,8 @@ meanwhile increasing transport towards the anterior ventricle,
 as the ventral cilia help induce flow towards the posterior ventricle.
 Removing the cilia in the anterior ventricle did not affect the transport.
 
-Next, we modified the ventricular geometry and identified the impact on transport.
+With an interest in assessing the impact of ventricular morphology on solute transprot,
+we simulated transport on modified ventricular geometries.
 Notably, shrinking ducts reduced interventricular solute movement, while shrinking
 the middle ventricle reduced diffusive transport upstream of the flow field.
 We previously identified large inter-individual variation in ventricular size and
@@ -1050,13 +1076,6 @@ testing of further hypotheses on the effects of ciliated
 lineages and ventricular morphology on CSF flow and intraventricular transport.
 We envision that our framework will be useful as a basis for future analyses of
 CSF dynamics in more complex geometries and also other animal species and humans.
-
-\lyng{HH: Compare numerical results with transport results in Figure 7 in \cite{Olstad2019CiliaryDevelopment}.}
-
-\lyng{HH: Discuss cilia serving as an "enhanced mixing factor" on small scales,
-refer to this~\cite{Siyahhan2014FlowVentricles} and this~\cite{Yoshida2022EffectVentricles}
-paper that studied this in human brain ventricles.
-Include a discussion of what happened when these papers removed cilia.}
 
 \subsection{Computational model assumptions and boundary conditions}
 To model CSF, we employed slip boundary conditions at the ventricular walls,
@@ -1256,16 +1275,16 @@ be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
 or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers, Bertoluzza2017BoundaryHemodynamics}. 
 
 A priori error estimates for the $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ scheme are naturally 
-derived in a mesh-dependent broken $H^1$-norm for $\uu$ and the $L^2$-norm for the pressure. The respective 
-errors are expected to decay with order $k$,
-see for example Cockburn~\emph{et al.}~\cite{Cockburn2005AEquations}.
+derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
+The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
 For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
-reports the velocity errors in the standard $H^1$ norm. Using polynomial degree  
+reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
 $k=1$, we observe linear convergence in both the velocity and the pressure.   
 \mk{MK: I see 1.5 in the table for $\uu$ in $L^2$?}
-\lyng{HH: Yes, while the $H^1$ error decays linearly, isn't this in line with expectations?
-Could be more specific: "Using polynomial degree 
-$k=1$, we observe linear convergence in both the velocity $H^1$ error and the pressure $L^2$ error."}
+\lyng{HH: Yes, we should expect 2 there? Maybe be more specific in the comment:
+"Using polynomial degree $k=1$, we observe linear convergence in both the velocity $H^1$ error
+and the pressure $L^2$ error. For the $L^2$ error of the velocity, we observe a suboptimal
+convergence order of 1.5"}
 
 \subsection{The role of motile cilia in intraventricular flow and transport}
 Our work has studied CSF flow and solute distribution
@@ -1336,11 +1355,12 @@ while most of the transport is governed by diffusion.
 
 \medskip
 \textbf{Data Availability Statement} \par
-\fixme{TO DO}.
+The data and implementations presented in this paper are licensed under \fixme{LICENSE}
+and openly avalaible at \fixme{REPO-LINK}.
 
 \medskip
-\textbf{Declaration of No Competing Interest} \par
-\fixme{TO DO}.
+\textbf{Conflict of Interest Disclosure} \par
+The authors declare no conflicts of interest.
 
 
 \medskip
@@ -1350,14 +1370,13 @@ while most of the transport is governed by diffusion.
 Supporting Information is available from the Wiley Online Library or from the author.
 
 
-
 % Acknowledgements
 \medskip
 \textbf{Acknowledgements} \par 
+Thanks are extended to J\o rgen Dokken for valuable model implementation discussions.
 Halvor Herlyng acknowledges support from the national infrastructure for computational
 science in Norway, Sigma2, via grant \#NN8049K.
 This work was funded by the Research Council of Norway (NJY FRIPRO grants 314189 and 353348).
-Thanks are extended to J\o rgen Dokken for valuable model implementation discussions.
 
 
 
@@ -1368,7 +1387,8 @@ Thanks are extended to J\o rgen Dokken for valuable model implementation discuss
 We consider the time-dependent Stokes equations
 \begin{subequations}
 \begin{alignat}{2}
-   \rho\pdifft{\uu} - \nabla \cdot \bsig(\uu, p) &= \mathbf{0} \quad &&\mathrm{in} \ \Omega, \label{eq:BDM_stokes_mom}\\
+   \rho\pdifft{\uu} - \nabla \cdot \bsig(\uu, p)
+   &= \mathbf{0} \quad &&\mathrm{in} \ \Omega, \label{eq:BDM_stokes_mom}\\
   \nabla \cdot \uu &= 0 \quad &&\mathrm{in} \ \Omega, \label{eq:BDM_stokes_div} 
 \end{alignat}
 \label{eq:appendix_stokes_eqs}% 
@@ -1385,7 +1405,8 @@ Sobolev spaces $\mathbf{H}^1(\mathrm{div}; \Omega)$ and $L^2(\Omega)$,
 respectively, defined as 
 \begin{align*}
     L^2(\Omega) &= \bigg\{p \ : \ \intO{p^2} < \infty\bigg\} \\
-    \mathbf{H}^1(\mathrm{div}; \Omega) &= \bigg\{\uu \ : \ \uu\in\mathbf{L}^2(\Omega), \nabla\cdot\uu\in L^2(\Omega)\bigg\}.
+    \mathbf{H}^1(\mathrm{div}; \Omega)
+    &= \bigg\{\uu \ : \ \uu\in\mathbf{L}^2(\Omega), \nabla\cdot\uu\in L^2(\Omega)\bigg\}.
 \end{align*}
 Bold-faced characters for a space denotes a $d$--dimensional vector space,
 where $d$ is the spatial dimension of $\Omega$. For example,
@@ -1393,7 +1414,8 @@ $\mathbf{H}^1(\Omega) = [H^1(\Omega)]^3$ if $\Omega$ is three-dimensional.
 We will consider $p\in Q=L^2_0(\Omega)$, with subscript 0 meaning
 that $\intO{p} = 0$, and $\uu\in\VV$ with
 \begin{equation*}
-    \VV =  \bigg\{\vv \ : \ \vv\in\mathbf{H}^1(\mathrm{div}; \Omega), \vv\cdot\nn=0 \ \mathrm{on} \ \Gamma\setminus\Gamma_{\mathrm{io}}\bigg\}.
+    \VV =  \bigg\{\vv \ : \ \vv\in\mathbf{H}^1(\mathrm{div}; \Omega),
+    \vv\cdot\nn=0 \ \mathrm{on} \ \Gamma\setminus\Gamma_{\mathrm{io}}\bigg\}.
 \end{equation*}
 Here $\Gamma_{\mathrm{io}}$ denotes an in- or outflow boundary. 
 
@@ -1407,8 +1429,8 @@ Instead you have $V_h\subset H(div)$. Reasons is better mass csrv and as a
 bonus the bcs can be enforced strongly. Note that H(div) functions can have
 jumps in tangential components on surfaces in $\Omega$. Then introduce the discrete weak form.  
 }
-To derive a weak formulation of the Stokes equations~\eqref{eq:appendix_stokes_eqs},
-we begin by multiplying~\eqref{eq:BDM_stokes_mom} with a
+To derive a weak formulation of the Stokes equations~\Cref{eq:appendix_stokes_eqs},
+we begin by multiplying~\Cref{eq:BDM_stokes_mom} with a
 test function $\vv\in\VV$ and integrating over the domain:
 \begin{equation*}
     \intO{\rho\pdifft{\uu}\cdot\vv} - \intO{(\nabla\cdot\bsig)\cdot\vv} = \mathbf{0}.
@@ -1453,49 +1475,52 @@ Next, we consider the way of handling the stress boundary integral for each mode
 
 \textbf{Only-cilia/no-cardiac model.} This model version has cilia forces
 as the only mechanism driving flow. We consider the
-Stokes equations~\eqref{eq:appendix_stokes_eqs} with the slip boundary conditions
+Stokes equations~\Cref{eq:appendix_stokes_eqs} with the slip boundary conditions
 \begin{subequations}
     \begin{alignat}{2}
-        \uu\cdot\nn &= 0 \quad &&\mathrm{on} \ \Gamma=\Gc\cup\Gs, \label{eq:modelA_slip_BC_impermeability} \\
+        \uu\cdot\nn &= 0 \quad &&\mathrm{on} \ \Gamma=\Gc\cup\Gs,
+        \label{eq:modelA_slip_BC_impermeability} \\
         \bsigpar &= \btau \quad &&\mathrm{on} \ \Gc,
         \label{eq:modelA_slip_BC_shear} \\
         \bsigpar &= \mathbf{0} \quad &&\mathrm{on} \ \Gs,\label{eq:modelA_full_slip_BC}
     \end{alignat}\label{eq:modelA_slip_BC}%
 \end{subequations}%
 on the boundary $\Gamma=\Gamma_c\cup\Gamma_s$. The boundary $\Gamma_s$ is a free-slip boundary,
-where we impose the free-slip condition~\eqref{eq:modelA_full_slip_BC}.
-The first condition~\eqref{eq:modelA_slip_BC_impermeability} is the
+where we impose the free-slip condition~\Cref{eq:modelA_full_slip_BC}.
+The first condition~\Cref{eq:modelA_slip_BC_impermeability} is the
 impermeability condition, enforcing no flow normal to the boundary,
-whereas~\eqref{eq:modelA_slip_BC_shear} imposes a stress tangential to
+whereas~\Cref{eq:modelA_slip_BC_shear} imposes a stress tangential to
 the boundary. These tangential stresses are applied to represent
 the forces that the collective cilia motion exerts on the cerebrospinal fluid. 
 
-The boundary conditions~\eqref{eq:modelA_slip_BC} are set weakly through the stress boundary integral 
+The boundary conditions~\Cref{eq:modelA_slip_BC} are set weakly through the stress
+boundary integral 
 \begin{equation}
     \intG{\bsig\nn\cdot\vv} =  \intG{\hat{\bsig}\cdot\vv}
     \label{eq:boundary_integral_BC1}
 \end{equation}
-in the weak form~\eqref{eq:modelA_weak_form1} of the Stokes equations.
+in the weak form~\Cref{eq:modelA_weak_form1} of the Stokes equations.
 We decompose the traction vector $\hat{\bsig}$ into a normal and tangential component:
 \begin{equation*}
     \hat{\bsig} = \bsigperp + \bsigpar
 \end{equation*}
-Inserting the above into~\eqref{eq:boundary_integral_BC1},
+Inserting the above into~\Cref{eq:boundary_integral_BC1},
 combined with application of the tangential traction
-condition~\eqref{eq:modelA_slip_BC_shear} and the
-free-slip condition~\eqref{eq:modelA_full_slip_BC}, yields
+condition~\Cref{eq:modelA_slip_BC_shear} and the
+free-slip condition~\Cref{eq:modelA_full_slip_BC}, yields
 \begin{equation}
     \intG{\hat{\bsig}\cdot\vv} = \int_{\Gc\cup\Gs}{(\bsigperp + \bsigpar)\cdot\vv}\, ds = 
     \int_{\Gc\cup\Gs}{\bsigperp\cdot\vv}\, ds
     + \intGc{\btau\cdot\vv} = \intG{\bsigperp\cdot\vv} + \intGc{\btau\cdot\vv}.
     \label{eq:boundary_integral_BC2}
 \end{equation}
-The second term on the right-hand side of~\eqref{eq:boundary_integral_BC2}
+The second term on the right-hand side of~\Cref{eq:boundary_integral_BC2}
 is moved to the right-hand side of the weak form, since $\btau$ is known
  Using $\hat{\bsig}_{\perp} = (\hat{\bsig}\cdot\nn)\nn$,
- we can write the first term on the right-hand side of~\eqref{eq:boundary_integral_BC2} as
+ we can write the first term on the right-hand side of~\Cref{eq:boundary_integral_BC2} as
 \begin{equation}
-    \intG{\bsigperp\cdot\vv} = \intG{((\hat{\bsig}\cdot\nn)\nn)\cdot\vv} = \intG{(\hat{\bsig}\cdot\nn)(\vv\cdot\nn)}.
+    \intG{\bsigperp\cdot\vv} = \intG{((\hat{\bsig}\cdot\nn)\nn)\cdot\vv} =
+    \intG{(\hat{\bsig}\cdot\nn)(\vv\cdot\nn)}.
     \label{eq:boundary_integral_BC_normal}
 \end{equation}
 In a later section, we will discretize the weak formulation
@@ -1504,9 +1529,9 @@ finite elements~\cite{Brezzi1985TwoProblems}. These elements are
 defined through integral moments of the normal component of a
 variable on the facets of an element, we can strongly enforce
 the value of $\uu\cdot\nn$ and thus the boundary
-condition~\eqref{eq:modelA_slip_BC_impermeability}.
+condition~\Cref{eq:modelA_slip_BC_impermeability}.
 Consequently, the test function counterpart $\vv\cdot\nn$ vanishes
-on the boundary, and the term~\eqref{eq:boundary_integral_BC_normal}
+on the boundary, and the term~\Cref{eq:boundary_integral_BC_normal}
 is therefore dropped from the weak form. As a result, for the cilia-only/no-cardiac model,
 the weak form of the momentum equation takes the following form:
 \begin{equation*}
@@ -1514,7 +1539,7 @@ the weak form of the momentum equation takes the following form:
     + \intO{2\mu\beps(\uu) : \beps(\vv)}
     - \intO{p\nabla\cdot\vv} = \intGc{\btau\cdot\vv}, \quad\forall\vv\in\VV.
 \end{equation*}
-Next, multiplying the continuity equation~\eqref{eq:BDM_stokes_div}
+Next, multiplying the continuity equation~\Cref{eq:BDM_stokes_div}
 with a test function $q\in Q$, we require that
 \begin{equation}
     -\intO{q\nabla\cdot\uu} = 0,\quad\forall q\in Q
@@ -1528,22 +1553,26 @@ find $(\uu, \, p) \in \VV\times Q$, such that
         + &\intO{2\mu\beps(\uu) : \beps(\vv)}
         - &\intO{p\nabla\cdot\vv}
         &&= \intGc{\btau\cdot\vv}, &&\quad\forall\vv\in\VV, \label{eq:stokes_weak_mom_modelA}\\ 
-        &{} &{}  -&\intO{q\nabla\cdot\uu} &&= 0, &&\quad\forall q\in Q. \label{eq:stokes_weak_cont_modelA}
+        &{} &{}  -&\intO{q\nabla\cdot\uu} &&= 0, &&\quad\forall q\in Q.
+        \label{eq:stokes_weak_cont_modelA}
     \end{alignat}%
     \label{eq:stokes_weak_modelA}%
 \end{subequations}%
-We observe that, in this case with slip boundary conditions on the entirety of the boundary $\Gamma$, the
-vector $(\uu, p)=(\mathbf{0}, C)$ for any real constant $C$ satisfies the equations.
-The system~\eqref{eq:stokes_weak_modelA} is thus singular with a one-dimensional nullspace of constant pressures.
-Consequently, assembly of our discretization of the  equations~\eqref{eq:stokes_weak_modelA} into a
-linear equation system $\mathbf{A}\xx=\mathbf{b}$ yields a singular matrix $\mathbf{A}$.
+We observe that, in this case with slip boundary conditions on the entirety of
+the boundary $\Gamma$, the vector $(\uu, p)=(\mathbf{0}, C)$ for any real
+constant $C$ satisfies the equations.
+The system~\Cref{eq:stokes_weak_modelA} is thus singular with a one-dimensional nullspace
+of constant pressures.
+Consequently, assembly of our discretization of the  equations~\Cref{eq:stokes_weak_modelA}
+into a linear equation system $\mathbf{A}\xx=\mathbf{b}$ yields a singular matrix $\mathbf{A}$.
 To ensure existence of solutions, we orthogonalize the right-hand side vector $\mathbf{b}$ with
-respect to the pressure nullspace basis (the set of all constants), before solving the linear system.
-To obtain a unique solution, which together with existence renders the problem well-posed,
-information of the pressure nullspace is passed to the linear solver. Let us remark that
-the singularity is a consequence of the fact that the impermeability condition is assumed
-to hold on the \emph{entire} domain boundary for this model version, which leaves the
-pressure under-determined as a result of no boundary condition specifying the pressure.
+respect to the pressure nullspace basis (the set of all constants), before solving the linear
+system. To obtain a unique solution, which together with existence renders the
+problem well-posed, information of the pressure nullspace is passed to the linear solver.
+Let us remark that the singularity is a consequence of the fact that the
+impermeability condition is assumed to hold on the \emph{entire} domain boundary
+for this model version, which leaves the pressure under-determined as a result of no
+boundary condition specifying the pressure.
 
 The tangential stresses $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ that represent the cilia
 motion differ for the cilia regions. We heuristically determined the constant $\tau= 0.65$ mPa
@@ -1563,10 +1592,16 @@ for the different cilia populations are summarized in~\Cref{tab:r_vector_and_lam
         \toprule
         Cilia population & $\rr$ & $\lambda(\xx)$ \\
         \midrule 
-        Anterior region, anterior ventricle  & $-(1, 0, 1)$ & $\frac{2}{5}$ \\
-        Posterior region, anterior ventricle & $\ \ \ (1, 0, 1)$ & 1 \\
-        Dorsal region, middle ventricle      & $-(1, 0, 1)$ & $\lambda(\xx)=\frac{11}{4}\left(\frac{x-x_{0, d}}{x_{e, d} - x_{0, d}}\right)$\\
-        Ventral region, middle ventricle     & $\ \ \ (1, 0, 1)$ & $\lambda(\xx) = \frac{1}{2}\left(1 - \frac{x-x_{0, v}}{x_{e, v} - x_{0, v}}\right)$ \\
+        Anterior region, anterior ventricle 
+        & $-(1, 0, 1)$ & $\frac{2}{5}$ \\
+        Posterior region, anterior ventricle
+        & $\ \ \ (1, 0, 1)$ & 1 \\
+        Dorsal region, middle ventricle     
+        & $-(1, 0, 1)$
+        & $\lambda(\xx)=\frac{11}{4}\left(\frac{x-x_{0, d}}{x_{e, d} - x_{0, d}}\right)$\\
+        Ventral region, middle ventricle    
+        & $\ \ \ (1, 0, 1)$
+        & $\lambda(\xx) = \frac{1}{2}\left(1 - \frac{x-x_{0, v}}{x_{e, v} - x_{0, v}}\right)$ \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -1577,41 +1612,47 @@ the only physical mechanism inducing fluid flow is the cardiac cycle.
 We model the influence of the cardiac cycle with a normal pressure boundary condition:
 \begin{subequations}
     \begin{alignat}{2}
-      \uu\cdot\nn = 0, \ \hat{\bsig}_{\parallel} &= \mathbf{0} \quad &&\mathrm{on} \ \Gs, \label{eq:modelB_slip_BC} \\
-      (\mu\nabla\uu - p\mathbf{I})\nn &= \Tilde{p}(t)\nn \quad &&\mathrm{on} \ \Gp, \label{eq:modelB_pressure_BC}
+      \uu\cdot\nn = 0, \ \hat{\bsig}_{\parallel} &= \mathbf{0} \quad &&\mathrm{on} \ \Gs,
+      \label{eq:modelB_slip_BC} \\
+      (\mu\nabla\uu - p\mathbf{I})\nn &= \Tilde{p}(t)\nn \quad &&\mathrm{on} \ \Gp,
+      \label{eq:modelB_pressure_BC}
     \end{alignat}%
 \end{subequations}%
 where the boundary $\Gamma = \Gs\cup\Gp$ consists of a free-slip boundary $\Gs$,
 and a part $\Gp$ where a normal traction type of boundary condition is imposed.
 Note, however, that the transpose velocity gradient term must be
-included inside the parentheses on the left-hand side of~\eqref{eq:modelB_pressure_BC}
+included inside the parentheses on the left-hand side of~\Cref{eq:modelB_pressure_BC}
 for it to be the traction $\bsig$. Since this is not the case,
 we rather refer to this boundary condition as a normal pressure boundary condition.
 The boundary $\Gs$ is handled as discussed in the previous section,
-such that the stress boundary integral~\eqref{eq:boundary_integral_BC1}
+such that the stress boundary integral~\Cref{eq:boundary_integral_BC1}
 vanishes over $\Gs$. Therefore, we now have
 \begin{align}
-    \intG{\hat{\bsig}\cdot\vv} = \intGp{\hat{\bsig}\cdot\vv} &= \intGp{(\mu(\nabla\uu + (\nabla\uu)^T) - p\mathbf{I})\nn\cdot\vv}\notag \\
-    &= \intGp{\mu(\nabla\uu)^T\nn\cdot\vv} + \intGp{(\mu\nabla\uu - p\mathbf{I})\nn\cdot\vv}\notag\\
+    \intG{\hat{\bsig}\cdot\vv} = \intGp{\hat{\bsig}\cdot\vv}
+    &= \intGp{(\mu(\nabla\uu + (\nabla\uu)^T) - p\mathbf{I})\nn\cdot\vv}\notag \\
+    &= \intGp{\mu(\nabla\uu)^T\nn\cdot\vv} + \intGp{(\mu\nabla\uu
+    - p\mathbf{I})\nn\cdot\vv}\notag\\
     &= \intGp{\mu(\nabla\uu)^T\nn\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}
     \label{eq:modelB_boundary_integral1}
 \end{align}
 We leave the first term on the left-hand side
-of~\eqref{eq:modelB_boundary_integral1} in the weak form of
+of~\Cref{eq:modelB_boundary_integral1} in the weak form of
 the momentum equation. The second term is determined by
-the boundary condition~\eqref{eq:modelB_pressure_BC},
+the boundary condition~\Cref{eq:modelB_pressure_BC},
 and is therefore moved to the right-hand side of the weak form.
 The weak form of the momentum equation is then
 \begin{equation}
     \begin{aligned}
-    \intO{\rho\pdifft{\uu}\cdot\vv} + \intO{2\mu\beps(\uu) : \beps(\vv)} - \intO{p\nabla\cdot\vv} &-\intGp{\mu(\nabla\uu)^T\nn\cdot\vv} \\ &=\intGp{\Tilde{p}(t)(\vv\cdot\nn)}, \quad\forall\vv\in\VV.
+    \intO{\rho\pdifft{\uu}\cdot\vv} + \intO{2\mu\beps(\uu) : \beps(\vv)} -
+    \intO{p\nabla\cdot\vv} &-\intGp{\mu(\nabla\uu)^T\nn\cdot\vv} \\
+    &=\intGp{\Tilde{p}(t)(\vv\cdot\nn)}, \quad\forall\vv\in\VV.
     \end{aligned}
     \label{eq:weak_form_mom_eq_modelB}
 \end{equation}
 Also considering the weak form of the continuity equation,
 the weak formulation for the cardiac-only/no-cilia model version
 then reads: find $(\uu,\, p)\in\VV\times Q$
-such that~\eqref{eq:weak_form_mom_eq_modelB} and~\eqref{eq:pressure_weak_form}
+such that~\Cref{eq:weak_form_mom_eq_modelB} and~\Cref{eq:pressure_weak_form}
 hold for all $(\vv, \, q)\in\VV\times Q$.
 To simulate the back-and-forth motion induced by the cardiac cycle observed in
 previous work~\cite{Olstad2019CiliaryDevelopment}, we apply sinusoidal forcing.
@@ -1619,7 +1660,8 @@ The boundary $\Gamma_p$ has two separate regions: one located on the
 anterior ventricle and one on the posterior ventricle~(\Cref{fig:fig1}\fixme{d}, blue markers).
 For the normal pressure boundary condition, we set $\Tilde{p}(t) = 0$ on the anterior part and
 $\Tilde{p}(t) = p_c(t) = -A\sin{\omega t}$ on the posterior part. The value of the amplitude
-$A$ was based on heuristics and $\omega = 2\pi f$, where $f=2.22$ Hz is the cardiac cycle frequency. 
+$A$ was based on heuristics and $\omega = 2\pi f$, where $f=2.22$ Hz
+is the cardiac cycle frequency. 
 
 \textbf{Baseline model.} The baseline flow model
 considers both cilia and cardiac beating as driving mechanisms of fluid flow.
@@ -1637,14 +1679,15 @@ We therefore consider the boundary conditions
 where $\Gamma = \Gc\cup\Gs\cup\Gp$ is the boundary of $\Omega$.
 The quantities $\btau$ and $\Tilde{p}(t)$ are as introduced in
 the sections of the other flow model versions. We handle the boundary
-conditions~\eqref{eq:slip_BC_modelC} and~\eqref{eq:freeslip_BC_modelC}
+conditions~\Cref{eq:slip_BC_modelC} and~\Cref{eq:freeslip_BC_modelC}
 as introduced for the cilia-only/no-cardiac model, and the boundary
-condition~\eqref{eq:pressure_BC_modelC} is applied as discussed in the section
+condition~\Cref{eq:pressure_BC_modelC} is applied as discussed in the section
 on the cardiac-only/no-cilia model. The abstract weak formulation for 
 the baseline model is then: find $(\uu,\, p)\in\VV\times Q$ such that
 \begin{subequations}
     \begin{alignat}{2}
-        \mathcal{A}(\uu, \vv) + \mathcal{B}(\vv, p) &= \mathcal{L}(\vv), &&\quad\forall\vv\in\VV, \\
+        \mathcal{A}(\uu, \vv) + \mathcal{B}(\vv, p) &= \mathcal{L}(\vv),
+        &&\quad\forall\vv\in\VV, \\
         \mathcal{B}(\uu, q) &= 0, &&\quad\forall q\in Q,
     \end{alignat}%
     \label{eq:abstract_weak_form_modelC}
@@ -1655,7 +1698,8 @@ with the definitions
                           + \intO{2\mu\beps(\uu) : \beps(\vv)}
                           -\intGp{\mu(\nabla\uu)^T\nn\cdot\vv},\label{eq:stokes_bilinear_form}\\
     \mathcal{B}(\uu, q) &= -\intO{q\nabla\cdot\uu}, \label{eq:stokes_skew_form}\\
-    \mathcal{L}(\vv) &= \intGc{\btau\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}. \label{eq:stokes_linear_form}
+    \mathcal{L}(\vv) &= \intGc{\btau\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}.
+    \label{eq:stokes_linear_form}
 \end{align}
 
 \subsection{Discretization of the Stokes equations}
@@ -1693,11 +1737,12 @@ with $\nn$ pointing to the exterior of the domain. We now define
 and add the bilinear form
 \begin{align*}
     \mathcal{A}_{\mathrm{stab}}(\uu_h, \vv_h) &=
-    \sum_{k\in K}\intF{2\mu\frac{\gamma}{\avg{h}}\jump{P_{\nn}(\uu_h)}\cdot \jump{P_{\nn}(\vv_h)}}\\
+    \sum_{k\in K}\intF{2\mu\frac{\gamma}{\avg{h}}\jump{P_{\nn}(\uu_h)}
+    \cdot\jump{P_{\nn}(\vv_h)}}\\
     &-\sum_{k\in K}\intF{2\mu\avg{\beps(\uu_h)}\cdot\jump{\vv_h}}
     -\sum_{k\in K}\intF{2\mu\avg{\beps(\vv_h)}\cdot\jump{\uu_h}}
 \end{align*}
-to the discrete weak  formulation~\eqref{eq:no_stabilization_abstract_discrete_weak_form_modelC},
+to the discrete weak  formulation~\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC},
 where $\mathcal{F} = \{\mathcal{F}_k : k\in K\}$ is the set of all interior facets
 $\mathcal{F}_k$ of the computational mesh. The parameter $\gamma>0$ is
 introduced to penalize jumps in the tangential components of the velocity
@@ -1715,13 +1760,14 @@ find ($\uu_h, p_h$)$\in$($\VV_h, Q_h$) such that
     \end{alignat}%
     \label{eq:abstract_semi_discrete_weak_form_modelC}%
 \end{subequations}%
-We solved~\eqref{eq:abstract_semi_discrete_weak_form_modelC}
+We solved~\Cref{eq:abstract_semi_discrete_weak_form_modelC}
 numerically with the penalty parameter $\gamma=10$.
 
-In time, we discretize the weak formulation~\eqref{eq:abstract_semi_discrete_weak_form_modelC}
+In time, we discretize the weak formulation~\Cref{eq:abstract_semi_discrete_weak_form_modelC}
 with the implicit Euler method.
 
-\subsection{Weak formulation of the advection-diffusion equation}\label{subsec:adv_diff_eq_weak_form}
+\subsection{Weak formulation of the advection-diffusion equation}
+\label{subsec:adv_diff_eq_weak_form}
 Recall the strong form of the advection-diffusion equation:
 \begin{equation}
     \pdifft{c} + \nabla\cdot\JJ = 0 \quad\mathrm{in} \ \Omega,
@@ -1733,7 +1779,7 @@ where $\Omega$ is the domain with boundary $\Gamma$, and the total solute flux
 \end{equation*}
 We consider $\JJ = \JJ(c)$, unless otherwise indicated.
 The concentration $c\in W$ and the cerebrospinal fluid velocity $\uu\in\VV$.
-The weak form of~\eqref{eq:adv_diff_strong_DG} is derived by
+The weak form of~\Cref{eq:adv_diff_strong_DG} is derived by
 multiplying the equation with a test function $\phi \in W$ and integrating over the domain: 
 \begin{equation*}
     \intO{\pdifft{c}\phi} + \intO{(\nabla\cdot\JJ)\phi} = 0.
@@ -1762,7 +1808,7 @@ we get the following abstract weak formulation: find $c\in W$ such that
 \end{equation*}
 
 \textbf{Only-cardiac/no-cilia model.} When using the normal pressure
-boundary condition~\eqref{eq:modelB_pressure_BC} to model pulsatile flow,
+boundary condition~\Cref{eq:modelB_pressure_BC} to model pulsatile flow,
 we have in- and outflow of cerebrospinal fluid and thus advection of
 $c$ on the pressure boundary $\Gp$.
 Let $\Gp=\Gin\cup\Gout$ and $\Gamma = \Gnf\cup\Gin\cup\Gout$, with 
@@ -1776,14 +1822,17 @@ With $\JJ\cdot\nn=0$ on the no-flux boundary $\Gnf$, we have
 \begin{equation*}
     \intG{(\JJ\cdot\nn)\phi} = \intGin{(\JJ\cdot\nn)\phi} + \intGout{(\JJ\cdot\nn)\phi}. 
 \end{equation*}
-For the outflow boundary integral over $\Gout$, we impose zero diffusive flux $D\nabla c\cdot\nn=0$,
+For the outflow boundary integral over $\Gout$, we impose zero
+diffusive flux $D\nabla c\cdot\nn=0$,
 with the advection term $c(\uu\cdot\nn)$ simply left in the variational form as an unknown.
-For the continuous problem this is problematic, since we are lacking a boundary condition to close the problem. 
+For the continuous problem this is problematic, since we are lacking a boundary
+condition to close the problem. 
 In the discrete setting, however, this method of leaving the boundary term has been shown
 to yield consistent results~\cite{Papanastasiou1992ACondition, Lynch2020NumericalHemodynamics,
 Griffiths1997TheCondition}. Intuitively, one can think of this outflow boundary condition as
 setting the advective flux to being the one consistent with the weak form,
-for which there is a unique $c$ satisfying the equations, with $\uu$ determined by the Stokes equations. 
+for which there is a unique $c$ satisfying the equations, with $\uu$ determined by
+the Stokes equations. 
 
 The flux integral over the inflow boundary $\Gin$ cannot be handled
 in the same way as the method used for $\Gout$, as this would not preserve
@@ -1791,7 +1840,8 @@ coercivity of the weak form. Lacking experimental data both for the magnitude an
 origin of an inflow boundary flux, we deal with the inflow boundary in an explicit
 way that resembles an approximation of a periodic boundary condition. At a timestep $n$,
 when solving the linear system for the concentration $c^{n+1}$ at the next timestep $n+1$,
-we set the inflow flux $h_{\mathrm{in}}^{n+1} = h_{\mathrm{out}}^{n}$, where the latter is the outflow flux
+we set the inflow flux $h_{\mathrm{in}}^{n+1} = h_{\mathrm{out}}^{n}$, where the
+latter is the outflow flux
 \begin{equation*}
     h_{\mathrm{out}}^{n} = \JJ^n\cdot\nn = (c^n\uu^n - D\nabla c^n)\cdot\nn
 \end{equation*}
@@ -1810,7 +1860,8 @@ find $c\in W$ such that
 \end{equation}
 with the definitions
 \begin{align}
-    a(c, \phi) &= \intO{\pdifft{c}\phi} - \intO{\JJ\cdot\nabla\phi}, \label{eq:adv_diff_bilinear_form}\\
+    a(c, \phi) &= \intO{\pdifft{c}\phi} - \intO{\JJ\cdot\nabla\phi},
+    \label{eq:adv_diff_bilinear_form}\\
     b(c, \phi) &= \intGout{c(\uu\cdot\nn)\phi}, \label{eq:adv_diff_skew_form} \\
     L(\phi) &= \intGin{h_{\mathrm{in}}\phi}.\label{eq:adv_diff_linear_form}
 \end{align}
@@ -1820,19 +1871,31 @@ traction boundaries have the same no-flux boundary condition
 in the advection-diffusion equation, the weak formulation of
 the advection-diffusion equation for the baseline model is
 identical to that of the cardiac-only/no-cilia model,
-defined by~\eqref{eq:adv_diff_weak_formB}--\eqref{eq:adv_diff_linear_form}.
+defined by~\Cref{eq:adv_diff_weak_formB,eq:adv_diff_skew_form,eq:adv_diff_linear_form}.
 
 \subsection{Discretization of the advection-diffusion equation}
 We outline the discretization of the advection-diffusion weak formulation
-for the baseline model, defined by~\eqref{eq:adv_diff_weak_formB}--\eqref{eq:adv_diff_linear_form}. The weak formulation is discretized with a symmetric interior-penalty method using discontinuous Galerkin finite elements~\cite{Arnold1982AnElements}. Let the subscript $h$ denote discrete variables. Exchanging the variables in~\eqref{eq:adv_diff_weak_formB} with their discrete counterparts yields the discrete weak form: find $c_h\in W_h$ such that
+for the baseline model, defined
+by~\Cref{eq:adv_diff_weak_formB,eq:adv_diff_skew_form,eq:adv_diff_linear_form}.
+The weak formulation is discretized with a symmetric interior-penalty method using
+discontinuous Galerkin finite elements~\cite{Arnold1982AnElements}.
+Let the subscript $h$ denote discrete variables. Exchanging the
+variables in~\Cref{eq:adv_diff_weak_formB} with their discrete
+counterparts yields the discrete weak form: find $c_h\in W_h$ such that
 \begin{equation*}
     a(c_h, \phi_h) + b(c_h, \phi_h) = L(\phi_h), \quad\forall\phi_h\in W_h.
 \end{equation*}
-The space $W_h$ is constructed with  finite elements with discontinuous linear Lagrange polynomial basis functions, allowing for discontinuities in the discrete solution across element edges.  To achieve a stable discretization with these elements, we add the stabilization
+The space $W_h$ is constructed with  finite elements with
+discontinuous linear Lagrange polynomial basis functions,
+allowing for discontinuities in the discrete solution across element edges.
+To achieve a stable discretization with these elements, we add the stabilization
 \begin{equation}
     \begin{aligned}
-        a_{\mathrm{stab}}(c_h, \phi_h) = &\sum_{k\in K}\intF{D\frac{\alpha}{\avg{h}}\jump{c_h}\cdot\jump{\phi_h}} +\sum_{k\in K}\intF{\jump{\phi_h}\cdot\jump{c_h \hat{u}_h}}  \\
-         -&\sum_{k\in K}\intF{D\avg{\nabla\phi_h}\cdot\jump{c_h}} -\sum_{k\in K}\intF{D\avg{\nabla c_h}\cdot\jump{\phi_h}},
+        a_{\mathrm{stab}}(c_h, \phi_h)
+        = &\sum_{k\in K}\intF{D\frac{\alpha}{\avg{h}}\jump{c_h}\cdot\jump{\phi_h}}
+        +\sum_{k\in K}\intF{\jump{\phi_h}\cdot\jump{c_h \hat{u}_h}}  \\
+         -&\sum_{k\in K}\intF{D\avg{\nabla\phi_h}\cdot\jump{c_h}}
+         -\sum_{k\in K}\intF{D\avg{\nabla c_h}\cdot\jump{\phi_h}},
     \end{aligned}\label{eq:SIP_stabilization}
 \end{equation}
 \mk{
@@ -1843,27 +1906,36 @@ to the discrete weak formulation, where
 \begin{equation*}
     \hat{u}_h = \frac{1}{2}\left(\uu_h\cdot\nn + \vert\uu_h\cdot\nn\vert\right)
 \end{equation*}
-is used to upwind the velocity $\uu_h$, with the velocity upwinded with respect to a facet $\mathcal{F}_k$. The stabilization parameter $\alpha>0$ must be chosen large enough to achieve stability. The average and jump operators used in~\eqref{eq:SIP_stabilization} are defined, respectively, as
+is used to upwind the velocity $\uu_h$, with the velocity upwinded with respect to a
+facet $\mathcal{F}_k$. The stabilization parameter $\alpha>0$ must be chosen
+large enough to achieve stability. The average and jump operators used
+in~\Cref{eq:SIP_stabilization} are defined, respectively, as
 \begin{equation*}
     \avg{c} = \frac{c^+ + c^-}{2} \qquad\mathrm{and}\qquad \jump{c} = c^+\nn^+ + c^-\nn^-.
 \end{equation*}
-The final discrete weak formulation of the advection-diffusion equation is: find $c_h\in W_h$, such that
+The final discrete weak formulation of the advection-diffusion equation is:
+find $c_h\in W_h$, such that
 \begin{equation}
-    a(c_h, \phi_h) + a_{\mathrm{stab}}(c_h, \phi_h) + b(c_h, \phi_h) = L(\phi_h), \quad\forall\phi_h\in W_h.
+    a(c_h, \phi_h) + a_{\mathrm{stab}}(c_h, \phi_h) + b(c_h, \phi_h) = L(\phi_h),
+    \quad\forall\phi_h\in W_h.
     \label{eq:discrete_weak_form_adv_diff}
 \end{equation}
-In this work, we solved~\eqref{eq:discrete_weak_form_adv_diff} numerically with the penalty parameter value $\alpha=25$.
+In this work, we solved~\Cref{eq:discrete_weak_form_adv_diff} numerically
+with the penalty parameter value $\alpha=25$.
 
-In time, we discretized~\eqref{eq:discrete_weak_form_adv_diff} with the implicit Euler method.
+In time, we discretized~\Cref{eq:discrete_weak_form_adv_diff} with the implicit Euler method.
 
 %--------------VERIFICATION--------------%
 \section{Verification}\label{sec:appB_verification}
 \subsection{Method of Manufactured Solutions}\label{subsec:mms}
 Let $\hat{\xx} = (\hat{x}, \hat{y}, \hat{z}) = \frac{1}{L}(x, y, z)$
 be the spatial coordinates scaled by the length $L$, which is the length of
-the computational domain $\Omega$ in the $x$-direction. Letting $\bm{\phi}$ be the vector-valued function
+the computational domain $\Omega$ in the $x$-direction. Letting $\bm{\phi}$ be
+the vector-valued function
 \begin{equation*}
-    \bm{\phi} = \left(\sin{(\pi(\hat{x} - \hat{y}))}, \sin{(\pi(\hat{y} + \hat{z}))}, \sin{(\pi(\hat{x} - \hat{z}))}\right)
+    \bm{\phi} = \left(\sin{(\pi(\hat{x} - \hat{y}))},
+    \sin{(\pi(\hat{y} + \hat{z}))},
+    \sin{(\pi(\hat{x} - \hat{z}))}\right)
 \end{equation*}
 and defining the velocity as 
 \begin{equation}
@@ -1878,8 +1950,8 @@ an arbitrary vector field $\mathbf{F}$. The pressure was defined as
     \label{eq:pressure_mms}
 \end{equation}
 Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions},
-we construct a problem with the Stokes equations where~\eqref{eq:velocity_mms}
-and~\eqref{eq:pressure_mms} are the solutions.
+we construct a problem with the Stokes equations where~\Cref{eq:velocity_mms}
+and~\Cref{eq:pressure_mms} are the solutions.
 To this end, we consider the general form of the steady Stokes equations
 \begin{subequations}
     \begin{align}
@@ -1894,21 +1966,24 @@ $\beps(\uu) = \frac{1}{2}\left(\nabla\uu + (\nabla\uu)^T\right)$, and the bounda
     \uu &= \uu_{\mathrm{mms}} \qquad&&\mathrm{on \ }\Gamma,
 \end{alignat}
 where $\Gamma=\partial\Omega$ is the boundary of the domain.
-Since the velocity field~\eqref{eq:velocity_mms} is divergence free by construction,
+Since the velocity field~\Cref{eq:velocity_mms} is divergence free by construction,
 $g = 0$. Setting the external force $\ff=-\nabla\cdot\bsig(\uu_{\mathrm{mms}}, p_{\mathrm{mms}})$
-using~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms},
-the solutions $\uu$ and $p$ to~\eqref{eq:stokes_mms} will be the ones
-defined by~\eqref{eq:velocity_mms} and~\eqref{eq:pressure_mms},
+using~\Cref{eq:velocity_mms} and~\Cref{eq:pressure_mms},
+the solutions $\uu$ and $p$ to~\Cref{eq:stokes_mms} will be the ones
+defined by~\Cref{eq:velocity_mms} and~\Cref{eq:pressure_mms},
 as long as we enforce equality in the mean pressures, i.e. $\intO{(p_h - p_{\mathrm{mms}})}=0$.
 Convergence rates are then readily calculated by comparing the numerical approximations of
-$\uu$ and $p$ with $\uu_{\mathrm{mms}}$ and $p_{\mathrm{mms}}$ on meshes of varying grid resolution.
+$\uu$ and $p$ with $\uu_{\mathrm{mms}}$ and $p_{\mathrm{mms}}$
+on meshes of varying grid resolution.
 
 \subsection{Norms and convergence order}\label{subsec:norms_and_eoc}
 Errors of the velocity $\uu_h$ and pressure $p_h$ approximated with finite elements
 were measured in the $\mathbf{H}^1$ and $L^2$ error norms, respectively.
-With the exact velocity field $\uu_{\mathrm{ex}}$, the $\mathbf{H}^1$ error norm was calculated as
+With the exact velocity field $\uu_{\mathrm{ex}}$, the $\mathbf{H}^1$
+error norm was calculated as
 \begin{equation*}
-    \Hnorm{\uu_h - \uu_{\mathrm{ex}}}^2 = \intO{\nabla(\uu_h - \uu_{\mathrm{ex}}) : \nabla(\uu_h - \uu_{\mathrm{ex}})}.
+    \Hnorm{\uu_h - \uu_{\mathrm{ex}}}^2
+    = \intO{\nabla(\uu_h - \uu_{\mathrm{ex}}) : \nabla(\uu_h - \uu_{\mathrm{ex}})}.
 \end{equation*}
 The $L^2$ error norms for the pressure were calculated as
 \begin{equation*}
@@ -1918,7 +1993,8 @@ The approximated functions were interpolated onto elements in a space of piecewi
 Lagrange polynomials of three polynomial degrees higher than the elements used to approximate
 the functions, meaning that polynomial degrees 5 and 4 were used for the velocity and pressure
 errors, respectively. Numerical integration was performed with a Gauss quadrature rule,
-with the quadrature rule degree equal to the polynomial degree of the integrated finite element functions. 
+with the quadrature rule degree equal to the polynomial degree of the integrated
+finite element functions. 
 
 Convergence rates reported in~\Cref{subsec:numerical_verification} were
 approximated in the following way. Define the error $e_k$ for a given mesh
@@ -1933,7 +2009,8 @@ Consider a finite element function
 \begin{equation*}
     \phi = \phi_i\psi_i(\xx)
 \end{equation*}
-with basis functions $\psi_i$, where $i$ are the degrees of freedom and Einstein summation is employed.
+with basis functions $\psi_i$, where $i$ are the degrees of freedom and Einstein
+summation is employed.
 The infinity norm of $\phi$ was approximated from the vector
 of coefficients $\left\{\phi_i\right\}$, which represent point evaluations of $\phi$ as
 \begin{equation*}
@@ -1965,7 +2042,7 @@ the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
     for mesh refinement on a cylinder mesh with the only-cilia/no-cardiac flow model.
     Additionally, we report the $L^2$ norm of the divergence of the velocity.
     For all error norms, convergence rates calculated
-    with~\eqref{eq:convergence_order_estimate} are given
+    with~\Cref{eq:convergence_order_estimate} are given
     in parentheses.}\label{tab:cylinder_error_rates}
     \begin{tabular}{cc|ccccc}
         \toprule
@@ -2001,7 +2078,8 @@ $\normlinf{u_h}$ scaled by the area $|\Gc|=\intGc{}$ over which tangential tract
 $\btau$ was applied. We chose this measure using $|\Gc|$ as a scale because the regions
 of the mesh marked as cilia-populated changes slightly with every mesh refinement,
 owing to the unstructured organization of the mesh cells. This change in the surface
-area over which the tangential traction was applied directly affected the maximum velocity magnitude,
+area over which the tangential traction was applied directly affected
+the maximum velocity magnitude,
 since the maximum velocity magnitude is a result of the total amount of force
 $\intGc{\btau\cdot P_{\nn}(\rr)}$ applied on the ciliated boundary, where the cilia
 vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ as introduced in~\Cref{subsec:appendixA1}.
@@ -2030,7 +2108,8 @@ reports units in millimeters, instead of micrometers which has been used elsewhe
         \# cells & \# dofs &
         $\normlinf{u_h}$ $\left[\frac{\mathrm{mm}}{\mathrm{s}}\right]$
         & $\frac{1}{|\Gc|}\normlinf{u_h}$ $\left[\frac{1}{\mathrm{mm\cdot s}}\right]$
-        & $\frac{1}{\vert\Omega\vert}\normltwovec{\uu_h}$ $\left[\frac{\mathrm{mm}}{\mathrm{s}}\right]$
+        & $\frac{1}{\vert\Omega\vert}\normltwovec{\uu_h}$
+        $\left[\frac{\mathrm{mm}}{\mathrm{s}}\right]$
         & $\normltwo{\nabla\cdot\uu_h}$ $\left[\frac{\mathrm{mm^3}}{\mathrm{s^2}}\right]$\\
         \midrule 
         132134  & 943820  & 0.0276 & 0.97 & \num{3.6e-03} & \num{6.3e-16}\\
@@ -2050,17 +2129,24 @@ diencephalic ventricle. Frequency of image acquisition was 20.22 Hz.
 The collected data constituted $x$ and $y$ positions of the particles at every time
 instant of image acquisition. The velocities $\uu_x$ and $\uu_y$ were determined by
 calculating the change in positions $\Delta x$ and $\Delta y$ relative to the change
-in time $\Delta t$ between two subsequent images, $\Delta t$ being equal to the frequency of acquisition.
-Mean velocities $\overline{u}_x$~(\Crefpanels{fig:particle_tracking_data}{a}) and $\overline{u}_y$~(\Crefpanels{fig:particle_tracking_data}{b}),
+in time $\Delta t$ between two subsequent images, $\Delta t$ being equal to the
+frequency of acquisition.
+Mean velocities $\overline{u}_x$~(\Crefpanels{fig:particle_tracking_data}{a}) and
+$\overline{u}_y$~(\Crefpanels{fig:particle_tracking_data}{b}),
 which serve as a quantification of particle drift, were calculated
 by taking the difference between the last and first positions of a particle.
 
 Particle movement varied over the different measurements. The mean of $\overline{u}_x$ was
-0.26 \textmu m/s and the mean of $\overline{u}_y$ was 0.08 \textmu m/s. The maximum mean velocities
-in absolute values were 10.2 \textmu m/s and 2.4 \textmu m/s for $\overline{u}_x$ and $\overline{u}_y$,
-respectively. We used the only-cardiac/no-cilia flow model to tune the pressure boundary condition
-amplitude $A$. The choice of $A=0.0015$ Pa was used since: (i) it yields a maximum velocity magnitude
-of 4.8 \textmu m/s, which is close to the maximum observed in the particle tracking data when
+0.26 \textmu m/s and the mean of $\overline{u}_y$ was 0.08 \textmu m/s.
+The maximum mean velocities
+in absolute values were 10.2 \textmu m/s and 2.4 \textmu m/s for
+$\overline{u}_x$ and $\overline{u}_y$,
+respectively. We used the only-cardiac/no-cilia flow model to tune the
+pressure boundary condition
+amplitude $A$. The choice of $A=0.0015$ Pa was used since: (i) it yields a
+maximum velocity magnitude
+of 4.8 \textmu m/s, which is close to the maximum observed in the
+particle tracking data when
 rejecting the outlier at around 10 \textmu m/s; (ii) it yields a time-averaged mean velocity
 of 0.89 \textmu m/s, which is close to the mean observed in the particle tracking data.
 \begin{figure}[H]
@@ -2070,7 +2156,9 @@ of 0.89 \textmu m/s, which is close to the mean observed in the particle trackin
     \begin{minipage}[t]{0.49\textwidth}
         \includegraphics[width=\textwidth]{graphics/mean_velocities_y.png}
     \end{minipage} 
-    \caption{Particle tracking data. Mean velocities in the $x$ and $y$ directions of the particles tracked. The dashed horizontal line designates a value of zero.}\label{fig:particle_tracking_data}
+    \caption{Particle tracking data. Mean velocities in
+    the $x$ (\textbf{a.}) and $y$ (\textbf{b.}) directions of the particles tracked.
+    The dashed horizontal line designates a value of zero.}\label{fig:particle_tracking_data}
 \end{figure}
 
 % References
