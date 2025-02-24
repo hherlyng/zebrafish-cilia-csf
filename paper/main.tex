@@ -1924,8 +1924,8 @@ to the discrete weak formulation, where
 \begin{equation*}
     \hat{u}_h = \frac{1}{2}\left(\uu_h\cdot\nn + \vert\uu_h\cdot\nn\vert\right)
 \end{equation*}
-is used to upwind the velocity $\uu_h$, with the velocity upwinded with respect to a
-facet $\mathcal{F}_k$. The stabilization parameter $\alpha>0$ must be chosen
+is used to upwind the velocity $\uu_h$ with respect to a
+facet. The stabilization parameter $\alpha>0$ must be chosen
 large enough to achieve stability. The average and jump operators used
 in~\Cref{eq:SIP_stabilization} are defined, respectively, as
 \begin{equation*}
@@ -2161,7 +2161,7 @@ in absolute values were 10.2 \textmu m/s and 2.4 \textmu m/s for
 $\overline{u}_x$ and $\overline{u}_y$,
 respectively. We used the only-cardiac/no-cilia flow model to tune the
 pressure boundary condition
-amplitude $A$. The choice of $A=0.0015$ Pa was used since: (i) it yields a
+amplitude $A$. The choice of $A=1.5$ mPa was used since: (i) it yields a
 maximum velocity magnitude
 of 4.8 \textmu m/s, which is close to the maximum observed in the
 particle tracking data when
