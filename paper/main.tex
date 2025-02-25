@@ -419,6 +419,14 @@ we also compute the Reynolds number
 \end{equation*}
 with $L_r$ and $U_r$ as length and velocity scales characteristic of the flow. 
 
+When studying how cilia paralysis and ventricular morphology affect intraventricular
+flow and transport, we calculate the magnitude of a tangential force $F$ 
+exerted by the cilia on a part $\mathcal{S}\subset\Gc$ of the ventricular surface as:
+\begin{equation}
+    F = \int_{\mathcal{S}}\sqrt{\btau\cdot\btau}\,\mathrm ds.
+    \label{eq:tangential_force_calculation}
+\end{equation}
+
 %-----DISCRETIZATION AND MODEL IMPLEMENTATION-----%
 \subsection{Numerical approximation of the Stokes equations}
 The Stokes equations~\Cref{eq:stokes_eqs} are discretized with a finite element method
@@ -881,7 +889,7 @@ In vivo, these cilia generate the strongest flow at
 this developmental stage of the fish~\cite{Olstad2019CiliaryDevelopment}.
 In contrast, removing telencephalic and ventral diencephalic cilia has minimal
 impact and results in maximum speeds of 27.7 \textmu m/s or 27.2 \textmu m/s, respectively.
-Of the total tangential force exerted by the cilia, ventral cilia in the middle ventricle
+Of the total tangential forces exerted by the cilia, ventral cilia in the middle ventricle
 contribute with 34\%, while the dorsal cilia exert 52\% of the total tangential
 force~(\Crefpanels{fig:fig5}{b}). The magnitude of the force contributions are thus
 more similar than the difference in their impact on the maximum velocity magnitudes.
@@ -902,8 +910,9 @@ less solute spreads towards the posterior ventricle (ROI 6).
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
     \caption{\textbf{a.} The three separate ciliated regions cilia paralysis is simulated
     by imposing a zero tangential traction boundary condition in the respective region.
-    \textbf{b.} The total tangential force applied through the tangential traction
-    boundary condition in the three separate ciliated regions.
+    \textbf{b.} The total tangential force applied with the tangential traction
+    boundary condition in the three separate ciliated regions, as well as the total
+    (the sum of the three regions), calculated with \Cref{eq:tangential_force_calculation}. 
     \textbf{c.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
     paralysis scenarios considered. The region named in the legend is the region
     where we modify the cilia tangential traction boundary condition to a free-slip condition
@@ -920,26 +929,37 @@ one where the duct connecting the anterior and middle ventricles is constricted
 one where the duct connecting the middle and posterior ventricles is constricted
 (33 \% reduction);
 one where the middle ventricle is shrunk in the lateral direction (43 \% reduction);
-and the combination of the above three modifications (\Crefpanels{fig:fig6}{a}).
+and the combination of the above three modifications (\Crefpanels{fig:fig6}{a}). In these
+four modified geometries the volume is reduced by 3.9\%, 4.1\%, 1.4\% and 9.4\%, respectively,
+comapred to the original geometry.
 We simulate CSF flow in the modified geometries with the baseline flow model
 and use the resulting velocity field to simulate transport of Dendra2
 (\Crefpanels{fig:fig6}{b}).
 
 Constricting the connection between the anterior and middle ventricle leads to
 slower transport to the anterior ventricle (ROI 5),
-and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the original geometry.
+and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the original geometry
+(\Crefpanels{fig:fig6}{c}, shrunk fore-mid scenario). This is notwithstanding a
+9.5\% reduction in ventral cilia force magnitude
+(\Crefpanels{fig:fig6}{d}), which are the cilia that propel CSF and solute towards ROI 6.
 On the other hand, constricting the duct connecting the middle and the posterior ventricle
 leads to less transport into the posterior ventricle (ROI 6),
-and slightly more transport towards the anterior ventricle (ROI 5).
+and slightly more transport towards the anterior ventricle (ROI 5)
+(\Crefpanels{fig:fig6}{c}, shrunk mid-hind scenario).
 Faster transport to the anterior ventricle (ROI 5) and slower transport to the
-posterior ventricle (ROI 6) is also the case for the geometry with a shrunk middle ventricle.
-Additionally, for the latter configuration, the transport upstream of CSF flow towards the
+posterior ventricle (ROI 6) is also the case for the geometry with a
+shrunk middle ventricle.
+Here also the change in transport to ROI 6 is counter to expectation when comparing with
+ventral cilia forces, with transport reducing in spite of a 6.6\% increase in the
+ventral cilia forces.
+Additionally, for the shrunk middle configuration, the transport upstream of CSF flow towards the
 ventral-posterior region of the middle ventricle (ROI 3) is slowed down.
 For the mesh where all three ventricles are modified,
 we observe higher retention of solute in the middle ventricle (ROIs 2--4),
 while both the anterior and the posterior ventricles (ROIs 5 and 6) have lower mean concentrations.
 Altogether, our results show that the geometry and width of the ventricular ducts matter
-for solute transport. This may explain why we observed larger differences
+for solute transport, with notable differences in transport from relatively small
+geometry modifications. This may explain why we observed larger differences
 in the cilia-deficient computational model compared to the experimental data in
 \Cref{fig:fig4}, as the model and the fish have different duct diameters.
 \begin{figure}[H]
@@ -952,10 +972,12 @@ in the cilia-deficient computational model compared to the experimental data in
     \textbf{c.} Mean concentration $\cbar(t)$ simulated with the original and modified geometries
     in the 6 ROIs.
     \textbf{d.} A comparison of the tangential cilia force in the three cilia regions
-    and the total force applied. In each region, the force $F_{\mathrm{original}}$ 
+    and the total force applied, calculated with \Cref{eq:tangential_force_calculation}.
+    In each region, the force $F_{\mathrm{original}}$ 
     applied on the original mesh is the baseline of 100\%,
-    to which the force $F_i$ of the other mesh versions are compared, where $i$ denotes
-    the case. The bars for the four shrunk scenarios thus
+    to which the forces $F_i$ of the other mesh versions are compared, where $i$ denotes
+    the cases fore-shrunk, middle shrunk, mid-hind shrunk, and the combination of the three.
+    The bars for the four shrunk scenarios thus
     display $F_i/F_{\mathrm{original}}\cdot 100\%$.}
     \label{fig:fig6}
 \end{figure}
@@ -1357,14 +1379,16 @@ We are also confident that our model can be adjusted and implemented to fit
 microscopic and macroscopic parameters for larger brains, once these parameters are acquired.
 
 \subsection{Limitations and further work}
-The model presented has certain limitations. Future work could consider:
+The model presented has certain limitations. Future work could consider improving:
 \begin{itemize}
+    \item quantify cilia force parameter to avoid tuning
     \item spatial heterogeneity of the cilia, how this affects flow and transport
     \item time-varying cilia?
     \item improved advection-diffusion equation influx/outflux BCs, or instead
     modeling deformation of a closed ventricular system. 
     and investigating how the arising flow compares with pulsatile flow observed in experiments
     \item FSI: CSF flow coupled to 1D/2D/3D cilia structures.
+    \item any comments on experiments?
 \end{itemize}
 
 \section{Conclusion}
@@ -1388,6 +1412,14 @@ Experimental results support the conclusion that cilia only affect the
 local distribution of small proteins,
 while most of their transport is governed by diffusion. 
 
+% Acknowledgements
+\medskip
+\textbf{Acknowledgements} \par 
+Thanks are extended to J\o rgen Dokken for valuable model implementation discussions.
+Halvor Herlyng acknowledges support from the national infrastructure for computational
+science in Norway, Sigma2, via grant \#NN8049K.
+This work was funded by the Research Council of Norway (NJY FRIPRO grants 314189 and 353348).
+
 \medskip
 \textbf{Data Availability Statement} \par
 The data and implementations presented in this paper are licensed under \fixme{LICENSE}
@@ -1405,13 +1437,6 @@ The authors declare no conflicts of interest.
 Supporting Information is available from the Wiley Online Library or from the author.
 
 
-% Acknowledgements
-\medskip
-\textbf{Acknowledgements} \par 
-Thanks are extended to J\o rgen Dokken for valuable model implementation discussions.
-Halvor Herlyng acknowledges support from the national infrastructure for computational
-science in Norway, Sigma2, via grant \#NN8049K.
-This work was funded by the Research Council of Norway (NJY FRIPRO grants 314189 and 353348).
 
 
 
