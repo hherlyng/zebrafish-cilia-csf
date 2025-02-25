@@ -85,7 +85,7 @@ import colormaps as cm
 green = cm.dark2_3.colors[0]
 orange = cm.dark2_3.colors[1]
 purple = cm.puor_4.colors[3]
-colors = ['k', green, orange, purple]
+colors = ['k', green, purple, orange]
 
 # Plot concentrations
 idx = 0
@@ -114,30 +114,5 @@ plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
 save_figs = 1
 if save_figs: fig_c.savefig(f"../output/illustrations/compare_cilia/concentrations_model{model_version}.png")
-
-
-cols = range(4)
-final_c = pd.DataFrame(index=ROI_tags, columns=cols)
-for i, c_bar in enumerate([c_bar_original, c_bar_dorsal, c_bar_ventral, c_bar_telenc]):
-    final_c[i] = c_bar[-1, :]
-
-fig_bars, ax_bars = plt.subplots(num=4, figsize=[18, 8])
-final_c.reset_index(inplace=True)
-bars = final_c.plot.bar(x='index', y=cols,
-                         color=colors,
-                         ax=ax_bars, rot=True, width=0.75)
-hatches = ['', '\\', 'x', '/', '^']
-for bar_container, hatch in zip(bars.containers, hatches):
-    for bar in bar_container:
-        bar.set_hatch(hatch)
-
-ax_bars.set_xlabel("ROI number", fontsize=35, labelpad=25)
-ax_bars.set_ylabel(r"Final mean concentration $\bar{c}(T)$ [-]", fontsize=35, labelpad=50)
-ax_bars.tick_params(labelsize=35)
-ax_bars.get_legend().remove()
-# ax_bars.legend(labels=['Original', 'Fore', 'Middle', 'Hind', 'Fore+middle+hind'], loc='right', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
-fig_bars.tight_layout()
-
-if save_figs: fig_bars.savefig(f"../output/illustrations/compare_cilia/final_concentrations_model{model_version}.png")
 
 plt.show()

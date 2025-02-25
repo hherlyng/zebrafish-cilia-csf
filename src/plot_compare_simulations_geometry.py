@@ -31,8 +31,7 @@ Author: Halvor Herlyng, 2024.
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
@@ -123,7 +122,7 @@ green = cm.dark2_3.colors[0]
 orange = cm.dark2_3.colors[1]
 purple = cm.puor_4.colors[3]
 yellow = cm.puor_4.colors[1]
-colors = ['k', green, orange, purple, yellow]
+colors = ['k', green, purple, orange, yellow]
 print([colors[i]*255 for i in range(1, len(colors))])
 
 # Plot concentrations
@@ -134,9 +133,9 @@ for row_idx in range(ax_c.shape[0]):
         ca_c = ax_c[row_idx, col_idx]
     
         ca_c.plot(times, c_bar1[:, idx], color=colors[0], label='Original', linewidth=lw)
-        ca_c.plot(times, c_bar2[:, idx], color=colors[1], linestyle='--', marker='o', markevery=2000, label='Fore', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar3[:, idx], color=colors[2], linestyle='--', marker='^', markevery=2000, label='Middle', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar4[:, idx], color=colors[3], linestyle='--', marker='s', markevery=2000, label='Hind', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar2[:, idx], color=colors[1], linestyle='--', marker='o', markevery=2000, label='Shrunk fore-mid', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar3[:, idx], color=colors[2], linestyle='--', marker='^', markevery=2000, label='Shrunk middle', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar4[:, idx], color=colors[3], linestyle='--', marker='s', markevery=2000, label='Shrunk mid-hind', linewidth=lw, markersize=msize)
         ca_c.plot(times, c_bar5[:, idx], color=colors[4], linestyle='--', marker='p', markevery=2000, label='Fore+middle+hind', linewidth=lw, markersize=msize)
 
         ca_c.set_title(f'ROI {tag}', fontsize=30, pad=2.0)
@@ -145,35 +144,11 @@ for row_idx in range(ax_c.shape[0]):
         
         if col_idx==0: ca_c.set_ylabel(r"Mean conc. $\overline{c}$ [-]", fontsize=32)    
         if row_idx==(ax_c.shape[0]-1): ca_c.set_xlabel("Time [s]", fontsize=35, labelpad=25)
-        if tag==1: ca_c.legend(loc='lower right', fontsize=28, frameon=True, fancybox=False, edgecolor='k')
+        if tag==1: ca_c.legend(loc='lower right', fontsize=22, frameon=True, fancybox=False, edgecolor='k')
 
         idx += 1
 
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
 if save_figs: fig_c.savefig(f"../output/illustrations/compare_geometry/all_ROIs_model{model_version}.png")
-
-cols = range(5)
-final_c = pd.DataFrame(index=ROI_tags, columns=cols)
-for i, c_bar in enumerate([c_bar1, c_bar2, c_bar3, c_bar4, c_bar5]):
-    final_c[i] = c_bar[-1, :]
-
-fig_bars, ax_bars = plt.subplots(num=4, figsize=[18, 8])
-final_c.reset_index(inplace=True)
-bars = final_c.plot.bar(x='index', y=cols,
-                         color=colors,
-                         ax=ax_bars, rot=True, width=0.75)
-hatches = ['', '\\', 'x', '/', '^']
-for bar_container, hatch in zip(bars.containers, hatches):
-    for bar in bar_container:
-        bar.set_hatch(hatch)
-
-ax_bars.set_xlabel("ROI number", fontsize=35, labelpad=25)
-ax_bars.set_ylabel(r"Final mean concentration $\bar{c}(T)$ [-]", fontsize=35, labelpad=50)
-ax_bars.tick_params(labelsize=35)
-ax_bars.get_legend().remove()
-# ax_bars.legend(labels=['Original', 'Fore', 'Middle', 'Hind', 'Fore+middle+hind'], loc='right', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
-fig_bars.tight_layout()
-
-if save_figs: fig_bars.savefig(f"../output/illustrations/compare_geometry/final_concentrations_model{model_version}.png")
 plt.show()
