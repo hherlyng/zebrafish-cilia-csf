@@ -12,8 +12,7 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
@@ -52,7 +51,7 @@ f = 2.22
 dt = 1/f/20
 
 # Plot parameters
-save_figs = 0 # Save figures if set to 1, don't save if set to 0
+save_figs = 1 # Save figures if set to 1, don't save if set to 0
 lw = 8 # linewidth
 msize = 4 # marker size
 

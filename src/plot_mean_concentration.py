@@ -12,8 +12,7 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
@@ -51,13 +50,13 @@ f = 2.22
 dt = 1/f/20
 
 # Plot parameters
-save_fig = 0 # Save figures if set to 1, don't save if set to 0
+save_fig = 1 # Save figures if set to 1, don't save if set to 0
 lw = 6 # linewidth
 
 # Loop over molecules
-transport_data_filename = '../output/transport/results/variable_tau+weak_PC/original/model_C_molecule_D2/data/c_hats.npy'
-# transport_dir + \
-# f"{tau_version}/{mesh_version}/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy"
+# transport_data_filename = '../output/transport/results/variable_tau+weak_PC/original/model_C_molecule_D2/data/c_hats.npy'
+transport_data_filename = transport_dir + \
+                f"{tau_version}/{mesh_version}/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy"
 
 # Load transport data: c_bars = the total concentration in each ROI
 with open(transport_data_filename, "rb") as file: c_bars = np.load(file) 

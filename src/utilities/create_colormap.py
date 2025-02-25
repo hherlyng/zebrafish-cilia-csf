@@ -47,8 +47,7 @@ if __name__=='__main__':
     import matplotlib.pyplot as plt
     import colormaps as cm
     plt.rcParams.update({
-        "text.usetex" : True,
-        "font.family" : "sans-serif",
+        "font.family" : "Arial",
         "axes.spines.top" : False,
         "axes.spines.right" : False
     })

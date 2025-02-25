@@ -5,8 +5,7 @@ from scipy.io import loadmat
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
@@ -37,7 +36,7 @@ for i in ROI_idx:
     # Plot control data
     y = np.mean(control[:, i, :], axis=0)
     err = np.std(control[:, i, :], axis=0)/np.sqrt(control.shape[0])
-    ax1.plot(times, y, label=f'ROI {i+1}', color=colors[i], linewidth=lw)
+    ax1.plot(times, y, label=f'ROI {i+1}' if i==0 else f'{i+1}', color=colors[i], linewidth=lw)
     ax1.fill_between(times, y-err, y+err, color=colors[i], alpha=0.25)
 
     # Plot mutant data
@@ -48,17 +47,22 @@ for i in ROI_idx:
 
 ax1.set_xlabel("Time [s]", fontsize=60, labelpad=25)
 ax1.set_ylabel(r"Fluoresc. intensity change $\Delta F$ [-]", fontsize=60, labelpad=25)
-ax1.legend(loc='best', fontsize=50, frameon=True, fancybox=False, edgecolor='k')
+leg = ax1.legend(loc='upper left', fontsize=45, frameon=True, fancybox=False, edgecolor='k',
+           ncols=len(ROI_idx),
+           handlelength=1.2, borderpad=0.4, columnspacing=0.6, handletextpad=0.5)
+# Increase the line width in the legend
+for line in leg.get_lines():
+    line.set_linewidth(10.0)
 ax1.tick_params(labelsize=60)
 ax2.set_xlabel("Time [s]", fontsize=60, labelpad=25)
 ax2.set_ylabel(r"Fluoresc. intensity change $\Delta F$ [-]", fontsize=60, labelpad=25)
-ax2.legend(loc='upper left', fontsize=50, frameon=True, fancybox=False, edgecolor='k')
+ax2.legend(loc='upper left', fontsize=45, frameon=True, fancybox=False, edgecolor='k')
 ax2.tick_params(labelsize=60)
 
 fig1.tight_layout()
 fig2.tight_layout()
 
-save_figs = 0
+save_figs = 1
 if save_figs:
     fig1.savefig(f"../output/illustrations/experimental_time_evolution_control.png")
     fig2.savefig(f"../output/illustrations/experimental_time_evolution_mutant.png")
