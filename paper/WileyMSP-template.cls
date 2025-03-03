@@ -5,7 +5,7 @@
 \RequirePackage{ragged2e}
 \RequirePackage{graphicx}
 \RequirePackage{caption}
-\RequirePackage[margin=0.5in]{geometry}
+\RequirePackage[margin=0.5in, a4paper]{geometry} % MER: a4paper
 \RequirePackage{fancyhdr}
 \RequirePackage{gensymb}
 \RequirePackage{siunitx} % \num{} to format powers of 10
@@ -22,7 +22,7 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 
-\RaggedRight
+%\RaggedRight % MER 
 
 \renewcommand{\maketitle}{
 \huge

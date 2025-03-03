@@ -3,34 +3,33 @@
 \begin{document}
 
 
-\pagestyle{fancy}
-\rhead{\includegraphics[width=2.5cm]{vch-logo.png}}
+%\pagestyle{fancy}
+%\rhead{}%\includegraphics[width=2.5cm]{vch-logo.png}}
+\pagestyle{plain} % MER
 
-\title{The Role of Advection Versus Diffusion in Intraventricular Transport}
-
+\title{The role of advection versus diffusion in intraventricular transport}
+%
 \maketitle
-
+%
 % Author: Please give full first and last names for authors and
 % include * after the name of all corresponding authors
-
-\author{Halvor Herlyng*}
-\author{Ada J.~Ellingsrud}
-\author{Miroslav Kuchta}
-\author{Inyoung Jeong}
-\author{Marie E.~Rognes} \\
+%
+\author{Halvor Herlyng*},
+\author{Ada J.~Ellingsrud},
+\author{Miroslav Kuchta},
+\author{Inyoung Jeong},
+\author{Marie E.~Rognes}, 
 \author{Nathalie Jurisch-Yaksi*}
 
 % Affiliations: Please provide adacemic titles (Prof. or Dr.) for all authors where applicable,
 % and include an institutional email address for all corresponding authors
 \begin{affiliations}
-H.~Herlyng, Dr.~A.~J.~Ellingsrud, Dr.~M.~Kuchta, Dr.~M.~E.~Rognes\\
+\noindent H.~Herlyng, Dr.~A.~J.~Ellingsrud, Dr.~M.~Kuchta, Dr.~M.~E.~Rognes\\
 Department of Numerical Analysis and Scientific Computing,
 Simula Research Laboratory, Kristian Augusts gate 23, 0164 Oslo, Norway\\
-Email Address: hherlyng@simula.no
-\\
-Dr.~M.~E.~Rognes\\
-K.~G.~Jebsen Center for Brain Fluid Research, Oslo, Norway
-\\
+Email Address: hherlyng@simula.no \\ 
+Dr.~M.~E.~Rognes \\
+K.~G.~Jebsen Centre for Brain Fluid Research, Oslo, Norway \\
 Dr.~I.~Jeong, Dr.~N.~Jurisch-Yaksi\\
 Department of Clinical and Molecular Medicine,
 Norwegian University of Science and Technology, Erling Skjalgsons gate 1, 7491 Trondheim, Norway \\
@@ -42,7 +41,6 @@ Email Address: nathalie.jurisch-yaksi@ntnu.no
 % Keywords: Please provide a minimum of three and a maximum of seven keywords, separated by commas
 
 \keywords{cerebrospinal fluid, brain ventricles, transport, finite element methods}
-
 
 % Abstract should be written in the present tense and impersonal style (i.e., avoid we), and be at most 200 words long
 \begin{abstract}
@@ -67,14 +65,15 @@ Please insert your abstract here
 %\threesubsection{First lowest-level subsection}
 
 \section{Introduction}
-Brain development and function depend on numerous regulatory processes,
-including the flow of cerebrospinal fluid
-(CSF). CSF is a clear liquid produced by the choroid plexus
-and the fluid flows through the ventricular system and subarachnoid space.
-By transporting growth factors, nutrients, neurotransmitters and metabolites
-and removing waste products, CSF regulates brain development and homeostasis.
-Disturbance of the CSF circulation can lead to brain disorders, such as
-hydrocephalus where accumulation of CSF often requires emergency surgical treatment. 
+Brain development and function depend on numerous regulatory
+processes, including the flow of cerebrospinal fluid (CSF). CSF is a
+clear liquid produced by the choroid plexus and the fluid flows
+through the ventricular system and subarachnoid space.  By
+transporting growth factors, nutrients, neurotransmitters and
+metabolites and removing waste products, CSF regulates brain
+development and homeostasis.  Disturbance of the CSF circulation can
+lead to brain disorders, such as hydrocephalus where accumulation of
+CSF often requires emergency surgical treatment.
 
 Motion of CSF occurs through multiple physiological processes,
 including the beating motion of motile cilia lining the ventricular walls,
