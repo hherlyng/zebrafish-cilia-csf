@@ -422,35 +422,58 @@ experimental values (\Crefpanels{fig:fig3}{c, d}).
 % Final mean c values ROIs 2-6: 0.7637806  0.72025859 0.81903216 0.56204164 0.34926411
 
 \subsection{Absence of ciliary motion affects local protein distribution}
-Since CSF flow is highly disturbed in the absence of motile cilia, we
-want to assess the impact of cilia motion on solute distribution. To this end,
-we measured the movement of photoconverted Dendra2 signal
-in control and motile-cilia mutant (\emph{smh}) zebrafish .
-By plotting the means of $\Delta F$ (\Crefpanels{fig:fig4}{a})
-and the time to threshold
-across the control and mutant cohorts (\Crefpanels{fig:fig4}{b}),
-we identified a significant
-difference in Dendra2 distribution in ROIs 2 and 4, but not in ROIs 3, 5, and 6. In ROIs 2 and 4,
-which measure Dendra2 distribution downstream of the photoconversion site,
-we observed a slower increase of fluorescence intensity,
-resulting in $45\%$ (ROI 2) and $25\%$ (ROI 4)
-higher mean times-to-threshold in the \emph{smh}
-mutants compared to controls (\Crefpanels{fig:fig4}{b}). 
 
-Next, to identify whether our model would recapitulate these findings,
-we simulate protein transport by using the only-cardiac/no-cilia flow model 
-and compare it with the baseline model
-(both cilia and cardiac motion) (\Crefpanels{fig:fig4}{c}).
-Similar to our experiments, we observe slower dynamics in simulations for ROIs 2 and 4,
-but small changes for ROIs 3 and 6.
-Interestingly, the difference was even greater for the simulations,
-with the times-to-threshold in ROI 2 and 4 being 90\% and 34\% higher
-in the absence of cilia-mediated flow.
-Moreover, ROI 5 exhibits very different $\cbar$ profiles for the two
-configurations in our computational model,
-but not in our experimental data.
-Altogether, our findings identify that diffusion plays an important
-role for solute movement to regions upstream in the cilia flow fields or to distant ventricles.
+\mer{Sentence on why absence of motile cilia is intersting: Cilia
+  motion is key to development and absence of cilia is associated with
+  pathologies.} As observed both experimentally and computationally,
+the absence of motile cilia alters the CSF flow patterns. We next
+investigate the implications of these changes on intraventricular
+transport.
+
+We first experimentally measured the movement of photoconverted
+Dendra2 signal in control and motile-cilia mutant (\emph{smh})
+zebrafish. In ROIs 2 and 4, which measure Dendra2 distribution
+downstream of the photoconversion site, we observed a slower increase
+of fluorescence intensity (\Crefpanels{fig:fig4}{a}), resulting in
+$45\%$ (ROI 2) and $25\%$ (ROI 4) higher mean times-to-threshold
+(\Crefpanels{fig:fig4}{b}), in the \emph{smh} mutants compared to
+controls. We found no significant differences in the Dendra2
+distribution in ROIs 3, 5, and 6 between \emph{smh} mutants and
+controls.
+
+We next mimic the \emph{smh} mutants in the computational model by
+considering transport of Dendra2 with CSF flow driven by cardiac
+pressure pulsations only, representing the absence of motile
+cilia. Comparing the in-silico mutants with transport predictions in
+the presence of both cardiac pulsations and motile cilia, we observe
+noticeably delayed dynamics in ROIs 2, 4 and 5, but little change for
+ROIs 3 and 6 (\Crefpanels{fig:fig4}{c}).
+
+\mer{MER: MER and HH stopped here.}
+
+Comparing with the experiment, the difference between the control and
+mutant scenarios was even greater for the simulations, with the
+times-to-threshold in ROI 2 and 4 being 90\% and 34\% higher in the
+absence of cilia-mediated flow. Moreover, ROI 5 exhibits very
+different $\cbar$ profiles for the two configurations in our
+computational model, but not in our experimental data.  Altogether,
+our findings identify that diffusion plays an important role for
+solute movement to regions upstream in the cilia flow fields or to
+distant ventricles.
+
+%% Again, the simulated Dendra2 distribution patterns differ from the
+
+%% Next, to identify whether our model would recapitulate these findings,
+%% we simulate CSF flow driven only by cardiac pressure pulsations and
+%% the resulting diffusion and advection of 
+
+%% Dendra2 transport 
+
+%% by using the only-cardiac/no-cilia flow model 
+%% and compare it with the baseline model
+%% (both cilia and cardiac motion) (\Crefpanels{fig:fig4}{c}).
+
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
