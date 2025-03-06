@@ -1110,20 +1110,22 @@ false; allow track merging: false; merging max distance: 15.0; cutoff percentile
 Only the particle tracks with at least 30 data points, while simultaneously
 covering a distance of at least 8.8 \textmu m, are shown (\Crefpanels{fig:fig1}{b, c}).
 
-
 \subsection{Image-based computational geometries of zebrafish brain ventricles}
-To model flow and transport in zebrafish larval brain ventricles, we generated a
-3D representation of the brain ventricular walls using confocal imaging data of a zebrafish embryo
-injected intraventricularly with a 70 kDa dye at 2 dpf~\cite{Olstad2019CiliaryDevelopment}. 
-From the imaging data, we constructed a computational mesh of the ventricles (\Crefpanels{fig:fig1}{d}).
-The interior volume was meshed with fTetWild~\cite{Hu2020FastWild}. 
-The standard mesh consisted of 132 134 tetrahedral cells and had a
-maximal (minimal) edge length of 14.9 \textmu m (4.68 \textmu m). 
-At 2 dpf, the ventricular system consists mainly of 3 cavities: the telencephalic (anterior),
-the di-/mesencephalic (middle) and the rhombencephalic (posterior) ventricles,
-which are connected by interventricular ducts. 
-Parts of the ventricular surfaces were marked to be lined with
-motile cilia (\Crefpanels{fig:fig1}{d}, magenta markers)~\cite{Olstad2019CiliaryDevelopment}.
+To model CSF flow and transport in the zebrafish brain ventricles, we
+generated a 3D surface representation of the ventricular walls using
+confocal imaging data of a zebrafish embryo injected
+intraventricularly with a 70 kDa dye at 2
+dpf~\cite{Olstad2019CiliaryDevelopment}. At 2 dpf, the ventricular
+system consists mainly of 3 cavities: the telencephalic (anterior),
+the di-/mesencephalic (middle) and the rhombencephalic (posterior)
+ventricles, which are connected by interventricular ducts. From the
+surface geometry, we constructed a volumetric mesh of the ventricles
+using fTetWild~\cite{Hu2020FastWild}, consisting of 132 134
+tetrahedral cells with a maximal (minimal) edge length of 14.9 \textmu
+m (4.68 \textmu m) (\Crefpanels{fig:fig1}{d}). Parts of the
+ventricular surfaces were marked to be lined with motile cilia
+(\Crefpanels{fig:fig1}{d}, magenta
+markers)~\cite{Olstad2019CiliaryDevelopment}.
 
 The morphology and geometry of the brain ventricles vary across zebrafish
 individuals, and under physiological and pathological conditions~\cite{Olstad2019CiliaryDevelopment}. 
@@ -1132,7 +1134,7 @@ we also consider four variations in the geometry (cross-sectional area
 reduction in parentheses):
 by shrinking the fore-mid brain connection (66 \%), 
 the middle ventricle (33 \%), the mid-hind brain connection (43 \%), and all three simultaneously.
-We used Blender~\cite{Community2018BlenderPackage} to modify the brain ventricles geometry.
+We used Blender~\cite{Community2018BlenderPackage} to modify the geometries (\Crefpanels{fig:fig6}{a, b}).
 % Cross-sectional areas of ducts normal to flow direction
 % Modified region       Original mesh        Deformed mesh
 % Fore                  3.36e-3 mm^2         1.15e-3 mm^2
