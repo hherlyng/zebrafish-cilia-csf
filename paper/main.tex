@@ -1334,8 +1334,8 @@ in the six regions of interest (ROIs) $\Omega_i$ ($i = 1, \dots, 6$)
 as functions of time, where $|\Omega_i|$ is the volume of
 the domain $\Omega_i$. The dynamics of ROI 1 follows directly
 from~\Cref{eq:photoconversion_curve}. In addition,
-we report time-to-threshold: the time $\hat{t}_i$ when
-the mean concentration $\cbar_i$ first exceed a threshold
+we report the time-to-threshold as the time $\hat{t}_i$ when
+the mean concentration $\cbar_i$ first exceeds a threshold
 value $\hat{c}_i$. We use $\hat{c}_i=0.25$ for ROI 1--4 and
 $\hat{c}_i=0.10$ for ROI 5--6.
 
@@ -1350,22 +1350,22 @@ and if $\mathrm{Pe} < 1$ transport is dominated by diffusion.
 Here, $L_p$ and $U_p$ are characteristic length and velocity scales,
 respectively, and $D$ is the solute diffusion coefficient.
 In calculating a global Péclet number, we use $L_p=600$ \textmu m, the approximate length of the
-ventricles geometry along the rostrocaudal ($x$-) axis.
+ventricular geometry along the rostrocaudal ($x$-) axis.
 We use a mean velocity $\overline{U}$ as the characteristic velocity $U_p$.
 The mean velocity $\overline{U}$ is calculated by first averaging the velocity in space:
 \begin{equation*}
     \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
 \end{equation*}
-and then averaging $\overline{u}$ in time over one cardiac cycle.
+and then averaging $\overline{u}$ in time over one cardiac cycle to yield $\overline{U} = \fixme{X}$ \fixme{unit}.
 To assess the assumption that inertial forces are negligible compared to
-viscous forces in the CSF flow, such that the flow is governed by the Stokes equations,
-we also compute the Reynolds number
+viscous forces, we also compute the Reynolds number
 \begin{equation*}
     \mathrm{Re} = \frac{\mathrm{inertial \ forces}}{\mathrm{viscous \ forces}} = \frac{\rho U_r L_r}{\mu},
 \end{equation*}
-with $L_r$ and $U_r$ as length and velocity scales characteristic of the flow. 
+with $L_r = \fixme{X}$ \fixme{unit} and $U_r = \fixme{X}$ \fixme{unit}
+as length and velocity scales characteristic of the flow.
 
-When studying how cilia paralysis and ventricular morphology affect intraventricular
+To study how cilia paralysis and ventricular morphology affect intraventricular
 flow and transport, we calculate the magnitude of a tangential force $F$ 
 exerted by the cilia on a part $\mathcal{S}\subset\Gc$ of the ventricular surface as:
 \begin{equation}
@@ -1375,9 +1375,9 @@ exerted by the cilia on a part $\mathcal{S}\subset\Gc$ of the ventricular surfac
 
 %-----DISCRETIZATION AND MODEL IMPLEMENTATION-----%
 \subsection{Numerical approximation of the Stokes equations}
-The Stokes equations~\Cref{eq:stokes_eqs} are discretized with a finite element method
+The Stokes equations (\Cref{eq:stokes_eqs}) are discretized with a finite element method
 in space, while in time, we employ a first-order implicit Euler discretization.
-We set the timestep size $\Delta t = 0.02252$ s such that 20 timesteps represent one cardiac cycle.
+We set the timestep size $\Delta t = 0.023$ s such that 20 timesteps represent one cardiac cycle.
 For the spatial discretization, we use piecewise linear Brezzi-Douglas-Marini (BDM)
 elements for the velocity.~\cite{Brezzi1985TwoProblems, Nedelec1986AIR3}
 The BDM elements have degrees of freedom associated with integral moments of the
@@ -1389,16 +1389,15 @@ For the pressure, we use piecewise constant (zeroth order discontinuous Galerkin
 The resulting total number of degrees of freedom at each time step is 943 820.
 The element combination $\mathrm{BDM}_1$--$\mathrm{DG}_{0}$ yields a non-conforming
 discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}.
-To ensure stability of the scheme, continuity in tangential velocities on interior facets
+Continuity in tangential velocities on interior facets
 is weakly enforced with a penalty parameter $\gamma=10$~\cite{Hong2016AEquations}.
 Since the divergence of the velocity space is a subspace of the pressure space for this scheme,
-the divergence-free condition of the velocity is satisfied exactly on each
-element, ensuring mass conservation.~\cite{Boffi2008FiniteProblem} 
+the divergence-free condition of the velocity is satisfied exactly, ensuring mass conservation.~\cite{Boffi2008FiniteProblem} 
 
 \subsection{Numerical approximation of the advection-diffusion equation}
-The advection-diffusion equation~\Cref{eq:adv_diff_strong} is discretized
+The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized
 with a first-order implicit Euler method in time, and a first-order,
-symmetric interior penalty discontinuous Galerkin (DG)
+symmetric interior penalty DG
 method in space~\cite{Arnold1982AnElements}, chosen due to its favorable
 conservation properties.
 To accurately approximate the solute concentrations even
@@ -1406,19 +1405,19 @@ in the presence of strong advection (high Péclet numbers),
 we use an upwind scheme for the velocity when calculating the
 advective flux~\cite{Patankar2018NumericalFlow}.
 As for the flow equations, we use a timestep size of
-$\Delta t = 0.02252$ s. We simulate transport for 1900 cardiac cycles,
+$\Delta t = 0.023$ s. We simulate transport for 1900 cardiac cycles,
 with a final time of simulation $T = 856$ s.
 A DG penalty parameter $\alpha = 25$ was chosen to ensure stability of the method. 
 
 \subsection{Solution strategy and software implementation}
 Owing to the one-way coupling between the velocity field $\uu$
 and the concentration $c$, the governing equations for the
-CSF flow and the concentration can be solved sequentially when modeling solute transport.
-For the cilia-only/no-cardiac flow scenario, the velocity quickly reaches steady-state since
+CSF flow and the concentration can be solved sequentially.
+For the cilia-driven/no-cardiac flow scenario, the velocity quickly reaches steady-state since
 the viscous forces dominate the inertial forces.
-In this case, we first solve the steady-state Stokes equations~\Cref{eq:stokes_eqs}
+In this case, we first solve the steady-state Stokes equations (\Cref{eq:stokes_eqs})
 for $\uu$ and $p$, and then use the velocity field $\uu$ as input when solving
-the advection-diffusion equation~\Cref{eq:adv_diff_strong}.
+the advection-diffusion equation (\Cref{eq:adv_diff_strong}).
 For the other flow scenarios, the Stokes equations are solved for one
 period of the pulsatile cardiac motion. The solution of this one period
 is then used periodically as input for the advection-diffusion equation.
@@ -1426,7 +1425,8 @@ is then used periodically as input for the advection-diffusion equation.
 The numerical solution schemes for the Stokes equations and the
 advection-diffusion equation were implemented and solved numerically with
 DOLFINx~\cite{dolfinx2023preprint} with petsc4py~\cite{Dalcin2011ParallelPython}
-as linear algebra backend.
+as linear algebra backend. The simulation code is openly
+available\fixme{~\cite{zenodo-link-to-all-code}}.
 A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the
 linear systems resulting from the discretized Stokes equations.
 For the discretized advection-diffusion equation, we used an iterative
@@ -1435,39 +1435,42 @@ preconditioning~\cite{Jacobi1845UeberGleichungen}. We discretize the time-depend
 diffusion equation (without advection) and use the assembled linear system matrix
 as the preconditioner matrix for the advection-diffusion problem.
 Numerical experiments verified the accuracy of the model implementation
-(\Cref{sec:appB_verification}). The simulation code is openly
-available~\cite{zenodo-link-to-all-code}\fixme{Add repo link.}. 
+(\Cref{sec:appB_verification}). 
 
 %%------PHYSICAL EXPERIMENTS------%%
 %\section{Experimental Methods}
 
 % Acknowledgements
 \medskip
-\textbf{Acknowledgments} \par 
-Thanks are extended to J\o rgen Dokken for valuable model implementation discussions.
-Halvor Herlyng acknowledges support from the national infrastructure for computational
-science in Norway, Sigma2, via grant \#NN8049K.
-This work was funded by the Research Council of Norway (NJY FRIPRO grants 314189 and 353348).
+\noindent \textbf{Acknowledgments} \par
+\noindent Thanks are extended to J\o rgen Dokken
+for valuable model implementation discussions.  H.~H.~and
+M.~E.~R. acknowledge support from the national infrastructure for
+computational science in Norway, Sigma2, via grant
+\#NN8049K. M.~E.~R.~acknowledges support from Stiftelsen Kristian
+Gerhard Jebsen via the K.~G.~Jebsen Centre for Brain Fluid Research
+and support from the Research Council of Norway (RCN) via grant
+\#324239 (EMIx). N.~J.~Y.~acknowledges support from the Research
+Council of Norway (grants \#314189 and \#353348).
 
 \medskip
-\textbf{Data Availability Statement} \par
-The data and implementations presented in this paper are licensed under \fixme{LICENSE}
+\noindent \textbf{Data Availability Statement} \par
+\noindent The data and implementations presented in this paper are licensed under \fixme{LICENSE}
 and openly available at \fixme{REPO-LINK}.
 
 \medskip
-\textbf{Conflict of Interest Disclosure} \par
-The authors declare no conflicts of interest.
+\noindent \textbf{Conflict of Interest Disclosure} \par
+\noindent The authors declare no conflicts of interest.
 
 
-\medskip
-\textbf{Supporting Information} \par %Please delete the Suppporting Information statement
+%\medskip
+%\textbf{Supporting Information} \par %Please delete the Suppporting Information statement
 %if it is not applicable. Please supply Supporting Information in another file.
 %Supporting information should not be provided in .tex format
-Supporting Information is available from the Wiley Online Library or from the author.
-
+%Supporting Information is available from the Wiley Online Library or from the author.
 
 % References
-\medskip
+%\medskip
 
 % Use the following code if you wish to generate your bibliography with BibTeX;
 % replace the string "MSP-template" below with the name(s) of
