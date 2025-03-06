@@ -351,34 +351,50 @@ simulated time frame.
 %% which results in smaller times-to-threshold
 %% (\Crefpanels{fig:fig2}{h}).
 
-\subsection{Validation of the simulations with experimental data}
-To validate our computational model, we performed photoconversion experiments
-in transgenic zebrafish larvae expressing the secreted Dendra2 in their brain ventricles.
-Our photoconversion protocol consisted of the acquisition of a baseline,
-before localized exposure to a UV laser (at the ROI 1 location)
-that converts Dendra2 from a green to a red emitting fluorescent protein. 
-To quantify the transport of photoconverted proteins, we measured and
-calculated the change in fluorescence intensity $\Delta F = (F(t)-F_0)/F_0$
-over time (\Crefpanels{fig:fig3}{a},
-$F_0$ being the average fluorescence at baseline). 
+\subsection{Model validation by comparison with photoconversion experiments}
 
-We obtained very similar kinetics curves (\Crefpanels{fig:fig3}{a, b})
-and time-to-threshold values (\Crefpanels{fig:fig3}{c, d}) when comparing our
-experiments (\Crefpanels{fig:fig3}{a, c}) with
-simulation (\Crefpanels{fig:fig3}{b, d}).
-Importantly, since the initial condition of the simulation is a mean concentration of zero,
-the mean concentration $\cbar$ can be interpreted as the change in mean concentration and
-is thus a similar metric to $\Delta F$.
-The final values of $\cbar$ in our simulations 0.76, 0.72, 0.82, 0.56 and 0.35
-(ROIs 2--6, respectively)
-are generally higher than the mean experimental values 0.63, 0.71, 0.67, 0.29 and 0.18 for $\Delta F$.
-Notwithstanding similar dynamics, we observe small differences between the experiments and simulation.
-For instance, transport in ROIs 2--6 is faster in the simulation and reaches higher final values.
-Moreover, the $\cbar$ profiles of ROIs 3--4 are opposite order in
-the simulations as compared to the experiments.
-Despite observing small differences, the in vivo experiments and
-simulations are similar enough to convincingly validate the model.
-\begin{figure}[H]
+To validate the model predictions, we performed photoconversion
+experiments in transgenic zebrafish larvae expressing the secreted
+Dendra2 in their brain ventricles. Our photoconversion protocol
+consisted of the acquisition of a baseline fluorescence intensity
+$F_0$, before localized exposure to a UV laser (at ROI 1) that
+converts Dendra2 from a green- to a red-emitting fluorescent
+protein. To quantify the transport of photoconverted proteins, we
+measured and calculated the change in fluorescence intensity $\Delta F
+= (F(t)-F_0)/F_0$ over time (\Crefpanels{fig:fig3}{a}).
+
+Comparing the intensity changes with the simulated concentration
+profiles in ROIs 1--6 (\Crefpanels{fig:fig3}{a, b}) show that the
+model predictions agree well with the experimental measurements. We
+note minor differences however. The simulated values of $\cbar_i$ at
+the final time (0.72, 0.82, 0.56 and 0.35 in ROIs 2--6, respectively)
+are generally higher than the corresponding experimental $\Delta F$
+values (0.63, 0.71, 0.67, 0.29 and 0.18). Moreover, we observe
+differences in the distribution within the middle ventricle,
+especially with regard to ROIs 2 and 3. Overall, we note that the time
+to reach a 25\% threshold agree well between the model predictions and
+experimental values (\Crefpanels{fig:fig3}{c, d}).
+
+%% the $\cbar$ profiles of ROIs 3--4 are opposite order in the
+%% simulations as compared to the experiments.
+
+%% Notwithstanding similar dynamics, we observe small differences between
+%% the experiments and simulation.
+
+%% For instance, transport in ROIs 2--6 is faster in the simulation and
+%% reaches higher final values.
+
+%% We obtained very similar kinetics curves (\Crefpanels{fig:fig3}{a, b})
+%% and time-to-threshold values (\Crefpanels{fig:fig3}{c, d}) when
+%% comparing our experiments (\Crefpanels{fig:fig3}{a, c}) with
+%% simulation (\Crefpanels{fig:fig3}{b, d}).
+
+%% Importantly, since the initial condition of the simulation is a mean
+%% concentration of zero, the mean concentration $\cbar$ can be
+%% interpreted as the change in mean concentration and is thus a similar
+%% metric to $\Delta F$.
+
+\begin{figure}%[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
     \caption{
