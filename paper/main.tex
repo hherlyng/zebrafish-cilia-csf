@@ -244,7 +244,6 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
 %% ventricle. This peak is attained at the time instant coinciding with
 %% the time of peak caudal cardiac pulsatile flow, 
 
-
 %% Using the observed maximum velocity magnitude and choosing the height
 %% of the middle ventricle ($110$ \textmu m) as a characteristic length
 %% scale yields a Reynolds number $\mathrm{Re} \approx 0.004$, justifying
@@ -262,30 +261,50 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
 
 
 \subsection{Ventricular solute transport is advection-dominated for larger molecules}
-We next explore the impact of these CSF flow patterns and magnitudes
-on solute transport within the brain ventricles.
-To this end, we simulate the distribution and evolution
-of different solutes subjected to photoconversion within a region of
-interest in the dorsal region of the middle ventricle (ROI 1)
-(~\Crefpanels{fig:fig2}{a}). We consider the spread of
-a solute concentration with a given molecular diffusion coefficient,
-corresponding to exosomes ($D_1 = 1.63 \times 10^{-12}$ m$^2$/s),
-a circa 90 kDa protein STM-GFP ($D_2 = 5.75 \times 10^{-11}$ m$^2$/s),
-and the 26 kDa photoconvertible protein  Dendra2 ($D_3 = 1.15 \times 10^{-10}$ m$^2$/s).
-As expected, transport occurs more
-rapidly with increasing diffusion coefficient. Interestingly, the
-distribution patterns differ between the solutes.
-For the smallest diffusion coefficient, representing
-exosomes, the advective transport by the CSF flow dominates diffusion
-(\Crefpanels{fig:fig2}{b}). The vortex structures of the velocity field
-carry over into the concentration field, indicating that transport
-along the streamlines is more rapid than the diffusion across the
-streamlines. The balance between diffusion and advection shifts with
-increasing diffusion coefficients: the CSF flow structures become more
-obfuscated, and the solute spreads more uniformly throughout the
-ventricular geometry (\Crefpanels{fig:fig2}{c, d}). Notably, the
+
+%We next explore the impact of these CSF flow patterns and magnitudes
+%on solute transport within the brain ventricles.
+
+Proteins, neurotransmitters and other molecular substances
+intrinsically diffuse within the brain ventricles, but are also
+advected by the flow of CSF. A natural question is which of these
+mechanisms that dominate for any given type of solute. To address this
+question, we simulate the distribution and evolution of three
+different solutes injected within a region of interest (ROI1) in the
+dorsal region of the middle ventricle (\Crefpanels{fig:fig2}{a}),
+subject to the CSF flow induced by motile cilia and cardiac pressure
+pulsations. In particular, we consider three different molecular
+diffusion coefficients, corresponding to a large exosome ($D_1 = 1.63
+\times 10^{-12}$ m$^2$/s), a 90 kDa protein STM-GFP ($D_2 = 5.75
+\times 10^{-11}$ m$^2$/s), and a 26 kDa photoconvertible protein
+Dendra2 ($D_3 = 1.15 \times 10^{-10}$ m$^2$/s).
+
+%As expected, transport occurs more rapidly with increasing diffusion
+%coefficient.
+
+Interestingly, the distribution patterns differ between the
+solutes. For the smallest diffusion coefficient, representing
+exosomes, the advective transport by the CSF dominates diffusion: the
+CSF flow structures carry over into the concentration field,
+indicating that transport along the streamlines is more rapid than the
+diffusion across the streamlines (\Crefpanels{fig:fig2}{b}). The
+balance between diffusion and advection shifts with increasing
+diffusion coefficient as the solute spreads more uniformly throughout
+the ventricular geometry (\Crefpanels{fig:fig2}{b--d}). Notably, the
 smaller solutes with higher diffusion coefficients spread more quickly
-to regions distal to the photoconversion site.
+to distal regions. Computing Péclet numbers, we find that
+$\mathrm{Pe}_1=519$, $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for
+$D_1$, $D_2$ and $D_3$, respectively. With all $\mathrm{Pe} > 1$, this
+indicates that advection is the dominant transport mechanism on a
+global scale.
+
+%% To quantify the balance of advection versus diffusion as transport
+%% mechanisms, we calculate the Péclet numbers $\mathrm{Pe}_1=519$,
+%% $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and
+%% $D_3$, respectively.  Since $\mathrm{Pe}>1$, this indicates that
+%% advection is the dominant transport mechanism on a global scale.
+
+
 \begin{figure}%[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}\caption{Simulated distribution and evolution after photoconversion of
@@ -304,28 +323,34 @@ to regions distal to the photoconversion site.
     Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}\label{fig:fig2}
 \end{figure}
 
-To quantify the transport of solute, we plot the profile of the mean
-concentrations $\cbar_i(t)$ as functions of time
-(\Crefpanels{fig:fig2}{e--g}) and
-the times $\hat{t}$ when the mean concentrations $\cbar_i$ first exceed
-a threshold value $\hat{c}$ (\Crefpanels{fig:fig2}{h})
-in 6 ROIs (\Crefpanels{fig:fig2}{a}).
-The dynamics at the site of photoconversion (ROI 1)
-is logarithmic and follows from imposing \Cref{eq:photoconversion_curve}.
-For ROIs 2--6, we observe faster kinetics with higher diffusion coefficients
-(\Crefpanels{fig:fig2}{e--g}),
-which results in smaller times-to-threshold
-(\Crefpanels{fig:fig2}{h}).
-For all three diffusion coefficients, the dynamics of ROI 5
-is significantly delayed compared to ROI 2--4,
-and ROI 6 is the slowest. Notably, for $D_1$ the mean concentration
-in ROI 6 is close to zero at the end of simulation.
-To quantify the balance of advection versus diffusion as transport mechanisms,
-we calculate the Péclet numbers $\mathrm{Pe}_1=519$,
-$\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for $D_1$, $D_2$ and $D_3$, respectively.
-Since $\mathrm{Pe}>1$, this indicates that advection is the
-dominant transport mechanism on a global scale.
- 
+To further quantify the solute transport, we examine the mean
+concentrations $\cbar_i(t)$ in the six ROIs over time
+(\Crefpanels{fig:fig2}{e--g}) and, in addition, the times $\hat{t}_i$
+when the mean concentrations first exceed a threshold value
+$\hat{c}_i$ (\Crefpanels{fig:fig2}{h}).  Higher diffusion coefficients
+result in more rapid transport (\Crefpanels{fig:fig2}{e--g}), with
+lower times-to-threshold in ROIs 2--6 (\Crefpanels{fig:fig2}{h}). For
+all three diffusion coefficients, the solute first spreads within the
+middle ventricle, covering ROIs 2--4, before appearing in the anterior
+ventricle (ROI5) and finally reaching the posterior ventricle
+(ROI6). Notably, the exosomes, associated with the smallest diffusion
+coefficient, do not reach the posterior ventricle (ROI6) within the
+simulated time frame.
+
+%% For all three diffusion coefficients, the dynamics of ROI 5
+%% is significantly delayed compared to ROI 2--4,
+%% and ROI 6 is the slowest.
+
+
+%The dynamics at the site of photoconversion (ROI 1)
+%is logarithmic and follows from imposing \Cref{eq:photoconversion_curve}.
+
+
+%% For ROIs 2--6, we observe faster kinetics with higher diffusion coefficients
+%% (\Crefpanels{fig:fig2}{e--g}),
+%% which results in smaller times-to-threshold
+%% (\Crefpanels{fig:fig2}{h}).
+
 \subsection{Validation of the simulations with experimental data}
 To validate our computational model, we performed photoconversion experiments
 in transgenic zebrafish larvae expressing the secreted Dendra2 in their brain ventricles.
