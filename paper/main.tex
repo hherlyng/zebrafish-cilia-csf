@@ -1250,7 +1250,7 @@ where the total concentration flux $\JJ$ is assumed to consist of an advective a
 \begin{equation*}
     \JJ = c\uu - D\nabla c .
 \end{equation*}
-Here, $\uu$ is the CSF velocity field, governed by the Stokes equations~\Cref{eq:stokes_eqs},
+Here, $\uu$ is the CSF velocity field, governed by the Stokes equations (\Cref{eq:stokes_eqs}),
 and $D$ is the molecular diffusion coefficient of the solute.
 Initially, we set $c(\xx, 0)=0$ for all $\xx\in\Omega$.
 The ventricular walls are assumed to be impermeable (admitting \emph{no flux}: $\JJ\cdot\nn=0$),
@@ -1274,9 +1274,9 @@ observed in the physical photoconversion experiments.
 
 \subsection{Estimation of diffusion coefficients via the Stokes-Einstein relation}
 Motivated by an interest in molecules that are significant in neural development,
-we study the transport of molecules resembling the Dendra2 Fluorescent Protein (Dendra2)
-used in this study, the Starmaker+Green Fluorescent Protein (STM-GFP) reported in
-Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}, and exosomes.
+we study the transport of molecules resembling (i) the Dendra2 Fluorescent Protein (Dendra2)
+used in the photoconversion, (ii) the Starmaker+Green Fluorescent Protein (STM-GFP) reported by
+Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}, and (iii) exosomes.
 To estimate the diffusion coefficients of these, when not
 available in the literature, we use the Stokes--Einstein relation
 \begin{equation}
@@ -1287,20 +1287,19 @@ which is an expression for the diffusion coefficient of a spherical
 molecule suspended in a viscous fluid~\cite{Einstein1905UberTeilchen}.
 In~\Cref{eq:D_stokes_einstein}, $k_B = \num{1.38e-23}$ J/K is the Boltzmann constant,
 $T = 310$ K is the absolute temperature, $\mu$ is the dynamic viscosity of the
-solvent (in this case the CSF), and $R$ is the radius of the molecule.
+CSF, and $R$ is the radius of the molecule.
 For the exosomes, we calculate $D$ using~\Cref{eq:D_stokes_einstein}
-with $R=150$ nm, which represents exosomes at the larger end of the
-scale~\cite{Moghassemi2024ExtracellularDecade}.
-Hence this radius covers the slowest diffusing exosomes,
-a choice made because smaller exosomes would have diffusion coefficients
-similar to the other molecules we consider.
-For STM-GFP, we estimated the diffusion coefficient by extrapolating
+with the relatively large $R=150$ nm~\cite{Moghassemi2024ExtracellularDecade}.
+%Hence this radius covers the slowest diffusing exosomes,
+%a choice made because smaller exosomes would have diffusion coefficients
+%similar to the other molecules we consider.
+For STM-GFP, we estimate the diffusion coefficient by extrapolating
 the experimentally observed diffusion coefficient of
 GFP~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells},
 assuming that if $D$ scales with $1/R$ according to~\Cref{eq:D_stokes_einstein},
 $D$ would scale with the cube root of the molecule mass~\cite{Goodhill1997DiffusionGuidance}.
-The resulting diffusion coefficients used in the simulations
-are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_table}).
+The resulting diffusion coefficients
+are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2) as given by \Cref{tab:diff_coeff_table}.
 
 %Implicit in this approach is the assumption that the proteins all have the same density.
 
@@ -1313,17 +1312,14 @@ are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2)~(\Cref{tab:diff_coeff_
     assuming that $D$ scales with the cube root of the molecule mass.
     (\textdagger) The value was estimated using the Stokes-Einstein relation~\Cref{eq:D_stokes_einstein}.}
     \label{tab:diff_coeff_table}
-    \begin{tabular}{l|ccc}
+    \begin{tabular}{lc|ccc}
         \toprule
-        Molecule & Mass [kDa] & $D \ [\mathrm{m^2/s}]$ & Reference \\ 
+        Molecule & Label & Mass [kDa]  & $D \ [\mathrm{m^2/s}]$ & Reference \\ 
         \midrule 
-        Dendra2 Fluorescent Protein & 25.6~\cite{Gurskaya2006EngineeringLight}
-        & $\num{1.15e-10}$  & \cite{GuraSadovsky2017MeasurementExpansion}\\
-        GFP (saline aqueous solution) & 26.9~\cite{UniProt2024GFPUniProtKB}
-        & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
-        STM-GFP & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB}
-        & $\num{5.75e-11}$ & * \\
-        Exosomes (radius of 150 nm) & -- & $\num{2.17e-12}$ & \textdagger \\
+        Exosomes (radius of 150 nm) & $D_1$ & -- & $\num{2.17e-12}$ & \textdagger \\
+        GFP (saline aqueous solution) & -- & 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
+        STM-GFP & $D_2$ & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{5.75e-11}$ & * \\
+        Dendra2 Fluorescent Protein & $D_3$ & 25.6~\cite{Gurskaya2006EngineeringLight} & $\num{1.15e-10}$ & \cite{GuraSadovsky2017MeasurementExpansion}\\
         \bottomrule
     \end{tabular}
 \end{table}
