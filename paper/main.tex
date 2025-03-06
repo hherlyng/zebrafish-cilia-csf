@@ -522,6 +522,434 @@ in the cilia-deficient computational model compared to the experimental data in
     \label{fig:fig6}
 \end{figure}
 
+\section{Discussion}
+In this study, we have presented a computational model of CSF flow and solute transport within the brain ventricles.
+We used the larval zebrafish brain ventricles since its geometry,
+flow components and kinetics are well described, thereby allowing us to validate
+our simulation experimentally. Nevertheless, our computational framework can be adapted to and implemented in
+other ventricular systems in the future, given that the flow parameters of such systems
+are comprehensively resolved. By imposing tangential traction and normal pressure
+on the CSF flow, we were able to reproduce flow fields with similar features
+as observed experimentally. The prominent flow features were vortex-structured flow,
+mediated by cilia, and pulsatile flow, mediated by the cardiac cycle.
+
+Using the simulated CSF flow, we modeled solute transport by an advection-diffusion equation.
+The transport results compared well with experimental data performed in vivo in zebrafish.
+Then, by using a computational model as well as zebrafish mutants with paralyzed cilia,
+we identified that even though advection by cilia is dominant,
+diffusion plays a significant role in protein transport.
+Finally, we reported how local cilia paralysis and ventricular geometries
+affect solute distribution. Altogether, we present not only new findings on the role of
+diffusion and advection in intraventricular transport, but also provide a novel framework to
+study CSF flow and transport in complex geometries.
+
+\subsection{The roles of advection and diffusion in intraventricular solute transport}
+To investigate the roles of advection and diffusion in solute transport, we quantified transport
+based on changes in fluorescence intensity $\Delta F$ (experiments) and
+mean concentration $\cbar$ (simulations) as functions of time.
+Even though we identified very similar dynamics in simulations and
+in vivo experiments, the dynamics of the simulations were generally
+more rapid and resulted in higher total amounts of solute.
+Differences between experiments and simulations may relate to
+ventricular size, as we showed that modifying the geometry of the interventricular ducts
+impacts solute distribution, and the geometry used for the computational model was larger
+than geometries used in experiments. Alternatively, dissimilarities in results may relate
+to the way we defined the photoconversion site (ROI 1) in the simulations,
+since the volume of the photoconversion region determines
+the total amount of solute and thereby the rate of transport. Another source
+of discrepancy may relate to the permeability of the ventricular wall,
+which we have ignored in our simulation. Reports have shown that the
+neuroepithelium lining the walls of brain ventricles in 24 hour old zebrafish
+is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}.
+Since Dendra2 is around 26 kDa in size~\cite{Gurskaya2006EngineeringLight} and
+thus under this reported limit, one could assume that Dendra2 may
+leak out of the brain ventricles over the time spans we consider
+and render the dynamics slower.
+
+Nevertheless, our results convincingly show that
+intraventricular transport of proteins depends on a balance of advection and diffusion.
+While advection is the strongest transport mechanism on a global scale for
+Dendra2 (global Péclet number 7.4), diffusion is balancing out
+advection especially for shorter distances and for regions devoid of motile cilia activity.
+Indeed, we identified that the diffusion coefficient had a greater impact on transport to
+regions located upstream in the CSF flow field (ROI 3) or in different ventricles (ROIs 5--6),
+than the regions located downstream of cilia-mediated flow (ROI 2). 
+
+Meanwhile, we identified that transport of larger molecules
+(thus with smaller diffusion coefficients),
+such as 150 nm exosomes, are almost entirely dependent on advection.
+Indeed, there was essentially zero solute in the posterior ventricle at the
+final simulation time (around 850 s), a ventricle where transport is largely driven
+by diffusion due to the absence of motile cilia.
+For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance
+$L=200$ \textmu m from the middle to the posterior ventricle is approximately 24500 s.
+Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same
+distance would happen on a timescale of the order of $t_a=L/\overline{U}=141$ s.
+Comparing this with the minuscule values of $\cbar_6$ after simulating transport
+with $D_1$ for 850 s, one can conclude that if advection
+played a role in transporting solute from the photoconversion site in the middle ventricle
+to the posterior ventricle, values of $\cbar_6$ would be higher than those observed.
+
+\subsection{Effects of cilia motility and ventricular morphology}
+To gain further insights into how CSF flow and intraventricular transport depend on cilia
+motility and ventricular morphology, we manipulated certain
+parameters in our models. First, we investigated how complete loss of cilia motility
+impacted the transport dynamics. Simulations with a cardiac-only/no-cilia lead to
+slower transport when compared to the baseline model that included cilia. Especially
+the middle-ventricular region downstream of CSF flow (ROI 2) and the anterior ventricle (ROI 5)
+experienced substantially increased times-to-threshold. We also observed
+slower dynamics in the rest of the middle ventricle (ROIs 3 and 4), whereas the
+posterior ventricle (ROI 6) was unaffected by the loss
+of cilia motility, indicating that transport from the middle to the posterior ventricle is
+purely driven by diffusion. We also performed photoconversion experiments on cilia mutant
+zebrafish larva (\emph{smh}), observing statistically significant slower transport in 
+ROIs 2 and 4. The results provide not only confidence in that our computational model
+well represents the physics, but also valuable quantification of the impact of cilia motility
+on intraventricular transport. Interestingly, a previous simulation study of reduced cilia motility
+also observed a drastic reduction in CSF mixing in specific regions of the brain
+ventricles~\cite{Yoshida2022EffectVentricles}, similar to our results. Since impaired brain 
+clearance of tracers has been demonstrated in idiopathic normal pressure hydrocephalus
+patients~\cite{Eide2020MagneticHydrocephalus}, cilia-enhanced mixing in the brain might be
+fundamental to physiological transport within the brain.
+
+Next, we paralyzed cilia in specific regions of
+our model. We identified that the cilia in the dorsal middle ventricle contribute
+the most to solute distribution, which aligns well with the fact
+that these cilia generate the strongest flow field in vivo~\cite{Olstad2019CiliaryDevelopment}
+and in our model. In contrast, removing the ventral cilia in the middle ventricle
+did not greatly impact flow dynamics, despite these cilia contributing a third of
+the total force exerted by the cilia. However, removing ventral cilia in the middle ventricle
+lead to reduced transport towards the posterior ventricle,
+meanwhile increasing transport towards the anterior ventricle,
+as the ventral cilia help induce flow towards the posterior ventricle.
+Removing the cilia in the anterior ventricle did not affect the transport.
+
+With an interest in assessing the impact of ventricular morphology on solute transport,
+we simulated transport on modified ventricular geometries.
+Notably, shrinking ducts reduced interventricular solute movement, while shrinking
+the middle ventricle reduced diffusive transport upstream of the flow field.
+We previously identified large inter-individual variation in ventricular size and
+CSF velocities between larva at given developmental stages and throughout
+development~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain, Jeong2024TheZebrafish}.
+Our results suggest that these two parameters, CSF velocities and ventricular size,
+may well co-vary and explain the variation in the two.
+
+These simulation studies demonstrate that our model is flexible and allows in silico
+testing of further hypotheses on the effects of ciliated
+lineages and ventricular morphology on CSF flow and intraventricular transport.
+We envision that our framework will be useful as a basis for future analyses of
+CSF dynamics in more complex geometries and also other animal species and humans.
+
+\subsection{Computational model assumptions and boundary conditions}
+To model CSF, we employed slip boundary conditions at the ventricular walls,
+contrasting the classical choice of a noslip boundary condition.
+The use of slip boundary conditions is motivated by experimental observations of the
+flow field in zebrafish embryo brain ventricles, both previously and in this work, in which
+the fluid velocity increases towards the
+wall~(\Crefpanels{fig:fig1}c)~\cite{Olstad2019CiliaryDevelopment}. Slip boundary
+conditions allow for this behavior, in contrast to a noslip condition where the velocity
+has to go to zero at the wall.
+
+As opposed to a couple of previous continuum model simulation studies of
+cilia-mediated flow where cilia were represented by body
+forces,~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal}
+we chose to model the cilia as a force
+exerted tangentially on the boundary.
+We deem this a good representation of the real nature of cilia,
+since they are microscale structures confined to the ventricular walls that
+generate flow through collective motion. Furthermore, it avoids the need of mesh
+refinement near the ciliated boundaries in the case that a
+body force were to be applied in a cilia layer of depth around
+5 \textmu m~\cite{Salman2022ComputationalEmbryo}.
+
+The ciliated boundaries in our CSF flow model are regionally homogeneous,
+whereas in reality, cilia populate the ventricle walls in a
+heterogeneous manner~\cite{Olstad2019CiliaryDevelopment}. Heterogeneous
+arrangement of cilia, both in location, beating direction and beating frequency,
+has been shown to enhance particle clearance in airway cilia arrays
+in mice~\cite{Ramirez-SanJuan2020Multi-scaleArrays}.
+Incorporating spatial arrangement heterogeneity in our model could possibly
+result in different transport timescales,
+but we would not expect notable changes to the general trends of the macroscopic
+transport that we study here, since the effects of introducing heterogeneous spacing
+of cilia would alter the magnitude of cilia forces, but not their direction.
+On the other hand, introducing more heterogeneous beating directionality could
+alter the transport timescales as well as the directionality.
+In our model, all of the applied cilia
+tangential traction is aligned with the rostrocaudal axis, and more heterogeneity
+in this alignment to reflect heterogeneity in the beating directionality of
+cilia would presumably affect both magnitude and directionality of advective transport.
+Previous studies have demonstrated that changes to beating directionality affects transport,
+and that specific coordination of the ciliary beating is important in the brain ventricles for
+flow and signaling processes~\cite{Eichele2020Cilia-drivenVentricle, Olstad2019CiliaryDevelopment,
+Faubel2016Cilia-basedVentricles, Guirao2010CouplingCilia, Afzelius2004Cilia-relatedDiseases},
+but also in other phenomena such as maintaining healthy functioning of mucous transport in
+airways~\cite{Rayner1996CiliarySyndrome, Schneiter2021Multi-scaleFunction,
+Bustamante-Marin2019LackClearance, Tsukita2012CoordinatedFeet} and in nodal flow which establishes
+left-right symmetry in mammals~\cite{Yoshiba2014RolesSymmetry, Hirokawa2006NodalAsymmetry,
+Sawamoto2006NewBrain}.
+Although these studies were mostly on spatial scales resolving individual cilia,
+we could envision the same effects in our continuum model,
+similar to the results of previous numerical studies~\cite{Ramirez-SanJuan2020Multi-scaleArrays,
+Thouvenin2020OriginCanal, Yoshida2022EffectVentricles}. 
+
+To simulate protein transport in the brain ventricles, we numerically solved
+an advection-diffusion equation. Except for where we imposed a normal pressure
+boundary condition on the CSF flow,
+we imposed a no-flux condition on the concentration. Imposing a pressure-driven
+cardiac-related flow on certain parts of the CSF flow boundary leads to in- and outflow,
+and the advective transport then requires handling of in- and outflux boundary conditions.
+We set boundary conditions such that the total mass is conserved in the
+limit that the timestep size is zero, reflecting our assumption that the
+ventricular system is closed.
+We handled the outflux by leaving the advective flux term as an unknown in the weak formulation
+of the advection-diffusion equation. This has been referred to with different names
+in previous works, names such as the ``free boundary condition"~\cite{Papanastasiou1992ACondition},
+the ``no boundary condition"~\cite{Griffiths1997TheCondition}, and the 
+``consistent flux boundary condition"~\cite{Lynch2020NumericalHemodynamics}. 
+In leaving the advective flux term in the weak form we are lacking a boundary condition,
+which is problematic in the continuous sense of the problem.
+However, the discrete problem is well-posed, because the approach represents
+constraining higher-order derivatives of the concentration~\cite{Griffiths1997TheCondition}. 
+
+Our approach can be interpreted as an approximate periodic boundary condition, where we set
+the inflow boundary flux at timestep $n$ equal to the outflow boundary flux at the previous
+timestep $n-1$. This is expected to be of low-order accuracy, and for high Péclet numbers,
+the boundary condition affects the concentration field in the vicinity of the
+in- and outflow boundaries
+due to large advective fluxes. For the simulation scenarios we considered,
+both in terms of model parameters
+and time span, the photoconversion region where solute originates
+is far enough away from the in- and outflow
+boundaries for the flux boundary condition to not significantly impact the results. Nevertheless,
+we deliberately excluded the space proximal to in- and outflow boundaries in
+the anterior and posterior regions of interest (5 and 6) to limit adverse effects. 
+
+A possible improvement to the in- and outflow boundary conditions we employed would be
+to consider a 3D-0D coupling of the in- and outflow boundaries using
+ordinary differential equations,
+similar to what has been done in cardiac
+modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
+However, if the ventricular system in reality is a closed system,
+one should rather seek out a way of modeling the CSF flow without open boundaries to avoid
+handling in- and outflow boundary conditions. A more appropriate way of handling the beating
+cardiac motion could be to impose a ventricular wall deformation, assumed to result from pulsatile
+motion of the heart and/or cardiac vessels surrounding the ventricles. This wall deformation would
+induce CSF flow while simultaneously permitting enforcement of the impermeability condition
+$\uu\cdot\nn=0$ on the ventricular walls. Such wall-motion induced CSF flow has been modeled and
+simulated successfully in the human brain ventricular system~\cite{Causemann2022HumanFramework,
+Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
+
+\subsection{Estimation of computational model parameters}
+The diffusion coefficients used in this study were partially based on values
+from experiments and partially estimated. The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$
+is based on the value $\num{1.15e-10} \pm 0.11 \ \mathrm{m^2/s}$ reported in an
+experiment~\cite{GuraSadovsky2017MeasurementExpansion}, while the Stokes-Einstein
+relation~(\Cref{eq:D_stokes_einstein})~\cite{Einstein1905UberTeilchen} was used to extrapolate
+the value of $D_2$ and estimate the value of $D_1$, based on experimental
+data~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells,
+Mahmood2023ExosomeTemperature}. The Stokes-Einstein relation assumes the diffusing
+substance is of spherical shape, which proteins are not, and the relation does not
+necessarily hold in CSF. Moreover, the extrapolation implies the assumption that
+the two substances (the one for which we determine $D$ and the one we extrapolate from)
+have equal densities. Consequently, there is uncertainty in the diffusion coefficient values used.
+We note that Sadovsky~\emph{et al.}~\cite{GuraSadovsky2017MeasurementExpansion} reported that
+Dendra2 satisfies the Stokes-Einstein in the solution they used,
+a solution which had similar viscosity
+to water. We used CSF density and viscosity values measured in
+humans~\cite{Bloomfield1998EffectsFluid},
+and because embryonic CSF in zebrafish is high in proteins, nutrients and other substances,
+the CSF in which photoconverted Dendra2 are transport in our experiments may be more viscous
+than what we consider. This would reduce the diffusion coefficient (cf.~\Cref{eq:D_stokes_einstein}),
+but based on reports of protein concentration having a limited impact on the viscosity of
+CSF~\cite{Bloomfield1998EffectsFluid, Brydon1995PhysicalViscosity}, this reduction is presumably
+limited. Merely the presence of other proteins and nutrients may also reduce the diffusion
+coefficient by reduction of mean-free path lengths of molecules~\cite{Cussler2009Diffusion:Systems}.
+Considering the diffusion coefficients $D_1$ and $D_2$ (both smaller
+than $D_3$) in our transport analysis provides information about how the simulation
+results of Dendra2 transport would be altered if the
+diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is
+underestimated, we assume the
+results would follow the same trend as the differences between results for
+$D_2$ and $D_3$: diffusion becomes
+more important, and is almost balancing advective transport for $D_3$. 
+Thus for a higher diffusion coefficient, we would see transport that is
+mostly explained by diffusive behavior.
+
+We heuristically determined the parameter $\tau = 0.65$ mPa, which determines
+the magnitude of the cilia tangential traction boundary conditions. The maximum force applied
+was in the dorsal region of the middle ventricle, where the posterior region had a tangential
+traction vector magnitude of $\vert\btau\vert_{\mathrm{max}} = 2.5$ mPa applied to the
+boundary. Previous simulation studies of cilia-mediated flow in brain ventricles have
+used a volumetric force density to represent the cilia.
+Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}
+used a force expression that increased linearly from the wall to a maximum force density of
+$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$ at a distance 15 \textmu m away from the wall,
+which represented cilium length. If we assumed a cilia array of the same thickness
+$l = 15$ \textmu m in our model, our maximum traction parameter $\vert\btau\vert_{\mathrm{max}}$
+would correspond to a maximum force density of 
+\begin{equation*}
+    f_c = \frac{\vert\btau\vert_{\mathrm{max}}}{l}
+        = \frac{\num{2.5e-3} \ \mathrm{Pa}}{15 \ \mu\mathrm{m}}
+        = 169 \ \mathrm{N/m^3},
+\end{equation*}
+which is smaller than $f_{\mathrm{max}}$, albeit the same order of magnitude.
+The length 15 \textmu m is the a typical length of cilia in human brain ventricles
+(in general the length is between 10--15 \textmu m~\cite{Afzelius2004Cilia-relatedDiseases}),
+while in zebrafish they are closer to 5 \textmu m~\cite{Salman2022ComputationalEmbryo}.
+With $l=5$ \textmu m, our traction parameter corresponds to a maximum force density of
+$f_c=507$ N/$\mathrm{m^3}$, which is in good agreement with
+$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$
+used by Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}.
+We note that they based $f_{\mathrm{max}}$ on reconstructions of
+flow velocities in murine brain ventricles.
+
+Another study that used a force density to model ciliary motion is
+Thouvenin~\emph{et al.}~\cite{Thouvenin2020OriginCanal}, where two-dimensional flow
+in the central canal of zebrafish embryos was modeled using a cilia force density of
+4000 N/$\mathrm{m^2}$. The resulting numerical velocity fields matched well with
+in vivo measurements, where the maximum velocity magnitude was around 5 \textmu m/s
+(recall that our model exhibits a maximum of 27.7 \textmu m/s).
+The geometry they studied resembles a pipe, probably offering more flow resistance
+than the open geometry considered in our work, which may be why they needed a larger
+force density to accurately represent experimental results. In any case, it is
+interesting to note that our and these two previous studies have estimated
+cilia force densities that only differ by one order of magnitude. 
+
+\subsection{Numerical approximation and convergence rates}
+The Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
+($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employ for the Stokes equations
+is computationally more expensive than a more conventional approach based on
+e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
+($P_2-P_1$ elements) or lower-order enriched
+elements~\cite{Brezzi2011MixedMethods},
+such as the mini-element ($P_1-P_1$ with a velocity stabilization).
+Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
+than or equal to $k$.
+We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
+since numerical experiments proved that a divergence-free velocity field was
+fundamental to attain a stable discretization of the advection-diffusion equation
+in advection-dominated regions. Using conventional
+Taylor-Hood elements for the Stokes equations
+stability of the advection-diffusion discretization either
+required excessive mesh refinement and/or problem-specific tuning of
+hyperparameters when employing a Streamline-Upwind/Petrov Galerkin stabilization
+method~\cite{Franca1992StabilizedModel}, which is why we also opted for a DG method
+for the advection-diffusion equation.
+Probing numerical values of the divergence of
+the velocity when using Taylor-Hood elements for the fluid equations revealed that,
+on the standard computational mesh, the $L^2$ norm of $\nabla\cdot\uu_h$ was
+in the order of $10^{-6}$, while the
+maximum value of the divergence of the velocity was of order unity. This is a result
+of the fact that incompressibility is only achieved in a (global) weak sense when
+employing Taylor-Hood elements. On a refined mesh with roughly six times as many
+computational cells as the standard mesh, the numerical values of
+$\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$ were still
+of order unity. This may lead to the
+hyperbolic advective term in the advection-diffusion equation accumulating errors
+that grow unstable over time. 
+
+In addition to its favorable mass-conserving property, the BDM-DG scheme
+lets us impose the impermeability condition strongly, and the tangential
+traction boundary condition weakly, without any tailored approach,
+since these boundary conditions appear naturally in the weak form of the
+Stokes equations~(\Cref{subsec:appendixA1}). If instead e.g. Taylor-Hood
+elements were to be used, the impermeability boundary condition must
+be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
+or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
+Bertoluzza2017BoundaryHemodynamics}.
+
+A priori error estimates for the $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ scheme are naturally 
+derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
+The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
+For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
+reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
+$k=1$, we observe linear convergence in both the velocity and the pressure.   
+\mk{MK: I see 1.5 in the table for $\uu$ in $L^2$?}
+\lyng{HH: Yes, we should expect 2 there? Maybe be more specific in the comment:
+"Using polynomial degree $k=1$, we observe linear convergence in both the velocity $H^1$ error
+and the pressure $L^2$ error. For the $L^2$ error of the velocity, we observe a suboptimal
+convergence order of 1.5"}
+
+\subsection{The role of motile cilia in intraventricular flow and transport}
+Our work has studied CSF flow and solute distribution
+in a relatively small and simple brain model, which is devoid of
+active CSF secretion and CSF absorption. Even though there is
+a clear conservation of the ventricular system across vertebrates,
+there are also important considerations to take. These include (but are not limited to)
+ventricular size and morphology, properties of ciliated cells,
+animal posture, and magnitude of velocities. For instance, a large
+volume would require an extensive amount of time for solutes to distribute
+if based solely on diffusion. Besides, the presence of multiple cilia
+instead of a single cilium per cell -- the former can be found in
+mammalian ependymal cells -- will generate stronger velocities.
+Hence advection may be more dominant in those situations.
+
+In large brains such as the human brain, we presume ciliary beating mostly 
+contributes to flow in localized regions proximal to the ventricular walls due to
+the microscopic length of the cilia.
+Although the precise mechanisms of intraventricular flow are still debated,
+much evidence indicate that blood vessel pulsations, respiration, CSF secretion
+and brain motion induce the pulsatile bulk flow in the central
+regions of the ventricles~\cite{Vinje2019RespiratoryMeasurements,
+Siyahhan2014FlowVentricles, Linninger2005PulsatileBrain, Enzmann1992BrainImaging,
+Kurtcuoglu2007ComputationalSylvius}.
+In human brains, cilia therefore probably play an important role in regulating the
+amount of substances like exosomes close to the ventricular walls, similar to coral
+reefs, where it has been observed that cilia are primary regulators of
+oxygen amounts at the coral surface~\cite{Pacherres2022CiliaryProduction}.
+Flow mediated by cilia indeed serves such a purpose in nodal flow at early
+developmental stages of the brain~\cite{Hirokawa2006NodalAsymmetry}, and the discovery
+of a cilia-driven flow network in rodent brains suggest such selective
+transport~\cite{Faubel2016Cilia-basedVentricles}.
+
+On the other hand, for the zebrafish embryos we studied,
+the ventricles are so small that the flow
+generated by ciliary motion is of the scale of the geometry, and thus not
+only contributes to near-wall flow dynamics, but flow in the entire ventricular
+system~\cite{Olstad2019CiliaryDevelopment}.
+To date, motile-cilia deficiency has been associated with altered brain function
+in the zebrafish, dysfunctional establishment of left-right symmetry,
+and ventricular enlargement in zebrafish, rodents and humans.~\cite{Afzelius2004Cilia-relatedDiseases,
+Youn2018PrimaryDiseases, Ma2024CiliaDisease, Ibanez-Tallon2002LossHydrocephalus}
+Yet the molecular mechanisms leading to these alterations are poorly understood.
+We trust that our model sets the basis for future work addressing these open questions.
+We are also confident that our model can be adjusted and implemented to fit
+microscopic and macroscopic parameters for larger brains, once these parameters are acquired.
+
+\subsection{Limitations and further work}
+The model presented has certain limitations. Future work could consider improving:
+\begin{itemize}
+    \item quantify cilia force parameter to avoid tuning
+    \item spatial heterogeneity of the cilia, how this affects flow and transport
+    \item time-varying cilia?
+    \item improved advection-diffusion equation influx/outflux BCs, or instead
+    modeling deformation of a closed ventricular system. 
+    and investigating how the arising flow compares with pulsatile flow observed in experiments
+    \item FSI: CSF flow coupled to 1D/2D/3D cilia structures.
+    \item any comments on experiments?
+\end{itemize}
+
+%\section{Conclusion}
+In conclusion, we have presented a numerical model
+of cerebrospinal fluid flow and solute transport in
+zebrafish brain ventricles based on finite element methods.
+A realistic ventricular geometry from medical imaging was used to perform a
+computational study. The flow model reproduces
+the experimentally observed flow features of cilia-mediated cerebrospinal fluid
+flow in zebrafish brain ventricles. Coupling the flow to the transport model,
+we estimated how slowly or rapidly molecules of varying size are transported in
+the ventricles. 
+The numerical model was validated with in vivo experiments, measuring the movement of
+a photoconverted fluorescent protein in zebrafish brain ventricles,
+both for healthy animals and mutant animals with ciliary dysfunction.
+We observed good alignment between computational and experimental results.
+Simulations indicate that cilia-driven advection is important
+for transport of larger molecules, whereas diffusion accounts for most of
+the transport of smaller molecules. 
+Experimental results support the conclusion that cilia only affect the
+local distribution of small proteins,
+while most of their transport is governed by diffusion. 
 
 \section{Methods}
 
@@ -1006,435 +1434,6 @@ available~\cite{zenodo-link-to-all-code}\fixme{Add repo link.}.
 
 %%------PHYSICAL EXPERIMENTS------%%
 %\section{Experimental Methods}
-
-\section{Discussion}
-In this study, we have presented a computational model of CSF flow and solute transport within the brain ventricles.
-We used the larval zebrafish brain ventricles since its geometry,
-flow components and kinetics are well described, thereby allowing us to validate
-our simulation experimentally. Nevertheless, our computational framework can be adapted to and implemented in
-other ventricular systems in the future, given that the flow parameters of such systems
-are comprehensively resolved. By imposing tangential traction and normal pressure
-on the CSF flow, we were able to reproduce flow fields with similar features
-as observed experimentally. The prominent flow features were vortex-structured flow,
-mediated by cilia, and pulsatile flow, mediated by the cardiac cycle.
-
-Using the simulated CSF flow, we modeled solute transport by an advection-diffusion equation.
-The transport results compared well with experimental data performed in vivo in zebrafish.
-Then, by using a computational model as well as zebrafish mutants with paralyzed cilia,
-we identified that even though advection by cilia is dominant,
-diffusion plays a significant role in protein transport.
-Finally, we reported how local cilia paralysis and ventricular geometries
-affect solute distribution. Altogether, we present not only new findings on the role of
-diffusion and advection in intraventricular transport, but also provide a novel framework to
-study CSF flow and transport in complex geometries.
-
-\subsection{The roles of advection and diffusion in intraventricular solute transport}
-To investigate the roles of advection and diffusion in solute transport, we quantified transport
-based on changes in fluorescence intensity $\Delta F$ (experiments) and
-mean concentration $\cbar$ (simulations) as functions of time.
-Even though we identified very similar dynamics in simulations and
-in vivo experiments, the dynamics of the simulations were generally
-more rapid and resulted in higher total amounts of solute.
-Differences between experiments and simulations may relate to
-ventricular size, as we showed that modifying the geometry of the interventricular ducts
-impacts solute distribution, and the geometry used for the computational model was larger
-than geometries used in experiments. Alternatively, dissimilarities in results may relate
-to the way we defined the photoconversion site (ROI 1) in the simulations,
-since the volume of the photoconversion region determines
-the total amount of solute and thereby the rate of transport. Another source
-of discrepancy may relate to the permeability of the ventricular wall,
-which we have ignored in our simulation. Reports have shown that the
-neuroepithelium lining the walls of brain ventricles in 24 hour old zebrafish
-is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}.
-Since Dendra2 is around 26 kDa in size~\cite{Gurskaya2006EngineeringLight} and
-thus under this reported limit, one could assume that Dendra2 may
-leak out of the brain ventricles over the time spans we consider
-and render the dynamics slower.
-
-Nevertheless, our results convincingly show that
-intraventricular transport of proteins depends on a balance of advection and diffusion.
-While advection is the strongest transport mechanism on a global scale for
-Dendra2 (global Péclet number 7.4), diffusion is balancing out
-advection especially for shorter distances and for regions devoid of motile cilia activity.
-Indeed, we identified that the diffusion coefficient had a greater impact on transport to
-regions located upstream in the CSF flow field (ROI 3) or in different ventricles (ROIs 5--6),
-than the regions located downstream of cilia-mediated flow (ROI 2). 
-
-Meanwhile, we identified that transport of larger molecules
-(thus with smaller diffusion coefficients),
-such as 150 nm exosomes, are almost entirely dependent on advection.
-Indeed, there was essentially zero solute in the posterior ventricle at the
-final simulation time (around 850 s), a ventricle where transport is largely driven
-by diffusion due to the absence of motile cilia.
-For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance
-$L=200$ \textmu m from the middle to the posterior ventricle is approximately 24500 s.
-Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same
-distance would happen on a timescale of the order of $t_a=L/\overline{U}=141$ s.
-Comparing this with the minuscule values of $\cbar_6$ after simulating transport
-with $D_1$ for 850 s, one can conclude that if advection
-played a role in transporting solute from the photoconversion site in the middle ventricle
-to the posterior ventricle, values of $\cbar_6$ would be higher than those observed.
-
-\subsection{Effects of cilia motility and ventricular morphology}
-To gain further insights into how CSF flow and intraventricular transport depend on cilia
-motility and ventricular morphology, we manipulated certain
-parameters in our models. First, we investigated how complete loss of cilia motility
-impacted the transport dynamics. Simulations with a cardiac-only/no-cilia lead to
-slower transport when compared to the baseline model that included cilia. Especially
-the middle-ventricular region downstream of CSF flow (ROI 2) and the anterior ventricle (ROI 5)
-experienced substantially increased times-to-threshold. We also observed
-slower dynamics in the rest of the middle ventricle (ROIs 3 and 4), whereas the
-posterior ventricle (ROI 6) was unaffected by the loss
-of cilia motility, indicating that transport from the middle to the posterior ventricle is
-purely driven by diffusion. We also performed photoconversion experiments on cilia mutant
-zebrafish larva (\emph{smh}), observing statistically significant slower transport in 
-ROIs 2 and 4. The results provide not only confidence in that our computational model
-well represents the physics, but also valuable quantification of the impact of cilia motility
-on intraventricular transport. Interestingly, a previous simulation study of reduced cilia motility
-also observed a drastic reduction in CSF mixing in specific regions of the brain
-ventricles~\cite{Yoshida2022EffectVentricles}, similar to our results. Since impaired brain 
-clearance of tracers has been demonstrated in idiopathic normal pressure hydrocephalus
-patients~\cite{Eide2020MagneticHydrocephalus}, cilia-enhanced mixing in the brain might be
-fundamental to physiological transport within the brain.
-
-Next, we paralyzed cilia in specific regions of
-our model. We identified that the cilia in the dorsal middle ventricle contribute
-the most to solute distribution, which aligns well with the fact
-that these cilia generate the strongest flow field in vivo~\cite{Olstad2019CiliaryDevelopment}
-and in our model. In contrast, removing the ventral cilia in the middle ventricle
-did not greatly impact flow dynamics, despite these cilia contributing a third of
-the total force exerted by the cilia. However, removing ventral cilia in the middle ventricle
-lead to reduced transport towards the posterior ventricle,
-meanwhile increasing transport towards the anterior ventricle,
-as the ventral cilia help induce flow towards the posterior ventricle.
-Removing the cilia in the anterior ventricle did not affect the transport.
-
-With an interest in assessing the impact of ventricular morphology on solute transport,
-we simulated transport on modified ventricular geometries.
-Notably, shrinking ducts reduced interventricular solute movement, while shrinking
-the middle ventricle reduced diffusive transport upstream of the flow field.
-We previously identified large inter-individual variation in ventricular size and
-CSF velocities between larva at given developmental stages and throughout
-development~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain, Jeong2024TheZebrafish}.
-Our results suggest that these two parameters, CSF velocities and ventricular size,
-may well co-vary and explain the variation in the two.
-
-These simulation studies demonstrate that our model is flexible and allows in silico
-testing of further hypotheses on the effects of ciliated
-lineages and ventricular morphology on CSF flow and intraventricular transport.
-We envision that our framework will be useful as a basis for future analyses of
-CSF dynamics in more complex geometries and also other animal species and humans.
-
-\subsection{Computational model assumptions and boundary conditions}
-To model CSF, we employed slip boundary conditions at the ventricular walls,
-contrasting the classical choice of a noslip boundary condition.
-The use of slip boundary conditions is motivated by experimental observations of the
-flow field in zebrafish embryo brain ventricles, both previously and in this work, in which
-the fluid velocity increases towards the
-wall~(\Crefpanels{fig:fig1}c)~\cite{Olstad2019CiliaryDevelopment}. Slip boundary
-conditions allow for this behavior, in contrast to a noslip condition where the velocity
-has to go to zero at the wall.
-
-As opposed to a couple of previous continuum model simulation studies of
-cilia-mediated flow where cilia were represented by body
-forces,~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal}
-we chose to model the cilia as a force
-exerted tangentially on the boundary.
-We deem this a good representation of the real nature of cilia,
-since they are microscale structures confined to the ventricular walls that
-generate flow through collective motion. Furthermore, it avoids the need of mesh
-refinement near the ciliated boundaries in the case that a
-body force were to be applied in a cilia layer of depth around
-5 \textmu m~\cite{Salman2022ComputationalEmbryo}.
-
-The ciliated boundaries in our CSF flow model are regionally homogeneous,
-whereas in reality, cilia populate the ventricle walls in a
-heterogeneous manner~\cite{Olstad2019CiliaryDevelopment}. Heterogeneous
-arrangement of cilia, both in location, beating direction and beating frequency,
-has been shown to enhance particle clearance in airway cilia arrays
-in mice~\cite{Ramirez-SanJuan2020Multi-scaleArrays}.
-Incorporating spatial arrangement heterogeneity in our model could possibly
-result in different transport timescales,
-but we would not expect notable changes to the general trends of the macroscopic
-transport that we study here, since the effects of introducing heterogeneous spacing
-of cilia would alter the magnitude of cilia forces, but not their direction.
-On the other hand, introducing more heterogeneous beating directionality could
-alter the transport timescales as well as the directionality.
-In our model, all of the applied cilia
-tangential traction is aligned with the rostrocaudal axis, and more heterogeneity
-in this alignment to reflect heterogeneity in the beating directionality of
-cilia would presumably affect both magnitude and directionality of advective transport.
-Previous studies have demonstrated that changes to beating directionality affects transport,
-and that specific coordination of the ciliary beating is important in the brain ventricles for
-flow and signaling processes~\cite{Eichele2020Cilia-drivenVentricle, Olstad2019CiliaryDevelopment,
-Faubel2016Cilia-basedVentricles, Guirao2010CouplingCilia, Afzelius2004Cilia-relatedDiseases},
-but also in other phenomena such as maintaining healthy functioning of mucous transport in
-airways~\cite{Rayner1996CiliarySyndrome, Schneiter2021Multi-scaleFunction,
-Bustamante-Marin2019LackClearance, Tsukita2012CoordinatedFeet} and in nodal flow which establishes
-left-right symmetry in mammals~\cite{Yoshiba2014RolesSymmetry, Hirokawa2006NodalAsymmetry,
-Sawamoto2006NewBrain}.
-Although these studies were mostly on spatial scales resolving individual cilia,
-we could envision the same effects in our continuum model,
-similar to the results of previous numerical studies~\cite{Ramirez-SanJuan2020Multi-scaleArrays,
-Thouvenin2020OriginCanal, Yoshida2022EffectVentricles}. 
-
-To simulate protein transport in the brain ventricles, we numerically solved
-an advection-diffusion equation. Except for where we imposed a normal pressure
-boundary condition on the CSF flow,
-we imposed a no-flux condition on the concentration. Imposing a pressure-driven
-cardiac-related flow on certain parts of the CSF flow boundary leads to in- and outflow,
-and the advective transport then requires handling of in- and outflux boundary conditions.
-We set boundary conditions such that the total mass is conserved in the
-limit that the timestep size is zero, reflecting our assumption that the
-ventricular system is closed.
-We handled the outflux by leaving the advective flux term as an unknown in the weak formulation
-of the advection-diffusion equation. This has been referred to with different names
-in previous works, names such as the ``free boundary condition"~\cite{Papanastasiou1992ACondition},
-the ``no boundary condition"~\cite{Griffiths1997TheCondition}, and the 
-``consistent flux boundary condition"~\cite{Lynch2020NumericalHemodynamics}. 
-In leaving the advective flux term in the weak form we are lacking a boundary condition,
-which is problematic in the continuous sense of the problem.
-However, the discrete problem is well-posed, because the approach represents
-constraining higher-order derivatives of the concentration~\cite{Griffiths1997TheCondition}. 
-
-Our approach can be interpreted as an approximate periodic boundary condition, where we set
-the inflow boundary flux at timestep $n$ equal to the outflow boundary flux at the previous
-timestep $n-1$. This is expected to be of low-order accuracy, and for high Péclet numbers,
-the boundary condition affects the concentration field in the vicinity of the
-in- and outflow boundaries
-due to large advective fluxes. For the simulation scenarios we considered,
-both in terms of model parameters
-and time span, the photoconversion region where solute originates
-is far enough away from the in- and outflow
-boundaries for the flux boundary condition to not significantly impact the results. Nevertheless,
-we deliberately excluded the space proximal to in- and outflow boundaries in
-the anterior and posterior regions of interest (5 and 6) to limit adverse effects. 
-
-A possible improvement to the in- and outflow boundary conditions we employed would be
-to consider a 3D-0D coupling of the in- and outflow boundaries using
-ordinary differential equations,
-similar to what has been done in cardiac
-modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
-However, if the ventricular system in reality is a closed system,
-one should rather seek out a way of modeling the CSF flow without open boundaries to avoid
-handling in- and outflow boundary conditions. A more appropriate way of handling the beating
-cardiac motion could be to impose a ventricular wall deformation, assumed to result from pulsatile
-motion of the heart and/or cardiac vessels surrounding the ventricles. This wall deformation would
-induce CSF flow while simultaneously permitting enforcement of the impermeability condition
-$\uu\cdot\nn=0$ on the ventricular walls. Such wall-motion induced CSF flow has been modeled and
-simulated successfully in the human brain ventricular system~\cite{Causemann2022HumanFramework,
-Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
-
-\subsection{Estimation of computational model parameters}
-The diffusion coefficients used in this study were partially based on values
-from experiments and partially estimated. The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$
-is based on the value $\num{1.15e-10} \pm 0.11 \ \mathrm{m^2/s}$ reported in an
-experiment~\cite{GuraSadovsky2017MeasurementExpansion}, while the Stokes-Einstein
-relation~(\Cref{eq:D_stokes_einstein})~\cite{Einstein1905UberTeilchen} was used to extrapolate
-the value of $D_2$ and estimate the value of $D_1$, based on experimental
-data~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells,
-Mahmood2023ExosomeTemperature}. The Stokes-Einstein relation assumes the diffusing
-substance is of spherical shape, which proteins are not, and the relation does not
-necessarily hold in CSF. Moreover, the extrapolation implies the assumption that
-the two substances (the one for which we determine $D$ and the one we extrapolate from)
-have equal densities. Consequently, there is uncertainty in the diffusion coefficient values used.
-We note that Sadovsky~\emph{et al.}~\cite{GuraSadovsky2017MeasurementExpansion} reported that
-Dendra2 satisfies the Stokes-Einstein in the solution they used,
-a solution which had similar viscosity
-to water. We used CSF density and viscosity values measured in
-humans~\cite{Bloomfield1998EffectsFluid},
-and because embryonic CSF in zebrafish is high in proteins, nutrients and other substances,
-the CSF in which photoconverted Dendra2 are transport in our experiments may be more viscous
-than what we consider. This would reduce the diffusion coefficient (cf.~\Cref{eq:D_stokes_einstein}),
-but based on reports of protein concentration having a limited impact on the viscosity of
-CSF~\cite{Bloomfield1998EffectsFluid, Brydon1995PhysicalViscosity}, this reduction is presumably
-limited. Merely the presence of other proteins and nutrients may also reduce the diffusion
-coefficient by reduction of mean-free path lengths of molecules~\cite{Cussler2009Diffusion:Systems}.
-Considering the diffusion coefficients $D_1$ and $D_2$ (both smaller
-than $D_3$) in our transport analysis provides information about how the simulation
-results of Dendra2 transport would be altered if the
-diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is
-underestimated, we assume the
-results would follow the same trend as the differences between results for
-$D_2$ and $D_3$: diffusion becomes
-more important, and is almost balancing advective transport for $D_3$. 
-Thus for a higher diffusion coefficient, we would see transport that is
-mostly explained by diffusive behavior.
-
-We heuristically determined the parameter $\tau = 0.65$ mPa, which determines
-the magnitude of the cilia tangential traction boundary conditions. The maximum force applied
-was in the dorsal region of the middle ventricle, where the posterior region had a tangential
-traction vector magnitude of $\vert\btau\vert_{\mathrm{max}} = 2.5$ mPa applied to the
-boundary. Previous simulation studies of cilia-mediated flow in brain ventricles have
-used a volumetric force density to represent the cilia.
-Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}
-used a force expression that increased linearly from the wall to a maximum force density of
-$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$ at a distance 15 \textmu m away from the wall,
-which represented cilium length. If we assumed a cilia array of the same thickness
-$l = 15$ \textmu m in our model, our maximum traction parameter $\vert\btau\vert_{\mathrm{max}}$
-would correspond to a maximum force density of 
-\begin{equation*}
-    f_c = \frac{\vert\btau\vert_{\mathrm{max}}}{l}
-        = \frac{\num{2.5e-3} \ \mathrm{Pa}}{15 \ \mu\mathrm{m}}
-        = 169 \ \mathrm{N/m^3},
-\end{equation*}
-which is smaller than $f_{\mathrm{max}}$, albeit the same order of magnitude.
-The length 15 \textmu m is the a typical length of cilia in human brain ventricles
-(in general the length is between 10--15 \textmu m~\cite{Afzelius2004Cilia-relatedDiseases}),
-while in zebrafish they are closer to 5 \textmu m~\cite{Salman2022ComputationalEmbryo}.
-With $l=5$ \textmu m, our traction parameter corresponds to a maximum force density of
-$f_c=507$ N/$\mathrm{m^3}$, which is in good agreement with
-$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$
-used by Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}.
-We note that they based $f_{\mathrm{max}}$ on reconstructions of
-flow velocities in murine brain ventricles.
-
-Another study that used a force density to model ciliary motion is
-Thouvenin~\emph{et al.}~\cite{Thouvenin2020OriginCanal}, where two-dimensional flow
-in the central canal of zebrafish embryos was modeled using a cilia force density of
-4000 N/$\mathrm{m^2}$. The resulting numerical velocity fields matched well with
-in vivo measurements, where the maximum velocity magnitude was around 5 \textmu m/s
-(recall that our model exhibits a maximum of 27.7 \textmu m/s).
-The geometry they studied resembles a pipe, probably offering more flow resistance
-than the open geometry considered in our work, which may be why they needed a larger
-force density to accurately represent experimental results. In any case, it is
-interesting to note that our and these two previous studies have estimated
-cilia force densities that only differ by one order of magnitude. 
-
-\subsection{Numerical approximation and convergence rates}
-The Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
-($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employ for the Stokes equations
-is computationally more expensive than a more conventional approach based on
-e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
-($P_2-P_1$ elements) or lower-order enriched
-elements~\cite{Brezzi2011MixedMethods},
-such as the mini-element ($P_1-P_1$ with a velocity stabilization).
-Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
-than or equal to $k$.
-We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
-since numerical experiments proved that a divergence-free velocity field was
-fundamental to attain a stable discretization of the advection-diffusion equation
-in advection-dominated regions. Using conventional
-Taylor-Hood elements for the Stokes equations
-stability of the advection-diffusion discretization either
-required excessive mesh refinement and/or problem-specific tuning of
-hyperparameters when employing a Streamline-Upwind/Petrov Galerkin stabilization
-method~\cite{Franca1992StabilizedModel}, which is why we also opted for a DG method
-for the advection-diffusion equation.
-Probing numerical values of the divergence of
-the velocity when using Taylor-Hood elements for the fluid equations revealed that,
-on the standard computational mesh, the $L^2$ norm of $\nabla\cdot\uu_h$ was
-in the order of $10^{-6}$, while the
-maximum value of the divergence of the velocity was of order unity. This is a result
-of the fact that incompressibility is only achieved in a (global) weak sense when
-employing Taylor-Hood elements. On a refined mesh with roughly six times as many
-computational cells as the standard mesh, the numerical values of
-$\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$ were still
-of order unity. This may lead to the
-hyperbolic advective term in the advection-diffusion equation accumulating errors
-that grow unstable over time. 
-
-In addition to its favorable mass-conserving property, the BDM-DG scheme
-lets us impose the impermeability condition strongly, and the tangential
-traction boundary condition weakly, without any tailored approach,
-since these boundary conditions appear naturally in the weak form of the
-Stokes equations~(\Cref{subsec:appendixA1}). If instead e.g. Taylor-Hood
-elements were to be used, the impermeability boundary condition must
-be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
-or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
-Bertoluzza2017BoundaryHemodynamics}.
-
-A priori error estimates for the $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ scheme are naturally 
-derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
-The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
-For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
-reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
-$k=1$, we observe linear convergence in both the velocity and the pressure.   
-\mk{MK: I see 1.5 in the table for $\uu$ in $L^2$?}
-\lyng{HH: Yes, we should expect 2 there? Maybe be more specific in the comment:
-"Using polynomial degree $k=1$, we observe linear convergence in both the velocity $H^1$ error
-and the pressure $L^2$ error. For the $L^2$ error of the velocity, we observe a suboptimal
-convergence order of 1.5"}
-
-\subsection{The role of motile cilia in intraventricular flow and transport}
-Our work has studied CSF flow and solute distribution
-in a relatively small and simple brain model, which is devoid of
-active CSF secretion and CSF absorption. Even though there is
-a clear conservation of the ventricular system across vertebrates,
-there are also important considerations to take. These include (but are not limited to)
-ventricular size and morphology, properties of ciliated cells,
-animal posture, and magnitude of velocities. For instance, a large
-volume would require an extensive amount of time for solutes to distribute
-if based solely on diffusion. Besides, the presence of multiple cilia
-instead of a single cilium per cell -- the former can be found in
-mammalian ependymal cells -- will generate stronger velocities.
-Hence advection may be more dominant in those situations.
-
-In large brains such as the human brain, we presume ciliary beating mostly 
-contributes to flow in localized regions proximal to the ventricular walls due to
-the microscopic length of the cilia.
-Although the precise mechanisms of intraventricular flow are still debated,
-much evidence indicate that blood vessel pulsations, respiration, CSF secretion
-and brain motion induce the pulsatile bulk flow in the central
-regions of the ventricles~\cite{Vinje2019RespiratoryMeasurements,
-Siyahhan2014FlowVentricles, Linninger2005PulsatileBrain, Enzmann1992BrainImaging,
-Kurtcuoglu2007ComputationalSylvius}.
-In human brains, cilia therefore probably play an important role in regulating the
-amount of substances like exosomes close to the ventricular walls, similar to coral
-reefs, where it has been observed that cilia are primary regulators of
-oxygen amounts at the coral surface~\cite{Pacherres2022CiliaryProduction}.
-Flow mediated by cilia indeed serves such a purpose in nodal flow at early
-developmental stages of the brain~\cite{Hirokawa2006NodalAsymmetry}, and the discovery
-of a cilia-driven flow network in rodent brains suggest such selective
-transport~\cite{Faubel2016Cilia-basedVentricles}.
-
-On the other hand, for the zebrafish embryos we studied,
-the ventricles are so small that the flow
-generated by ciliary motion is of the scale of the geometry, and thus not
-only contributes to near-wall flow dynamics, but flow in the entire ventricular
-system~\cite{Olstad2019CiliaryDevelopment}.
-To date, motile-cilia deficiency has been associated with altered brain function
-in the zebrafish, dysfunctional establishment of left-right symmetry,
-and ventricular enlargement in zebrafish, rodents and humans.~\cite{Afzelius2004Cilia-relatedDiseases,
-Youn2018PrimaryDiseases, Ma2024CiliaDisease, Ibanez-Tallon2002LossHydrocephalus}
-Yet the molecular mechanisms leading to these alterations are poorly understood.
-We trust that our model sets the basis for future work addressing these open questions.
-We are also confident that our model can be adjusted and implemented to fit
-microscopic and macroscopic parameters for larger brains, once these parameters are acquired.
-
-\subsection{Limitations and further work}
-The model presented has certain limitations. Future work could consider improving:
-\begin{itemize}
-    \item quantify cilia force parameter to avoid tuning
-    \item spatial heterogeneity of the cilia, how this affects flow and transport
-    \item time-varying cilia?
-    \item improved advection-diffusion equation influx/outflux BCs, or instead
-    modeling deformation of a closed ventricular system. 
-    and investigating how the arising flow compares with pulsatile flow observed in experiments
-    \item FSI: CSF flow coupled to 1D/2D/3D cilia structures.
-    \item any comments on experiments?
-\end{itemize}
-
-\section{Conclusion}
-We have presented a numerical model
-of cerebrospinal fluid flow and solute transport in
-zebrafish brain ventricles based on finite element methods.
-A realistic ventricular geometry from medical imaging was used to perform a
-computational study. The flow model reproduces
-the experimentally observed flow features of cilia-mediated cerebrospinal fluid
-flow in zebrafish brain ventricles. Coupling the flow to the transport model,
-we estimated how slowly or rapidly molecules of varying size are transported in
-the ventricles. 
-The numerical model was validated with in vivo experiments, measuring the movement of
-a photoconverted fluorescent protein in zebrafish brain ventricles,
-both for healthy animals and mutant animals with ciliary dysfunction.
-We observed good alignment between computational and experimental results.
-Simulations indicate that cilia-driven advection is important
-for transport of larger molecules, whereas diffusion accounts for most of
-the transport of smaller molecules. 
-Experimental results support the conclusion that cilia only affect the
-local distribution of small proteins,
-while most of their transport is governed by diffusion. 
 
 % Acknowledgements
 \medskip
