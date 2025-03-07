@@ -2,11 +2,14 @@
 \ProvidesClass{WileyMSP-template}
 
 \LoadClass{article}
-\RequirePackage{ragged2e}
 \RequirePackage{graphicx}
 \RequirePackage{caption}
-\RequirePackage[margin=0.5in, a4paper]{geometry} % MER: a4paper
-\RequirePackage{fancyhdr}
+\RequirePackage[left=2cm,%
+                right=2cm,%
+                top=2.25cm,%
+                bottom=2.25cm,%
+                headheight=12pt,%
+                a4paper]{geometry}%
 \RequirePackage{gensymb}
 \RequirePackage{siunitx} % \num{} to format powers of 10
 \RequirePackage{float} % Fiure placement

@@ -2,18 +2,17 @@
 
 \begin{document}
 
+\pagestyle{plain} 
 
-%\pagestyle{fancy}
-%\rhead{}%\includegraphics[width=2.5cm]{vch-logo.png}}
-\pagestyle{plain} % MER
+\begingroup
+\parindent0pt
 
 \title{The role of advection versus diffusion in intraventricular transport}
 %
 \maketitle
- %
+%
 % Author: Please give full first and last names for authors and
 % include * after the name of all corresponding authors
-
 
 \author{Halvor Herlyng*},
 \author{Ada J.~Ellingsrud},
@@ -25,19 +24,23 @@
 % Affiliations: Please provide adacemic titles (Prof. or Dr.) for all authors where applicable,
 % and include an institutional email address for all corresponding authors
 \begin{affiliations}
-\noindent H.~Herlyng, Dr.~A.~J.~Ellingsrud, Dr.~M.~Kuchta, Dr.~M.~E.~Rognes\\
+H.~Herlyng, Dr.~A.~J.~Ellingsrud, Dr.~M.~Kuchta, Dr.~M.~E.~Rognes\\
 Department of Numerical Analysis and Scientific Computing,
 Simula Research Laboratory, Kristian Augusts gate 23, 0164 Oslo, Norway\\
-Email Address: hherlyng@simula.no \\ 
+Email Address: hherlyng@simula.no
+
+\medskip
 Dr.~M.~E.~Rognes \\
-K.~G.~Jebsen Centre for Brain Fluid Research, Oslo, Norway \\
+K.~G.~Jebsen Centre for Brain Fluid Research, Oslo, Norway
+
+\medskip
 Dr.~I.~Jeong, Dr.~N.~Jurisch-Yaksi\\
 Department of Clinical and Molecular Medicine,
 Norwegian University of Science and Technology, Erling Skjalgsons gate 1, 7491 Trondheim, Norway \\
 Email Address: nathalie.jurisch-yaksi@ntnu.no
-
 \end{affiliations}
 
+\medskip
 
 % Keywords: Please provide a minimum of three and a maximum of seven keywords, separated by commas
 
@@ -49,6 +52,8 @@ Email Address: nathalie.jurisch-yaksi@ntnu.no
 Please insert your abstract here
 
 \end{abstract}
+
+\endgroup % End 0parindent group
 
 % Text: Please use section headings and subheadings as specified below. For communications, all section headings apart from Experimental Section should be removed
 % Please make the first reference to a display item bold: \textbf{Figure 1}
@@ -1936,9 +1941,9 @@ and add the bilinear form
 \begin{align*}
     \mathcal{A}_{\mathrm{stab}}(\uu_h, \vv_h) &=
     \sum_{f\in \mathcal{F}}\int_f{2\mu\frac{\gamma}{\avg{h}}\jump{P_{\nn}(\uu_h)}
-    \cdot\jump{P_{\nn}(\vv_h)}}\\
-    &-\sum_{f\in \mathcal{F}}\int_f{2\mu\avg{\beps(\uu_h)}\cdot\jump{\vv_h}}
-    -\sum_{f\in \mathcal{F}}\int_f{2\mu\avg{\beps(\vv_h)}\cdot\jump{\uu_h}}
+    \cdot\jump{P_{\nn}(\vv_h)}}\,\mathrm ds\\
+    &-\sum_{f\in \mathcal{F}}\int_f{2\mu\avg{\beps(\uu_h)}\cdot\jump{\vv_h}}\,\mathrm ds
+    -\sum_{f\in \mathcal{F}}\int_f{2\mu\avg{\beps(\vv_h)}\cdot\jump{\uu_h}}\,\mathrm ds
 \end{align*}
 to the discrete weak formulation~\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC},
 where $\mathcal{F}$ is the set of all interior facets of the computational mesh.
@@ -2099,10 +2104,10 @@ To ensure a stable discretization with these elements, we add the stabilization
 \begin{equation}
     \begin{aligned}
         a_{\mathrm{stab}}(c_h, \phi_h)
-        = &\sum_{f\in \mathcal{F}}\int_f{D\frac{\alpha}{\avg{h}}\jump{c_h}\cdot\jump{\phi_h}}
-        +\sum_{f\in \mathcal{F}}\int_f{\jump{c_h \hat{u}_h}\cdot\jump{\phi_h}}  \\
-         -&\sum_{f\in \mathcal{F}}\int_f{D\avg{\nabla\phi_h}\cdot\jump{c_h}}
-         -\sum_{f\in \mathcal{F}}\int_f{D\avg{\nabla c_h}\cdot\jump{\phi_h}},
+        = &\sum_{f\in \mathcal{F}}\int_f{D\frac{\alpha}{\avg{h}}\jump{c_h}\cdot\jump{\phi_h}}\,\mathrm ds
+        +\sum_{f\in \mathcal{F}}\int_f{\jump{c_h \hat{u}_h}\cdot\jump{\phi_h}}\,\mathrm ds  \\
+         -&\sum_{f\in \mathcal{F}}\int_f{D\avg{\nabla\phi_h}\cdot\jump{c_h}}\,\mathrm ds
+         -\sum_{f\in \mathcal{F}}\int_f{D\avg{\nabla c_h}\cdot\jump{\phi_h}}\,\mathrm ds,
     \end{aligned}\label{eq:SIP_stabilization}
 \end{equation}
 to the discrete weak formulation, where
