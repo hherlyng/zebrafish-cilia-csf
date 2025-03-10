@@ -405,7 +405,9 @@ experimental values (\Crefpanels{fig:fig3}{c, d}).
     \caption{
     \textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$ 
     in each region of interest (ROI)
-    observed during experiments of photoconversion of Dendra2 proteins in ROI 1.
+    observed during experiments of photoconversion of Dendra2 proteins in ROI 1. 
+    Bold lines are mean values of the cohort and shaded regions cover one standard devation errors
+    in the mean.
     \textbf{b.} Mean concentration $\cbar(t)$ in each ROI in a
     simulation of Dendra2 protein transport with
     the diffusion coefficient $D_3$.
@@ -446,7 +448,7 @@ controls. We found no significant differences in the Dendra2
 distribution in ROIs 3, 5, and 6 between \emph{smh} mutants and
 controls.
 
-We next mimic the \emph{smh} mutants in the computational model by
+The \emph{smh} mutants are mimicked in the computational model by
 considering transport of Dendra2 with CSF flow driven by cardiac
 pressure pulsations only, representing the absence of motile
 cilia. Comparing the in-silico mutants with transport predictions in
@@ -454,37 +456,25 @@ the presence of both cardiac pulsations and motile cilia, we observe
 noticeably delayed dynamics in ROIs 2, 4 and 5, but little change for
 ROIs 3 and 6 (\Crefpanels{fig:fig4}{c}).
 
-\mer{MER: MER and HH stopped here.}
-
-Comparing with the experiment, the difference between the control and
+Compared to experimental data, the difference between the control and
 mutant scenarios was even greater for the simulations, with the
 times-to-threshold in ROI 2 and 4 being 90\% and 34\% higher in the
-absence of cilia-mediated flow. Moreover, ROI 5 exhibits very
-different $\cbar$ profiles for the two configurations in our
-computational model, but not in our experimental data.  Altogether,
-our findings identify that diffusion plays an important role for
+absence of cilia-mediated flow. Moreover, the ROI 5 $\cbar$ profiles
+for the two configurations in our computational model deviate,
+which is not the case in the experiments.  Altogether,
+our findings identify that, for smaller proteins such as Dendra2,
+diffusion plays an important role for
 solute movement to regions upstream in the cilia flow fields or to
-distant ventricles.
-
-%% Again, the simulated Dendra2 distribution patterns differ from the
-
-%% Next, to identify whether our model would recapitulate these findings,
-%% we simulate CSF flow driven only by cardiac pressure pulsations and
-%% the resulting diffusion and advection of 
-
-%% Dendra2 transport 
-
-%% by using the only-cardiac/no-cilia flow model 
-%% and compare it with the baseline model
-%% (both cilia and cardiac motion) (\Crefpanels{fig:fig4}{c}).
-
+distant ventricles, while cilia affect the downstream mean concentrations.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
     \caption{\textbf{a.} Relative change in fluorescence intensity $F(t)$
-    in each region of interest (ROI) for control (black lines)
-    and \emph{smh} mutant (red lines) fish. 
+    in each region of interest (ROI) for control (black lines, $n=8$)
+    and \emph{smh} mutant (red lines, $n=6$) fish. 
+    Bold lines are mean values of the cohorts and shaded regions cover one standard devation errors
+    in the means.
     \textbf{b.} Times when $\Delta F(t)$ first exceeds a threshold value,
     equal to 0.25 (ROIs 2--4) or 0.10 (ROIs 5, 6), for control (gray dots) and
     \emph{smh} mutant (red dots) fish.
@@ -502,20 +492,19 @@ distant ventricles.
 \end{figure}
 
 \subsection{Loss of cilia motility in specific subpopulation slows down transport}
+
 We previously identified three distinct ciliated cell lineages in the
 zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain}.
-To identify the role of these lineages on CSF transport, we simulate transport
-upon region-specific cilia paralysis by modifying the boundary conditions
-of the CSF flow model. Three cilia-covered regions were considered separately:
+To identify the effects of these lineages on CSF flow and transport, 
+we investigate region-specific cilia paralysis with the computational model.
+Three cilia-covered regions were considered paralyzed separately:
 the telencephalic (anterior) ventricle, and the dorsal and ventral parts
 of the diencephalic (middle) ventricle (\Crefpanels{fig:fig5}{a}).
-The cilia tangential traction boundary condition is for each case
-changed to a free-slip boundary condition in the paralyzed region,
+To simulate cilia paralysis, the cilia tangential traction boundary condition
+is for each case changed to a free-slip boundary condition
+in the paralyzed region,
 prescribing zero tangential forces to
 represent absence of cilia motion.
-We simulate CSF flow modeled by the Stokes equations with the
-modified boundary conditions and use the resulting
-velocity fields in transport simulations.
 
 The CSF velocities are most strongly
 affected when removing cilia in the dorsal diencephalic ventricle,
@@ -529,14 +518,15 @@ contribute with 34\%, while the dorsal cilia exert 52\% of the total tangential
 force~(\Crefpanels{fig:fig5}{b}). The magnitude of the force contributions are thus
 more similar than the difference in their impact on the maximum velocity magnitudes.
 
-Changes in the transport dynamics of Dendra2 are most prominent when removing the dorsal cilia
-in the diencephalic ventricle. All ROIs (except ROI 1, where we impose the photoconversion curve)
-exhibit changes in the dynamics of $\cbar$ (\Crefpanels{fig:fig5}{c}).
-Compared to the baseline model results, we observe a slower increase and lower final concentration
+Changes in the transport of Dendra2 are most prominent when removing the dorsal cilia
+in the diencephalic ventricle. The mean concentration profiles 
+of all ROIs (except ROI 1, where we impose the photoconversion curve)
+exhibit changes (\Crefpanels{fig:fig5}{c}).
+Compared to the baseline model results, we observe less solute distribution
 in the middle and anterior ventricles (ROIs 2--5),
 and more rapid transport to the posterior ventricle (ROI 6).
-In contrast, removal of telencephalic cilia does not alter the evolution of the
-mean concentration $\cbar$ with time (\Crefpanels{fig:fig5}{c}).
+Meanwhile, removal of telencephalic cilia does not alter the 
+mean concentrations (\Crefpanels{fig:fig5}{c}).
 Finally, without ventral cilia in the diencephalic ventricle,
 more solute spreads towards the anterior ventricle (ROI 5) and
 less solute spreads towards the posterior ventricle (ROI 6).
@@ -557,19 +547,16 @@ less solute spreads towards the posterior ventricle (ROI 6).
 
 \subsection{Modification of ventricles geometry impacts protein distribution}
 Variations in ventricular morphology impact CSF flow patterns.
-To assess how ventricular morphologies influence solute distribution,
+To assess how these variations influence solute distribution,
 we consider four alternative brain ventricles meshes:
 one where the duct connecting the anterior and middle ventricles is constricted
 (66 \% reduction in cross-sectional area);
 one where the duct connecting the middle and posterior ventricles is constricted
 (33 \% reduction);
 one where the middle ventricle is shrunk in the lateral direction (43 \% reduction);
-and the combination of the above three modifications (\Crefpanels{fig:fig6}{a}). In these
+and the combination of the above three modifications (\Crefpanels{fig:fig6}{a, b}). In these
 four modified geometries the volume is reduced by 3.9\%, 4.1\%, 1.4\% and 9.4\%, respectively,
 compared to the original geometry.
-We simulate CSF flow in the modified geometries with the baseline flow model
-and use the resulting velocity field to simulate transport of Dendra2
-(\Crefpanels{fig:fig6}{b}).
 
 Constricting the connection between the anterior and middle ventricle leads to
 slower transport to the anterior ventricle (ROI 5),
@@ -577,22 +564,22 @@ and a slightly higher mean concentration in ROIs 2--4 and 6, compared to the ori
 (\Crefpanels{fig:fig6}{c}, shrunk fore-mid scenario). This is notwithstanding a
 9.5\% reduction in ventral cilia force magnitude
 (\Crefpanels{fig:fig6}{d}), which are the cilia that propel CSF and solute towards ROI 6.
-On the other hand, constricting the duct connecting the middle and the posterior ventricle
+Constricting the mid-hind brain connection
 leads to less transport into the posterior ventricle (ROI 6),
-and slightly more transport towards the anterior ventricle (ROI 5)
-(\Crefpanels{fig:fig6}{c}, shrunk mid-hind scenario).
+and slightly more transport towards the anterior ventricle (ROI 5).
 Faster transport to the anterior ventricle (ROI 5) and slower transport to the
 posterior ventricle (ROI 6) is also the case for the geometry with a
 shrunk middle ventricle.
-Here also the change in transport to ROI 6 is counter to expectation when comparing with
-ventral cilia forces, with transport reducing in spite of a 6.6\% increase in the
-ventral cilia forces.
+Here the transport to the posterior ventricle (ROI 6) is reduced,
+in spite of a 6.6\% increase in the ventral cilia forces.
 Additionally, for the shrunk middle configuration, the transport upstream of CSF flow towards the
 ventral-posterior region of the middle ventricle (ROI 3) is slowed down.
+
 For the mesh where all three ventricles are modified,
 we observe higher retention of solute in the middle ventricle (ROIs 2--4),
-while both the anterior and the posterior ventricles (ROIs 5 and 6) have lower mean concentrations.
-Altogether, our results show that the geometry and width of the ventricular ducts matter
+while both the anterior and the posterior ventricles (ROIs 5 and 6) have reduced
+mean concentrations. Altogether, our results show that the geometry and
+width of the ventricular ducts matter
 for solute transport, with notable differences in transport from relatively small
 geometry modifications. This may explain why we observed larger differences
 in the cilia-deficient computational model compared to the experimental data in
@@ -674,12 +661,12 @@ Meanwhile, we identified that transport of larger molecules
 (thus with smaller diffusion coefficients),
 such as 150 nm exosomes, are almost entirely dependent on advection.
 Indeed, there was essentially zero solute in the posterior ventricle at the
-final simulation time (around 850 s), a ventricle where transport is largely driven
+final simulation time (around 860 s), a ventricle where transport is largely driven
 by diffusion due to the absence of motile cilia.
 For $D_1$, an estimate of the diffusion timescale $t_d=L^2/D_1$ over a distance
 $L=200$ \textmu m from the middle to the posterior ventricle is approximately 24500 s.
-Advective transport by the mean velocity $\overline{U}=1.41 \ \mu$m/s over the same
-distance would happen on a timescale of the order of $t_a=L/\overline{U}=141$ s.
+Advective transport by the mean velocity $\overline{U}=2.4 \ \mu$m/s over the same
+distance would happen on a timescale of the order of $t_a=L/\overline{U}=83$ s.
 Comparing this with the minuscule values of $\cbar_6$ after simulating transport
 with $D_1$ for 850 s, one can conclude that if advection
 played a role in transporting solute from the photoconversion site in the middle ventricle
@@ -735,27 +722,41 @@ lineages and ventricular morphology on CSF flow and intraventricular transport.
 We envision that our framework will be useful as a basis for future analyses of
 CSF dynamics in more complex geometries and also other animal species and humans.
 
-\subsection{Computational model assumptions and boundary conditions}
-To model CSF, we employed slip boundary conditions at the ventricular walls,
-contrasting the classical choice of a noslip boundary condition.
-The use of slip boundary conditions is motivated by experimental observations of the
+\subsection{Computational modeling aspects}
+We chose to model the cilia as a force
+exerted tangentially on the boundary, as opposed to a
+couple of previous continuum model simulation studies of
+cilia-mediated flow where cilia were represented by body
+forces,~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal}.
+We employed slip boundary conditions at the ventricular walls,
+motivated by experimental observations of the
 flow field in zebrafish embryo brain ventricles, both previously and in this work, in which
 the fluid velocity increases towards the
-wall~(\Crefpanels{fig:fig1}c)~\cite{Olstad2019CiliaryDevelopment}. Slip boundary
-conditions allow for this behavior, in contrast to a noslip condition where the velocity
-has to go to zero at the wall.
+wall~(\Crefpanels{fig:fig1}c)~\cite{Olstad2019CiliaryDevelopment}. 
+In addition to its favorable mass-conserving property, the 
+Brezzi-Douglas-Marini and discontinuous Galerkin (BDM-DG) discretization scheme 
+we employed for the Stokes equations
+lets us impose the impermeability condition strongly, and the tangential
+traction boundary condition weakly, without any tailored approach,
+since these boundary conditions appear naturally in the weak form of the
+Stokes equations~(\Cref{subsec:appendixA1}). If instead e.g. Taylor-Hood
+elements were to be used, the impermeability boundary condition must
+be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
+or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
+Bertoluzza2017BoundaryHemodynamics}.
 
-As opposed to a couple of previous continuum model simulation studies of
-cilia-mediated flow where cilia were represented by body
-forces,~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal}
-we chose to model the cilia as a force
-exerted tangentially on the boundary.
-We deem this a good representation of the real nature of cilia,
-since they are microscale structures confined to the ventricular walls that
-generate flow through collective motion. Furthermore, it avoids the need of mesh
-refinement near the ciliated boundaries in the case that a
-body force were to be applied in a cilia layer of depth around
-5 \textmu m~\cite{Salman2022ComputationalEmbryo}.
+The BDM-DG scheme ($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employed for the Stokes equations
+is computationally more expensive than a more conventional approach based on
+e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
+($P_2-P_1$ elements) or lower-order enriched
+elements~\cite{Brezzi2011MixedMethods},
+such as the mini-element ($P_1-P_1$ with a velocity stabilization).
+Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
+than or equal to $k$.
+We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
+as the elements by definition satisfy the incompressibility constraint for the fluid.
+This leads to $\normlinf{\nabla\cdot\uu_h}$ being equal to zero to within solver tolerances,
+an important property for the stability of the advection-diffusion equation\cite{CITATION}.
 
 The ciliated boundaries in our CSF flow model are regionally homogeneous,
 whereas in reality, cilia populate the ventricle walls in a
@@ -794,7 +795,8 @@ boundary condition on the CSF flow,
 we imposed a no-flux condition on the concentration. Imposing a pressure-driven
 cardiac-related flow on certain parts of the CSF flow boundary leads to in- and outflow,
 and the advective transport then requires handling of in- and outflux boundary conditions.
-We set boundary conditions such that the total mass is conserved in the
+We set an approximate periodic boundary condition on the the in- and outflux boundaries,
+such that the total mass is conserved in the
 limit that the timestep size is zero, reflecting our assumption that the
 ventricular system is closed.
 We handled the outflux by leaving the advective flux term as an unknown in the weak formulation
@@ -806,19 +808,9 @@ In leaving the advective flux term in the weak form we are lacking a boundary co
 which is problematic in the continuous sense of the problem.
 However, the discrete problem is well-posed, because the approach represents
 constraining higher-order derivatives of the concentration~\cite{Griffiths1997TheCondition}. 
-
-Our approach can be interpreted as an approximate periodic boundary condition, where we set
-the inflow boundary flux at timestep $n$ equal to the outflow boundary flux at the previous
-timestep $n-1$. This is expected to be of low-order accuracy, and for high Péclet numbers,
-the boundary condition affects the concentration field in the vicinity of the
-in- and outflow boundaries
-due to large advective fluxes. For the simulation scenarios we considered,
-both in terms of model parameters
-and time span, the photoconversion region where solute originates
-is far enough away from the in- and outflow
-boundaries for the flux boundary condition to not significantly impact the results. Nevertheless,
-we deliberately excluded the space proximal to in- and outflow boundaries in
-the anterior and posterior regions of interest (5 and 6) to limit adverse effects. 
+We deliberately excluded the space proximal to in- and outflow boundaries in
+the anterior and posterior regions of interest (5 and 6) to limit adverse effects of 
+the advective transport at the in- and outflux boundaries on the mean concentrations. 
 
 A possible improvement to the in- and outflow boundary conditions we employed would be
 to consider a 3D-0D coupling of the in- and outflow boundaries using
@@ -911,61 +903,6 @@ force density to accurately represent experimental results. In any case, it is
 interesting to note that our and these two previous studies have estimated
 cilia force densities that only differ by one order of magnitude. 
 
-\subsection{Numerical approximation and convergence rates}
-The Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
-($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employ for the Stokes equations
-is computationally more expensive than a more conventional approach based on
-e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
-($P_2-P_1$ elements) or lower-order enriched
-elements~\cite{Brezzi2011MixedMethods},
-such as the mini-element ($P_1-P_1$ with a velocity stabilization).
-Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
-than or equal to $k$.
-We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
-since numerical experiments proved that a divergence-free velocity field was
-fundamental to attain a stable discretization of the advection-diffusion equation
-in advection-dominated regions. Using conventional
-Taylor-Hood elements for the Stokes equations
-stability of the advection-diffusion discretization either
-required excessive mesh refinement and/or problem-specific tuning of
-hyperparameters when employing a Streamline-Upwind/Petrov Galerkin stabilization
-method~\cite{Franca1992StabilizedModel}, which is why we also opted for a DG method
-for the advection-diffusion equation.
-Probing numerical values of the divergence of
-the velocity when using Taylor-Hood elements for the fluid equations revealed that,
-on the standard computational mesh, the $L^2$ norm of $\nabla\cdot\uu_h$ was
-in the order of $10^{-6}$, while the
-maximum value of the divergence of the velocity was of order unity. This is a result
-of the fact that incompressibility is only achieved in a (global) weak sense when
-employing Taylor-Hood elements. On a refined mesh with roughly six times as many
-computational cells as the standard mesh, the numerical values of
-$\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$ were still
-of order unity. This may lead to the
-hyperbolic advective term in the advection-diffusion equation accumulating errors
-that grow unstable over time. 
-
-In addition to its favorable mass-conserving property, the BDM-DG scheme
-lets us impose the impermeability condition strongly, and the tangential
-traction boundary condition weakly, without any tailored approach,
-since these boundary conditions appear naturally in the weak form of the
-Stokes equations~(\Cref{subsec:appendixA1}). If instead e.g. Taylor-Hood
-elements were to be used, the impermeability boundary condition must
-be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
-or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
-Bertoluzza2017BoundaryHemodynamics}.
-
-A priori error estimates for the $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ scheme are naturally 
-derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
-The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
-For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
-reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
-$k=1$, we observe linear convergence in both the velocity and the pressure.   
-\mk{MK: I see 1.5 in the table for $\uu$ in $L^2$?}
-\lyng{HH: Yes, we should expect 2 there? Maybe be more specific in the comment:
-"Using polynomial degree $k=1$, we observe linear convergence in both the velocity $H^1$ error
-and the pressure $L^2$ error. For the $L^2$ error of the velocity, we observe a suboptimal
-convergence order of 1.5"}
-
 \subsection{The role of motile cilia in intraventricular flow and transport}
 Our work has studied CSF flow and solute distribution
 in a relatively small and simple brain model, which is devoid of
@@ -1025,7 +962,6 @@ The model presented has certain limitations. Future work could consider improvin
     \item any comments on experiments?
 \end{itemize}
 
-%\section{Conclusion}
 In conclusion, we have presented a numerical model
 of cerebrospinal fluid flow and solute transport in
 zebrafish brain ventricles based on finite element methods.
@@ -1451,13 +1387,13 @@ The mean velocity $\overline{U}$ is calculated by first averaging the velocity i
 \begin{equation*}
     \overline{u}^2 = \frac{1}{|\Omega|}\int_{\Omega}\uu\cdot\uu\dx,
 \end{equation*}
-and then averaging $\overline{u}$ in time over one cardiac cycle to yield $\overline{U} = \fixme{X}$ \fixme{unit}.
+and then averaging $\overline{u}$ in time over one cardiac cycle to yield $\overline{U} = 2.4$ \textmu m/s.
 To assess the assumption that inertial forces are negligible compared to
 viscous forces, we also compute the Reynolds number
 \begin{equation*}
     \mathrm{Re} = \frac{\mathrm{inertial \ forces}}{\mathrm{viscous \ forces}} = \frac{\rho U_r L_r}{\mu},
 \end{equation*}
-with $L_r = \fixme{X}$ \fixme{unit} and $U_r = \fixme{X}$ \fixme{unit}
+with $L_r = 110$ \textmu m and $U_r = 27.7$ \textmu m/s
 as length and velocity scales characteristic of the flow.
 
 To study how cilia paralysis and ventricular morphology affect intraventricular
@@ -2331,6 +2267,57 @@ reports units in millimeters, instead of micrometers which has been used elsewhe
         \bottomrule
     \end{tabular}
 \end{table}
+
+\subsection{Discussion of the numerical approximation and convergence rates}
+The Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
+($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employ for the Stokes equations
+is computationally more expensive than a more conventional approach based on
+e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
+($P_2-P_1$ elements) or lower-order enriched
+elements~\cite{Brezzi2011MixedMethods},
+such as the mini-element ($P_1-P_1$ with a velocity stabilization).
+Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
+than or equal to $k$.
+We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
+since numerical experiments proved that a divergence-free velocity field was
+fundamental to attain a stable discretization of the advection-diffusion equation
+in advection-dominated regions. Using conventional
+Taylor-Hood elements for the Stokes equations
+stability of the advection-diffusion discretization either
+required excessive mesh refinement and/or problem-specific tuning of
+hyperparameters when employing a Streamline-Upwind/Petrov Galerkin stabilization
+method~\cite{Franca1992StabilizedModel}, which is why we also opted for a DG method
+for the advection-diffusion equation.
+Probing numerical values of the divergence of
+the velocity when using Taylor-Hood elements for the fluid equations revealed that,
+on the standard computational mesh, the $L^2$ norm of $\nabla\cdot\uu_h$ was
+in the order of $10^{-6}$, while the
+maximum value of the divergence of the velocity was of order unity. This is a result
+of the fact that incompressibility is only achieved in a (global) weak sense when
+employing Taylor-Hood elements. On a refined mesh with roughly six times as many
+computational cells as the standard mesh, the numerical values of
+$\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$ were still
+of order unity. This may lead to the
+hyperbolic advective term in the advection-diffusion equation accumulating errors
+that grow unstable over time. 
+
+In addition to its favorable mass-conserving property, the BDM-DG scheme
+lets us impose the impermeability condition strongly, and the tangential
+traction boundary condition weakly, without any tailored approach,
+since these boundary conditions appear naturally in the weak form of the
+Stokes equations~(\Cref{subsec:appendixA1}). If instead e.g. Taylor-Hood
+elements were to be used, the impermeability boundary condition must
+be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
+or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
+Bertoluzza2017BoundaryHemodynamics}.
+
+A priori error estimates for the $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ scheme are naturally 
+derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
+The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
+For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
+reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
+$k=1$, we observe linear convergence in the velocity in the $\mathbf{H}^1$ error norm
+and the pressure in the $L^2$ error norm.   
 
 \section{Quantification of velocities in particle tracking}\label{sec:appC_particle_transport}
 Particle tracking data~\cite{Olstad2019CiliaryDevelopment} was analyzed.
