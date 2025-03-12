@@ -1151,9 +1151,10 @@ system consists mainly of 3 cavities: the telencephalic (anterior),
 the di-/mesencephalic (middle) and the rhombencephalic (posterior)
 ventricles, which are connected by interventricular ducts. From the
 surface geometry, we constructed a volumetric mesh of the ventricles
-using fTetWild~\cite{Hu2020FastWild}, consisting of 132 134
-tetrahedral cells with a maximal (minimal) edge length of 14.9 \textmu
-m (4.68 \textmu m) (\Crefpanels{fig:fig1}{d}). Parts of the
+by initially using fTetWild~\cite{Hu2020FastWild} and subsequently
+local refinement functionality in~\cite{dolfinx2023preprint}. The mesh
+consists of 141 512 tetrahedral cells with a maximal (minimal) edge length of 14.9 \textmu
+m (3.1 \textmu m) (\Crefpanels{fig:fig1}{d}). Parts of the
 ventricular surfaces were marked to be lined with motile cilia
 (\Crefpanels{fig:fig1}{d}, magenta
 markers)~\cite{Olstad2019CiliaryDevelopment}.
@@ -1282,8 +1283,7 @@ where the total concentration flux $\JJ$ is assumed to consist of an advective a
     \JJ = c\uu - D\nabla c .
 \end{equation*}
 Here, $\uu$ is the CSF velocity field, governed by the Stokes equations (\Cref{eq:stokes_eqs}),
-and $D$ is the molecular diffusion coefficient of the solute.
-Initially, we set $c(\xx, 0)=0$ for all $\xx\in\Omega$.
+and $D$ is the molecular diffusion coefficient of the solute. 
 The ventricular walls are assumed to be impermeable (admitting \emph{no flux}: $\JJ\cdot\nn=0$),
 except at the anterior/posterior boundary $\Gp$.
 At the anterior/posterior boundary, we permit the solute concentration to be advected into
@@ -1301,7 +1301,19 @@ diencephalic ventricle as the subdomain $\Omega_{\mathrm{pc}}$, and set
 \label{eq:photoconversion_curve}
 \end{equation}
 The value $a=65$ was chosen to fit the fluorescence intensity curve
-observed in the physical photoconversion experiments.
+observed in the physical photoconversion experiments. 
+To impose a smooth initial condition, we initially solve the diffusion equation
+\begin{equation*}
+    \pdifft{c} = \Tilde{D}\nabla^2 c
+\end{equation*}
+with an increased diffusion coefficient $\Tilde{D}=D\times 10^{5}$ for two timesteps.
+The solutions are normalized by their respective maximum values, and subsequently
+multiplied with the value of \Cref{eq:photoconversion_curve} at the times $t=\Delta t$
+and $t=2\Delta t$, respectively.
+The resulting concentration fields are used as initial conditions for $c(\xx, 0)$ and
+$c(\xx, \Delta t)$ for all $\xx\in\Omega$, where $\Delta t$
+is the timestep. The two initial conditions are required because of the
+two-step temporal discretization scheme employed (see~\Cref{subsec:num_approx_adv_diff} for more details.)
 
 \subsection{Estimation of diffusion coefficients via the Stokes-Einstein relation}
 Motivated by an interest in molecules that are significant in neural development,
@@ -1425,12 +1437,12 @@ is weakly enforced with a penalty parameter $\gamma=10$~\cite{Hong2016AEquations
 Since the divergence of the velocity space is a subspace of the pressure space for this scheme,
 the divergence-free condition of the velocity is satisfied exactly, ensuring mass conservation.~\cite{Boffi2008FiniteProblem} 
 
-\subsection{Numerical approximation of the advection-diffusion equation}
+\subsection{Numerical approximation of the advection-diffusion equation}\label{subsec:num_approx_adv_diff}
 The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized
-with a first-order implicit Euler method in time, and a first-order,
-symmetric interior penalty DG
+with with a second-order, symmetric interior penalty DG
 method in space~\cite{Arnold1982AnElements}, chosen due to its favorable
-conservation properties.
+conservation properties. In time, the equation is discretized with the second-order backward
+difference scheme BDF2.~\cite{Volker2016}
 To accurately approximate the solute concentrations even
 in the presence of strong advection (high Péclet numbers),
 we use an upwind scheme for the velocity when calculating the
@@ -1438,7 +1450,7 @@ advective flux~\cite{Patankar2018NumericalFlow}.
 As for the flow equations, we use a timestep size of
 $\Delta t = 0.023$ s. We simulate transport for 1900 cardiac cycles,
 with a final time of simulation $T = 856$ s.
-A DG penalty parameter $\alpha = 25$ was chosen to ensure stability of the method. 
+A DG penalty parameter $\alpha = 50$ was chosen to ensure stability of the method. 
 
 \subsection{Solution strategy and software implementation}
 Owing to the one-way coupling between the velocity field $\uu$
