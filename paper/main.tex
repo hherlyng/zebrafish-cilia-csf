@@ -232,22 +232,21 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
     \caption{
     \textbf{a.} Schematic illustration of the two cerebrospinal fluid (CSF) flow components modeled,
     motile cilia and cardiac pulsations, and their contributions to the flow patterns.
-    \textbf{b.} Particle tracking data visualizing flow directionality in the middle ventricle.
-    \textbf{c.} Flow velocity magnitudes in the middle ventricle from particle tracking data.
+    \textbf{b, c.} Particle tracking data visualizing CSF flow directionality (\textbf{b}) and
+    velocity magnitudes in the middle ventricle.
     \textbf{d.} Computational mesh with marked facets indicating regions of motile cilia (magenta) and
     anterior/posterior facets (blue).
     \textbf{e.} Streamlines of the (steady-state) CSF flow field simulated with the
     cilia-only/no-cardiac flow model.
     \textbf{f.} Streamlines of the CSF flow field simulated with the cardiac-only/no-cilia flow
     model at a time 25\% into the cardiac cycle. %t=0.112613 s, period=0.45045 s
-    \textbf{g.} Streamlines simulated with the baseline flow model at
-    a time 25\% into the cardiac cycle. %t=0.112613 s
-    \textbf{h.} Streamlines simulated with the baseline flow model at
-    a time 50\% into the cardiac cycle. %t=0.225225 s
-    \textbf{i.} Streamlines simulated with the baseline flow model at
-    a time 75\% into the cardiac cycle. %t=0.315315 s
-    \textbf{j.} Illustration of the cardiac-related normal pressure forcing imposed on the
-    anterior/posterior boundaries. Time instants of panels \textbf{f, h--j} are indicated.
+    \textbf{g.} Illustration of the cardiac-related normal pressure forcing imposed on the
+    anterior/posterior boundaries.
+    \textbf{h--j.} Streamlines simulated with the baseline flow model at
+    a time a time 25\% (\textbf{h}), 50\% (\textbf{i}) and 75\% (\texbf{j})
+    into the cardiac cycle. Times indicated in panel \textbf{g}.
+    %t=0.112613 s %t=0.225225 s %t=0.315315 s
+    Scale bars 50 \textmu m.
     }
     \label{fig:fig1}
 \end{figure}
@@ -288,7 +287,7 @@ different solutes injected within a region of interest (ROI1) in the
 dorsal region of the middle ventricle (\Crefpanels{fig:fig2}{a}),
 subject to the CSF flow induced by motile cilia and cardiac pressure
 pulsations. In particular, we consider three different molecular
-diffusion coefficients, corresponding to a large exosome ($D_1 = 1.63
+diffusion coefficients, corresponding to a large extracellular vesicle ($D_1 = 2.17
 \times 10^{-12}$ m$^2$/s), a 90 kDa protein STM-GFP ($D_2 = 5.75
 \times 10^{-11}$ m$^2$/s), and a 26 kDa photoconvertible protein
 Dendra2 ($D_3 = 1.15 \times 10^{-10}$ m$^2$/s).
@@ -298,7 +297,7 @@ Dendra2 ($D_3 = 1.15 \times 10^{-10}$ m$^2$/s).
 
 Interestingly, the distribution patterns differ between the
 solutes. For the smallest diffusion coefficient, representing
-exosomes, the advective transport by the CSF dominates diffusion: the
+extracellular vesicles, the advective transport by the CSF dominates diffusion: the
 CSF flow structures carry over into the concentration field,
 indicating that transport along the streamlines is more rapid than the
 diffusion across the streamlines (\Crefpanels{fig:fig2}{b}). The
@@ -322,7 +321,7 @@ global scale.
 \begin{figure}%[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}\caption{Simulated distribution and evolution after photoconversion of
-    exosomes ($D_1$), STM-GFP ($D_2$) and Dendra2 ($D_3$). 
+    extracellular vesicles (EVs) ($D_1$), STM-GFP ($D_2$) and Dendra2 ($D_3$). 
     \textbf{a.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs.
     \textbf{b--d.} Slice of the concentration field simulated
     with diffusion coefficients $D_1$, $D_2$ and $D_3$ for eight time instants covering the
@@ -347,7 +346,7 @@ lower times-to-threshold in ROIs 2--6 (\Crefpanels{fig:fig2}{h}). For
 all three diffusion coefficients, the solute first spreads within the
 middle ventricle, covering ROIs 2--4, before appearing in the anterior
 ventricle (ROI5) and finally reaching the posterior ventricle
-(ROI6). Notably, the exosomes, associated with the smallest diffusion
+(ROI6). Notably, the extracellular vesicles, associated with the smallest diffusion
 coefficient, do not reach the posterior ventricle (ROI6) within the
 simulated time frame.
 
@@ -369,7 +368,11 @@ simulated time frame.
 
 To validate the model predictions, we performed photoconversion
 experiments in transgenic zebrafish larvae expressing the secreted
-Dendra2 in their brain ventricles. Our photoconversion protocol
+Dendra2 in their brain ventricles. The approach is inspired by earlier work
+where a photoconvertible protein was injected into the ventricle~\cite{fame2016directional}.
+By using a transgenic system where the protein is directly secreted into the CSF,
+we avoid detrimental effects of intraventricular injection on CSF properties. 
+Our photoconversion protocol
 consisted of the acquisition of a baseline fluorescence intensity
 $F_0$, before localized exposure to a UV laser (at ROI 1) that
 converts Dendra2 from a green- to a red-emitting fluorescent
@@ -437,7 +440,7 @@ experimental values (\Crefpanels{fig:fig3}{c, d}).
 %0.18155055624229066 ROI 6
 % Final mean c values ROIs 2-6: 0.7637806  0.72025859 0.81903216 0.56204164 0.34926411
 
-\subsection{Absence of ciliary motion affects local protein distribution}
+\subsection{Absence of ciliary motion affects local solute distribution}
 
 \mer{Sentence on why absence of motile cilia is intersting: Cilia
   motion is key to development and absence of cilia is associated with
@@ -502,7 +505,7 @@ distant ventricles, while cilia affect the downstream mean concentrations.
 
 \subsection{Loss of cilia motility in specific subpopulation slows down transport}
 
-We previously identified three distinct ciliated cell lineages in the
+We previously characterized three distinct ciliated cell lineages in the
 zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain}.
 To identify the effects of these lineages on CSF flow and transport, 
 we investigate region-specific cilia paralysis with the computational model.
@@ -554,7 +557,7 @@ less solute spreads towards the posterior ventricle (ROI 6).
     \label{fig:fig5}
 \end{figure}
 
-\subsection{Modification of ventricles geometry impacts protein distribution}
+\subsection{Modification of ventricular geometry impacts solute distribution}
 Variations in ventricular morphology impact CSF flow patterns.
 To assess how these variations influence solute distribution,
 we consider four alternative brain ventricles meshes:
@@ -592,7 +595,7 @@ width of the ventricular ducts matter
 for solute transport, with notable differences in transport from relatively small
 geometry modifications. This may explain why we observed larger differences
 in the cilia-deficient computational model compared to the experimental data in
-\Cref{fig:fig4}, as the model and the fish have different duct diameters.
+\Cref{fig:fig4}, as the model and the fish have slightly different duct diameters.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
@@ -618,7 +621,7 @@ In this study, we have presented a computational model of CSF flow and solute tr
 We used the larval zebrafish brain ventricles since its geometry,
 flow components and kinetics are well described, thereby allowing us to validate
 our simulation experimentally. Nevertheless, our computational framework can be adapted to and implemented in
-other ventricular systems in the future, given that the flow parameters of such systems
+other ventricular systems in the future, once the flow parameters of such systems
 are comprehensively resolved. By imposing tangential traction and normal pressure
 on the CSF flow, we were able to reproduce flow fields with similar features
 as observed experimentally. The prominent flow features were vortex-structured flow,
@@ -644,7 +647,9 @@ more rapid and resulted in higher total amounts of solute.
 Differences between experiments and simulations may relate to
 ventricular size, as we showed that modifying the geometry of the interventricular ducts
 impacts solute distribution, and the geometry used for the computational model was larger
-than geometries used in experiments. Alternatively, dissimilarities in results may relate
+than some of the geometries used in experiments.
+Notably, there are large variations in ventricular size in the control population at 2 dpf.
+Alternatively, dissimilarities in results may relate
 to the way we defined the photoconversion site (ROI 1) in the simulations,
 since the volume of the photoconversion region determines
 the total amount of solute and thereby the rate of transport. Another source
@@ -668,7 +673,7 @@ than the regions located downstream of cilia-mediated flow (ROI 2).
 
 Meanwhile, we identified that transport of larger molecules
 (thus with smaller diffusion coefficients),
-such as 150 nm exosomes, are almost entirely dependent on advection.
+such as 150 nm radius extracellular vesicles, are almost entirely dependent on advection.
 Indeed, there was essentially zero solute in the posterior ventricle at the
 final simulation time (around 860 s), a ventricle where transport is largely driven
 by diffusion due to the absence of motile cilia.
@@ -692,10 +697,11 @@ experienced substantially increased times-to-threshold. We also observed
 slower dynamics in the rest of the middle ventricle (ROIs 3 and 4), whereas the
 posterior ventricle (ROI 6) was unaffected by the loss
 of cilia motility, indicating that transport from the middle to the posterior ventricle is
-purely driven by diffusion. We also performed photoconversion experiments on cilia mutant
+purely driven by diffusion at this developmental stage.
+We also performed photoconversion experiments on cilia mutant
 zebrafish larva (\emph{smh}), observing statistically significant slower transport in 
 ROIs 2 and 4. The results provide not only confidence in that our computational model
-well represents the physics, but also valuable quantification of the impact of cilia motility
+represents the physics well, but also valuable quantification of the impact of cilia motility
 on intraventricular transport. Interestingly, a previous simulation study of reduced cilia motility
 also observed a drastic reduction in CSF mixing in specific regions of the brain
 ventricles~\cite{Yoshida2022EffectVentricles}, similar to our results. Since impaired brain 
@@ -818,10 +824,10 @@ which is problematic in the continuous sense of the problem.
 However, the discrete problem is well-posed, because the approach represents
 constraining higher-order derivatives of the concentration~\cite{Griffiths1997TheCondition}. 
 We deliberately excluded the space proximal to in- and outflow boundaries in
-the anterior and posterior regions of interest (5 and 6) to limit adverse effects of 
+the anterior and posterior ventricles (ROIs 5 and 6) to limit adverse effects of 
 the advective transport at the in- and outflux boundaries on the mean concentrations. 
 
-A possible improvement to the in- and outflow boundary conditions we employed would be
+A possible improvement to the in- and outflow boundary conditions would be
 to consider a 3D-0D coupling of the in- and outflow boundaries using
 ordinary differential equations,
 similar to what has been done in cardiac
@@ -936,7 +942,7 @@ regions of the ventricles~\cite{Vinje2019RespiratoryMeasurements,
 Siyahhan2014FlowVentricles, Linninger2005PulsatileBrain, Enzmann1992BrainImaging,
 Kurtcuoglu2007ComputationalSylvius}.
 In human brains, cilia therefore probably play an important role in regulating the
-amount of substances like exosomes close to the ventricular walls, similar to coral
+amount of substances like extracellular vesicles close to the ventricular walls, similar to coral
 reefs, where it has been observed that cilia are primary regulators of
 oxygen amounts at the coral surface~\cite{Pacherres2022CiliaryProduction}.
 Flow mediated by cilia indeed serves such a purpose in nodal flow at early
@@ -1010,13 +1016,13 @@ and subsequently transferred to artificial fish water (AFW)
 \emph{ccdc103(dnaaf19)\textsuperscript{tn222a}}
 (\emph{schmalhans (smh)})~\cite{Jau-NianChen1997Left-rightZebrafish}
 and \emph{Tg(gfap:Gal4FF)\textsuperscript{nw7Tg}}~\cite{DiazVerdugo2019Glia-neuronSeizures},
-\emph{Tg(5xuas:Signal-Dendra2)\textsuperscript{nw21Tg}}.
+\emph{Tg(5xUAS:Signal-Dendra2)\textsuperscript{nw21Tg}}.
 Animals were in the pigmentless \emph{nacre\textsuperscript{b692}}
 (\emph{mitfa\textsuperscript{-/-}})~\cite{JamesA.Lister1999NacreFate} background.
 
 Wholemount in vivo live imaging and photoconversion
 experiments were performed with zebrafish larvae at the 2 dpf stage obtained from inbreeding of heterozygous
-\emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xuas:Signal-Dendra2})
+\emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xUAS:Signal-Dendra2})
 adult animals, as described by D'Gama~\emph{et al.}~\cite{DGama2024Cilia-mediatedBrain}.
 Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+})
 or \emph{smh}\textsuperscript{+/-} heterozygous zebrafish from the same breeding.
@@ -1331,7 +1337,7 @@ two-step temporal discretization scheme employed (see~\Cref{subsec:num_approx_ad
 Motivated by an interest in molecules that are significant in neural development,
 we study the transport of molecules resembling (i) the Dendra2 Fluorescent Protein (Dendra2)
 used in the photoconversion, (ii) the Starmaker+Green Fluorescent Protein (STM-GFP) reported by
-Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}, and (iii) exosomes.
+Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}, and (iii) extracellular vesicles.
 To estimate the diffusion coefficients of these, when not
 available in the literature, we use the Stokes--Einstein relation
 \begin{equation}
@@ -1343,7 +1349,7 @@ molecule suspended in a viscous fluid~\cite{Einstein1905UberTeilchen}.
 In~\Cref{eq:D_stokes_einstein}, $k_B = \num{1.38e-23}$ J/K is the Boltzmann constant,
 $T = 310$ K is the absolute temperature, $\mu$ is the dynamic viscosity of the
 CSF, and $R$ is the radius of the molecule.
-For the exosomes, we calculate $D$ using~\Cref{eq:D_stokes_einstein}
+For the extracellular vesicles, we calculate $D$ using~\Cref{eq:D_stokes_einstein}
 with the relatively large $R=150$ nm~\cite{Moghassemi2024ExtracellularDecade}.
 %Hence this radius covers the slowest diffusing exosomes,
 %a choice made because smaller exosomes would have diffusion coefficients
@@ -1354,7 +1360,7 @@ GFP~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells},
 assuming that if $D$ scales with $1/R$ according to~\Cref{eq:D_stokes_einstein},
 $D$ would scale with the cube root of the molecule mass~\cite{Goodhill1997DiffusionGuidance}.
 The resulting diffusion coefficients
-are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2) as given by \Cref{tab:diff_coeff_table}.
+are $D_1$ (extracellular vesicles), $D_2$ (STM-GFP) and $D_3$ (Dendra2) as given by \Cref{tab:diff_coeff_table}.
 
 %Implicit in this approach is the assumption that the proteins all have the same density.
 
@@ -1371,7 +1377,7 @@ are $D_1$ (exosomes), $D_2$ (STM-GFP) and $D_3$ (Dendra2) as given by \Cref{tab:
         \toprule
         Molecule & Label & Mass [kDa]  & $D \ [\mathrm{m^2/s}]$ & Reference \\ 
         \midrule 
-        Exosomes (radius of 150 nm) & $D_1$ & -- & $\num{2.17e-12}$ & \textdagger \\
+        Extracellular vesicles (radius of 150 nm) & $D_1$ & -- & $\num{2.17e-12}$ & \textdagger \\
         GFP (saline aqueous solution) & -- & 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{8.70e-11}$ & \cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells} \\
         STM-GFP & $D_2$ & 66.2~\cite{UniProt2024StmUniProtKB} + 26.9~\cite{UniProt2024GFPUniProtKB} & $\num{5.75e-11}$ & * \\
         Dendra2 Fluorescent Protein & $D_3$ & 25.6~\cite{Gurskaya2006EngineeringLight} & $\num{1.15e-10}$ & \cite{GuraSadovsky2017MeasurementExpansion}\\
