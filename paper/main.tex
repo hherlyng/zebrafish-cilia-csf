@@ -49,21 +49,25 @@ Email Address: nathalie.jurisch-yaksi@ntnu.no
 % Abstract should be written in the present tense and impersonal style (i.e., avoid we), and be at most 200 words long
 \begin{abstract}
 
-Cerebrospinal fluid (CSF) flow is integral to brain function.
-The underlying mechanisms of cilia-mediated flow and transport
-in the brain ventricles remain to be fully explored.
-In this paper, we analyze and evaluate the role of motile cilia
-in intraventricular CSF flow and transport. We combine computational
-modeling with in vivo experiments that monitor transport of a photoconvertible
-protein secreted in the brain ventricles.
-We use the geometry of the zebrafish larval brain ventricles,
-for which we have detailed knowledge of cilia properties and CSF motion velocities and frequencies,
-to develop a finite element model.
+Cerebrospinal fluid (CSF) is integral to brain function, as the fluid
+provides mechanical support of the brain and the flow of CSF helps
+distribute nutrients, neurotransmitters and metabolites throughout
+the central nervous system. CSF flow is partly driven
+by beating of motile cilia, hair-like structures that line the ependymal cell layer
+of the brain ventricles. Despite the physiological importance of CSF flow,
+the underlying mechanisms of cilia-mediated flow and transport
+in the brain ventricles remain yet to be comprehensively resolved.
+In this study, we analyze and evaluate the role of motile cilia
+in intraventricular CSF flow and transport. We use the geometry
+of the zebrafish larval brain ventricles, for which we have detailed knowledge of cilia properties and CSF motion velocities
+and frequencies, to develop finite element methods that model flow and transport.
+The computational model is validated by in vivo experiments that monitor transport
+of a photoconvertible protein secreted in the brain ventricles.
 Our results show that while cilia contribute to advection of large particles,
 diffusion plays a significant role in the transport of small molecules such as proteins.
 We also found that cilia location and the geometry of the ventricular system impact solute distribution.
-Altogether, our work offers both a computational framework that can be applied to other
-ventricular system and new concepts of how molecules are transported within the brain and its ventricles.
+Altogether, our work presents a computational framework that can be applied to other
+ventricular systems, together with new concepts of how molecules are transported within the brain and its ventricles.
 
 \end{abstract}
 
@@ -89,10 +93,10 @@ ventricular system and new concepts of how molecules are transported within the 
 % I1: What is the problem - from big picture to our precise topic - why is it interesting?
 Brain development and function depend on numerous regulatory
 processes, including the flow of cerebrospinal fluid
-(CSF)~\cite{CITATTION}. Produced mostly by the choroid
-plexus and partly by brain interstitial fluid,
+(CSF)~\cite{fame2020emergence}. Produced mostly by the choroid
+plexus and partly by brain interstitial fluid~\cite{Brodal2016},
 CSF is a clear liquid that flows through the ventricular system and subarachnoid
-space~\cite{Damkier2013, Brodal2016}. By transporting growth factors, nutrients, neurotransmitters
+space~\cite{Damkier2013}. By transporting growth factors, nutrients, neurotransmitters
 and metabolites, as well as removing waste products, CSF regulates
 brain development and homeostasis~\cite{Ringers2020Role, fame2020emergence, del2010ependymal}.
 Disruption of the CSF circulation is detrimental to brain health and disturbs
@@ -102,11 +106,6 @@ disorders such as hydrocephalus, where accumulation of
 CSF often requires emergency surgical
 treatment~\cite{duy2022rethinking, kahle2024paediatric, wallmeier2022role},
 but for which there is little agreement on optimal treatments~\cite{flannery2014pediatric}. 
-Of particular importance is the fact that
-hydrocephalus is observed in animal models and humans with deficient motile
-cilia~\cite{Afzelius2004Cilia-relatedDiseases, Olstad2019CiliaryDevelopment, Mitchison2017Motile,
-Ibanez-Tallon2002LossHydrocephalus},
-indicating that the cilia play a crucial role for healthy brain function. 
 
 % I2: What do we know about the problem and the topic?
 The flow of CSF in the ventricular system is driven by multiple
@@ -133,19 +132,6 @@ Causemann2025, fultz2019coupled, mestre2018flow, daversin2020mechanisms}.
 % I3: What do we not know about the problem and what do we want to
 % know? What are the precise research questions we want to address?
 % Refer to specific studies and what specifically we do not know.
-
-%
-%Until now, most studies have analyzed one physical mechanism at a
-%time, especially in mammals.
-%
-%  Studies on animal models such as mice and
-% zebrafish have provided unequivocal evidence that cilia are crucial
-% for CSF flow in these animals~\cite{Olstad2019CiliaryDevelopment, Faubel2016Cilia}.
-% It is clear that cilia affects advective intraventricular transport 
-% to some extent. However a quantification of this effect, as well as of to which
-% extent diffusion plays a role in transporting solutes, remains
-% yet to be performed.
-
 To date, it remains poorly understood how motile cilia contribute to 
 the overall fluid flow and solute transport within the brain.
 Experimental endeavors are challenging to pursue due to
@@ -159,20 +145,17 @@ Until now, most studies have analyzed one physical mechanism at a time, especial
 For instance, studies using brain explants have convincingly shown
 that cilia generate complex flow patterns at the surface of the brain
 ventricles~\cite{Faubel2016Cilia-basedVentricles, Sawamoto2006NewBrain, ibanez2003beat};
-however, they failed to identify the role of pressure
-gradients associated with respiration and cardiac pulsations in CSF
-flow and the accompanying transport. Similarly, while MRI technology
+however, they failed to identify the role of other contributions to CSF
+flow and accompanying transport, such as pressure
+gradients associated with respiration and cardiac pulsations. Moreover, while MRI technology
 can measure CSF movement in humans~\cite{feinberg1987human, battal2011cerebrospinal,
 yamada2015current}, it cannot detect the microscopic
 movements of cilia to understand their impact in the large human
-brain~\cite{Siyahhan2014FlowVentricles}. Consequently, we lack a comprehensive understanding of how
-cilia contribute to CSF motion and solute transport, and whether cilia
-dysfunction alters CSF composition and thus leads to brain disorders.
-
-
-The technical limitations of studying cilia-mediated flow and transport opens the
-possibility of mathematical modeling and computational investigations. Numerous previous studies
-have focused on modeling the interaction between single or several cilia and surrounding
+brain~\cite{Siyahhan2014FlowVentricles}. 
+These technical limitations of studying cilia-mediated flow and transport make 
+mathematical modeling and computational investigations an attractive alternative to experimental
+studies. Numerous previous simulation studies have focused on modeling the interaction
+between single or several cilia and surrounding
 fluids~\cite{Guo2020SimulatingGeometries, Ruvalcaba2021NumericalTree, Smith2009MathematicalFluids,
 Cui2019NumericalMethod, Cui2022AFlow}.
 Others considered applications such as ciliary transport of mucous and particles in
@@ -184,25 +167,35 @@ and cilia-mediated flow in the brain~\cite{Siyahhan2014FlowVentricles,
 Yoshida2022EffectVentricles, Salman2022ComputationalEmbryo, Thouvenin2020OriginCanal}.
 These simulation studies have provided valuable insights on how cilia mediate complex
 biological flows, and how cilia may contribute to tissue physiology.
+However, we still lack a comprehensive understanding of how
+cilia contribute to CSF motion and solute transport within the brain.
+This is of particular importance since disorders such as hydrocephalus are observed
+in animal models and humans with deficient motile cilia~\cite{Afzelius2004Cilia-relatedDiseases,
+Olstad2019CiliaryDevelopment, Mitchison2017Motile, Ibanez-Tallon2002LossHydrocephalus},
+indicating that the cilia play a crucial role for healthy brain function. 
 
 % I4: How do we address the problem and what do we find out?
 In this study, we combined computational and experimental approaches to investigate
 the role of motile cilia in intraventricular CSF flow and transport.
-First, we computed flow patterns and simulated solute transport with a computational model. To
-this end, we used the geometry of the zebrafish larval brain ventricles,
-for which we have detailed knowledge of cilia properties and CSF motion velocities
-and frequencies. Notably, this early developmental stage allows us to simplify our model
+We model the flow and transport by partial differential equations and solve
+them numerically with finite element methods to compute flow patterns and
+solute concentration dynamics. A geometry representing the zebrafish larval brain ventricles
+was used, for which we have detailed knowledge of cilia properties and CSF motion velocities
+and frequencies~\cite{Olstad2019CiliaryDevelopment}. 
+Notably, this early developmental stage allows us to simplify our model
 by omitting CSF secretion, which starts at later stages~\cite{Jeong2024TheZebrafish},
 while still being well-conserved with mammals~\cite{DGama2025MotileBrain,
 Olstad2019CiliaryDevelopment, Ringers2020Role, DGama2021Diversity, jurisch2020radial}. 
-Next, we validated our computation model with experimental data by monitoring in vivo
+The computational model is validated with experimental data by monitoring in vivo
 the dynamics of a photoconvertible fluorescent protein Dendra2
 expressed within the brain ventricles.
 Our results show that diffusion plays a major role in the transport of small solutes,
 whereas cilia majorly contribute to the movement of larger particles.
-We also found that the location of cilia, as well as the ventricular geometry, largely
-impact solute distribution. Altogether, our work presents a computational
-framework together with new concepts of how cilia distribute molecules and
+We also found that the location of cilia, as well as changes to the ventricular geometry,
+largely impact solute distribution. In summary, our work presents a computational
+framework together that can be applied to other
+ventricular systems in the future, together with new concepts
+of how cilia distribute molecules and
 particles within the brain ventricles. 
 
 %%--------------RESULTS--------------%%
@@ -210,16 +203,16 @@ particles within the brain ventricles.
 
 \subsection{Motile cilia induce flow compartmentalization within the brain ventricles}
 
-% Why? (Intersting point #1. However, we do not know aspect #2. 
+% Why? (Interesting point #1. However, we do not know aspect #2. 
 % How? (We therefore ...)
 % What ... 
 
-In-vivo particle tracking reveals characteristic CSF flow patterns in
+In vivo particle tracking reveals characteristic CSF flow patterns in
 zebrafish larval brain ventricles
 (\Crefpanels{fig:fig1}{a--c})~\cite{Olstad2019CiliaryDevelopment}. We
 first ask whether we can accurately represent these flow patterns with
 computational fluid dynamics driven by cardiac pulsations and motile
-cilia lining the brain ventricles.
+cilia lining the surface of the brain ventricles.
 
 We model the net forces induced by motile cilia as a steady
 bidirectional traction acting on parts of the ventricular wall
@@ -261,7 +254,7 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
     \textbf{a.} Schematic illustration of the two cerebrospinal fluid (CSF) flow components modeled,
     motile cilia and cardiac pulsations, and their contributions to the flow patterns.
     \textbf{b, c.} Particle tracking data visualizing CSF flow directionality (\textbf{b}) and
-    velocity magnitudes in the middle ventricle.
+    velocity magnitudes (\textbf{c}) in the middle ventricle.
     \textbf{d.} Computational mesh with marked facets indicating regions of motile cilia (magenta) and
     anterior/posterior facets (blue).
     \textbf{e.} Streamlines of the (steady-state) CSF flow field simulated with the
