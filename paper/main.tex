@@ -49,7 +49,21 @@ Email Address: nathalie.jurisch-yaksi@ntnu.no
 % Abstract should be written in the present tense and impersonal style (i.e., avoid we), and be at most 200 words long
 \begin{abstract}
 
-Please insert your abstract here
+Cerebrospinal fluid (CSF) flow is integral to brain function.
+The underlying mechanisms of cilia-mediated flow and transport
+in the brain ventricles remain to be fully explored.
+In this paper, we analyze and evaluate the role of motile cilia
+in intraventricular CSF flow and transport. We combine computational
+modeling with in vivo experiments that monitor transport of a photoconvertible
+protein secreted in the brain ventricles.
+We use the geometry of the zebrafish larval brain ventricles,
+for which we have detailed knowledge of cilia properties and CSF motion velocities and frequencies,
+to develop a finite element model.
+Our results show that while cilia contribute to advection of large particles,
+diffusion plays a significant role in the transport of small molecules such as proteins.
+We also found that cilia location and the geometry of the ventricular system impact solute distribution.
+Altogether, our work offers both a computational framework that can be applied to other
+ventricular system and new concepts of how molecules are transported within the brain and its ventricles.
 
 \end{abstract}
 
@@ -79,7 +93,7 @@ processes, including the flow of cerebrospinal fluid
 plexus and partly by brain interstitial fluid,
 CSF is a clear liquid that flows through the ventricular system and subarachnoid
 space~\cite{Damkier2013, Brodal2016}. By transporting growth factors, nutrients, neurotransmitters
-and metabolites as well as removing waste products, CSF regulates
+and metabolites, as well as removing waste products, CSF regulates
 brain development and homeostasis~\cite{Ringers2020Role, fame2020emergence, del2010ependymal}.
 Disruption of the CSF circulation is detrimental to brain health and disturbs
 cognitive and motor functions~\cite{Johanson2008}.
@@ -90,9 +104,9 @@ treatment~\cite{duy2022rethinking, kahle2024paediatric, wallmeier2022role},
 but for which there is little agreement on optimal treatments~\cite{flannery2014pediatric}. 
 Of particular importance is the fact that
 hydrocephalus is observed in animal models and humans with deficient motile
-cilia~\cite{Afzelius2004Cilia, Olstad2019CiliaryDevelopment, Mitchison2017Motile,
+cilia~\cite{Afzelius2004Cilia-relatedDiseases, Olstad2019CiliaryDevelopment, Mitchison2017Motile,
 Ibanez-Tallon2002LossHydrocephalus},
-indicating that the cilia play a crucial role for healthy brain functioning. 
+indicating that the cilia play a crucial role for healthy brain function. 
 
 % I2: What do we know about the problem and the topic?
 The flow of CSF in the ventricular system is driven by multiple
@@ -109,7 +123,7 @@ The cilia beat in a coordinated pattern at frequencies of
 Given their microscopic size, ranging from
 5 to 15 microns, cilia contribute primarily to flow near the
 ependyma in the human brain~\cite{Siyahhan2014FlowVentricles, Olstad2019CiliaryDevelopment,
-Ringers2020Role, Faubel2016Cilia}. In contrast, cardiac,
+Ringers2020Role, Faubel2016Cilia-basedVentricles}. In contrast, cardiac,
 respiratory and delta waves at lower frequencies induce pulsatile flow
 at the larger scales in the brain ventricular system, subarachnoid space, and
 subarachnoid perivascular
@@ -144,7 +158,7 @@ make cilia difficult to monitor in vivo in humans.
 Until now, most studies have analyzed one physical mechanism at a time, especially in mammals.
 For instance, studies using brain explants have convincingly shown
 that cilia generate complex flow patterns at the surface of the brain
-ventricles~\cite{Faubel2016Cilia, Sawamoto2006NewBrain, ibanez2003beat};
+ventricles~\cite{Faubel2016Cilia-basedVentricles, Sawamoto2006NewBrain, ibanez2003beat};
 however, they failed to identify the role of pressure
 gradients associated with respiration and cardiac pulsations in CSF
 flow and the accompanying transport. Similarly, while MRI technology
