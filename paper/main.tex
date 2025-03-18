@@ -1460,7 +1460,7 @@ exerted by the cilia on a part $\mathcal{S}\subset\Gc$ of the ventricular surfac
 %-----DISCRETIZATION AND MODEL IMPLEMENTATION-----%
 \subsection{Numerical approximation of the Stokes equations}
 The Stokes equations (\Cref{eq:stokes_eqs}) are discretized with a finite element method
-in space, while in time, we employ a first-order implicit Euler discretization.
+in space, while in time, we employ a first-order implicit Euler discretization~\cite{butcher2016numerical}.
 We set the timestep size $\Delta t = 0.023$ s such that 20 timesteps represent one cardiac cycle.
 For the spatial discretization, we use piecewise linear Brezzi-Douglas-Marini (BDM)
 elements for the velocity.~\cite{Brezzi1985TwoProblems, Nedelec1986AIR3}
@@ -1916,17 +1916,21 @@ the mesh is ensured through stabilization
 of the discrete weak form~\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}.
 We apply the stabilization outlined in Hong~\emph{et al.}~\cite{Hong2016AEquations}.
 First, we define the average and jump operators, respectively, as
-\begin{equation*}
+\begin{equation}
     \avg{\uu} = \frac{\uu^+\cdot\nn^+ - \uu^-\cdot\nn^-}{2}
     \qquad\mathrm{and}\qquad \jump{\uu} = \uu^+ - \uu^-,
-\end{equation*}
-where $\nn$ is the normal vector on a facet separating two cells,
+    \label{eq:operators_BDM}
+\end{equation}
+where $\uu$ is a first-order tensor and 
+$\nn$ is the normal vector on a facet separating two cells,
 where the plus and minus signs denote variables in each of the two cells.
 The normal vector is chosen such that it points towards the exterior of
 its corresponding cell. On the boundary, the operators are defined as
 $\avg{\uu} = \uu\cdot\nn$ and $\jump{\uu} = \uu$,
-with $\nn$ pointing to the exterior of the domain. We now define
-and add the bilinear form
+with $\nn$ pointing to the exterior of the domain. Note that average operator
+defined in~\Cref{eq:operators_BDM} reduces the rank of the tensor $\uu$ by one,
+whereas the jump operator preserves rank. This extends to tensors of higher order.
+We now define and add the bilinear form
 \begin{align*}
     \mathcal{A}_{\mathrm{stab}}(\uu_h, \vv_h) &=
     \sum_{f\in \mathcal{F}}\int_f{2\mu\frac{\gamma}{\avg{h}}\jump{P_{\nn}(\uu_h)}
@@ -1962,7 +1966,13 @@ We solved~\Cref{eq:abstract_semi_discrete_weak_form_modelC}
 numerically with the penalty parameter $\gamma=10$.
 
 In time, we discretize the weak formulation~\Cref{eq:abstract_semi_discrete_weak_form_modelC}
-with the implicit Euler method.
+with the implicit Euler method, approximating the time derivative as
+\begin{equation*}
+    \pdifft{\uu} \approx \frac{\uu^{n+1} - \uu^n}{\Delta t},
+\end{equation*}
+where $n$ denotes the timestep index. All of the other terms
+in~\Cref{eq:abstract_semi_discrete_weak_form_modelC} are evaluated at timestep $n+1$.
+The method is implicit and of first order in time~\cite{butcher2016numerical}.
 
 \subsection{Weak formulation of the advection-diffusion equation}
 \label{subsec:adv_diff_eq_weak_form}
@@ -2094,7 +2104,7 @@ To ensure a stable discretization with these elements, we add the stabilization
     \begin{aligned}
         a_{\mathrm{stab}}(c_h, \phi_h)
         = &\sum_{f\in \mathcal{F}}\int_f{D\frac{\alpha}{\avg{h}}\jump{c_h}\cdot\jump{\phi_h}}\,\mathrm ds
-        +\sum_{f\in \mathcal{F}}\int_f{\jump{c_h \hat{u}_h}\cdot\jump{\phi_h}}\,\mathrm ds  \\
+        +\sum_{f\in \mathcal{F}}\int_f{\left({c_h \hat{u}_h}|^+ - {c_h \hat{u}_h}|^-\right)\cdot\jump{\phi_h}}\,\mathrm ds  \\
          -&\sum_{f\in \mathcal{F}}\int_f{D\avg{\nabla\phi_h}\cdot\jump{c_h}}\,\mathrm ds
          -\sum_{f\in \mathcal{F}}\int_f{D\avg{\nabla c_h}\cdot\jump{\phi_h}}\,\mathrm ds,
     \end{aligned}\label{eq:SIP_stabilization}
@@ -2123,7 +2133,15 @@ find $c_h\in W_h$, such that
 In this work, we solved~\Cref{eq:discrete_weak_form_adv_diff} numerically
 with the penalty parameter value $\alpha=25$.
 
-In time, we discretized~\Cref{eq:discrete_weak_form_adv_diff} with the implicit Euler method.
+In time, we discretized~\Cref{eq:discrete_weak_form_adv_diff} with the
+second-order backward difference scheme BDF2~\cite{Volker2016}. This scheme
+approximates the time derivative as
+\begin{equation*}
+    \pdifft{c} \approx \frac{3c^{n+1} - 4c^n + c^{n-1}}{2\Delta t},
+\end{equation*}
+where $n$ denotes the timestep index. All of the other terms
+in~\Cref{eq:discrete_weak_form_adv_diff} are evaluated at timestep $n+1$.
+The method is implicit and of second order in time.
 
 %--------------VERIFICATION--------------%
 \section{Verification}\label{sec:appB_verification}
