@@ -220,13 +220,13 @@ bidirectional traction acting on parts of the ventricular wall
 leads to a partial compartmentalization of the ventricular system,
 with large-scale vortex structures in the anterior, middle and
 posterior ventricles (\Crefpanels{fig:fig1}{e}). The highest flow
-speeds ($26.5$ \textmu m/s) occur in the vicinity of the dorsal cilia
+speeds ($\fixme{26.5}$ \textmu m/s) occur in the vicinity of the dorsal cilia
 in the middle ventricle. To model the cardiac pulsations, we impose a
 pulsatile pressure difference between the anterior and posterior
 boundaries (\Crefpanels{fig:fig1}{d, \fixme{g}}). The resulting flow
 is pulsatile and directional (\Crefpanels{fig:fig1}{\fixme{f}}), and
 in the absence of the cilia, the vortex structures vanish. The
-velocity magnitude peaks at $4.8$ \textmu m/s. CSF initially flows
+velocity magnitude peaks at $\fixme{4.8}$ \textmu m/s. CSF initially flows
 rostrocaudally before changing direction to caudorostral in the middle
 of the cardiac cycle.
 
@@ -241,7 +241,7 @@ posterior ventricle and in the ducts connecting the ventricular
 compartments. The CSF flow speed peaks at the time of peak caudal
 cardiac pulsatile flow, when both the tangential traction induced by
 the cilia and the pulsatile pressure-driven flow are aligned with the
-rostrocaudal axis, reaching up to 27.7 \textmu m/s dorsally in the
+rostrocaudal axis, reaching up to 28.0 \textmu m/s dorsally in the
 posterior part of the middle ventricle. The flow Reynolds number is
 $\mathrm{Re} \approx 0.004$, justifying the assumption of Stokes
 flow. In summary, the computational CSF flow model reproduces the flow
@@ -256,7 +256,8 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
     \textbf{b, c.} Particle tracking data visualizing CSF flow directionality (\textbf{b}) and
     velocity magnitudes (\textbf{c}) in the middle ventricle.
     \textbf{d.} Computational mesh with marked facets indicating regions of motile cilia (magenta) and
-    anterior/posterior facets (blue).
+    anterior/posterior facets (blue). Dorsal (D), ventral (V), anterior (A), posterior (P),
+    left (L) and right (R) coordinates indicated.
     \textbf{e.} Streamlines of the (steady-state) CSF flow field simulated with the
     cilia-only/no-cardiac flow model.
     \textbf{f.} Streamlines of the CSF flow field simulated with the cardiac-only/no-cilia flow
@@ -274,7 +275,7 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
 
 
 %% Over one cardiac cycle, the CSF flow speed reaches up to
-%% 27.7 \textmu m/s, dorsally in the posterior part of the middle
+%% 28.0 \textmu m/s, dorsally in the posterior part of the middle
 %% ventricle. This peak is attained at the time instant coinciding with
 %% the time of peak caudal cardiac pulsatile flow, 
 
@@ -327,7 +328,7 @@ diffusion coefficient as the solute spreads more uniformly throughout
 the ventricular geometry (\Crefpanels{fig:fig2}{b--d}). Notably, the
 smaller solutes with higher diffusion coefficients spread more quickly
 to distal regions. Computing Péclet numbers, we find that
-$\mathrm{Pe}_1=519$, $\mathrm{Pe}_2=14.7$ and $\mathrm{Pe}_3=7.4$ for
+$\mathrm{Pe}_1=664$, $\mathrm{Pe}_2=25$ and $\mathrm{Pe}_3=13$ for
 $D_1$, $D_2$ and $D_3$, respectively. With all $\mathrm{Pe} > 1$, this
 indicates that advection is the dominant transport mechanism on a
 global scale.
@@ -541,11 +542,11 @@ represent absence of cilia motion.
 
 The CSF velocities are most strongly
 affected when removing cilia in the dorsal diencephalic ventricle,
-as the maximum velocity magnitude drops from 27.7 \textmu m/s to 8.0 \textmu m/s.
+as the maximum velocity magnitude drops from \fixme{27.7} \textmu m/s to \fixme{8.0} \textmu m/s.
 In vivo, these cilia generate the strongest flow at
 this developmental stage of the fish~\cite{Olstad2019CiliaryDevelopment}.
 In contrast, removing telencephalic and ventral diencephalic cilia has minimal
-impact and results in maximum speeds of 27.7 \textmu m/s or 27.2 \textmu m/s, respectively.
+impact and results in maximum speeds of \fixme{27.7} \textmu m/s or \fixme{27.2} \textmu m/s, respectively.
 Of the total tangential forces exerted by the cilia, ventral cilia in the middle ventricle
 contribute with 34\%, while the dorsal cilia exert 52\% of the total tangential
 force~(\Crefpanels{fig:fig5}{b}). The magnitude of the force contributions are thus
@@ -932,7 +933,7 @@ Thouvenin~\emph{et al.}~\cite{Thouvenin2020OriginCanal}, where two-dimensional f
 in the central canal of zebrafish embryos was modeled using a cilia force density of
 4000 N/$\mathrm{m^2}$. The resulting numerical velocity fields matched well with
 in vivo measurements, where the maximum velocity magnitude was around 5 \textmu m/s
-(recall that our model exhibits a maximum of 27.7 \textmu m/s).
+(recall that our model exhibits a maximum of 28.0 \textmu m/s).
 The geometry they studied resembles a pipe, probably offering more flow resistance
 than the open geometry considered in our work, which may be why they needed a larger
 force density to accurately represent experimental results. In any case, it is
@@ -1445,7 +1446,7 @@ viscous forces, we also compute the Reynolds number
     \mathrm{Re} = \frac{\mathrm{inertial \ forces}}{\mathrm{viscous \ forces}} = \frac{\rho U_r L_r}{\mu},
 \end{equation*}
 with $L_r = 110$ \textmu m (the height of the middle ventricle) and
-$U_r = 27.7$ \textmu m/s (the maximum velocity magnitude)
+$U_r = 28.0$ \textmu m/s (the maximum velocity magnitude)
 as length and velocity scales characteristic of the flow.
 
 To study how cilia paralysis and ventricular morphology affect intraventricular
