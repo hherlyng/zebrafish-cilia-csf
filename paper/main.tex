@@ -1470,7 +1470,7 @@ thus we enforce the impermeability condition $\uu\cdot\nn=0$ strongly.
 We impose the boundary conditions for both the tangential traction $\bsigpar$ and
 the normal pressure $\Tilde{p}(t)$ weakly.
 For the pressure, we use piecewise constant (zeroth order discontinuous Galerkin (DG)) elements.
-The resulting total number of degrees of freedom at each time step is 943 820.
+The resulting total number of degrees of freedom at each time step is 1 009 874.
 The element combination $\mathrm{BDM}_1$--$\mathrm{DG}_{0}$ yields a non-conforming
 discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}.
 Continuity in tangential velocities on interior facets
@@ -1482,7 +1482,8 @@ the divergence-free condition of the velocity is satisfied exactly, ensuring mas
 The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized
 with with a second-order, symmetric interior penalty DG
 method in space~\cite{Arnold1982AnElements}, chosen due to its favorable
-conservation properties. In time, the equation is discretized with the second-order backward
+conservation properties. At each timestep the total number of degrees of freedom 
+is 1 415 120. In time, the equation is discretized with the second-order backward
 difference scheme BDF2.~\cite{Volker2016}
 To accurately approximate the solute concentrations even
 in the presence of strong advection (high Péclet numbers),

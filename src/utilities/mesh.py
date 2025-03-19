@@ -15,6 +15,59 @@ ANTERIOR_CILIA1      = 7
 ANTERIOR_CILIA2      = 8
 SLIP                 = 9
 
+def create_refinement_meshtags(mesh: dfx.mesh.Mesh):
+
+    # def ROI_1(x):
+    #     """ The dorsal posterior region of the middle ventricle. """
+    #     x_range = np.logical_and(x[0]>0.290, x[0]<0.320) #295, 325
+    #     y_range = np.logical_and(x[1]>0.145, x[1]<0.155)
+    #     z_range = np.logical_and(x[2]>0.195, x[2]<0.220) #200, 225
+    #     xz_range = np.logical_and(x_range, z_range)
+    #     return np.logical_and(y_range, xz_range)
+
+    def ROI_1_refinement_bot(x):
+        x_range = np.logical_and(x[0]>0.290, x[0]<0.320)
+        y_range = np.logical_and(x[1]>0.130, x[1]<0.150)
+        z_range = np.logical_and(x[2]>0.175, x[2]<0.195)
+        xz_range = np.logical_and(x_range, z_range)
+        return np.logical_and(y_range, xz_range)
+    
+    def ROI_1_refinement_top(x):
+        x_range = np.logical_and(x[0]>0.290, x[0]<0.320)
+        y_range = np.logical_and(x[1]>0.130, x[1]<0.150)
+        z_range = np.logical_and(x[2]>0.220, x[2]<0.250)
+        xz_range = np.logical_and(x_range, z_range)
+        return np.logical_and(y_range, xz_range)
+
+    def ROI_1_refinement_left(x):
+        x_range = np.logical_and(x[0]>0.270, x[0]<0.290)
+        y_range = np.logical_and(x[1]>0.130, x[1]<0.150)
+        z_range = np.logical_and(x[2]>0.195, x[2]<0.220)
+        xz_range = np.logical_and(x_range, z_range)
+        return np.logical_and(y_range, xz_range)
+    
+    def ROI_1_refinement_right(x):
+        x_range = np.logical_and(x[0]>0.320, x[0]<0.340)
+        y_range = np.logical_and(x[1]>0.130, x[1]<0.150)
+        z_range = np.logical_and(x[2]>0.195, x[2]<0.220)
+        xz_range = np.logical_and(x_range, z_range)
+        return np.logical_and(y_range, xz_range)
+    
+    tdim = mesh.topology.dim
+
+    cells = {1 : dfx.mesh.locate_entities(mesh, tdim, ROI_1_refinement_bot),
+                 2 : dfx.mesh.locate_entities(mesh, tdim, ROI_1_refinement_top),
+                 3 : dfx.mesh.locate_entities(mesh, tdim, ROI_1_refinement_left),
+                 4 : dfx.mesh.locate_entities(mesh, tdim, ROI_1_refinement_right),
+    }
+    num_volumes = mesh.topology.index_map(tdim).size_local \
+                + mesh.topology.index_map(tdim).num_ghosts # Total number of volumes = local + ghosts
+    DEFAULT  = 9 # default cell tag value
+    tags = [1, 2, 3, 4]
+    volume_marker = np.full(num_volumes, DEFAULT, dtype=np.int32)
+    for i in reversed(tags): volume_marker[cells[i]] = tags[i-1] # Mark the cells in each ROI with the corresponding ROI tag
+
+    return (dfx.mesh.meshtags(mesh, tdim, np.arange(num_volumes, dtype=np.int32), volume_marker), tags)
 
 def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.MeshTags, list[int])):
     """ Create cell meshtags for the different regions of interest (ROI)
@@ -48,9 +101,9 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
     # Define locator functions for each region of interest (ROI)
     def ROI_1(x):
         """ The dorsal posterior region of the middle ventricle. """
-        x_range = np.logical_and(x[0]>0.295, x[0]<0.325)
-        y_range = np.logical_and(x[1]>0.145, x[1]<0.155)
-        z_range = np.logical_and(x[2]>0.200, x[2]<0.225)
+        x_range = np.logical_and(x[0]>0.290, x[0]<0.320) #295, 325
+        y_range = np.logical_and(x[1]>0.135, x[1]<0.145) #145, 155
+        z_range = np.logical_and(x[2]>0.195, x[2]<0.220) #200, 225
         xz_range = np.logical_and(x_range, z_range)
         return np.logical_and(y_range, xz_range)
 
@@ -63,14 +116,18 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
     def ROI_3(x):
         """ The ventral posterior region of the middle ventricle. """
         x_range = np.logical_and(x[0] > 0.265, x[0] < 0.295)
+        y_range = np.logical_and(x[1]>0.075, x[1]<0.225)
         z_range = np.logical_and(x[2] > 0.110, x[2] < 0.135)
-        return np.logical_and(x_range, z_range)
+        xz_range = np.logical_and(x_range, z_range)
+        return np.logical_and(y_range, xz_range)
 
     def ROI_4(x):
         """ The entire middle ventricle. """
         x_range = np.logical_and(x[0]>line_ROI4_start(x[2]), x[0]<line_ROI4_end(x[2]))
+        y_range = np.logical_and(x[1]>0.075, x[1]<0.225)
         z_range = x[2] > 0.5*x[0] - 0.03
-        return np.logical_and(x_range, z_range)
+        xz_range = np.logical_and(x_range, z_range)
+        return np.logical_and(y_range, xz_range)
 
     def ROI_5(x):
         """ The anterior ventricle. """

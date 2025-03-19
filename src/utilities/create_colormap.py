@@ -62,9 +62,9 @@ if __name__=='__main__':
         cmap = 'wgk'
         cb = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap, orientation='horizontal')
         cb.set_ticks([0, 1])
-        cb.set_ticklabels([0, 0.77])
-        ax.tick_params(axis='x', labelsize=46)
-        ax.set_title(r"Concentration $c$ [-]", fontsize=46)
+        cb.set_ticklabels([0, 1.0])
+        ax.tick_params(axis='x', labelsize=36)
+        ax.set_title(r"Concentration $c$ [-]", fontsize=42)
         fig_name = "../../output/illustrations/colorbars/colorbar_D3.png"
     elif bar_type==2:
         fig = plt.figure(figsize=(15, 4))
