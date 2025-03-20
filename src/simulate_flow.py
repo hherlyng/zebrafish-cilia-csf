@@ -8,15 +8,23 @@ import adios4dolfinx as a4d
 from sys       import argv
 from ufl       import div, dot, inner, sym, grad, avg
 from mpi4py    import MPI
+from pathlib   import Path
 from petsc4py  import PETSc
 from basix.ufl import element, mixed_element
 from dolfinx.fem.petsc import assemble_matrix, _assemble_vector_vec, set_bc, apply_lifting, create_vector
 
 from utilities.mesh                 import mark_facets
 from utilities.forcing_expressions  import OscillatoryPressure
-from utilities.normals_and_tangents import facet_vector_approximation
 
 print = PETSc.Sys.Print
+
+# Set compiler options for runtime optimization
+cache_dir = f"{str(Path.cwd())}/.cache"
+compile_options = ["-Ofast", "-march=native"]
+jit_parameters  = {"cffi_extra_compile_args" : compile_options,
+                   "cache_dir"               : cache_dir,
+                   "cffi_libraries"          : ["m"]
+}
 
 # Mesh tags for flow
 ANTERIOR_PRESSURE    = 2 # The pressure BC facets on the anterior ventricle boundary
@@ -59,7 +67,7 @@ class FlowSolver:
 
     #----------CLASS CONSTANTS AND PARAMETERS----------#
     # Fluid parameters
-    nu_val  = 0.697 # Kinematic viscosity [mm^2 / s]
+    nu_val  = 0.7 # Kinematic viscosity [mm^2 / s]
     rho_val = 1e-3  # Fluid density [g / mm^3]
 
     # Model parameters
@@ -197,50 +205,53 @@ class FlowSolver:
             return self.comm.allreduce(force, op=MPI.SUM)
 
     def post_process(self):
-        """ Perform post processing of the numerical solution: 
+        """ Perform post processing of the numerical solution of the CSF velocity: 
         
-        Prints the maximum and minimum values of
-        the divergence of the velocity field. Also prints the value of integrating the normal velocity component
-        over the boundary of the mesh. 
+        Prints the maximum and minimum values and the L2 norm of
+        the divergence of the velocity field. 
         
         Calculates tangential forces in the different cilia regions and prints the values.
         
         """
 
         # Calculate the minimum and maximum values of the normal velocity component on the mesh boundary
-        n_h = facet_vector_approximation(V=self.uh_out.function_space, mt=self.ft) # Finite element approximation of the facet normal vector on the mesh boundary
-        u_dot_n = dfx.fem.Expression(dot(self.uh_out, n_h), self.uh_out.function_space.element.interpolation_points()) # The velocity component normal to the boundary
-        u_dot_n_f = dfx.fem.Function(dfx.fem.functionspace(self.mesh, element("Lagrange", self.mesh.basix_cell(), 1)))
-        u_dot_n_f.interpolate(u_dot_n)
-        u_dot_n_min = u_dot_n_f.x.array[np.invert(np.isnan(u_dot_n_f.x.array))].min()
-        u_dot_n_max = u_dot_n_f.x.array[np.invert(np.isnan(u_dot_n_f.x.array))].max()
+        DG0 = dfx.fem.functionspace(self.mesh, element('DG', self.mesh.basix_cell(), 0))
+        div_u_expr = dfx.fem.Expression(div(self.uh_out), DG0.element.interpolation_points()) # The velocity component normal to the boundary
+        div_u = dfx.fem.Function(DG0)
+        div_u.interpolate(div_u_expr)
+        div_u_min = div_u.x.array[np.invert(np.isnan(div_u.x.array))].min()
+        div_u_max = div_u.x.array[np.invert(np.isnan(div_u.x.array))].max()
 
         # Calculate total mass flux through the mesh boundary
-        n  = ufl.FacetNormal(self.mesh) # The facet normal of the mesh
-        ds = ufl.Measure('ds', domain=self.mesh) # Boundary integral measure
-        u_dot_n_integrated = dfx.fem.assemble_scalar(dfx.fem.form(dot(self.uh_out, n) * ds))
+        div_u_L2 = dfx.fem.assemble_scalar(
+                        dfx.fem.form(
+                                     inner(div(self.uh_out), div(self.uh_out)) * self.dx
+                                    )
+                                )
 
         # Parallel communication
-        u_dot_n_min = self.mesh.comm.allreduce(u_dot_n_min, op=MPI.MIN)
-        u_dot_n_max = self.mesh.comm.allreduce(u_dot_n_max, op=MPI.MAX)
-        u_dot_n_integrated = self.mesh.comm.allreduce(u_dot_n_integrated, op=MPI.SUM)
+        div_u_min = self.mesh.comm.allreduce(div_u_min, op=MPI.MIN)
+        div_u_max = self.mesh.comm.allreduce(div_u_max, op=MPI.MAX)
+        div_u_L2 = self.mesh.comm.allreduce(div_u_L2, op=MPI.SUM)
         
         # Print
-        print(f"Mass conservation min: {u_dot_n_min:.2e}")
-        print(f"Mass conservation max: {u_dot_n_max:.2e}")        
-        print(f"Mass conservation integrated: {u_dot_n_integrated:.2e}")
-
-        dorsal_force    = self.calculate_tangential_force(self.tangent_traction_dorsal(n), MIDDLE_DORSAL_CILIA)
-        ventral_force   = self.calculate_tangential_force(self.tangent_traction_ventral(n), MIDDLE_VENTRAL_CILIA)
-        anterior1_force = self.calculate_tangential_force(self.tangent_traction_anterior1(n), ANTERIOR_CILIA1)
-        anterior2_force = self.calculate_tangential_force(self.tangent_traction_anterior2(n), ANTERIOR_CILIA2)
-    
-        anterior_force = anterior1_force+anterior2_force                                                                    
-        print("Tangential forces:")
-        print(f"Dorsal: {dorsal_force}")
-        print(f"Ventral: {ventral_force}")
-        print(f"Anterior: {anterior_force}")
-        print(f"Total: {dorsal_force+ventral_force+anterior_force}")
+        print(f"Divergence min: {div_u_min:.2e}")
+        print(f"Divergence max: {div_u_max:.2e}")        
+        print(f"Divergence L2 norm: {div_u_L2:.2e}")
+        
+        if self.model_version in ['A', 'C']:
+            n  = ufl.FacetNormal(self.mesh) # The facet normal of the mesh
+            dorsal_force    = self.calculate_tangential_force(self.tangent_traction_dorsal(n), MIDDLE_DORSAL_CILIA)
+            ventral_force   = self.calculate_tangential_force(self.tangent_traction_ventral(n), MIDDLE_VENTRAL_CILIA)
+            anterior1_force = self.calculate_tangential_force(self.tangent_traction_anterior1(n), ANTERIOR_CILIA1)
+            anterior2_force = self.calculate_tangential_force(self.tangent_traction_anterior2(n), ANTERIOR_CILIA2)
+        
+            anterior_force = anterior1_force+anterior2_force                                                                    
+            print("Tangential cilia forces:")
+            print(f"Dorsal: {dorsal_force}")
+            print(f"Ventral: {ventral_force}")
+            print(f"Anterior: {anterior_force}")
+            print(f"Total: {dorsal_force+ventral_force+anterior_force}")
 
     def setup(self):
         """ Set up the discrete variational problem of the Stokes equations,
@@ -260,7 +271,7 @@ class FlowSolver:
         self.mu = dfx.fem.Constant(mesh, dfx.default_scalar_type(self.nu_val*self.rho_val)) # Dynamic viscosity [g / (mm * s)]
 
         # Finite elements
-        k  = 1 # Velocity FEM order, pressure one order lower
+        k = 1 # Velocity FEM order, pressure one order lower
         cell = mesh.basix_cell() # Mesh cell type
         Velm = element('BDM', cell, k  ) # Velocity element: Brezzi-Douglas-Marini  of order k
         Qelm = element('DG' , cell, k-1) # Pressure element: Discontinuous Galerkin of order k-1
@@ -382,7 +393,8 @@ class FlowSolver:
         self.bcs = [u_bc]
 
         # Compile bilinear and linear forms
-        self.a_cpp, self.L_cpp = dfx.fem.form(a), dfx.fem.form(L)
+        self.a_cpp = dfx.fem.form(a, jit_options=jit_parameters)
+        self.L_cpp = dfx.fem.form(L, jit_options=jit_parameters)
 
         # Assemble system matrix and create RHS vector
         A = assemble_matrix(self.a_cpp, self.bcs)
@@ -399,7 +411,7 @@ class FlowSolver:
             
             # Account for HDiv
             a_prec += self.stabilization(u, v, consistent=False)
-            a_prec_cpp = dfx.fem.form(a_prec)
+            a_prec_cpp = dfx.fem.form(a_prec, jit_options=jit_parameters)
             B = assemble_matrix(a_prec_cpp, self.bcs)
             B.assemble()
         
@@ -602,7 +614,7 @@ class FlowSolver:
             with open(file=self.u_out_str.removesuffix('.bp')+f'max_and_mean.txt',
                       mode='w+') as file:
                 file.write('max velocity  = ' + str(float(self.uh_mag_max)) + '\n')
-                file.write('mean velocity = ' + str(float(u_mag_mean)))
+                if self.model_version in ['B', 'C']: file.write('mean velocity = ' + str(float(u_mag_mean)))
 
 if __name__ == '__main__':
 
@@ -674,3 +686,4 @@ if __name__ == '__main__':
     print("\n#-------------Solving linear system--------------#\n")
     solver.solve()
     print("\n#-------------Simulation complete----------------#\n")
+    solver.post_process()

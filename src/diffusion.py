@@ -178,12 +178,6 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
     total_c = comm.allreduce(total_c, op=MPI.SUM)
     print(f"Total concentration: {total_c:.2e}")
 
-    output = dfx.io.VTXWriter(comm, "pure_diffusion.bp", [c_h], "BP4")
-    output.write(t)
-
-
-    output.close()
-
     return c__, c_
 
 if __name__=='__main__':

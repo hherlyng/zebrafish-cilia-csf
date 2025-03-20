@@ -6,24 +6,16 @@ import dolfinx   as dfx
 from mpi4py   import MPI
 
 # Mesh tags for flow
-ANTERIOR_PRESSURE    = 2
-POSTERIOR_PRESSURE   = 3
-VOLUME               = 4
-MIDDLE_VENTRAL_CILIA = 5
-MIDDLE_DORSAL_CILIA  = 6
-ANTERIOR_CILIA1      = 7
-ANTERIOR_CILIA2      = 8
-SLIP                 = 9
+ANTERIOR_PRESSURE    = 2 # The pressure BC facets on the anterior ventricle boundary
+POSTERIOR_PRESSURE   = 3 # The pressure BC facets on the posterior ventricle boundary
+MIDDLE_VENTRAL_CILIA = 5 # The cilia BC facets on the ventral wall of the middle ventricle
+MIDDLE_DORSAL_CILIA  = 6 # The cilia BC facets on the dorsal wall of the middle ventricle
+ANTERIOR_CILIA1      = 7 # The cilia BC facets on the dorsal, anterior walls of the anterior ventricle
+ANTERIOR_CILIA2      = 8 # The cilia BC facets on the dorsal, posterior walls of the anterior ventricle
+SLIP                 = 9 # The free-slip facets of the boundary
+DEFAULT = 10 # Default tag
 
 def create_refinement_meshtags(mesh: dfx.mesh.Mesh):
-
-    # def ROI_1(x):
-    #     """ The dorsal posterior region of the middle ventricle. """
-    #     x_range = np.logical_and(x[0]>0.290, x[0]<0.320) #295, 325
-    #     y_range = np.logical_and(x[1]>0.145, x[1]<0.155)
-    #     z_range = np.logical_and(x[2]>0.195, x[2]<0.220) #200, 225
-    #     xz_range = np.logical_and(x_range, z_range)
-    #     return np.logical_and(y_range, xz_range)
 
     def ROI_1_refinement_bot(x):
         x_range = np.logical_and(x[0]>0.290, x[0]<0.320)
@@ -62,7 +54,6 @@ def create_refinement_meshtags(mesh: dfx.mesh.Mesh):
     }
     num_volumes = mesh.topology.index_map(tdim).size_local \
                 + mesh.topology.index_map(tdim).num_ghosts # Total number of volumes = local + ghosts
-    DEFAULT  = 9 # default cell tag value
     tags = [1, 2, 3, 4]
     volume_marker = np.full(num_volumes, DEFAULT, dtype=np.int32)
     for i in reversed(tags): volume_marker[cells[i]] = tags[i-1] # Mark the cells in each ROI with the corresponding ROI tag
@@ -154,7 +145,6 @@ def create_ventricle_volumes_meshtags(mesh: dfx.mesh.Mesh) -> tuple((dfx.mesh.Me
     }
     num_volumes = mesh.topology.index_map(tdim).size_local \
                 + mesh.topology.index_map(tdim).num_ghosts # Total number of volumes = local + ghosts
-    DEFAULT  = 9 # default cell tag value
     ROI_tags = [1, 2, 3, 4, 5, 6]
     volume_marker = np.full(num_volumes, DEFAULT, dtype=np.int32)
     for i in reversed(ROI_tags): volume_marker[ROI_cells[i]] = ROI_tags[i-1] # Mark the cells in each ROI with the corresponding ROI tag
@@ -187,7 +177,7 @@ def mark_facets(mesh: dfx.mesh.Mesh, inflow_outflow: bool) -> dfx.mesh.MeshTags:
 
     num_facets   = mesh.topology.index_map(facet_dim).size_local \
                  + mesh.topology.index_map(facet_dim).num_ghosts # Number of facets = local + ghosts
-    facet_marker = np.full(num_facets, VOLUME, dtype=np.int32) # Default facet marker value
+    facet_marker = np.full(num_facets, DEFAULT, dtype=np.int32) # Default facet marker value
     
     # Facets of the boundary of the mesh where noslip condition is imposed
     boundary_facets = dfx.mesh.exterior_facet_indices(mesh.topology)
@@ -235,7 +225,7 @@ def posterior_pressure_boundary(x: numpy.typing.NDArray[np.float64]) -> numpy.ty
     array_like
         Boolean, True if coordinate is on boundary to be marked, else False.
     """
-    return (x[0] > 0.59)
+    return (x[0]>0.59)
 
 def anterior_pressure_boundary(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
     """ Marker function for the boundary where pressure BCs are applied in the anterior ventricle.
@@ -250,7 +240,7 @@ def anterior_pressure_boundary(x: numpy.typing.NDArray[np.float64]) -> numpy.typ
     array_like
         Boolean, True if coordinate is on boundary to be marked, else False.
     """
-    return np.logical_and(x[0] < 0.10, x[2] < 0.07)
+    return np.logical_and(x[0]<0.10, x[2]<0.07)
 
 def middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
 
@@ -280,9 +270,6 @@ def middle_ventral_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.ty
     return np.logical_or(or1, xyz_bool3)
 
 def middle_dorsal_cilia_volume(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.NDArray[np.bool_]:
-    x_range3 = np.logical_and(x[0]>0.14, x[0]<0.165)
-    z_range3 = (x[2]>0.21)
-    xz_bool3 = np.logical_and(x_range3, z_range3)
 
     x_range1  = np.logical_and(x[0]>0.175, x[0]<0.230)
     z_range1  = (x[2]>0.215)
@@ -320,7 +307,7 @@ def anterior_cilia_volume2(x: numpy.typing.NDArray[np.float64]) -> numpy.typing.
 
 
 ###########################
-#       TEST MESHES       #
+#   VERIFICATION MESHES   #
 ###########################
 LEFT    = 1
 RIGHT   = 2

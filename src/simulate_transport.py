@@ -40,9 +40,9 @@ SLIP                 = 9
 
 # Diffusion coefficients
 D_coeffs = {
-    'D1' : 2.17e-6, # Exosomes, 150 nm radius 
-    'D2' : 57.5e-6, # STM-GFP
-    'D3' : 115e-6,  # Dendra2
+    'D1' : 2.17e-6, # Extracellular vesicles (150 nm radius)
+    'D2' : 57.5e-6, # STM-GFP 
+    'D3' : 115e-6,  # Dendra2 fluorescent protein
 }
 
 class TransportSolver:
@@ -50,7 +50,7 @@ class TransportSolver:
     
     comm = MPI.COMM_WORLD # MPI communicator
     ghost_mode = dfx.mesh.GhostMode.shared_facet # Mesh partitioning method for MPI communication
-    record_periods = np.array([200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800])
+    record_periods = np.array([200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800]) # Periods for which concentration snapshots will be written
 
     def __init__(self, data_fname: str,
                        model_version: str,
@@ -81,6 +81,7 @@ class TransportSolver:
         self.data_fname = data_fname
         self.element_degree = element_degree
         
+        # Read mesh and meshtags from velocity data file
         self.mesh = a4d.read_mesh(comm=self.comm, filename=data_fname, engine='BP4', ghost_mode=self.ghost_mode)
         self.ft   = a4d.read_meshtags(filename=data_fname, mesh=self.mesh, meshtag_name='ft')
         print(f"Total # of cells in mesh: {self.mesh.topology.index_map(self.mesh.topology.dim).size_global}")
@@ -93,17 +94,16 @@ class TransportSolver:
         self.period = period # Cardiac cycle period length
         self.write_time = 0 # For checkpointing
 
-        # Penalty parameters
-        self.alpha_val = 25.0 * self.element_degree  # DG interior penalty parameter
+        # DG interior penalty parameter
+        self.alpha_val = 25.0 * self.element_degree  
 
         # Create meshtags for the different ventricle ROIs
         self.ROI_ct, self.ROI_tags = create_ventricle_volumes_meshtags(mesh=self.mesh)      
 
-        # Concentration Dirihclet condition value
-        self.c_tilde = 1.0 # Max concentration in ROI 1 as time t->large
-        self.a = 65 # Logarithm growth factor
+        # Photoconversion curve logarithm growth factor
+        self.a = 65
 
-        # Set output directory
+        # Output directory
         self.output_dir = f'../output/transport/mesh={self.mesh_version}_model={self.model_version}_molecule={self.molecule}_ciliaScenario={cilia_string}_dt={dt:.4g}/'
     
     def setup_variational_problem(self):
@@ -169,8 +169,8 @@ class TransportSolver:
         self.a_cpp = dfx.fem.form(a, jit_options=jit_parameters)
         self.L_cpp = dfx.fem.form(L, jit_options=jit_parameters)
 
-    def photoconversion_curve(self):        
-        return self.c_tilde*np.log(1+self.t/self.a)/np.log(1+self.T/self.a) # Parameter a determines growth speed
+    def photoconversion_curve(self):
+        return np.log(1+self.t/self.a)/np.log(1+self.T/self.a) # Parameter a determines growth speed
 
     def setup_preconditioner(self):
         """ Variational problem for the preconditioner matrix:
@@ -260,7 +260,7 @@ class TransportSolver:
         self.setup_solver()
 
         # Prepare stuff to be calculated
-        self.total_c = dfx.fem.form(self.c_h * self.dx)
+        self.total_c = dfx.fem.form(self.c_h * self.dx, jit_options=jit_parameters)
         
         if self.write_output_vtx:
             # Intialize VTX output file for the concentration
@@ -291,9 +291,19 @@ class TransportSolver:
             for ROI_tag in self.ROI_tags:
                 if ROI_tag==4:
                     # For ROI 4, we need to include the integrals of regions 1, 2 and 3
-                    self.c_hat_forms.append(dfx.fem.form(self.c_h*self.dx((ROI_tag, ROI_tag-1, ROI_tag-2, ROI_tag-3))))
+                    self.c_hat_forms.append(
+                                        dfx.fem.form(
+                                                self.c_h*self.dx((ROI_tag, ROI_tag-1, ROI_tag-2, ROI_tag-3)),
+                                                jit_options=jit_parameters
+                                                )
+                                            )
                 else:
-                    self.c_hat_forms.append(dfx.fem.form(self.c_h*self.dx(ROI_tag)))
+                    self.c_hat_forms.append(
+                                        dfx.fem.form(
+                                                self.c_h*self.dx(ROI_tag),
+                                                jit_options=jit_parameters
+                                                )
+                                            )
 
             # Pre-allocate concentration arrays
             self.c_hat_arrays = np.zeros((self.num_timesteps, len(self.ROI_tags)), dtype=np.float64)
@@ -353,18 +363,30 @@ class TransportSolver:
         """ Run transport simulations. """
 
         if self.model_version=='A':
+
+            # Read velocity data from file
+            # This is done before the solution loop
+            # because the velocity field is a
+            # steady-state solution for this model version
             a4d.read_function(u=self.u, filename=self.data_fname, engine="BP4", time=1)
             
             for i in range(self.num_timesteps):
 
                 self.t += self.dt
 
+                if i==0:
+                    # Scale initial conditions by the photoconversion curve values at
+                    # the respective time points
+                    self.bc_func.x.array[:] = self.photoconversion_curve()  
+                    self.c__.x.array[:] *= self.comm.allreduce(self.bc_func.x.array.max(), op=MPI.MAX)
+                    self.t += self.dt
+
+                    self.bc_func.x.array[:] = self.photoconversion_curve()
+                    self.c_.x.array[:] *= self.comm.allreduce(self.bc_func.x.array.max(), op=MPI.MAX)
+                    self.t += self.dt
+
                 # Update photoconversion site (ROI 1) concentration
                 self.bc_func.x.array[:] = self.photoconversion_curve()
-
-                if i==0:
-                    # Scale initial condition
-                    self.c_.x.array[:] *= self.comm.allreduce(self.bc_func.x.array.max(), op=MPI.MAX)
 
                 # Assemble the system matrix and the right-hand side vector and solve
                 self.assemble_system_matrix()
@@ -373,6 +395,7 @@ class TransportSolver:
                 self.c_h.x.scatter_forward()
 
                 # Update previous timestep solution
+                self.c__.x.array[:] = self.c_.x.array.copy()
                 self.c_.x.array[:] = self.c_h.x.array.copy()
 
                 # Print stuff
@@ -395,7 +418,6 @@ class TransportSolver:
                     self.write_time += 1
                     a4d.write_function(u=self.c_h, filename=self.checkpoint_filename, time=self.write_time)
                 
-                #--------  Post-process data  ---------#
                 if self.write_data:
                     # Calculate mean concentrations and store them in arrays
                     for j in range(len(self.ROI_tags)):
@@ -452,7 +474,7 @@ class TransportSolver:
                 self.solver.solve(self.b, self.c_h.x.petsc_vec)
                 self.c_h.x.scatter_forward()
 
-                # Update previous timestep solution and BC
+                # Update previous timestep solution
                 self.c__.x.array[:] = self.c_.x.array.copy()
                 self.c_.x.array[:] = self.c_h.x.array.copy()
             
@@ -464,8 +486,6 @@ class TransportSolver:
                 # Print stuff
                 print("Maximum concentration: ", max_c)
                 print("Minimum concentration: ", min_c)
-
-                print("Undershoot in percent of max: ", min_c/max_c*100)
                 
                 total_c = dfx.fem.assemble_scalar(self.total_c)
                 total_c = self.comm.allreduce(total_c, op=MPI.SUM)
@@ -485,7 +505,6 @@ class TransportSolver:
                     record_period_index = np.where(np.isclose(self.t, self.snapshot_times)==True)[0][0]
                     a4d.write_function(u=self.c_h, filename=self.snapshot_filename, time=self.record_periods[record_period_index])
 
-                #--------  Post-process data  ---------#
                 if self.write_data:
                     # Calculate mean concentrations and store them in arrays
                     for j in range(len(self.ROI_tags)):
@@ -518,24 +537,23 @@ class TransportSolver:
 if __name__ == '__main__':
 
     # Model versions:
-    # A = only-cilia/no-cardiac
-    # B = only-cardiac/no-cilia
+    # A = cilia-driven/no-cardiac
+    # B = cardiac-induced/no-cilia
     # C = cilia+cardiac (baseline)
 
     model_version = 'C' 
-    write_data = False # Write mean concentrations in ROIs as numpy data
+    write_data = True # Write ROI mean concentrations as numpy data
     write_output_vtx = False # Write VTX output file
     write_output_xdmf = False # Write XDMF output file
     write_checkpoint  = False # Write DOLFINx fem function concentration checkpoints
-    write_snapshot_checkpoint = False # Write checkpoints at specific periods defined in class
+    write_snapshot_checkpoint = True # Write checkpoints at specific periods defined in class
     use_direct_solver = False # Use a direct or iterative solver
     k = 2 # DG element polynomial degree
     
-    #-----Create transport solver object-----#
     # Molecule options:
     # D1 = Extracellular vesicles (radius 150 nm)
     # D2 = Starmaker + Green Fluorescent Protein
-    # D3 = Dendra Fluorescent Protein
+    # D3 = Dendra2 Fluorescent Protein
     molecule_input = int(argv[1])
     if molecule_input==1:
         molecule = 'D1'
