@@ -54,7 +54,7 @@ class TransportSolver:
 
     def __init__(self, data_fname: str,
                        model_version: str,
-                       mesh_version: int,
+                       mesh_version: str,
                        T: float,
                        dt: float,
                        period: float,
@@ -66,7 +66,56 @@ class TransportSolver:
                        write_checkpoint: bool=False,
                        write_snapshot_checkpoint: bool=False,
                        use_direct_solver: bool=True):
-        """ Constructor for the transport model solver. """
+        """ Constructor.
+
+        Parameters
+        ----------
+        data_fname : str
+            Filename of velocity data.
+        
+        model_version : str
+            The problem setup considered for the flow model, 
+            either model A, B or C:
+                - Model A: only cilia forces
+                - Model B: only cardiac forces
+                - Model C: cilia and cardiac forces, i.e. A+B
+        
+        mesh_version : str
+            The mesh version used, as specified by the mesh filename prefix.
+        
+        T : float
+            Simulation end time in seconds.
+        
+        dt : float
+            Timestep size in seconds.
+        
+        period : float
+            Cardiac cycle period in seconds.
+        
+        molecule : str
+            Which molecule to simulate transport of. Options are 'D1', 'D2' and 'D3'.
+
+        element_degree : int
+            Polynomial degree of finite element basis functions.
+
+        write_data : bool
+            Write ROI mean concentrations to .npy data file if True.
+        
+        write_output_vtx : bool
+            Write concentration to VTX file if True.
+        
+        write_output_xdmf : bool
+            Write concentration to XDMF file if True.
+        
+        write_checkpoint : bool
+            Write concentration to adios4dolfinx checkpoint file if True. 
+        
+        write_snapshot_checkpoint : bool
+            Write concentration snapshots at times equal to record_periods if True. 
+
+        use_direct_solver : bool
+            Use a direct solver if True, else use an iterative solver.
+        """
 
         self.model_version = model_version
         self.mesh_version = mesh_version

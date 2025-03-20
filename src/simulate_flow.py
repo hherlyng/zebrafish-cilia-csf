@@ -49,20 +49,6 @@ Tangent = lambda v, n: v - n*dot(v, n)
 # Symmetric gradient
 eps = lambda u: sym(grad(u))
 
-# Velocity of reference frame
-class ReferenceFrameVelocity:
-    """ Class for generating a velocity expression used to prescribe the motion of the reference frame. """
-
-    def __init__(self, amp, freq):
-        self.t = 0
-        self.amp = amp
-        self.omega = 2*np.pi*freq
-
-    def __call__(self, x):
-        return self.amp * np.cos(self.omega*self.t) * np.stack((np.ones (x.shape[1]),
-                                                                np.zeros(x.shape[1]),
-                                                                np.zeros(x.shape[1])))
-
 class FlowSolver:
 
     #----------CLASS CONSTANTS AND PARAMETERS----------#
@@ -88,14 +74,15 @@ class FlowSolver:
     def __init__(self,
                  mesh: dfx.mesh.Mesh,
                  ft: dfx.mesh.MeshTags,
-                 direct: bool,
                  model_version: str,
-                 mesh_version: int,
+                 mesh_version: str,
                  T: float,
                  dt: float,
                  cilia_scenario: int,
                  write_output: bool=False,
-                 write_checkpoint: bool=False):
+                 write_checkpoint: bool=False,
+                 use_direct_solver: bool=True):
+
         """ Constructor.
 
         Parameters
@@ -106,8 +93,6 @@ class FlowSolver:
         ft : dfx.mesh.MeshTags
             Facet tags for the mesh.
         
-        direct : bool
-            Use a direct solver if True, else use an iterative solver.
         
         model_version : str
             The problem setup considered, either model A, B or C.
@@ -136,11 +121,14 @@ class FlowSolver:
         
         write_checkpoint : bool
             Write velocity to adios4dolfinx checkpoint file if True. 
+        
+        use_direct_solver : bool
+            Use a direct solver if True, else use an iterative solver.
         """
         
         self.mesh = mesh
+        self.comm = mesh.comm # MPI communicator
         self.ft = ft
-        self.use_direct_solver = direct
         self.model_version = model_version
         self.mesh_version = mesh_version
         self.T = T
@@ -148,7 +136,7 @@ class FlowSolver:
         self.cilia_scenario = cilia_scenario
         self.write_output = write_output
         self.write_checkpoint = write_checkpoint
-        self.comm = mesh.comm
+        self.use_direct_solver = use_direct_solver
 
     def stabilization(self, u: ufl.Coefficient, v: ufl.Coefficient, consistent: bool=True):
         """ Displacement/Flux Stabilization term from Krauss et al paper.
@@ -481,7 +469,6 @@ class FlowSolver:
         #------------OUTPUT SETUP------------#
         #------------------------------------#
         self.wh = dfx.fem.Function(W) # Function for storing the solution
-        self.uh_diff = dfx.fem.Function(V) # Function for storing the velocity in the moving reference frame
         self.uh_out  = dfx.fem.Function(dfx.fem.functionspace(mesh, element('DG', cell, 1, shape=(3,)))) # Function for writing the velocity to output
         self.uh_mag_max = 0 # Used to store the maximum of the velocity magnitude
         self.write_time = 0 # Used to write velocity checkpoints
@@ -673,7 +660,7 @@ if __name__ == '__main__':
     # Initialize solver object
     solver = FlowSolver(mesh=mesh,
                         ft=ft,
-                        direct=direct,
+                        use_direct_solver=direct,
                         model_version=model,
                         mesh_version=mesh_version,
                         T=T,
