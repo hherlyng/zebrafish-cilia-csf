@@ -18,6 +18,7 @@
 \RequirePackage{booktabs} % Tables
 \RequirePackage{color} % Text color
 \RequirePackage{bm} % Bold math
+\RequirePackage{authblk}
 \RequirePackage{stmaryrd} % Double brackets for jump operator
 \RequirePackage[colorlinks=true, allcolors=blue]{hyperref} % Links
 \RequirePackage[nameinlink, capitalise]{cleveref} % Cross referencing
@@ -25,40 +26,9 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 
-%\RaggedRight % MER 
-
-\renewcommand{\maketitle}{
-\huge
-\@title
-\medskip
-\global\@topnum\z@
-   }
-   
- \renewenvironment{author} {
- \large
- \emph
-  }
- 
-
-\newcommand{\keywords}[1]{
-\medskip
-Keywords: \textit{#1}
-}
-
-\newcommand{\dedication}[1]{
-\medskip
-\textit{#1}
-}
-
-\newenvironment{affiliations}{
-\medskip
-\large
-}
-
-\renewenvironment{abstract}{
-\small
-\medskip\medskip
-}
+% Author block
+\setlength{\affilsep}{1.5em}
+\renewcommand\Affilfont{\small} 
 
 \newcommand{\threesubsection}[1]{
 \medskip
@@ -81,9 +51,6 @@ Keywords: \textit{#1}
 \newcommand{\lyng}[1]{\textcolor{blue}{#1}}
 \newcommand{\mer}[1]{\textcolor{magenta}{#1}}
 \newcommand{\mk}[1]{\textcolor{olive}{MK: #1}}
-
-% Citation
-\newcommand{\newcite}[1]{\textsuperscript{\cite{#1}}}
 
 % Math
 \newcommand{\cbar}{\overline{c}} % Mean concentration

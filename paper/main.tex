@@ -1,77 +1,25 @@
 \documentclass{WileyMSP-template}
 
-\begin{document}
-
 \pagestyle{plain} 
 
-\begingroup
-\parindent0pt
-
-\title{The role of advection versus diffusion in intraventricular transport}
+\title{\textbf{Advection versus diffusion in intraventricular transport}}
 %
-\maketitle
 %
 % Author: Please give full first and last names for authors and
 % include * after the name of all corresponding authors
 
-\author{Halvor Herlyng*},
-\author{Ada J.~Ellingsrud},
-\author{Miroslav Kuchta},
-\author{Inyoung Jeong},
-\author{Marie E.~Rognes}, 
-\author{Nathalie Jurisch-Yaksi*}
+\author[1,*]{Halvor Herlyng}
+\author[1]{Ada J.~Ellingsrud}
+\author[1]{Miroslav Kuchta} 
+\author[2]{Inyoung Jeong}
+\author[1,3]{Marie E.~Rognes}
+\author[2, *]{Nathalie Jurisch-Yaksi}
+\affil[1]{Department for Numerical Analysis and Scientific Computing, Simula Research Laboratory, Oslo, Norway} % Kristian Augusts gate 23, 0164
+\affil[2]{Department of Clinical and Molecular Medicine, Norwegian University of Science and Technology, Trondheim, Norway} % Erling Skjalgsons gate 1, 7491
+\affil[3]{K.~G.~Jebsen Center for Brain Fluid Research, Oslo, Norway}
+\affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}, \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
+\date{}
 
-% Affiliations: Please provide adacemic titles (Prof. or Dr.) for all authors where applicable,
-% and include an institutional email address for all corresponding authors
-\begin{affiliations}
-H.~Herlyng, Dr.~A.~J.~Ellingsrud, Dr.~M.~Kuchta, Dr.~M.~E.~Rognes\\
-Department of Numerical Analysis and Scientific Computing,
-Simula Research Laboratory, Kristian Augusts gate 23, 0164 Oslo, Norway\\
-Email Address: hherlyng@simula.no
-
-\medskip
-Dr.~M.~E.~Rognes \\
-K.~G.~Jebsen Centre for Brain Fluid Research, Oslo, Norway
-
-\medskip
-Dr.~I.~Jeong, Dr.~N.~Jurisch-Yaksi\\
-Department of Clinical and Molecular Medicine,
-Norwegian University of Science and Technology, Erling Skjalgsons gate 1, 7491 Trondheim, Norway \\
-Email Address: nathalie.jurisch-yaksi@ntnu.no
-\end{affiliations}
-
-\medskip
-
-% Keywords: Please provide a minimum of three and a maximum of seven keywords, separated by commas
-
-\keywords{cerebrospinal fluid, brain ventricles, cilia, transport, finite element methods}
-
-% Abstract should be written in the present tense and impersonal style (i.e., avoid we), and be at most 200 words long
-\begin{abstract}
-
-Cerebrospinal fluid (CSF) is integral to brain function, as the fluid
-provides mechanical support of the brain and the flow of CSF helps
-distribute nutrients, neurotransmitters and metabolites throughout
-the central nervous system. CSF flow is partly driven
-by beating of motile cilia, hair-like structures that line the ependymal cell layer
-of the brain ventricles. Despite the physiological importance of CSF flow,
-the underlying mechanisms of cilia-mediated flow and transport
-in the brain ventricles remain yet to be comprehensively resolved.
-In this study, we analyze and evaluate the role of motile cilia
-in intraventricular CSF flow and transport. We use the geometry
-of the zebrafish larval brain ventricles, for which we have detailed knowledge of cilia properties and CSF motion velocities
-and frequencies, to develop finite element methods that model flow and transport.
-The computational model is validated by in vivo experiments that monitor transport
-of a photoconvertible protein secreted in the brain ventricles.
-Our results show that while cilia contribute to advection of large particles,
-diffusion plays a significant role in the transport of small molecules such as proteins.
-We also found that cilia location and the geometry of the ventricular system impact solute distribution.
-Altogether, our work presents a computational framework that can be applied to other
-ventricular systems, together with new concepts of how molecules are transported within the brain and its ventricles.
-
-\end{abstract}
-
-\endgroup % End 0parindent group
 
 % Text: Please use section headings and subheadings as specified below. For communications, all section headings apart from Experimental Section should be removed
 % Please make the first reference to a display item bold: \textbf{Figure 1}
@@ -87,6 +35,37 @@ ventricular systems, together with new concepts of how molecules are transported
 %\subsubsection{First Sub Subsection}
 
 %\threesubsection{First lowest-level subsection}
+
+\begin{document}
+\maketitle
+
+% Abstract should be written in the present tense and impersonal style (i.e., avoid we), and be at most 200 words long
+\begin{abstract}
+    
+    Cerebrospinal fluid (CSF) is integral to brain function, as the fluid
+    provides mechanical support of the brain and the flow of CSF helps
+    distribute nutrients, neurotransmitters and metabolites throughout
+    the central nervous system. CSF flow is partly driven
+    by beating of motile cilia, hair-like structures that line the ependymal cell layer
+    of the brain ventricles. Despite the physiological importance of CSF flow,
+    the underlying mechanisms of cilia-mediated flow and transport
+    in the brain ventricles remain yet to be comprehensively resolved.
+    In this study, we analyze and evaluate the role of motile cilia
+    in intraventricular CSF flow and transport. We use the geometry
+    of the zebrafish larval brain ventricles, for which we have detailed knowledge of cilia properties and CSF motion velocities
+    and frequencies, to develop finite element methods that model flow and transport.
+    The computational model is validated by in vivo experiments that monitor transport
+    of a photoconvertible protein secreted in the brain ventricles.
+    Our results show that while cilia contribute to advection of large particles,
+diffusion plays a significant role in the transport of small molecules such as proteins.
+We also found that cilia location and the geometry of the ventricular system impact solute distribution.
+Altogether, our work presents a computational framework that can be applied to other
+ventricular systems, together with new concepts of how molecules are transported within the brain and its ventricles.
+
+\end{abstract}
+
+% Keywords: Please provide a minimum of three and a maximum of seven keywords, separated by commas
+\noindent\small\hspace{.8725cm}\textbf{Keywords} cerebrospinal fluid, brain ventricles, cilia, transport, finite elements
 
 \section{Introduction}
 
@@ -115,10 +94,18 @@ cardiac cycle, the respiration, neural activity, and bodily
 movement~\cite{Brodal2016, del2010ependymal, Ringers2020Role, Vinje2019RespiratoryMeasurements,
 Kurtcuoglu2005ComputationalSystem, Olstad2019CiliaryDevelopment,
 macaulay2022cerebrospinal, mestre2018flow}.
-Motile cilia are hair-like structures that line the ventricular surface of the brain,
-known as the ependyma~\cite{mitchell2007evolution, Ringers2020Role, spassky2013motile}. 
-The cilia beat in a coordinated pattern at frequencies of
-10--40 Hz to mediate fluid flow~\cite{Ringers2023NovelEpithelia, roth2025structure}. 
+Cilia are hair-like structures found in a vast diversity of
+biological organisms and in several human organs,
+of which the brain is one of them~\cite{Fulford1986Muco-ciliaryLung,
+Pacherres2022CiliaryProduction, Jahn1972LocomotionProtozoa,
+Brennen1977FluidFlagella, Ringers2020Role, spassky2013motile,
+DGama2025MotileBrain, mitchell2007evolution,
+Tsukita2012CoordinatedFeet, BLAKE1974MechanicsMotion,
+Reiten2017Motile-Cilia-MediatedComputations, Thouvenin2020OriginCanal}. 
+The ventricular surface of the brain, known as the ependyma, is lined by
+motile cilia that beat in a coordinated pattern at frequencies of
+10--40 Hz to mediate fluid flow~\cite{mitchell2007evolution,
+Ringers2020Role, spassky2013motile, Ringers2023NovelEpithelia, roth2025structure}. 
 Given their microscopic size, ranging from
 5 to 15 microns, cilia contribute primarily to flow near the
 ependyma in the human brain~\cite{Siyahhan2014FlowVentricles, Olstad2019CiliaryDevelopment,
@@ -868,8 +855,8 @@ simulated successfully in the human brain ventricular system~\cite{Causemann2022
 Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
 
 \subsection{Estimation of computational model parameters}
-The diffusion coefficients used in this study were partially based on values
-from experiments and partially estimated. The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$
+The diffusion coefficients used in this study were based on experimental values. 
+The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$
 is based on the value $\num{1.15e-10} \pm 0.11 \ \mathrm{m^2/s}$ reported in an
 experiment~\cite{GuraSadovsky2017MeasurementExpansion}, while the Stokes-Einstein
 relation~(\Cref{eq:D_stokes_einstein})~\cite{Einstein1905UberTeilchen} was used to extrapolate
@@ -881,13 +868,12 @@ necessarily hold in CSF. Moreover, the extrapolation implies the assumption that
 the two substances (the one for which we determine $D$ and the one we extrapolate from)
 have equal densities. Consequently, there is uncertainty in the diffusion coefficient values used.
 We note that Sadovsky~\emph{et al.}~\cite{GuraSadovsky2017MeasurementExpansion} reported that
-Dendra2 satisfies the Stokes-Einstein in the solution they used,
-a solution which had similar viscosity
-to water. We used CSF density and viscosity values measured in
+Dendra2 satisfies the Stokes-Einstein in a solution of similar viscosity
+to CSF. We used CSF density and viscosity values measured in
 humans~\cite{Bloomfield1998EffectsFluid},
 and because embryonic CSF in zebrafish is high in proteins, nutrients and other substances,
-the CSF in which photoconverted Dendra2 are transport in our experiments may be more viscous
-than what we consider. This would reduce the diffusion coefficient (cf.~\Cref{eq:D_stokes_einstein}),
+the CSF in which the photoconverted Dendra2 are transported in our experiments may be more viscous
+than we assumed. This would reduce the diffusion coefficient (cf.~\Cref{eq:D_stokes_einstein}),
 but based on reports of protein concentration having a limited impact on the viscosity of
 CSF~\cite{Bloomfield1998EffectsFluid, Brydon1995PhysicalViscosity}, this reduction is presumably
 limited. Merely the presence of other proteins and nutrients may also reduce the diffusion
@@ -895,53 +881,46 @@ coefficient by reduction of mean-free path lengths of molecules~\cite{Cussler200
 Considering the diffusion coefficients $D_1$ and $D_2$ (both smaller
 than $D_3$) in our transport analysis provides information about how the simulation
 results of Dendra2 transport would be altered if the
-diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is
-underestimated, we assume the
-results would follow the same trend as the differences between results for
-$D_2$ and $D_3$: diffusion becomes
-more important, and is almost balancing advective transport for $D_3$. 
-Thus for a higher diffusion coefficient, we would see transport that is
-mostly explained by diffusive behavior.
+diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is underestimated, 
+we expect a trend similar to the difference in the $D_2$ and $D_3$ solute concentrations;
+incerasingly diffusive fields.
 
-We heuristically determined the parameter $\tau = 0.65$ mPa, which determines
-the magnitude of the cilia tangential traction boundary conditions. The maximum force applied
-was in the dorsal region of the middle ventricle, where the posterior region had a tangential
-traction vector magnitude of $\vert\btau\vert_{\mathrm{max}} = 2.5$ mPa applied to the
-boundary. Previous simulation studies of cilia-mediated flow in brain ventricles have
+We heuristically determined the magnitude of the cilia tangential traction boundary condition
+with the parameter $\tau = 0.65$ mPa. The maximum stress $\vert\btau\vert_{\mathrm{max}} = 2.5$ mPa
+was applied in the dorsal-posterior region of the middle ventricle.
+Previous simulation studies of cilia-mediated flow in brain ventricles have
 used a volumetric force density to represent the cilia.
+Based on reconstruction of CSF flow in murine brain ventricles,
 Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}
-used a force expression that increased linearly from the wall to a maximum force density of
-$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$ at a distance 15 \textmu m away from the wall,
-which represented cilium length. If we assumed a cilia array of the same thickness
-$l = 15$ \textmu m in our model, our maximum traction parameter $\vert\btau\vert_{\mathrm{max}}$
+employed a force that increased linearly from the ventricular wall to a maximum force density of
+$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$ at a distance 15 \textmu m (the cilium length)
+away from the wall. If we assumed a cilia array of the same thickness
+$\delta = 15$ \textmu m in our model, the maximum stress $\vert\btau\vert_{\mathrm{max}}$
 would correspond to a maximum force density of 
 \begin{equation*}
-    f_c = \frac{\vert\btau\vert_{\mathrm{max}}}{l}
+    f_c = \frac{\vert\btau\vert_{\mathrm{max}}}{\delta}
         = \frac{\num{2.5e-3} \ \mathrm{Pa}}{15 \ \mu\mathrm{m}}
         = 169 \ \mathrm{N/m^3},
 \end{equation*}
 which is smaller than $f_{\mathrm{max}}$, albeit the same order of magnitude.
-The length 15 \textmu m is the a typical length of cilia in human brain ventricles
-(in general the length is between 10--15 \textmu m~\cite{Afzelius2004CiliaRelatedDiseases}),
-while in zebrafish they are closer to 5 \textmu m~\cite{Salman2022ComputationalEmbryo}.
-With $l=5$ \textmu m, our traction parameter corresponds to a maximum force density of
-$f_c=507$ N/$\mathrm{m^3}$, which is in good agreement with
-$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$
-used by Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}.
-We note that they based $f_{\mathrm{max}}$ on reconstructions of
-flow velocities in murine brain ventricles.
-
+The length 15 \textmu m is the a typical length of cilia in human brain basedVentricles
+\cite{Afzelius2004CiliaRelatedDiseases, Siyahhan2014FlowVentricles},
+while in zebrafish they are closer to 5 \textmu m~\cite{Olstad2019CiliaryDevelopment,
+Salman2022ComputationalEmbryo, Ringers2023NovelEpithelia}.
+With $\delta=5$ \textmu m, our cilia traction corresponds to a maximum force density of
+$f_c=507$ N/$\mathrm{m^3}$, which is very similar to
+$f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$~\cite{Siyahhan2014FlowVentricles}.
 Another study that used a force density to model ciliary motion is
 Thouvenin~\emph{et al.}~\cite{Thouvenin2020OriginCanal}, where two-dimensional flow
 in the central canal of zebrafish embryos was modeled using a cilia force density of
-4000 N/$\mathrm{m^2}$. The resulting numerical velocity fields matched well with
-in vivo measurements, where the maximum velocity magnitude was around 5 \textmu m/s
-(recall that our model exhibits a maximum of 27.9 \textmu m/s).
-The geometry they studied resembles a pipe, probably offering more flow resistance
-than the open geometry considered in our work, which may be why they needed a larger
-force density to accurately represent experimental results. In any case, it is
-interesting to note that our and these two previous studies have estimated
-cilia force densities that only differ by one order of magnitude. 
+4000 N/$\mathrm{m^2}$. Averaging this value over the central canal diameter 8.9 \textmu m
+they measured yields 449 N/$\mathrm{m^3}$. It is very interesting to note the similarity 
+in cilia force densities estimated in our and these two previous studies. 
+
+% The geometry they studied resembles a pipe,
+% probably offering more flow resistance than the open geometry considered in our work,
+% which may be why they needed a larger force density to accurately represent
+% experimental results. In any case,
 
 \subsection{The role of motile cilia in intraventricular flow and transport}
 Our work has studied CSF flow and solute distribution
@@ -1192,7 +1171,7 @@ the di-/mesencephalic (middle) and the rhombencephalic (posterior)
 ventricles, which are connected by interventricular ducts. From the
 surface geometry, we constructed a volumetric mesh of the ventricles
 by initially using fTetWild~\cite{Hu2020FastWild} and subsequently
-local refinement functionality in DOLFINx~\cite{dolfinx2023preprint}. The mesh
+local refinement functionality in DOLFINx~\cite{dolfinx2023preprint}. The standard mesh
 consists of 141 512 tetrahedral cells with a maximal (minimal) edge length of 14.9 \textmu
 m (3.1 \textmu m) (\Crefpanels{fig:fig1}{d}). Parts of the
 ventricular surfaces were marked to be lined with motile cilia
