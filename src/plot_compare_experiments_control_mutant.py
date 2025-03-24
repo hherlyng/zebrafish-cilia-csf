@@ -4,12 +4,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from scipy.io import loadmat
-from scipy.stats import ranksums, mannwhitneyu
+from scipy.stats import mannwhitneyu
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })

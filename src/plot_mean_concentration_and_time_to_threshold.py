@@ -16,27 +16,29 @@ plt.rcParams.update({
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
+plt.rcParams['text.latex.preamble'] += '\\usepackage{sfmath}' # Enable sans-serif math font
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
-colors = loadmat("../data/data_photoconversion/aggregated_data/colors")['color'] # The colors used for plotting
+f = 2.22
+dt = 1/f/20
+colors = loadmat('../data/data_photoconversion/aggregated_data/colors')['color'] # The colors used for plotting
 fig_num = 1 # Figure number index
 
 # Directories
 flow_dir = '../output/flow/checkpoints/'
-transport_dir = '../output/transport/results/'
+transport_dir = '../output/transport/'
 
 # Problem version
 model_version = 'C'
 molecules = ['D1', 'D2', 'D3']
-tau_version  = 'variable_tau'
+cilia_scenario = 'all_cilia'
 mesh_version = 'original'
-output_dir = f'../output/illustrations/{mesh_version}/{tau_version}/'
+output_dir = f'../output/illustrations/'
 
 # Read mesh
-mesh_input_filename = flow_dir+f"{tau_version}/pressure+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252"
-mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine="BP4", ghost_mode=gm)
+mesh_input_filename = flow_dir+f'velocity_mesh={mesh_version}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
+mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine='BP4', ghost_mode=gm)
 
 # Create meshtags and calculate ROI volumes
 mt, ROI_tags = create_ventricle_volumes_meshtags(mesh)
@@ -47,8 +49,6 @@ volumes[3] += volumes[2]+volumes[1]+volumes[0] # Add ROI 1, 2, 3 volumes to ROI 
 # Analysis parameters
 c_threshold1 = 0.25 # threshold value used to calculate "time to threshold" in ROIs 1-4
 c_threshold2 = 0.10 # threshold value used to calculate "time to threshold" in ROIs 5-6
-f = 2.22
-dt = 1/f/20
 
 # Plot parameters
 save_figs = 1 # Save figures if set to 1, don't save if set to 0
@@ -61,10 +61,10 @@ t_hat_df = pd.DataFrame(index=ROI_tags, columns=molecules)
 # Loop over molecules
 for idx, molecule in enumerate(molecules):
     transport_data_filename = transport_dir + \
-        f"{tau_version}/{mesh_version}/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy"
+        f'mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/data/c_hats.npy'
     
     # Load transport data: c_bars = the total concentration in each ROI
-    with open(transport_data_filename, "rb") as file: c_bars = np.load(file) 
+    with open(transport_data_filename, 'rb') as file: c_bars = np.load(file) 
     
 
     # Scale the total concentrations in the ROIs by the volume of the respective ROI
@@ -94,7 +94,7 @@ for idx, molecule in enumerate(molecules):
     ax.tick_params(labelsize=55)
     fig.tight_layout()
 
-    if save_figs: fig.savefig(f"{output_dir}/simulations_time_evolution_model{model_version}_{molecule}.png")
+    if save_figs: fig.savefig(f"{output_dir}/simulations_time_evolution_model={model_version}_molecule={molecule}.png")
 
     # Calculate times to threshold
     t_hat_arr = np.array([0]*len(ROI_tags), dtype=np.float64)
@@ -131,5 +131,5 @@ ax2.spines['right'].set_visible(True)
 ax2.spines['left'].set_visible(False)
 fig2.tight_layout()
 
-if save_figs: fig2.savefig(f"{output_dir}/simulations_time_to_threshold_barplot_model{model_version}.png")
+if save_figs: fig2.savefig(f'{output_dir}/simulations_time_to_threshold_barplot_model={model_version}_molecule={molecule}.png')
 plt.show()

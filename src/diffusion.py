@@ -48,8 +48,6 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
     el = element("Discontinuous Lagrange", mesh.basix_cell(), k) # Continuous Lagrange finite elements, polynomial order k
     W = dfx.fem.functionspace(mesh, el)
 
-    print(f"Problem size = {W.dofmap.index_map.size_global}")
-
     c_h = dfx.fem.Function(W) # Function for storing the solution
     c_  = dfx.fem.Function(W) # Function for storing the solution at the previous timestep
     c__ = dfx.fem.Function(W)
@@ -105,7 +103,7 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
 
     # Create and configure linear solver
     solver_options = {'ksp_type' : 'preonly',
-                      'pc_type' : 'lu', 
+                      'pc_type'  : 'lu', 
                       'factor_solver_type' : 'mumps'
     }
     solver = PETSc.KSP().create(comm)
@@ -125,9 +123,7 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
 
     # The first solve
     t += dt # Increment time
-    print(f"Time t={t}")
-    # Update BC
-    bc_func.x.array[:] = photoconversion_curve(t)
+    bc_func.x.array[:] = photoconversion_curve(t) # Update BC
     assemble_RHS(b, a_cpp, L_cpp, bcs) # Assemble right-hand side vector
 
     # Linear solve
@@ -143,21 +139,14 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
     print("Maximum concentration: ", max_c)
     print("Minimum concentration: ", min_c)
 
-    print("Undershoot in percent of max: ", min_c/max_c*100)
-
     total_c_form = dfx.fem.form(c_h*dx)
     total_c = dfx.fem.assemble_scalar(total_c_form)
     total_c = comm.allreduce(total_c, op=MPI.SUM)
     print(f"Total concentration: {total_c:.2e}")
 
-    output = dfx.io.VTXWriter(comm, "pure_diffusion.bp", [c_h], "BP4")
-    output.write(t)
-
     # The second solve
     t += dt # Increment time
-    print(f"Time t={t}")
-    # Update BC
-    bc_func.x.array[:] = photoconversion_curve(t)
+    bc_func.x.array[:] = photoconversion_curve(t) # Update BC
     assemble_RHS(b, a_cpp, L_cpp, bcs) # Assemble right-hand side vector
 
     # Linear solve
@@ -172,8 +161,6 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
     print("Maximum concentration: ", max_c)
     print("Minimum concentration: ", min_c)
 
-    print("Undershoot in percent of max: ", min_c/max_c*100)
-
     total_c = dfx.fem.assemble_scalar(total_c_form)
     total_c = comm.allreduce(total_c, op=MPI.SUM)
     print(f"Total concentration: {total_c:.2e}")
@@ -181,6 +168,7 @@ def diffusion_problem(mesh: dfx.mesh.Mesh, k: int, D_value: float):
     return c__, c_
 
 if __name__=='__main__':
+    ''' Solve the diffusion problem on the original mesh. '''
     with dfx.io.XDMFFile(MPI.COMM_WORLD, '../geometries/standard/original_ventricles.xdmf', 'r') as xdmf:
         mesh = xdmf.read_mesh()
         

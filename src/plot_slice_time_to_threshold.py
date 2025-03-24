@@ -20,11 +20,14 @@ plt.rcParams.update({
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
-k = 1 # element degree
+k = 2 # element degree
 model_version = 'C'
 molecule = 'D3'
-tau_version = 'variable_tau'
-input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+original/model_C/velocity_data_dt=0.02252/"
+cilia_scenario = 'all_cilia'
+mesh_version = 'original'
+f = 2.22
+dt = 1/f/20
+input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_version}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
 mesh = a4d.read_mesh(comm=comm, filename=input_filename, engine="BP4", ghost_mode=gm)
 
 # Get mesh properties
@@ -41,13 +44,13 @@ z_max = x_geo[:, 2].max()
 z_mid = (z_min + z_max) / 2
 
 # Set up unstructured grids with data
-W = dfx.fem.functionspace(mesh=mesh, element=element("DG", mesh.basix_cell(), k)) # DGk function space
+W = dfx.fem.functionspace(mesh=mesh, element=element('DG', mesh.basix_cell(), k)) # DGk function space
 cells, types, x = dfx.plot.vtk_mesh(W)
 grid = pv.UnstructuredGrid(cells, types, x)
 
 # Load time to threshold function values
 c_in = dfx.fem.Function(W)
-input_filename = f"../output/transport/results/{tau_version}/original/log_model_{model_version}_{molecule}_DG1_pressureBC/t_hat/"
+input_filename = f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/t_hat/'
 a4d.read_function(u=c_in, filename=input_filename, engine="BP4", time=0)
 grid.point_data["c"] = c_in.x.array.real
 grid.set_active_scalars("c")
@@ -61,8 +64,6 @@ plotter = pv.Plotter(window_size=[1600, 900], border=False)
 import colormaps as cm
 cmap = cm.dense_r
 my_colors = {'colors' : cmap.colors}
-from scipy.io import savemat
-# savemat('/Users/hherlyng/data_photoconversion/codes/colors.mat', my_colors) # Save to matlab file
 
 # Add grid to plotter
 plotter.add_mesh(grid.slice(normal=[0, -1, 0]), cmap=cmap, clim=[0, 800], show_scalar_bar=False)
@@ -74,7 +75,7 @@ plotter.camera.zoom(0.275)
 # Display the plot and save to file
 save_fig = 1
 if save_fig:
-    output_filename = f'../output/illustrations/original/{tau_version}/slice_time_to_threshold_model{model_version}_{molecule}'
+    output_filename = f'../output/illustrations/slice_time_to_threshold_model={model_version}_molecule={molecule}'
     plotter.show(screenshot=output_filename+'.png')
 else:
     plotter.show()

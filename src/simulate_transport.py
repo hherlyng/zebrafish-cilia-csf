@@ -19,6 +19,7 @@ Author: Halvor Herlyng, 2023-.
 """
 
 print = PETSc.Sys.Print
+# PETSc.Log.begin()
 
 # Set compiler options for runtime optimization
 cache_dir = f"{str(Path.cwd())}/.cache"
@@ -157,7 +158,10 @@ class TransportSolver:
     
     def setup_variational_problem(self):
         """ Set up bilinear and linear form for the weak form of the advection-diffusion equation discretized 
-            with Discontinuous Galerkin elements.
+            with Discontinuous Galerkin elements using a Symmetric Interior Penalty method,
+            using an upwind scheme for the velocity.
+            
+            In time, the equations are discretized with the BDF2 scheme.
         """
 
         # Initialize
@@ -173,8 +177,7 @@ class TransportSolver:
         un  = (dot(self.u, self.n) + abs(dot(self.u, self.n))) / 2.0 # Upwind velocity
         pres_tags = (ANTERIOR_PRESSURE, POSTERIOR_PRESSURE) # pressure BC tags
 
-        # Crank-Nicolson Scheme (Theta scheme with theta=0.5):
-        # Bilinear form either for theta*a(c^{n+1}) and (1-theta)*a(c^n)
+        # Time-discretization: BDF2 scheme
         a0 = 3/2*self.c*self.w / self.deltaT * self.dx # Time derivative
 
         a1 = dot(grad(self.w), self.D * grad(self.c) - self.u * self.c) * self.dx # Flux term integrated by parts
@@ -189,8 +192,8 @@ class TransportSolver:
 
         a = a0+a1+a2+a3
         
-        # Linear form
-        L0 = 2*self.c_ * self.w / self.deltaT * self.dx # Time derivative
+        # Linear form time derivative terms
+        L0 = 2*self.c_ * self.w / self.deltaT * self.dx 
         L1 = -1/2*self.c__ * self.w / self.deltaT * self.dx
         L = L0+L1
         
@@ -283,6 +286,7 @@ class TransportSolver:
 
         # Solve the diffusion equation for a smooth initial condition for the concentration
         # at two previous timesteps
+        print('Solving diffusion equation for initial conditions ...')
         self.c__, self.c_ = diffusion_problem(self.mesh, k=self.element_degree, D_value=self.D_value)
         for conc in [self.c__, self.c_]:
             # Scale the concentration values so that they are on
@@ -292,6 +296,7 @@ class TransportSolver:
             # the interval [0, max(bc_func)].
             max_conc = self.comm.allreduce(conc.x.array.max(), op=MPI.MAX)
             conc.x.array[:] /= max_conc
+        print('Initial condition set.')
 
         #------VARIATIONAL FORM------#
         self.deltaT = dfx.fem.Constant(self.mesh, dfx.default_scalar_type(self.dt)) # Compiled timestep
@@ -385,9 +390,12 @@ class TransportSolver:
             # Configure iterative solver
             self.solver = PETSc.KSP().create(self.comm)
             self.solver.setOperators(self.A, self.P)
-            self.solver.setType("gmres")
+            self.solver.setType("fgmres")
             self.solver.getPC().setType("bjacobi")
             self.solver.setTolerances(rtol=1e-10)
+            opts = PETSc.Options()
+            opts.setValue('sub_pc_type', 'ilu')
+            self.solver.setFromOptions()
         
     def assemble_system_matrix(self):
         """ Assemble the system matrix of the variational problem. """
@@ -483,6 +491,8 @@ class TransportSolver:
         else: # Model B or C
             read_time = 0
             period_counter = 0
+
+            tic = time.perf_counter()
         
             for i in range(self.num_timesteps):
                 
@@ -522,6 +532,7 @@ class TransportSolver:
                 # Solve
                 self.solver.solve(self.b, self.c_h.x.petsc_vec)
                 self.c_h.x.scatter_forward()
+                # PETSc.Log.view()
 
                 # Update previous timestep solution
                 self.c__.x.array[:] = self.c_.x.array.copy()
@@ -568,6 +579,7 @@ class TransportSolver:
                     self.t_hat.x.array[above_idx] = self.t
 
         print("\nFor-loop finished, closing ...\n")
+        print(f'Solve loop time: {time.perf_counter() - tic:.4g} sec')
 
         if self.write_data:
             with open(file=self.data_output_dir+f"final_total_c.txt", mode="w+") as file: file.write(str(float(total_c)))
@@ -647,6 +659,11 @@ if __name__ == '__main__':
     T  = 1900*period # Simulation end time
     period_partition = 20
     dt = period / period_partition # Timestep size [s]
+    print("Transport simulation information:")
+    print("Model version: " + model_version)
+    print("Mesh version: " + mesh_version)
+    print("Molecule: " + molecule)
+    print("Cilia scenario: " + cilia_string)
     print(f"Timestep: dt = {dt:.4g}")
 
     # Set velocity data filename
@@ -673,7 +690,7 @@ if __name__ == '__main__':
 
     # Print information
     print("\n#-------------------------#")
-    print("Transport simulation information:")
+    print("Transport simulation completed.")
     print("Model version: " + model_version)
     print("Mesh version: " + mesh_version)
     print("Molecule: " + molecule)

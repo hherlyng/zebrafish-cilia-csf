@@ -10,8 +10,7 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "text.usetex" : True,
-    "font.family" : "sans-serif",
+    "font.family" : "Arial",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
@@ -19,12 +18,11 @@ plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-seri
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
-k = 1 # element degree
+f = 2.22
+dt = 1/f/20
 molecule = 'D3'
-tau_version  = 'original_tau'
-tau_version  = 'variable_tau'
 mesh_version = 'original'
-mesh_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+{mesh_version}/model_C/velocity_data_dt=0.02252"
+mesh_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_version}_model=C_ciliaScenario=all_cilia_dt={dt:.4g}'
 mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine="BP4", ghost_mode=gm)
 
 # Create meshtags and calculate ROI volumes
@@ -34,9 +32,9 @@ volumes = [comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*dx(tag))), op=M
 volumes[3] += volumes[2]+volumes[1]+volumes[0] # Add ROI 1, 2, 3 volumes to ROI 4 volume
 
 # Load data c_bar, the total concenctration in each ROI
-with open(f"../output/transport/results/original_tau/{mesh_version}/log_model_B_{molecule}_DG1_pressureBC/data/c_hats.npy", "rb") as file:
+with open(f'../output/transport/mesh={mesh_version}_model=B_molecule={molecule}_ciliaScenario=all_cilia_dt={dt:.4g}/data/c_hats.npy', 'rb') as file:
     c_bar_B = np.load(file)
-with open(f"../output/transport/results/{tau_version}/{mesh_version}/log_model_C_{molecule}_DG1_pressureBC/data/c_hats.npy", "rb") as file:
+with open(f'../output/transport/mesh={mesh_version}_model=C_molecule={molecule}_ciliaScenario=all_cilia_dt={dt:.4g}/data/c_hats.npy', 'rb') as file:
     c_bar_C = np.load(file)
 
 # Scale the total concentrations in the ROIs by the volume of the respective ROI
@@ -48,8 +46,6 @@ for i in ROI_tags:
 num_timesteps = c_bar_B.shape[0]
 c_threshold1 = 0.25 # threshold value to be used to calculate "time to threshold" for ROIs 1-4
 c_threshold2 = 0.10 # threshold value to be used to calculate "time to threshold" for ROIs 5 and 6
-f = 2.22
-dt = 1/f/20
 times = dt*np.arange(num_timesteps)
 
 #-----------------------------------------------#
@@ -141,6 +137,6 @@ for idx, tag in enumerate(ROI_tags):
 fig_c.tight_layout(); fig_t.tight_layout()
 save_figs = 1
 if save_figs:
-    fig_c.savefig(f"../output/illustrations/original/{tau_version}/compare_models_concentrations_{molecule}.png")
-    fig_t.savefig(f"../output/illustrations/original/{tau_version}/compare_models_time_to_threshold{molecule}.png")
+    fig_c.savefig(f"../output/illustrations/compare_models_concentrations_molecule={molecule}_mesh={mesh_version}.png")
+    fig_t.savefig(f"../output/illustrations/compare_models_time_to_threshold_molecule={molecule}_mesh={mesh_version}.png")
 plt.show()

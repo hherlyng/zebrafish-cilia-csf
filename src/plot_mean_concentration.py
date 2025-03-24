@@ -1,7 +1,6 @@
 import ufl
 
 import numpy   as np
-import pandas  as pd
 import dolfinx as dfx
 import adios4dolfinx     as a4d
 import matplotlib.pyplot as plt
@@ -28,13 +27,16 @@ transport_dir = '../output/transport/results/'
 
 # Problem version
 model_version = 'C'
-molecule = 'D3'
-tau_version  = 'variable_tau'
+molecule = 'D2'
+cilia_string = 'all_cilia'
 mesh_version = 'original'
-output_dir = f'../output/illustrations/{mesh_version}/{tau_version}/'
+output_dir = f'../output/illustrations/'
+f = 2.22
+dt = 1/f/20
 
 # Read mesh
-mesh_input_filename = flow_dir+f"{tau_version}/pressure+{mesh_version}/model_{model_version}/velocity_data_dt=0.02252"
+# mesh_input_filename = flow_dir+f"{tau_version}/pressure+neighbor_refined/model_{model_version}/velocity_data_dt=0.02252"
+mesh_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_version}_model={model_version}_ciliaScenario={cilia_string}_dt={dt:.4g}'
 mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine="BP4", ghost_mode=gm)
 
 # Create meshtags and calculate ROI volumes
@@ -43,20 +45,18 @@ dx = ufl.Measure('dx', domain=mesh, subdomain_data=mt)
 volumes = [comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*dx(tag))), op=MPI.SUM) for tag in ROI_tags]
 volumes[3] += volumes[2]+volumes[1]+volumes[0] # Add ROI 1, 2, 3 volumes to ROI 4 volume
 
-# Analysis parameters
+# ROI concentration thresholds
 c_threshold1 = 0.25 # threshold value used to calculate "time to threshold" in ROIs 1-4
 c_threshold2 = 0.10 # threshold value used to calculate "time to threshold" in ROIs 5-6
-f = 2.22
-dt = 1/f/20
 
 # Plot parameters
-save_fig = 1 # Save figures if set to 1, don't save if set to 0
+save_fig = 0 # Save figures if set to 1, don't save if set to 0
 lw = 6 # linewidth
 
 # Loop over molecules
-# transport_data_filename = '../output/transport/results/variable_tau+weak_PC/original/model_C_molecule_D2/data/c_hats.npy'
-transport_data_filename = transport_dir + \
-                f"{tau_version}/{mesh_version}/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy"
+transport_data_filename = '../output/transport/mesh=original_model=C_molecule=D3_ciliaScenario=all_cilia_dt=0.02252/data/c_hats.npy'
+# transport_data_filename = transport_dir + \
+#                 f"{tau_version}/{mesh_version}/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy"
 
 # Load transport data: c_bars = the total concentration in each ROI
 with open(transport_data_filename, "rb") as file: c_bars = np.load(file) 

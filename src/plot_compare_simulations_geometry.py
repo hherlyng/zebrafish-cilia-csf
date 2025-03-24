@@ -39,16 +39,17 @@ plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-seri
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
-k = 1 # element degree
+f = 2.22
+dt = 1/f/20
 model_version = 'C'
 molecule = 'D3'
-tau_version = 'variable_tau'
-transport_dir = f"../output/transport/results/{tau_version}/"
-mesh1_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+original/model_{model_version}/velocity_data_dt=0.02252"
-mesh2_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+shrunk/model_{model_version}/velocity_data_dt=0.02252"
-mesh3_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+middle_shrunk/model_{model_version}/velocity_data_dt=0.02252"
-mesh4_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+hind_shrunk/model_{model_version}/velocity_data_dt=0.02252"
-mesh5_input_filename = f"../output/flow/checkpoints/{tau_version}/pressure+fore_middle_hind_shrunk/model_{model_version}/velocity_data_dt=0.02252"
+cilia_scenario = 'all_cilia'
+mesh_versions = ['original', 'fore_shrunk', 'middle_shrunk', 'hind_shrunk', 'fore_middle_hind_shrunk']
+mesh1_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_versions[0]}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
+mesh2_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_versions[1]}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
+mesh3_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_versions[2]}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
+mesh4_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_versions[3]}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
+mesh5_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_versions[4]}_model={model_version}_ciliaScenario={cilia_scenario}_dt={dt:.4g}'
 mesh1 = a4d.read_mesh(comm=comm, filename=mesh1_input_filename, engine="BP4", ghost_mode=gm)
 mesh2 = a4d.read_mesh(comm=comm, filename=mesh2_input_filename, engine="BP4", ghost_mode=gm)
 mesh3 = a4d.read_mesh(comm=comm, filename=mesh3_input_filename, engine="BP4", ghost_mode=gm)
@@ -88,11 +89,11 @@ for volume in [volumes1, volumes2, volumes3, volumes4, volumes5]:
     volume[3] += volume[2]+volume[1]+volume[0] 
 
 # Load data c_bar, the total concentration in each ROI
-with open(transport_dir+f"original/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar1 = np.load(file)
-with open(transport_dir+f"shrunk/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar2 = np.load(file)
-with open(transport_dir+f"middle_shrunk/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar3 = np.load(file)
-with open(transport_dir+f"hind_shrunk/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar4 = np.load(file)
-with open(transport_dir+f"fore_middle_hind_shrunk/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy", 'rb') as file: c_bar5 = np.load(file)
+with open(f'../output/transport/mesh={mesh_versions[0]}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar1 = np.load(file)
+with open(f'../output/transport/mesh={mesh_versions[1]}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar2 = np.load(file)
+with open(f'../output/transport/mesh={mesh_versions[2]}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar3 = np.load(file)
+with open(f'../output/transport/mesh={mesh_versions[3]}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar4 = np.load(file)
+with open(f'../output/transport/mesh={mesh_versions[4]}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar5 = np.load(file)
 
 # Divide the total concentrations in the ROIs by the volume of the respective ROI
 for i in ROI_tags:
@@ -106,8 +107,6 @@ for i in ROI_tags:
 
 # Get the number of timesteps
 num_timesteps = c_bar1.shape[0]
-f = 2.22
-dt = 1/f/20
 times = dt*np.arange(num_timesteps)
 
 #-------- Plot the figures --------#
@@ -123,7 +122,6 @@ orange = cm.dark2_3.colors[1]
 purple = cm.puor_4.colors[3]
 yellow = cm.puor_4.colors[1]
 colors = ['k', green, purple, orange, yellow]
-print([colors[i]*255 for i in range(1, len(colors))])
 
 # Plot concentrations
 idx = 0

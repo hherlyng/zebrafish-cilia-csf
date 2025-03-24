@@ -27,7 +27,7 @@ fig, ax = plt.subplots(figsize=[11.35, 10])
 idx = [1, 2, 3, 4]
 
 # Forces applied [dorsal, ventral, anterior, total]
-forces = np.array([3.64E-06, 2.41E-06, 9.78E-07, 7.03E-06])*1e6 # Forces in micro Newton
+forces = np.array([3.72E-06, 2.41E-06, 9.78E-07, 7.11E-06])*1e6 # Forces in micro Newton
 
 hatches = ['/', '\\', 'x', '']
 bars = ax.bar(x=idx, height=forces, width=0.5, color=colors, hatch=hatches)
@@ -52,11 +52,11 @@ yellow = cm.puor_4.colors[1]
 colors = ['k', green, purple, orange, yellow]
 
 # Forces applied [dorsal, ventral, anterior, total] in micro Newton
-forces = np.array([[3.64E-06, 2.41E-06, 9.78E-07, 7.03E-06],
-                   [3.63E-06, 2.18E-06, 8.20E-07, 6.63E-06],
-                   [3.63E-06, 2.57E-06, 9.55E-07, 7.16E-06],
-                   [3.48E-06, 2.41E-06, 9.14E-07, 6.80E-06],
-                   [3.71E-06, 2.33E-06, 7.65E-07, 6.80E-06]])*1e6
+forces = np.array([[3.72E-06, 2.41E-06, 9.78E-07, 7.11E-06], # original
+                   [3.69E-06, 2.18E-06, 8.20E-07, 6.69E-06], # fore shrunk
+                   [3.65E-06, 2.57E-06, 9.55E-07, 7.18E-06], # middle shrunk
+                   [3.54E-06, 2.41E-06, 9.14E-07, 6.86E-06], # hind shrunk
+                   [3.77E-06, 2.33E-06, 7.65E-07, 6.86E-06]])*1e6 # fore+middle+hind shrunk
 for i in range(forces.shape[1]):
     forces[:, i] /= forces[0, i]
 forces = forces*100

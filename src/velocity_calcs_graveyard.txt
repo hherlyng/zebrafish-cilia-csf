@@ -1,0 +1,42 @@
+# Calculate max velocities ventrally and dorsally
+                self.mesh.topology.create_connectivity(3, 3)
+                ent = dfx.mesh.locate_entities(self.mesh, 3, middle_ventral_cilia_volume)
+                V_dofs, _ = dfx.fem.locate_dofs_topological((self.V, self.W), 3, ent)
+                bdm_copy = self.u_.copy()
+                dg_copy = self.uh_out.copy()
+                bdm_copy.x.array[:] = 0
+                bdm_copy.x.array[V_dofs] = self.u_.x.array[V_dofs]
+                dg_copy.interpolate(bdm_copy)
+                dg_reshaped = np.reshape(dg_copy.x.array, (int(len(dg_copy.x.array)/3), 3))
+                u1 = dg_reshaped[:, 0] 
+                u2 = dg_reshaped[:, 1]  
+                u3 = dg_reshaped[:, 2]
+                u_mag_ventral = np.sqrt(u1**2+u2**2+u3**2)
+                u_mag_ventral_max = max(u_mag_ventral_max, u_mag_ventral.max())
+                u_mag_ventral_max = self.mesh.comm.allreduce(u_mag_ventral_max, op=MPI.MAX)
+
+                ent = dfx.mesh.locate_entities(self.mesh, 3, anterior_cilia_volume1)
+                V_dofs, _ = dfx.fem.locate_dofs_topological((self.V, self.W), 3, ent)
+                bdm_copy = self.u_.copy()
+                dg_copy = self.uh_out.copy()
+                bdm_copy.x.array[:] = 0
+                bdm_copy.x.array[V_dofs] = self.u_.x.array[V_dofs]
+                dg_copy.interpolate(bdm_copy)
+                dg_reshaped = np.reshape(dg_copy.x.array, (int(len(dg_copy.x.array)/3), 3))
+                u1 = dg_reshaped[:, 0] 
+                u2 = dg_reshaped[:, 1] 
+                u3 = dg_reshaped[:, 2]
+                u_mag_anterior = np.sqrt(u1**2+u2**2+u3**2)
+                u_mag_anterior_max = max(u_mag_anterior_max, u_mag_anterior.max())
+                u_mag_anterior_max = self.mesh.comm.allreduce(u_mag_anterior_max, op=MPI.MAX)
+
+
+
+
+                div_u_ufl = ufl.div(self.uh_out)
+                Q = self.wh.sub(1).collapse().function_space
+                quad_points = Q.element.interpolation_points()
+                div_u_expr = dfx.fem.Expression(div_u_ufl, quad_points)
+                div_u = dfx.fem.Function(Q)
+                div_u.interpolate(div_u_expr)
+                print(f"Divergence max: {np.max(div_u.x.array[:])}")

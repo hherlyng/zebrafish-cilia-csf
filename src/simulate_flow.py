@@ -660,14 +660,14 @@ if __name__ == '__main__':
     # Initialize solver object
     solver = FlowSolver(mesh=mesh,
                         ft=ft,
-                        use_direct_solver=direct,
                         model_version=model,
                         mesh_version=mesh_version,
                         T=T,
                         dt=dt,
                         cilia_scenario=cilia_scenario_input,
                         write_output=write_output,
-                        write_checkpoint=write_checkpoint)
+                        write_checkpoint=write_checkpoint,
+                        use_direct_solver=direct)
     solver.setup()
     print("\n#-------------Solver setup complete--------------#\n")
     print("\n#-------------Solving linear system--------------#\n")
