@@ -18,7 +18,7 @@
 \affil[2]{Department of Clinical and Molecular Medicine, Norwegian University of Science and Technology, Trondheim, Norway} % Erling Skjalgsons gate 1, 7491
 \affil[3]{K.~G.~Jebsen Center for Brain Fluid Research, Oslo, Norway}
 \affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}, \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
-\date{}
+\date{\vspace{-2em}}
 
 
 % Text: Please use section headings and subheadings as specified below. For communications, all section headings apart from Experimental Section should be removed
@@ -329,18 +329,18 @@ global scale.
 
 \begin{figure}%[H]
     \centering
-    \includegraphics[width=\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}\caption{Simulated distribution and evolution after photoconversion of
-    extracellular vesicles (EVs) ($D_1$), STM-GFP ($D_2$) and Dendra2 ($D_3$). 
-    \textbf{a.} Geometry-centered clip of the ventricles mesh showing the locations of the ROIs.
+    \includegraphics[width=\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
+    \caption{Simulated distribution and evolution after photoconversion of
+    extracellular vesicles (EVs, $D_1$), STM-GFP ($D_2$) and Dendra2 ($D_3$). 
+    \textbf{a.} Geometry-centered clip of the ventricles mesh showing the locations of the 
+    regions of interest (ROIs).
     \textbf{b--d.} Slices of the concentration field simulated
     with diffusion coefficients $D_1$, $D_2$ and $D_3$ for nine time instants covering the
     time range from 90 seconds to 811 seconds, corresponding to 200 to 1800 cardiac cycles,
     for even intervals of 200 cycles.
     Slices are taken in the $xz$-plane ($y=0.140$ mm, the center of the geometry).
-    The colorbar is scaled so the maximum is the maximum concentration of the Dendra2 
-    concentration field slice at the last time instant.
-    \textbf{e--g.} Mean concentration $\cbar$ in each region of interest (ROI)
-    as function of time for diffusion coefficients $D_1$, $D_2$ and $D_3$, respectively. 
+    \textbf{e--g.} Mean concentration $\cbar$ in each ROI
+    as function of time for diffusion coefficients $D_1$, $D_2$ and $D_3$. 
     \textbf{h.} The time $\hat{t}$ before the mean concentration $\cbar$ exceeds a
     threshold value of $0.25$ (ROIs 2-4) or $0.10$ (ROIs 5, 6) in each simulation setup.
     Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}
@@ -395,7 +395,7 @@ Comparing the intensity changes with the simulated concentration
 profiles in ROIs 1--6 (\Crefpanels{fig:fig3}{a, b}) show that the
 model predictions agree well with the experimental measurements. We
 note minor differences however. The simulated values of $\cbar_i$ at
-the final time \fixme{(0.72, 0.82, 0.56, 0.35 and X in ROIs 2--6, respectively)}
+the final time (0.80, 0.76, 0.86, 0.60 and 0.38 in ROIs 2--6, respectively)
 are generally higher than the corresponding experimental $\Delta F$
 values (0.63, 0.71, 0.67, 0.29 and 0.18). Moreover, we observe
 differences in the distribution within the middle ventricle,
@@ -567,7 +567,7 @@ less solute spreads towards the posterior ventricle (ROI 6).
 \subsection{Modification of ventricular geometry impacts solute distribution}
 Variations in ventricular morphology impact CSF flow patterns~\cite{Olstad2019CiliaryDevelopment}.
 To assess how these variations influence solute distribution,
-we consider four alternative brain ventricles meshes:
+we consider four alternative ventricular geometries:
 one where the duct connecting the anterior and middle ventricles is constricted
 (66 \% reduction in cross-sectional area);
 one where the duct connecting the middle and posterior ventricles is constricted
@@ -734,10 +734,10 @@ as the ventral cilia help induce flow towards the posterior ventricle.
 Removing the cilia in the anterior ventricle did not affect the transport.
 
 With an interest in assessing the impact of ventricular morphology on solute transport,
-we simulated transport on modified ventricular geometries.
-Notably, shrinking ducts reduced interventricular solute movement, while shrinking
+we simulated transport in modified ventricular geometries.
+Notably, shrinking ducts reduced interventricular solute distribution, while shrinking
 the middle ventricle reduced diffusive transport upstream of the flow field.
-We previously identified large inter-individual variation in ventricular size and
+We previously identified large interindividual variation in ventricular size and
 CSF velocities between larva at given developmental stages and throughout
 development~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain, Jeong2024TheZebrafish}.
 Our results suggest that these two parameters, CSF velocities and ventricular size,
@@ -750,16 +750,27 @@ We envision that our framework will be useful as a basis for future analyses of
 CSF dynamics in more complex geometries and also other animal species and humans.
 
 \subsection{Computational modeling aspects}
-We chose to model the cilia as a force
-exerted tangentially on the boundary, as opposed to a
-couple of previous continuum model simulation studies of
-cilia-mediated flow where cilia were represented by body
-forces,~\cite{Siyahhan2014FlowVentricles, Thouvenin2020OriginCanal}.
-We employed slip boundary conditions at the ventricular walls,
+We modeled motile cilia as a stress
+exerted tangentially on the CSF at the ventricular walls
+while employing a slip boundary condition,
 motivated by experimental observations of the
 flow field in zebrafish embryo brain ventricles, both previously and in this work, in which
 the fluid velocity increases towards the
 wall~(\Crefpanels{fig:fig1}c)~\cite{Olstad2019CiliaryDevelopment}. 
+The BDM-DG scheme ($\mathrm{BDM}_1$-$\mathrm{DG}_0$) we used to discretize the
+governing equations of the flow is computationally more expensive
+than more conventional approaches such as a
+Taylor-Hood discretization
+($P_2-P_1$ elements)~\cite{Stenberg1990ErrorProblem}, or lower-order enriched
+elements, such as the mini-element
+($P_1-P_1$ with a velocity stabilization)~\cite{Brezzi2011MixedMethods}.
+Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
+than or equal to $k$.
+We opted for the BDM-DG scheme because of its exactly-mass-conserving property;
+by the definition of the elements, the numerical approximation of
+the CSF velocity satisfies the continuity equation (\Cref{eq:stokes_eqs_cont}).
+This leads to $\normlinf{\nabla\cdot\uu_h}$ being equal to zero to within solver tolerances,
+an important property for the stability of the advection-diffusion equation\cite{CITATION}.
 In addition to its favorable mass-conserving property, the 
 Brezzi-Douglas-Marini and discontinuous Galerkin (BDM-DG) discretization scheme 
 we employed for the Stokes equations
@@ -771,19 +782,6 @@ elements were to be used, the impermeability boundary condition must
 be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
 or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
 Bertoluzza2017BoundaryHemodynamics}.
-
-The BDM-DG scheme ($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employed for the Stokes equations
-is computationally more expensive than a more conventional approach based on
-e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
-($P_2-P_1$ elements) or lower-order enriched
-elements~\cite{Brezzi2011MixedMethods},
-such as the mini-element ($P_1-P_1$ with a velocity stabilization).
-Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
-than or equal to $k$.
-We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
-as the elements by definition satisfy the incompressibility constraint for the fluid.
-This leads to $\normlinf{\nabla\cdot\uu_h}$ being equal to zero to within solver tolerances,
-an important property for the stability of the advection-diffusion equation\cite{CITATION}.
 
 The ciliated boundaries in our CSF flow model are regionally homogeneous,
 whereas in reality, cilia populate the ventricle walls in a
@@ -1171,8 +1169,12 @@ the di-/mesencephalic (middle) and the rhombencephalic (posterior)
 ventricles, which are connected by interventricular ducts. From the
 surface geometry, we constructed a volumetric mesh of the ventricles
 by initially using fTetWild~\cite{Hu2020FastWild} and subsequently
-local refinement functionality in DOLFINx~\cite{dolfinx2023preprint}. The standard mesh
-consists of 141 512 tetrahedral cells with a maximal (minimal) edge length of 14.9 \textmu
+local refinement functionality in DOLFINx~\cite{dolfinx2023preprint}. 
+The geometry spans approximately 600 microns along the rostrocaudal axis
+and around 300 microns in the lateral direction. At most around
+100 microns separates the ventral and dorsal ventricular walls.
+The standard mesh consists of 141 512 tetrahedral cells with a
+maximal (minimal) edge length of 14.9 \textmu
 m (3.1 \textmu m) (\Crefpanels{fig:fig1}{d}). Parts of the
 ventricular surfaces were marked to be lined with motile cilia
 (\Crefpanels{fig:fig1}{d}, magenta
@@ -1205,8 +1207,8 @@ and the CSF pressure $p = p(\xx, t)$ for $\xx \in \Omega$ and time $t>0$, such t
     \begin{align}
       \rho \pdifft{\uu} - \nabla \cdot \bsig &= \mathbf{0}
       \quad \text{in } \Omega,\\
-      \nabla \cdot \uu &= 0
-      \quad  \text{in } \Omega,
+      \nabla \cdot \uu &= 0 
+      \quad  \text{in } \Omega,\label{eq:stokes_eqs_cont} 
   \end{align}
   \label{eq:stokes_eqs}% 
 \end{subequations}%
@@ -1230,27 +1232,26 @@ $\uu \cdot \nn = 0$ with a stress $\btau$ applied tangentially on the boundary $
 the normal direction: $(\mu\nabla\uu - p\mathbf{I})\nn = \Tilde{p}(t)\nn$),
 and (iii) \emph{free slip} (no flow normal to the boundary
 $\uu \cdot \nn = 0$ and no tangential traction $\bsigpar = {\bf 0}$).
-Unless noted otherwise, the free-slip condition is applied on the
-boundary. We assume that the system starts at rest: $\uu(\xx, t=0) = \mathbf{0}$.
+We assume that the system starts at rest: $\uu(\xx, t=0) = \mathbf{0}$.
 
 To study the impact of the motile cilia and the cardiac pulsations on the CSF flow,
 we consider the following computational flow scenarios,
 each predicting a CSF flow velocity $\uu$ and pressure $p$.
+In all of the scenarios, $\Gs$ denotes a free-slip boundary.
 \begin{itemize}
     \item A \emph{baseline} flow model representing a wild-type zebrafish including 
     contributions both from the cilia forces and the cardiac pulsations.
-    In this scenario, we apply the tangential traction $\btau$ on the cilia boundary
+    In this scenario, we let $\Gamma=\Gs\cup\Gc\cup\Gp$ and apply the tangential traction $\btau$ on the cilia boundary
     $\Gc$ and prescribe the normal pressure $\Tilde{p}$ on the anterior/posterior boundary $\Gp$. % Model 0/Model C
 
     \item A \emph{cilia-driven/no-cardiac} flow model including contributions from the
     cilia forces but no cardiac pulsations.
-    Here, we apply a tangential traction $\btau$ on the cilia boundary $\Gc$.
-    In the absence of cardiac flow, the anterior/posterior boundary $\Gp=\emptyset$. % Model I/Model A
+    Here, $\Gamma=\Gs\cup\Gc$, and we apply a tangential traction $\btau$ on the cilia boundary $\Gc$.
+    In the absence of cardiac-induced flow, the anterior/posterior boundary $\Gp=\emptyset$. % Model I/Model A
 
     \item A \emph{cardiac-induced/no-cilia} flow model including contributions from the
     cardiac pulsations but no cilia forces.
-    Here, we set the tangential traction to zero on the cilia boundary
-    $\Gc$, while prescribing the normal pressure $\Tilde{p}$ on the
+    In this scenario, we disregard the cilia and consider $\Gamma=\Gs\cup\Gp$, prescribing the normal pressure $\Tilde{p}$ on the
     anterior/posterior boundary $\Gp$.  % Model II/Model B
 \end{itemize}
 The tangential traction and normal pressure are described further below.
@@ -1294,7 +1295,7 @@ We simulate transport of photoconverted proteins within the brain ventricles by
 modeling transport of a solute with concentration $c(\xx, t)$ for $\xx\in\Omega$ and
 time $t > 0$ by the advection-diffusion equation
 \begin{equation}
-    \pdifft{c} + \nabla\cdot\JJ = 0 \quad \text{in } \Omega,
+    \pdifft{c} + \nabla\cdot\JJ = 0 \quad \text{in } \Omega\setminus\Omega_{\mathrm{pc}},
     \label{eq:adv_diff_strong}
 \end{equation}
 where the total concentration flux $\JJ$ is assumed to consist of an advective and a diffusive flux:
@@ -1494,12 +1495,13 @@ advection-diffusion equation were implemented and solved numerically with
 DOLFINx~\cite{dolfinx2023preprint} with petsc4py~\cite{Dalcin2011ParallelPython}
 as linear algebra backend. The simulation code is openly
 available\fixme{~\cite{zenodo-link-to-all-code}}.
-A direct solver using MUMPS~\cite{Amestoy2011Mumps} was used to solve the
+A direct solver using MUMPS~\cite{Amestoy2011Mumps} is used to solve the
 linear systems resulting from the discretized Stokes equations.
-For the discretized advection-diffusion equation, we used an iterative
-linear solver based on GMRES~\cite{Saad1986GMRES:Systems} with block Jacobi
-preconditioning~\cite{Jacobi1845UeberGleichungen}. We discretize the time-dependent 
-diffusion equation (without advection) and use the assembled linear system matrix
+For the discretized advection-diffusion equation, we use a flexible GMRES solver~\cite{fgmres}
+with block Jacobi preconditioning~\cite{Jacobi1845UeberGleichungen} for the outer solves
+and ILU preconditioning for the inner solves~\cite{chan1997approximate}. 
+We discretize the time-dependent diffusion equation (without advection)
+and use the assembled linear system matrix
 as the preconditioner matrix for the advection-diffusion problem.
 Numerical experiments verified the accuracy of the model implementation
 (\Cref{sec:appB_verification}). 
