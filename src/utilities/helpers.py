@@ -60,15 +60,15 @@ def nonmatching_mesh_interpolation(mesh0: dfx.mesh.Mesh,
         
         with dfx.io.VTXWriter(mesh0.comm, f"3D_function{string}.bp", [u], "BP4") as vtx:
             vtx.write(0)
-    
-    # # Check that the interpolation is correct
-    # nz_dofs = np.where(u1.x.array!=0.0)[0] # only check dofs where plane intersection is interior to the mesh
-    # assert np.allclose(
-    #     u.x.array[nz_dofs],
-    #     u1.x.array[nz_dofs],
-    #     rtol=np.sqrt(np.finfo(xtype).eps),
-    #     atol=np.sqrt(np.finfo(xtype).eps),
-    # )
+
+    # Check that the interpolation is correct
+    nz_dofs = np.where(u1.x.array!=0.0)[0] # only check dofs where plane intersection is interior to the mesh
+    assert np.allclose(
+        u.x.array[nz_dofs],
+        u1.x.array[nz_dofs],
+        rtol=np.sqrt(np.finfo(xtype).eps),
+        atol=np.sqrt(np.finfo(xtype).eps),
+    )
 
     return u1
 
@@ -99,16 +99,18 @@ def calc_error_L2(u_approx: dfx.fem.Function, u_exact: dfx.fem.Function, dX: ufl
             The L2 error norm.
         """
         # Create higher-order function space for solution refinement
-        degree = u_approx.function_space.ufl_element().degree()
-        family = u_approx.function_space.ufl_element().family()
+        degree = u_approx.ufl_element().degree
+        family = u_approx.ufl_element().family_name
         mesh   = u_approx.function_space.mesh
         if vector_elements:
             # Create higher-order function space based on vector elements
-            W = dfx.fem.FunctionSpace(mesh, ufl.VectorElement(family = family, 
-                                      degree = (degree + degree_raise), cell = mesh.ufl_cell()))
+            W = dfx.fem.functionspace(mesh, element(family=family, 
+                                                    degree=(degree+degree_raise),
+                                                    cell=mesh.basix_cell(),
+                                                    shape=(mesh.geometry.dim,)))
         else:
             # Create higher-order funciton space based on finite elements
-            W = dfx.fem.FunctionSpace(mesh, (family, degree + degree_raise))
+            W = dfx.fem.functionspace(mesh, (family, degree + degree_raise))
             
         # Interpolate the approximate solution into the refined space
         u_W = dfx.fem.Function(W)
@@ -160,17 +162,19 @@ def calc_error_H1(u_approx: dfx.fem.Function, u_exact: dfx.fem.Function, dX: ufl
             The H1 error norm.
         """
         # Create higher-order function space for solution refinement
-        degree = u_approx.function_space.ufl_element().degree()
-        family = u_approx.function_space.ufl_element().family()
+        degree = u_approx.ufl_element().degree
+        family = u_approx.ufl_element().family_name
         mesh   = u_approx.function_space.mesh
         
         if vector_elements:
             # Create higher-order function space based on vector elements
-            W = dfx.fem.FunctionSpace(mesh, ufl.VectorElement(family=family, 
-                                      degree=(degree+degree_raise), cell=mesh.ufl_cell()))
+            W = dfx.fem.functionspace(mesh, element(family=family, 
+                                                    degree=(degree+degree_raise),
+                                                    cell=mesh.basix_cell(),
+                                                    shape=(mesh.geometry.dim,)))
         else:
             # Create higher-order funciton space based on finite elements
-            W = dfx.fem.FunctionSpace(mesh, (family, degree+degree_raise))
+            W = dfx.fem.functionspace(mesh, (family, degree+degree_raise))
             
         # Interpolate the approximate solution into the refined space
         u_W = dfx.fem.Function(W)
@@ -222,17 +226,19 @@ def calc_error_Hdiv(u_approx: dfx.fem.Function, u_exact: dfx.fem.Function, dX: u
             The Hdiv error norm.
         """
         # Create higher-order function space for solution refinement
-        degree = u_approx.function_space.ufl_element().degree()
-        family = u_approx.function_space.ufl_element().family()
+        degree = u_approx.ufl_element().degree
+        family = u_approx.ufl_element().family_name
         mesh   = u_approx.function_space.mesh
         
         if vector_elements:
             # Create higher-order function space based on vector elements
-            W = dfx.fem.FunctionSpace(mesh, ufl.VectorElement(family=family, 
-                                      degree=(degree + degree_raise), cell=mesh.ufl_cell()))
+            W = dfx.fem.functionspace(mesh, element(family=family, 
+                                                    degree=(degree+degree_raise),
+                                                    cell=mesh.basix_cell(),
+                                                    shape=(mesh.geometry.dim,)))
         else:
             # Create higher-order funciton space based on finite elements
-            W = dfx.fem.FunctionSpace(mesh, (family, degree+degree_raise))
+            W = dfx.fem.functionspace(mesh, (family, degree+degree_raise))
             
         # Interpolate the approximate solution into the refined space
         u_W = dfx.fem.Function(W)
@@ -281,7 +287,7 @@ def calc_mean_pressure(mesh, p):
 
 def write_to_file(filename, param, u_bar, p_bar):
     file = open(filename, "a")
-    file.write(str(param) + '\t' + str(u_bar) + '\t' + str(p_bar) + '\n')
+    file.write(str(param) + "\t" + str(u_bar) + "\t" + str(p_bar) + "\n")
     file.close()
 
 def tangential_projection(u: ufl.Coefficient, n: ufl.FacetNormal) -> ufl.Coefficient:

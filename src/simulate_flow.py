@@ -38,10 +38,10 @@ SLIP                 = 9 # The free-slip facets of the boundary
 # Operators
 # NOTE: these are the jump operators from Krauss, Zikatonov paper.
 # Jump is just a difference and it preserves the rank 
-Jump = lambda arg: arg('+') - arg('-')
+Jump = lambda arg: arg("+") - arg("-")
 
 # Average uses dot with normal and AGAIN MINUS; it reduces the rank
-Avg = lambda arg, n: .5*(dot(arg('+'), n('+')) - dot(arg('-'), n('-')))
+Avg = lambda arg, n: .5*(dot(arg("+"), n("+")) - dot(arg("-"), n("-")))
 
 # Action of (1 - n x n) on a vector yields the tangential component
 Tangent = lambda v, n: v - n*dot(v, n)
@@ -65,10 +65,10 @@ class FlowSolver:
     BDM_penalty_val = 10.0 # BDM interior penalty parameter
 
     # Cilia scenario strings for output directory names
-    cilia_strings = {0 : 'all_cilia',
-                     1 : 'rm_anterior',
-                     2 : 'rm_dorsal',
-                     3 : 'rm_ventral'
+    cilia_strings = {0 : "all_cilia",
+                     1 : "rm_anterior",
+                     2 : "rm_dorsal",
+                     3 : "rm_ventral"
     }
 
     def __init__(self,
@@ -160,7 +160,7 @@ class FlowSolver:
         """
 
         n, hA = ufl.FacetNormal(self.mesh), avg(ufl.CellDiameter(self.mesh)) # Facet normal vector and average cell diameter
-        dS = ufl.Measure('dS', domain=self.mesh) # Interior facet integral measure
+        dS = ufl.Measure("dS", domain=self.mesh) # Interior facet integral measure
 
         if consistent: # Add symmetrization terms
             return (-inner(Avg(2*self.mu*eps(u), n), Jump(Tangent(v, n)))*dS
@@ -203,7 +203,7 @@ class FlowSolver:
         """
 
         # Calculate the minimum and maximum values of the normal velocity component on the mesh boundary
-        DG0 = dfx.fem.functionspace(self.mesh, element('DG', self.mesh.basix_cell(), 0))
+        DG0 = dfx.fem.functionspace(self.mesh, element("DG", self.mesh.basix_cell(), 0))
         div_u_expr = dfx.fem.Expression(div(self.uh_out), DG0.element.interpolation_points()) # The velocity component normal to the boundary
         div_u = dfx.fem.Function(DG0)
         div_u.interpolate(div_u_expr)
@@ -227,7 +227,7 @@ class FlowSolver:
         print(f"Divergence max: {div_u_max:.2e}")        
         print(f"Divergence L2 norm: {div_u_L2:.2e}")
         
-        if self.model_version in ['A', 'C']:
+        if self.model_version in ["A", "C"]:
             n  = ufl.FacetNormal(self.mesh) # The facet normal of the mesh
             dorsal_force    = self.calculate_tangential_force(self.tangent_traction_dorsal(n), MIDDLE_DORSAL_CILIA)
             ventral_force   = self.calculate_tangential_force(self.tangent_traction_ventral(n), MIDDLE_VENTRAL_CILIA)
@@ -261,14 +261,14 @@ class FlowSolver:
         # Finite elements
         k = 1 # Velocity FEM order, pressure one order lower
         cell = mesh.basix_cell() # Mesh cell type
-        Velm = element('BDM', cell, k  ) # Velocity element: Brezzi-Douglas-Marini  of order k
-        Qelm = element('DG' , cell, k-1) # Pressure element: Discontinuous Galerkin of order k-1
+        Velm = element("BDM", cell, k  ) # Velocity element: Brezzi-Douglas-Marini  of order k
+        Qelm = element("DG" , cell, k-1) # Pressure element: Discontinuous Galerkin of order k-1
         Welm = mixed_element([Velm, Qelm]) # Mixed velocity-pressure element
         self.W = W = dfx.fem.functionspace(mesh, Welm) # Mixed velocity-pressure function space
         self.V, _ = V, _ = W.sub(0).collapse() # Velocity subspace
         self.Q, _ = Q, _ = W.sub(1).collapse() # Pressure subspace
 
-        print(f'Total number of degrees of freedom: {W.dofmap.index_map.size_global}')
+        print(f"Total number of degrees of freedom: {W.dofmap.index_map.size_global}")
 
         # Trial and test functions
         (u, p) = ufl.TrialFunctions(W)
@@ -308,7 +308,7 @@ class FlowSolver:
         a -= q * div(u) * dx # Continuity equation term
         a += self.stabilization(u, v) # BDM stabilization terms
 
-        if self.model_version in ['B', 'C']:
+        if self.model_version in ["B", "C"]:
             # Add time-derivative term
             a += rho/deltaT*dot(u, v) * dx 
 
@@ -319,7 +319,7 @@ class FlowSolver:
         #------------LINEAR FORM------------#
         L = 0 # Initialize
         
-        if self.model_version == 'A': # Only cilia forces
+        if self.model_version == "A": # Only cilia forces
             # Add tangential traction
             if self.cilia_scenario!=1:
                 L += -inner(Tangent(v, n), self.tangent_traction_anterior1(n)) * ds(ANTERIOR_CILIA1)
@@ -328,7 +328,7 @@ class FlowSolver:
                 L += -inner(Tangent(v, n), self.tangent_traction_dorsal(n)) * ds(MIDDLE_DORSAL_CILIA)
             if self.cilia_scenario!=3:
                 L +=  inner(Tangent(v, n), self.tangent_traction_ventral(n)) * ds(MIDDLE_VENTRAL_CILIA)
-        elif self.model_version=='B': # Only pulsatile cardiac motion
+        elif self.model_version=="B": # Only pulsatile cardiac motion
             # Add time-derivative term
             L += rho/deltaT*dot(self.u_, v) * dx 
 
@@ -340,7 +340,7 @@ class FlowSolver:
             # Add pressure term to the RHS
             L += inner(self.p_bc*n, v) * ds(ANTERIOR_PRESSURE) 
 
-        elif self.model_version=='C': # Cilia forces + pulsatile cardiac motion
+        elif self.model_version=="C": # Cilia forces + pulsatile cardiac motion
             # Add time-derivative term
             L += rho/deltaT*dot(self.u_, v) * dx
 
@@ -403,7 +403,7 @@ class FlowSolver:
             B = assemble_matrix(a_prec_cpp, self.bcs)
             B.assemble()
         
-        if self.model_version=='A': # Singular weak formulation
+        if self.model_version=="A": # Singular weak formulation
             # Create nullspace vector, nullspace=set of all constants
             ns_vec = A.createVecLeft()
             _, Q_dofs = W.sub(1).collapse()
@@ -436,15 +436,15 @@ class FlowSolver:
             # Configure solver using minres with preconditioner
             self.ksp.setOperators(A, B)
             opts = PETSc.Options()
-            opts.setValue('ksp_type', 'minres')
-            opts.setValue('ksp_rtol', 1E-12) # Important with high tolerance to achieve low div(u_h)               
-            opts.setValue('ksp_view', None)
-            opts.setValue('ksp_monitor_true_residual', None)                
-            opts.setValue('ksp_converged_reason', None)
-            opts.setValue('fieldsplit_0_ksp_type', 'preonly')
-            opts.setValue('fieldsplit_0_pc_type', 'lu')
-            opts.setValue('fieldsplit_1_ksp_type', 'preonly')
-            opts.setValue('fieldsplit_1_pc_type', 'lu')           
+            opts.setValue("ksp_type", "minres")
+            opts.setValue("ksp_rtol", 1E-12) # Important with high tolerance to achieve low div(u_h)               
+            opts.setValue("ksp_view", None)
+            opts.setValue("ksp_monitor_true_residual", None)                
+            opts.setValue("ksp_converged_reason", None)
+            opts.setValue("fieldsplit_0_ksp_type", "preonly")
+            opts.setValue("fieldsplit_0_pc_type", "lu")
+            opts.setValue("fieldsplit_1_ksp_type", "preonly")
+            opts.setValue("fieldsplit_1_pc_type", "lu")           
 
             # Configure preconditioner with fieldsplit method
             pc = self.ksp.getPC()
@@ -457,7 +457,7 @@ class FlowSolver:
             is_Q = PETSc.IS().createGeneral(Q_dofs)
 
             # Set field split index sets
-            pc.setFieldSplitIS(('0', is_V), ('1', is_Q))
+            pc.setFieldSplitIS(("0", is_V), ("1", is_Q))
             pc.setFieldSplitType(PETSc.PC.CompositeType.ADDITIVE) 
 
             # Finalize setup
@@ -469,27 +469,27 @@ class FlowSolver:
         #------------OUTPUT SETUP------------#
         #------------------------------------#
         self.wh = dfx.fem.Function(W) # Function for storing the solution
-        self.uh_out  = dfx.fem.Function(dfx.fem.functionspace(mesh, element('DG', cell, 1, shape=(3,)))) # Function for writing the velocity to output
+        self.uh_out  = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", cell, 1, shape=(3,)))) # Function for writing the velocity to output
         self.uh_mag_max = 0 # Used to store the maximum of the velocity magnitude
         self.write_time = 0 # Used to write velocity checkpoints
 
         if self.write_output: # Write velocity to VTX file
             # Create output filenames based on the formulation used
-            self.u_out_str = f'../output/flow/velocity_mesh={self.mesh_version}_model={self.model_version}_ciliaScenario={self.cilia_strings[self.cilia_scenario]}_dt={self.dt:.4g}.bp'
+            self.u_out_str = f"../output/flow/velocity_mesh={self.mesh_version}_model={self.model_version}_ciliaScenario={self.cilia_strings[self.cilia_scenario]}_dt={self.dt:.4g}.bp"
             
             # Create velocity output file and write the initial velocity field to the output file
-            self.vtx_u = dfx.io.VTXWriter(mesh.comm, self.u_out_str, [self.uh_out], 'BP4') 
+            self.vtx_u = dfx.io.VTXWriter(mesh.comm, self.u_out_str, [self.uh_out], "BP4") 
             self.vtx_u.write(0)
 
-            print(f'Writing output to: {self.u_out_str}')
+            print(f"Writing output to: {self.u_out_str}")
 
         if self.write_checkpoint: # Write velocity checkpoints to adios4dolfinx file
-            self.checkpoint_fname = f'../output/flow/checkpoints/velocity_mesh={self.mesh_version}_model={self.model_version}_ciliaScenario={self.cilia_strings[self.cilia_scenario]}_dt={self.dt:.4g}'
+            self.checkpoint_fname = f"../output/flow/checkpoints/velocity_mesh={self.mesh_version}_model={self.model_version}_ciliaScenario={self.cilia_strings[self.cilia_scenario]}_dt={self.dt:.4g}"
             
             # Write mesh and initial velocity field to the checkpoint file
-            a4d.write_mesh(filename=self.checkpoint_fname, mesh=self.mesh, engine='BP4')
-            a4d.write_meshtags(filename=self.checkpoint_fname, mesh=self.mesh, meshtags=self.ft, meshtag_name='ft')
-            a4d.write_function(filename=self.checkpoint_fname, u=self.uh_out, engine='BP4', time=self.write_time)
+            a4d.write_mesh(filename=self.checkpoint_fname, mesh=self.mesh, engine="BP4")
+            a4d.write_meshtags(filename=self.checkpoint_fname, mesh=self.mesh, meshtags=self.ft, meshtag_name="ft")
+            a4d.write_function(filename=self.checkpoint_fname, u=self.uh_out, engine="BP4", time=self.write_time)
             
             print(f"Writing checkpoints to {self.checkpoint_fname}")
 
@@ -500,7 +500,7 @@ class FlowSolver:
     def solve(self):
         """ Solve the discretized Stokes equations. """
 
-        if self.model_version=='A': # The velocity field is a steady state solution => no timeloop
+        if self.model_version=="A": # The velocity field is a steady state solution => no timeloop
             # Perform linear solve 
             tic = time.perf_counter()
             self.ksp.solve(self.b, self.wh.x.petsc_vec)
@@ -591,23 +591,23 @@ class FlowSolver:
         # Solution of linear system done -> print quantities and close output file
         print(f"Maximum velocity magnitude: {self.uh_mag_max}")
 
-        if self.model_version in ['B', 'C']: # Print time-averaged velocity magnitude
+        if self.model_version in ["B", "C"]: # Print time-averaged velocity magnitude
             u_mag_mean = np.sum(u_mag_means)/period_partition
             print(f"Time-averaged mean velocity: {u_mag_mean}")
         
         if self.write_output:
             # Close VTX file and write maximum velocity to .txt file
             self.vtx_u.close()
-            with open(file=self.u_out_str.removesuffix('.bp')+f'max_and_mean.txt',
-                      mode='w+') as file:
-                file.write('max velocity  = ' + str(float(self.uh_mag_max)) + '\n')
-                if self.model_version in ['B', 'C']: file.write('mean velocity = ' + str(float(u_mag_mean)))
+            with open(file=self.u_out_str.removesuffix(".bp")+f"max_and_mean.txt",
+                      mode="w+") as file:
+                file.write("max velocity  = " + str(float(self.uh_mag_max)) + "\n")
+                if self.model_version in ["B", "C"]: file.write("mean velocity = " + str(float(u_mag_mean)))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Input parameters
     direct = True # Use direct solver if True, else use iterative solver
-    model = 'C' # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
+    model = "C" # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
     f = 2.22 # Cardiac frequency [Hz]
     period = 1 / f # The cardiac period [s]
     T  = 1*period # Simulation end time [s]
@@ -619,23 +619,23 @@ if __name__ == '__main__':
     # Set mesh version from input
     mesh_version_input = int(argv[1])
     if mesh_version_input==0:
-        mesh_version = 'original'
+        mesh_version = "original"
     elif mesh_version_input==1:
-        mesh_version = 'fore_shrunk'
+        mesh_version = "fore_shrunk"
     elif mesh_version_input==2:
-        mesh_version = 'middle_shrunk'
+        mesh_version = "middle_shrunk"
     elif mesh_version_input==3:
-        mesh_version = 'hind_shrunk'
+        mesh_version = "hind_shrunk"
     elif mesh_version_input==4:
-        mesh_version = 'fore_middle_hind_shrunk'
+        mesh_version = "fore_middle_hind_shrunk"
     else:
-        raise ValueError('Error in mesh version input. Choose an integer in the interval [0, 4].')
+        raise ValueError("Error in mesh version input. Choose an integer in the interval [0, 4].")
 
     # Read mesh and mark facets
-    mesh_filename = f'../geometries/standard/{mesh_version}_ventricles.xdmf'
-    with dfx.io.XDMFFile(MPI.COMM_WORLD, mesh_filename, 'r') as xdmf: mesh = xdmf.read_mesh()
+    mesh_filename = f"../geometries/standard/{mesh_version}_ventricles.xdmf"
+    with dfx.io.XDMFFile(MPI.COMM_WORLD, mesh_filename, "r") as xdmf: mesh = xdmf.read_mesh()
 
-    in_out = False if model=='A' else True # Determine whether to mark pressure boundaries
+    in_out = False if model=="A" else True # Determine whether to mark pressure boundaries
     ft = mark_facets(mesh, inflow_outflow=in_out) # Generate boundary facet tags
 
     # Parse cilia modification scenario
@@ -646,7 +646,7 @@ if __name__ == '__main__':
         # 1 = remove telencephalic (anterior) cilia
         # 2 = remove dorsal diencephalic (middle) cilia
         # 3 = remove ventral diencephalic (middle) cilia
-        raise ValueError('Error in cilia modification scenario input. Choose an integer in the interval [0, 3].')
+        raise ValueError("Error in cilia modification scenario input. Choose an integer in the interval [0, 3].")
 
     # Print information
     print("\n#-------------Simulation information-------------#")
@@ -655,7 +655,7 @@ if __name__ == '__main__':
     print(f"Linear solver type =", "direct" if direct else "iterative")
     print(f"Timestep size = {dt:.4g} s")
     print(f"Simulation end time = {T:.4g} s")
-    if not model=='A': print("Imposing sinusoidal normal pressure BCs.")
+    if not model=="A": print("Imposing sinusoidal normal pressure BCs.")
 
     # Initialize solver object
     solver = FlowSolver(mesh=mesh,

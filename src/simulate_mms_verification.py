@@ -14,10 +14,10 @@ print = PETSc.Sys.Print
 # Operators
 # NOTE: these are the jump operators from Krauss, Zikatonov paper.
 # Jump is just a difference and it preserves the rank 
-Jump = lambda arg: arg('+') - arg('-')
+Jump = lambda arg: arg("+") - arg("-")
 
 # Average uses dot with normal and AGAIN MINUS; it reduces the rank
-Avg = lambda arg, n: .5*(dot(arg('+'), n('+')) - dot(arg('-'), n('-')))
+Avg = lambda arg, n: .5*(dot(arg("+"), n("+")) - dot(arg("-"), n("-")))
 
 # Action of (1 - n x n)
 Tangent = lambda v, n: v - n*dot(v, n)
@@ -31,7 +31,6 @@ def assemble_system(a_cpp: dfx.fem.form, L_cpp: dfx.fem.form, bcs: list[dfx.fem.
 
     b = assemble_vector(L_cpp)
     apply_lifting(b, [a_cpp], bcs=[bcs])
-    # b.zeroEntries()
     b.ghostUpdate(addv=PETSc.InsertMode.ADD_VALUES, mode=PETSc.ScatterMode.REVERSE)
     set_bc(b, bcs=bcs)
     b.ghostUpdate(addv=PETSc.InsertMode.INSERT_VALUES, mode=PETSc.ScatterMode.FORWARD)
@@ -46,11 +45,11 @@ def Stabilization(mesh: dfx.mesh.Mesh,
                 penalty: dfx.fem.Constant,
                 consistent: bool=True):
 
-    '''Displacement/Flux Stabilization from Krauss et al paper'''
+    """Displacement/Flux Stabilization from Krauss et al paper"""
     n, hA = ufl.FacetNormal(mesh), avg(ufl.CellDiameter(mesh))
 
     D  = lambda v: sym(grad(v)) # the symmetric gradient
-    dS = ufl.Measure('dS', domain=mesh)
+    dS = ufl.Measure("dS", domain=mesh)
 
     if consistent:
         return (-inner(Avg(2*mu*D(u), n), Jump(Tangent(v, n)))*dS
@@ -64,8 +63,8 @@ def get_system_mms(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct
 
     k  = 1
     cell = msh.basix_cell()
-    Velm = element('BDM', cell, k)
-    Qelm = element('DG', cell, k-1)
+    Velm = element("BDM", cell, k)
+    Qelm = element("DG", cell, k-1)
     Welm = mixed_element([Velm, Qelm])
     W = dfx.fem.functionspace(msh, Welm)
     V, _ = W.sub(0).collapse()
@@ -161,8 +160,8 @@ def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bo
     bdry_facets = mark_boundaries_flow(mesh=msh, inflow_outflow=False)
     k  = 1
     cell = msh.basix_cell()
-    Velm = element('BDM', cell, k)
-    Qelm = element('DG', cell, k-1)
+    Velm = element("BDM", cell, k)
+    Qelm = element("DG", cell, k-1)
     Welm = mixed_element([Velm, Qelm])
     W = dfx.fem.functionspace(msh, Welm)
     V, _ = W.sub(0).collapse()
@@ -242,27 +241,27 @@ def solve(A: PETSc.Mat, B: PETSc.Mat, b: PETSc.Vec, W: dfx.fem.FunctionSpace, di
         ksp.getPC().setType("lu")
         ksp.getPC().setFactorSolverType("mumps")
         opts = PETSc.Options()
-        opts.setValue('ksp_view', None)
-        opts.setValue('ksp_monitor_true_residual', None)                
-        opts.setValue('ksp_converged_reason', None)
+        opts.setValue("ksp_view", None)
+        opts.setValue("ksp_monitor_true_residual", None)                
+        opts.setValue("ksp_converged_reason", None)
         ksp.setFromOptions()
 
-        ksp.solve(b, wh.vector)
+        ksp.solve(b, wh.x.petsc_vec)
 
     else:
         ksp = PETSc.KSP().create(mesh.comm)
         ksp.setOperators(A, B)
 
         opts = PETSc.Options()
-        opts.setValue('ksp_type', 'minres')
-        opts.setValue('ksp_rtol', 1E-12)                
-        opts.setValue('ksp_view', None)
-        opts.setValue('ksp_monitor_true_residual', None)                
-        opts.setValue('ksp_converged_reason', None)
-        opts.setValue('fieldsplit_0_ksp_type', 'preonly')
-        opts.setValue('fieldsplit_0_pc_type', 'lu')
-        opts.setValue('fieldsplit_1_ksp_type', 'preonly')
-        opts.setValue('fieldsplit_1_pc_type', 'lu')           
+        opts.setValue("ksp_type", "minres")
+        opts.setValue("ksp_rtol", 1E-12)                
+        opts.setValue("ksp_view", None)
+        opts.setValue("ksp_monitor_true_residual", None)                
+        opts.setValue("ksp_converged_reason", None)
+        opts.setValue("fieldsplit_0_ksp_type", "preonly")
+        opts.setValue("fieldsplit_0_pc_type", "lu")
+        opts.setValue("fieldsplit_1_ksp_type", "preonly")
+        opts.setValue("fieldsplit_1_pc_type", "lu")           
 
         pc = ksp.getPC()
         pc.setType(PETSc.PC.Type.FIELDSPLIT)
@@ -276,14 +275,14 @@ def solve(A: PETSc.Mat, B: PETSc.Mat, b: PETSc.Vec, W: dfx.fem.FunctionSpace, di
         is_p = PETSc.IS().createStride(Q_map.size_local, offset_p, 1, comm=PETSc.COMM_SELF)
 
 
-        pc.setFieldSplitIS(('0', is_u), ('1', is_p))
+        pc.setFieldSplitIS(("0", is_u), ("1", is_p))
         pc.setFieldSplitType(PETSc.PC.CompositeType.ADDITIVE) 
 
         ksp.setUp()
         pc.setFromOptions()
         ksp.setFromOptions()
 
-        ksp.solve(b, wh.vector)
+        ksp.solve(b, wh.x.petsc_vec)
     
     print(f"Converged reason: {ksp.getConvergedReason()}")
     wh.x.scatter_forward()
@@ -297,7 +296,7 @@ def solve(A: PETSc.Mat, B: PETSc.Mat, b: PETSc.Vec, W: dfx.fem.FunctionSpace, di
     uh.x.array[:] = wh.sub(0).collapse().x.array.copy()
     ph.x.array[:] = wh.sub(1).collapse().x.array.copy()
 
-    uh_out = dfx.fem.Function(dfx.fem.functionspace(mesh, ufl.VectorElement("DG", mesh.ufl_cell(), 1)))
+    uh_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
     uh_out.interpolate(uh)
 
     if not direct:
@@ -312,7 +311,7 @@ def solve(A: PETSc.Mat, B: PETSc.Mat, b: PETSc.Vec, W: dfx.fem.FunctionSpace, di
     return uh, ph, uh_out, niters, rnorm
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     import tabulate
     import time
@@ -320,17 +319,17 @@ if __name__ == '__main__':
     mu_value = 1.0
     penalty_value = 10.0
     direct = True
-    mesh_type = 'cyl'
+    mesh_type = "cyl"
 
     history = []
 
-    if mesh_type=='cyl':
+    if mesh_type=="cyl":
 
         # init
         if direct:
-            headers = ('hmin', 'hmax', '#cells', 'dimW', '|eu|_0', 'EOC', '|eu|_1', 'EOC', '|eu|_div', 'EOC', '|eu|_Linf', 'EOC', '|div u|_0', '|ep|_0', 'EOC')
+            headers = ("hmin", "hmax", "#cells", "dimW", "|eu|_0", "EOC", "|eu|_1", "EOC", "|eu|_div", "EOC", "|eu|_Linf", "EOC", "|div u|_0", "|ep|_0", "EOC")
         else:
-            headers = ('hmin', 'hmax', '#cells', 'dimW', '|eu|_0', 'EOC', '|eu|_1', 'EOC', '|eu|_div', 'EOC', '|eu|_Linf', 'EOC', '|div u|_0', '|ep|_0', 'EOC', 'niters', '|r|')
+            headers = ("hmin", "hmax", "#cells", "dimW", "|eu|_0", "EOC", "|eu|_1", "EOC", "|eu|_div", "EOC", "|eu|_Linf", "EOC", "|div u|_0", "|ep|_0", "EOC", "niters", "|r|")
         eu_L2_prev  = 0
         eu_H1_prev  = 0
         eu_div_prev = 0
@@ -338,7 +337,7 @@ if __name__ == '__main__':
 
         for i in [0, 1, 2, 3, 4, 5]:
 
-            with dfx.io.XDMFFile(MPI.COMM_WORLD, f'./geometries/cylinder_{i}.xdmf', "r") as xdmf:
+            with dfx.io.XDMFFile(MPI.COMM_WORLD, f"../geometries/cylinder/cylinder_{i}.xdmf", "r") as xdmf:
                 mesh = xdmf.read_mesh()
             mesh.geometry.x[:] *= 1000 # Scale mesh
             
@@ -346,7 +345,7 @@ if __name__ == '__main__':
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
 
             # Calculate mean pressure and subtract it from the calculated pressure
-            dx = ufl.Measure('dx', domain=mesh) 
+            dx = ufl.Measure("dx", domain=mesh) 
             vol = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1 * dx)), op=MPI.SUM)
             mean_p_h = mesh.comm.allreduce(1/vol * dfx.fem.assemble_scalar(dfx.fem.form(ph * dx)), op=MPI.SUM)
 
@@ -362,7 +361,7 @@ if __name__ == '__main__':
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
             #u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
             
-            u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, ufl.VectorElement("DG", mesh.ufl_cell(), 1)))
+            u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
             u0_out.interpolate(u0)
             u1_ex = u0_out.sub(0).collapse().x.array
             u2_ex = u0_out.sub(1).collapse().x.array
@@ -390,9 +389,9 @@ if __name__ == '__main__':
 
             if i==0:
                 if direct:
-                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', '--', f'{eu_H1:.1E}', '--', f'{eu_div:.1E}', '--', f'{eu_Linf:.1E}', '--', f'{div_uh:.1E}', f'{ep_L2:.1E}', '--'))
+                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', '--', f'{eu_H1:.1E}', '--', f'{eu_div:.1E}', '--', f'{eu_Linf:.1E}', '--', f'{div_uh:.1E}', f'{ep_L2:.1E}', '--', niters, rnorm))
+                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--", niters, rnorm))
             else:
                 eu_L2_eoc   = np.log(eu_L2_prev/eu_L2) / np.log(2)
                 eu_H1_eoc   = np.log(eu_H1_prev/eu_H1) / np.log(2)
@@ -400,9 +399,9 @@ if __name__ == '__main__':
                 eu_Linf_eoc = np.log(eu_Linf_prev/eu_Linf) / np.log(2)
                 ep_L2_eoc   = np.log(ep_L2_prev/ep_L2) / np.log(2)
                 if direct:
-                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', f'{eu_L2_eoc:.2f}', f'{eu_H1:.1E}', f'{eu_H1_eoc:.2f}', f'{eu_div:.1E}', f'{eu_div_eoc:.2f}', f'{eu_Linf:.1E}', f'{eu_Linf_eoc:.2f}', f'{div_uh:.1E}', f'{ep_L2:.1E}', f'{ep_L2_eoc:.2f}'))
+                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', f'{eu_L2_eoc:.2f}', f'{eu_H1:.1E}', f'{eu_H1_eoc:.2f}', f'{eu_div:.1E}', f'{eu_div_eoc:.2f}', f'{eu_Linf:.1E}', f'{eu_Linf_eoc:.2f}', f'{div_uh:.1E}', f'{ep_L2:.1E}', f'{ep_L2_eoc:.2f}', niters, rnorm))
+                    history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}", niters, rnorm))
             
             eu_L2_prev   = eu_L2
             eu_H1_prev   = eu_H1
@@ -412,14 +411,14 @@ if __name__ == '__main__':
             print(tabulate.tabulate(history, headers=headers))
             
 
-    elif mesh_type=='zfish':
+    elif mesh_type=="zfish":
 
         # init
-        headers = ('hmin', 'hmax', '#cells', 'dimW', '|u|_0', '|u|_Linf', '|u|_Linf_s', '|div u|_0', 'niters', '|r|')
+        headers = ("hmin", "hmax", "#cells", "dimW", "|u|_0", "|u|_Linf", "|u|_Linf_s", "|div u|_0", "niters", "|r|")
 
         for i in [0, 1]:#, 2]:
             
-            with dfx.io.XDMFFile(MPI.COMM_WORLD, f'./geometries/ventricles_{i}.xdmf', "r") as xdmf:
+            with dfx.io.XDMFFile(MPI.COMM_WORLD, f"../geometries/ventricles/ventricles_{i}.xdmf", "r") as xdmf:
                 mesh = xdmf.read_mesh()
 
             mu_value = 6.97e-4
@@ -429,8 +428,8 @@ if __name__ == '__main__':
             # Calculate mean pressure and subtract it from the calculated pressure
             from utilities.mesh import mark_boundaries_flow
             ft = mark_boundaries_flow(mesh, inflow_outflow=False)
-            dx = ufl.Measure('dx', domain=mesh)
-            ds = ufl.Measure('ds', domain=mesh, subdomain_data=ft)
+            dx = ufl.Measure("dx", domain=mesh)
+            ds = ufl.Measure("ds", domain=mesh, subdomain_data=ft)
             vol = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1 * dx)), op=MPI.SUM)
             gamma_c = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*ds((ANTERIOR_CILIA, MIDDLE_DORSAL_CILIA, MIDDLE_VENTRAL_CILIA)))), op=MPI.SUM)
             mean_p_h = mesh.comm.allreduce(1/vol * dfx.fem.assemble_scalar(dfx.fem.form(ph * dx)), op=MPI.SUM)
@@ -465,13 +464,13 @@ if __name__ == '__main__':
             history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, uh_L2, u_Linf, u_Linf_scaled, div_uh_L2, niters, rnorm))
             print(tabulate.tabulate(history, headers=headers))
 
-    elif mesh_type=='square':
+    elif mesh_type=="square":
 
         # init
         if direct:
-            headers = ('hmin', 'hmax', '#cells', 'dimW', '|eu|_0', 'EOC', '|eu|_1', 'EOC', '|eu|_div', 'EOC', '|eu|_Linf', 'EOC', '|div u|_0', '|ep|_0', 'EOC')
+            headers = ("hmin", "hmax", "#cells", "dimW", "|eu|_0", "EOC", "|eu|_1", "EOC", "|eu|_div", "EOC", "|eu|_Linf", "EOC", "|div u|_0", "|ep|_0", "EOC")
         else:
-            headers = ('hmin', 'hmax', '#cells', 'dimW', '|eu|_0', 'EOC', '|eu|_1', 'EOC', '|eu|_div', 'EOC', '|eu|_Linf', 'EOC', '|div u|_0', '|ep|_0', 'EOC', 'niters', '|r|')
+            headers = ("hmin", "hmax", "#cells", "dimW", "|eu|_0", "EOC", "|eu|_1", "EOC", "|eu|_div", "EOC", "|eu|_Linf", "EOC", "|div u|_0", "|ep|_0", "EOC", "niters", "|r|")
         eu_L2_prev  = 0
         eu_H1_prev  = 0
         eu_div_prev = 0
@@ -486,7 +485,7 @@ if __name__ == '__main__':
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
 
             # Calculate mean pressure and subtract it from the calculated pressure
-            dx = ufl.Measure('dx', domain=mesh) 
+            dx = ufl.Measure("dx", domain=mesh) 
             vol = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1 * dx)), op=MPI.SUM)
             mean_p_h = mesh.comm.allreduce(1/vol * dfx.fem.assemble_scalar(dfx.fem.form(ph * dx)), op=MPI.SUM)
 
@@ -501,7 +500,7 @@ if __name__ == '__main__':
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
             #u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
             
-            u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, ufl.VectorElement("DG", mesh.ufl_cell(), 1)))
+            u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
             u0_out.interpolate(u0)
             u1_ex = u0_out.sub(0).collapse().x.array
             u2_ex = u0_out.sub(1).collapse().x.array
@@ -528,9 +527,9 @@ if __name__ == '__main__':
             if i==3:
                 if direct:
                     from decimal import Decimal
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', '--', f'{eu_H1:.1E}', '--', f'{eu_div:.1E}', '--', f'{eu_Linf:.1E}', '--', f'{div_uh:.1E}', f'{ep_L2:.1E}', '--'))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', '--', f'{eu_H1:.1E}', '--', f'{eu_div:.1E}', '--', f'{eu_Linf:.1E}', '--', f'{div_uh:.1E}', f'{ep_L2:.1E}', '--', niters, rnorm))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--", niters, rnorm))
             else:
                 eu_L2_eoc   = np.log(eu_L2_prev/eu_L2) / np.log(2)
                 eu_H1_eoc   = np.log(eu_H1_prev/eu_H1) / np.log(2)
@@ -538,9 +537,9 @@ if __name__ == '__main__':
                 eu_Linf_eoc = np.log(eu_Linf_prev/eu_Linf) / np.log(2)
                 ep_L2_eoc   = np.log(ep_L2_prev/ep_L2) / np.log(2)
                 if direct:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', f'{eu_L2_eoc:.2f}', f'{eu_H1:.1E}', f'{eu_H1_eoc:.2f}', f'{eu_div:.1E}', f'{eu_div_eoc:.2f}', f'{eu_Linf:.1E}', f'{eu_Linf_eoc:.2f}', f'{div_uh:.1E}', f'{ep_L2:.1E}', f'{ep_L2_eoc:.2f}'))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', f'{eu_L2_eoc:.2f}', f'{eu_H1:.1E}', f'{eu_H1_eoc:.2f}', f'{eu_div:.1E}', f'{eu_div_eoc:.2f}', f'{eu_Linf:.1E}', f'{eu_Linf_eoc:.2f}', f'{div_uh:.1E}', f'{ep_L2:.1E}', f'{ep_L2_eoc:.2f}', niters, rnorm))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}", niters, rnorm))
             
             eu_L2_prev   = eu_L2
             eu_H1_prev   = eu_H1
@@ -549,13 +548,13 @@ if __name__ == '__main__':
             ep_L2_prev   = ep_L2
             print(tabulate.tabulate(history, headers=headers))
 
-    elif mesh_type=='cube':
+    elif mesh_type=="cube":
 
         # init
         if direct:
-            headers = ('hmin', 'hmax', '#cells', 'dimW', '|eu|_0', 'EOC', '|eu|_1', 'EOC', '|eu|_div', 'EOC', '|eu|_Linf', 'EOC', '|div u|_0', '|ep|_0', 'EOC')
+            headers = ("hmin", "hmax", "#cells", "dimW", "|eu|_0", "EOC", "|eu|_1", "EOC", "|eu|_div", "EOC", "|eu|_Linf", "EOC", "|div u|_0", "|ep|_0", "EOC")
         else:
-            headers = ('hmin', 'hmax', '#cells', 'dimW', '|eu|_0', 'EOC', '|eu|_1', 'EOC', '|eu|_div', 'EOC', '|eu|_Linf', 'EOC', '|div u|_0', '|ep|_0', 'EOC', 'niters', '|r|')
+            headers = ("hmin", "hmax", "#cells", "dimW", "|eu|_0", "EOC", "|eu|_1", "EOC", "|eu|_div", "EOC", "|eu|_Linf", "EOC", "|div u|_0", "|ep|_0", "EOC", "niters", "|r|")
         eu_L2_prev  = 0
         eu_H1_prev  = 0
         eu_div_prev = 0
@@ -570,7 +569,7 @@ if __name__ == '__main__':
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
 
             # Calculate mean pressure and subtract it from the calculated pressure
-            dx = ufl.Measure('dx', domain=mesh) 
+            dx = ufl.Measure("dx", domain=mesh) 
             vol = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1 * dx)), op=MPI.SUM)
             mean_p_h = mesh.comm.allreduce(1/vol * dfx.fem.assemble_scalar(dfx.fem.form(ph * dx)), op=MPI.SUM)
 
@@ -586,7 +585,7 @@ if __name__ == '__main__':
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
             #u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
             
-            u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, ufl.VectorElement("DG", mesh.ufl_cell(), 1)))
+            u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
             u0_out.interpolate(u0)
             u1_ex = u0_out.sub(0).collapse().x.array
             u2_ex = u0_out.sub(1).collapse().x.array
@@ -614,9 +613,9 @@ if __name__ == '__main__':
             if i==2:
                 if direct:
                     from decimal import Decimal
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', '--', f'{eu_H1:.1E}', '--', f'{eu_div:.1E}', '--', f'{eu_Linf:.1E}', '--', f'{div_uh:.1E}', f'{ep_L2:.1E}', '--'))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', '--', f'{eu_H1:.1E}', '--', f'{eu_div:.1E}', '--', f'{eu_Linf:.1E}', '--', f'{div_uh:.1E}', f'{ep_L2:.1E}', '--', niters, rnorm))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--", niters, rnorm))
             else:
                 eu_L2_eoc   = np.log(eu_L2_prev/eu_L2) / np.log(2)
                 eu_H1_eoc   = np.log(eu_H1_prev/eu_H1) / np.log(2)
@@ -624,9 +623,9 @@ if __name__ == '__main__':
                 eu_Linf_eoc = np.log(eu_Linf_prev/eu_Linf) / np.log(2)
                 ep_L2_eoc   = np.log(ep_L2_prev/ep_L2) / np.log(2)
                 if direct:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', f'{eu_L2_eoc:.2f}', f'{eu_H1:.1E}', f'{eu_H1_eoc:.2f}', f'{eu_div:.1E}', f'{eu_div_eoc:.2f}', f'{eu_Linf:.1E}', f'{eu_Linf_eoc:.2f}', f'{div_uh:.1E}', f'{ep_L2:.1E}', f'{ep_L2_eoc:.2f}'))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f'{eu_L2:.1E}', f'{eu_L2_eoc:.2f}', f'{eu_H1:.1E}', f'{eu_H1_eoc:.2f}', f'{eu_div:.1E}', f'{eu_div_eoc:.2f}', f'{eu_Linf:.1E}', f'{eu_Linf_eoc:.2f}', f'{div_uh:.1E}', f'{ep_L2:.1E}', f'{ep_L2_eoc:.2f}', niters, rnorm))
+                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}", niters, rnorm))
             
             eu_L2_prev   = eu_L2
             eu_H1_prev   = eu_H1
@@ -635,7 +634,7 @@ if __name__ == '__main__':
             ep_L2_prev   = ep_L2
             print(tabulate.tabulate(history, headers=headers))
     
-    else: raise ValueError('Unknown mesh_type.')
+    else: raise ValueError("Unknown mesh_type.")
     print(f"Script time = {time.perf_counter() - tic:.2f} sec")
     vtx_u = dfx.io.VTXWriter(comm=mesh.comm, filename="MMS_BDM_velocity.bp", output=[uh_out], engine="BP4")
     vtx_u.write(0)

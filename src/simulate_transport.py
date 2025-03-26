@@ -1,9 +1,10 @@
+from diffusion import diffusion_problem
 from utilities.local_imports import *
 from utilities.mesh          import create_ventricle_volumes_meshtags
-from diffusion import diffusion_problem
 
 import os
 import time
+import adios2
 import adios4dolfinx as a4d
 
 from ufl       import avg, jump
@@ -41,9 +42,9 @@ SLIP                 = 9
 
 # Diffusion coefficients
 D_coeffs = {
-    'D1' : 2.17e-6, # Extracellular vesicles (150 nm radius)
-    'D2' : 57.5e-6, # STM-GFP 
-    'D3' : 115e-6,  # Dendra2 fluorescent protein
+    "D1" : 2.17e-6, # Extracellular vesicles (150 nm radius)
+    "D2" : 57.5e-6, # STM-GFP 
+    "D3" : 115e-6,  # Dendra2 fluorescent protein
 }
 
 class TransportSolver:
@@ -94,7 +95,7 @@ class TransportSolver:
             Cardiac cycle period in seconds.
         
         molecule : str
-            Which molecule to simulate transport of. Options are 'D1', 'D2' and 'D3'.
+            Which molecule to simulate transport of. Options are "D1", "D2" and "D3".
 
         element_degree : int
             Polynomial degree of finite element basis functions.
@@ -132,8 +133,8 @@ class TransportSolver:
         self.element_degree = element_degree
         
         # Read mesh and meshtags from velocity data file
-        self.mesh = a4d.read_mesh(comm=self.comm, filename=data_fname, engine='BP4', ghost_mode=self.ghost_mode)
-        self.ft   = a4d.read_meshtags(filename=data_fname, mesh=self.mesh, meshtag_name='ft')
+        self.mesh = a4d.read_mesh(comm=self.comm, filename=data_fname, engine="BP4", ghost_mode=self.ghost_mode)
+        self.ft   = a4d.read_meshtags(filename=data_fname, mesh=self.mesh, meshtag_name="ft")
         print(f"Total # of cells in mesh: {self.mesh.topology.index_map(self.mesh.topology.dim).size_global}")
 
         # Temporal parameters
@@ -154,7 +155,7 @@ class TransportSolver:
         self.a = 65
 
         # Output directory
-        self.output_dir = f'../output/transport/mesh={self.mesh_version}_model={self.model_version}_molecule={self.molecule}_ciliaScenario={cilia_string}_dt={dt:.4g}/'
+        self.output_dir = f"../output/transport/mesh={self.mesh_version}_model={self.model_version}_molecule={self.molecule}_ciliaScenario={cilia_string}_dt={dt:.4g}/"
     
     def setup_variational_problem(self):
         """ Set up bilinear and linear form for the weak form of the advection-diffusion equation discretized 
@@ -165,30 +166,23 @@ class TransportSolver:
         """
 
         # Initialize
-        # Define the cells in ROI 1
-        ROI1_cells = self.ROI_ct.find(self.ROI_tags[0])
-        self.mesh.topology.create_connectivity(self.mesh.topology.dim, self.mesh.topology.dim)
-        ROI1_dofs = dfx.fem.locate_dofs_topological(self.W, self.mesh.topology.dim, ROI1_cells)
-        self.bc_func = dfx.fem.Function(self.W)
-        self.bcs = [dfx.fem.dirichletbc(self.bc_func, ROI1_dofs)]
-
-        dS = ufl.Measure('dS', domain=self.mesh) # Interior facet integral measure
-        alpha  = dfx.fem.Constant(self.mesh, dfx.default_scalar_type(self.alpha_val))  # DG interior penalty parameter
+        dS  = ufl.Measure("dS", domain=self.mesh) # Interior facet integral measure
         un  = (dot(self.u, self.n) + abs(dot(self.u, self.n))) / 2.0 # Upwind velocity
-        pres_tags = (ANTERIOR_PRESSURE, POSTERIOR_PRESSURE) # pressure BC tags
+        alpha     = dfx.fem.Constant(self.mesh, dfx.default_scalar_type(self.alpha_val))  # DG interior penalty parameter
 
-        # Time-discretization: BDF2 scheme
-        a0 = 3/2*self.c*self.w / self.deltaT * self.dx # Time derivative
+        #----- The weak formulation -----#
+        # Bilinear form
+        a0 = 3/2*self.c*self.w / self.deltaT * self.dx # Time derivative, discretized with BDF2 scheme
 
         a1 = dot(grad(self.w), self.D * grad(self.c) - self.u * self.c) * self.dx # Flux term integrated by parts
 
         # Diffusive terms with interior penalization
-        a2  = self.D('+') * alpha('+') / avg(self.hf) * dot(jump(self.w, self.n), jump(self.c, self.n)) * dS
-        a2 -= self.D('+') * dot(avg(grad(self.w)), jump(self.c, self.n)) * dS
-        a2 -= self.D('+') * dot(jump(self.w, self.n), avg(grad(self.c))) * dS
+        a2  = self.D("+") * alpha("+") / avg(self.hf) * dot(jump(self.w, self.n), jump(self.c, self.n)) * dS
+        a2 -= self.D("+") * dot(avg(grad(self.w)), jump(self.c, self.n)) * dS
+        a2 -= self.D("+") * dot(jump(self.w, self.n), avg(grad(self.c))) * dS
         
         # Advective term
-        a3  = dot(jump(self.w), un('+') * self.c('+') - un('-') * self.c('-')) * dS
+        a3  = dot(jump(self.w), un("+")*self.c("+") - un("-")*self.c("-")) * dS
 
         a = a0+a1+a2+a3
         
@@ -197,9 +191,11 @@ class TransportSolver:
         L1 = -1/2*self.c__ * self.w / self.deltaT * self.dx
         L = L0+L1
         
-        if (self.model_version=='B' or self.model_version=='C'):    
+        if (self.model_version=="B" or self.model_version=="C"):    
             # Impose consistent flux BC: influx(t_n) = outflux(t_{n-1})
             # No diffusive flux on outflux BC, advective outflux kept in variational form
+            pres_tags = (ANTERIOR_PRESSURE, POSTERIOR_PRESSURE) # Pressure BC tags
+            
             outflux  = self.c*dot(self.u, self.n) # Only advective flux on outflow boundary, diffusive flux is zero
             u_normal = dot(self.u, self.n) # The normal velocity
 
@@ -221,6 +217,14 @@ class TransportSolver:
         self.a_cpp = dfx.fem.form(a, jit_options=jit_parameters)
         self.L_cpp = dfx.fem.form(L, jit_options=jit_parameters)
 
+        # Boundary conditions:
+        # Set strong Dirichlet condition in ROI 1
+        ROI1_cells = self.ROI_ct.find(self.ROI_tags[0])
+        self.mesh.topology.create_connectivity(self.mesh.topology.dim, self.mesh.topology.dim)
+        ROI1_dofs = dfx.fem.locate_dofs_topological(self.W, self.mesh.topology.dim, ROI1_cells)
+        self.bc_func = dfx.fem.Function(self.W)
+        self.bcs = [dfx.fem.dirichletbc(self.bc_func, ROI1_dofs)]
+
     def photoconversion_curve(self):
         return np.log(1+self.t/self.a)/np.log(1+self.T/self.a) # Parameter a determines growth speed
 
@@ -233,7 +237,7 @@ class TransportSolver:
         """
 
         # boundary tags
-        dS = ufl.Measure('dS', domain=self.mesh)
+        dS = ufl.Measure("dS", domain=self.mesh)
         alpha = dfx.fem.Constant(self.mesh, dfx.default_scalar_type(self.alpha_val))  # DG interior penalty parameter
 
         # Bilinear form
@@ -241,9 +245,9 @@ class TransportSolver:
         a1 = dot(grad(self.w), self.D * grad(self.c)) * self.dx # Flux term integrated by parts
 
         # Diffusive terms with interior penalization
-        a2  = self.D('+') * alpha('+') / avg(self.hf) * dot(jump(self.w, self.n), jump(self.c, self.n)) * dS
-        a2 -= self.D('+') * dot(avg(grad(self.w)), jump(self.c, self.n)) * dS
-        a2 -= self.D('+') * dot(jump(self.w, self.n), avg(grad(self.c))) * dS
+        a2  = self.D("+") * alpha("+") / avg(self.hf) * dot(jump(self.w, self.n), jump(self.c, self.n)) * dS
+        a2 -= self.D("+") * dot(avg(grad(self.w)), jump(self.c, self.n)) * dS
+        a2 -= self.D("+") * dot(jump(self.w, self.n), avg(grad(self.c))) * dS
 
         a = a0+a1+a2
 
@@ -260,11 +264,11 @@ class TransportSolver:
 
         # Facet normal vector and integral measures
         self.n  = ufl.FacetNormal(self.mesh)
-        self.dx = ufl.Measure('dx', domain=self.mesh, subdomain_data=self.ROI_ct)
-        self.ds = ufl.Measure('ds', domain=self.mesh, subdomain_data=self.ft)
+        self.dx = ufl.Measure("dx", domain=self.mesh, subdomain_data=self.ROI_ct)
+        self.ds = ufl.Measure("ds", domain=self.mesh, subdomain_data=self.ft)
 
         # Velocity field finite elements
-        DG1_vec = element('DG', self.mesh.basix_cell(), 1, shape=(3,)) # Piecewise linear vector elements for the velocity
+        DG1_vec = element("DG", self.mesh.basix_cell(), 1, shape=(3,)) # Piecewise linear vector elements for the velocity
         V = dfx.fem.functionspace(self.mesh, DG1_vec)
         self.u  = dfx.fem.Function(V) # Velocity
         self.u_ = dfx.fem.Function(V) # Velocity at previous timestep
@@ -273,7 +277,7 @@ class TransportSolver:
         a4d.read_function(u=self.u, filename=self.data_fname, engine="BP4")
         
         # Piecewise (discontinuous) linear lagrange elements for concentration
-        DG = element('DG', self.mesh.basix_cell(), self.element_degree) 
+        DG = element("DG", self.mesh.basix_cell(), self.element_degree) 
 
         self.W = W = dfx.fem.functionspace(self.mesh, DG) # Concentration function space
         print("Number of dofs: ", W.dofmap.index_map.size_global) # Print the number of dofs
@@ -286,7 +290,7 @@ class TransportSolver:
 
         # Solve the diffusion equation for a smooth initial condition for the concentration
         # at two previous timesteps
-        print('Solving diffusion equation for initial conditions ...')
+        print("Solving diffusion equation for initial conditions ...")
         self.c__, self.c_ = diffusion_problem(self.mesh, k=self.element_degree, D_value=self.D_value)
         for conc in [self.c__, self.c_]:
             # Scale the concentration values so that they are on
@@ -296,7 +300,7 @@ class TransportSolver:
             # the interval [0, max(bc_func)].
             max_conc = self.comm.allreduce(conc.x.array.max(), op=MPI.MAX)
             conc.x.array[:] /= max_conc
-        print('Initial condition set.')
+        print("Initial condition set.")
 
         #------VARIATIONAL FORM------#
         self.deltaT = dfx.fem.Constant(self.mesh, dfx.default_scalar_type(self.dt)) # Compiled timestep
@@ -318,13 +322,13 @@ class TransportSolver:
         
         if self.write_output_vtx:
             # Intialize VTX output file for the concentration
-            self.output_vtx_str = self.output_dir + 'concentration.bp'            
+            self.output_vtx_str = self.output_dir + "concentration.bp"            
             self.vtx_c = dfx.io.VTXWriter(comm=self.comm, filename=self.output_vtx_str, output=[self.c_h], engine="BP4")
             print(f"Writing VTX output to: {self.output_vtx_str}\n")
         
         if self.write_output_xdmf:
             # Intialize XDMF output file for the concentration
-            self.output_xdmf_str = self.output_dir + 'concentration.xdmf' 
+            self.output_xdmf_str = self.output_dir + "concentration.xdmf" 
             self.c_dg0 = dfx.fem.Function(dfx.fem.functionspace(self.mesh, element("DG", self.mesh.basix_cell(), 0)))           
             self.xdmf_c = dfx.io.XDMFFile(self.comm, self.output_xdmf_str, "w")
             self.xdmf_c.write_mesh(self.mesh)
@@ -332,7 +336,7 @@ class TransportSolver:
         
         if self.write_checkpoint:
             # Intialize output file for checkpoints of the concentration
-            self.checkpoint_filename = self.output_dir + 'checkpoints/concentration/'
+            self.checkpoint_filename = self.output_dir + "checkpoints/concentration/"
             a4d.write_mesh(mesh=self.mesh, filename=self.checkpoint_filename)
             print(f"Writing concentration checkpoints to: {self.checkpoint_filename}\n")
 
@@ -366,7 +370,7 @@ class TransportSolver:
 
         if self.write_snapshot_checkpoint:
             self.snapshot_times = self.record_periods*self.period
-            self.snapshot_filename = self.output_dir + 'checkpoints/concentration_snapshots/'
+            self.snapshot_filename = self.output_dir + "checkpoints/concentration_snapshots/"
             a4d.write_mesh(mesh=self.mesh, filename=self.snapshot_filename)
             print(f"Writing concentration snapshots to: {self.snapshot_filename}")
             print(f"Writing the snapshots at times: {self.snapshot_times}\n")
@@ -394,7 +398,7 @@ class TransportSolver:
             self.solver.getPC().setType("bjacobi")
             self.solver.setTolerances(rtol=1e-10)
             opts = PETSc.Options()
-            opts.setValue('sub_pc_type', 'ilu')
+            opts.setValue("sub_pc_type", "ilu")
             self.solver.setFromOptions()
         
     def assemble_system_matrix(self):
@@ -419,7 +423,7 @@ class TransportSolver:
     def run(self):
         """ Run transport simulations. """
 
-        if self.model_version=='A':
+        if self.model_version=="A":
 
             # Read velocity data from file
             # This is done before the solution loop
@@ -489,8 +493,8 @@ class TransportSolver:
                     self.t_hat.x.array[above_idx] = self.t
 
         else: # Model B or C
-            read_time = 0
-            period_counter = 0
+            read_time = 0 # Initialize time index for reading velocity
+            period_counter = 0 # Initialize period counter for writing concentration snapshots
 
             tic = time.perf_counter()
         
@@ -508,7 +512,7 @@ class TransportSolver:
                     period_counter += 1
                 else:
                     read_time += 1
-                self.u_ = self.u
+                self.u_ = self.u # Update previous timestep velocity
                 a4d.read_function(u=self.u, filename=self.data_fname, engine="BP4", time=read_time) # velocity at this timestep
                 
                 if i==0:
@@ -579,30 +583,30 @@ class TransportSolver:
                     self.t_hat.x.array[above_idx] = self.t
 
         print("\nFor-loop finished, closing ...\n")
-        print(f'Solve loop time: {time.perf_counter() - tic:.4g} sec')
+        print(f"Solve loop time: {time.perf_counter() - tic:.4g} sec")
 
         if self.write_data:
             with open(file=self.data_output_dir+f"final_total_c.txt", mode="w+") as file: file.write(str(float(total_c)))
 
             # Save concentration arrays to file
-            with open(self.data_output_dir + 'c_hats.npy', 'w+b') as c_means_file:
+            with open(self.data_output_dir + "c_hats.npy", "w+b") as c_means_file:
                 np.save(c_means_file, self.c_hat_arrays)
             
             # Write output of t_hat (times to threshold)
-            with dfx.io.VTXWriter(self.comm, self.output_dir+f"t_hat.bp", [self.t_hat], "BP4") as vtx: vtx.write(0) # VTX file (for visualization)
-            a4d.write_function_on_input_mesh(filename=self.output_dir+f"t_hat", u=self.t_hat) # Checkpoint file (can be reloaded later)
+            with dfx.io.VTXWriter(self.comm, self.output_dir+"t_hat.bp", [self.t_hat], "BP4") as vtx: vtx.write(0) # VTX file (for visualization)
+            a4d.write_function_on_input_mesh(filename=self.output_dir+"t_hat", u=self.t_hat, mode=adios2.bindings.Mode.Write, name="t_hat") # Checkpoint file (can be reloaded later)
 
         if self.write_output_xdmf: self.xdmf_c.close()
         if self.write_output_vtx: self.vtx_c.close()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Model versions:
     # A = cilia-driven/no-cardiac
     # B = cardiac-induced/no-cilia
     # C = cilia+cardiac (baseline)
 
-    model_version = 'C' 
+    model_version = "C" 
     write_data = True # Write ROI mean concentrations as numpy data
     write_output_vtx = False # Write VTX output file
     write_output_xdmf = False # Write XDMF output file
@@ -617,41 +621,41 @@ if __name__ == '__main__':
     # D3 = Dendra2 Fluorescent Protein
     molecule_input = int(argv[1])
     if molecule_input==1:
-        molecule = 'D1'
+        molecule = "D1"
     elif molecule_input==2:
-        molecule = 'D2'
+        molecule = "D2"
     elif molecule_input==3:
-        molecule = 'D3'
+        molecule = "D3"
     else:
-        raise ValueError('Error in molecule number input. Choose 1, 2, or 3.')
+        raise ValueError("Error in molecule number input. Choose 1, 2, or 3.")
 
     # Set mesh version from input
     mesh_version_input = int(argv[2])
     if mesh_version_input==0:
-        mesh_version = 'original'
+        mesh_version = "original"
     elif mesh_version_input==1:
-        mesh_version = 'fore_shrunk'
+        mesh_version = "fore_shrunk"
     elif mesh_version_input==2:
-        mesh_version = 'hind_shrunk'
+        mesh_version = "hind_shrunk"
     elif mesh_version_input==3:
-        mesh_version = 'middle_shrunk'
+        mesh_version = "middle_shrunk"
     elif mesh_version_input==4:
-        mesh_version = 'fore_middle_hind_shrunk'
+        mesh_version = "fore_middle_hind_shrunk"
     else:
-        raise ValueError('Error in mesh version input. Choose an integer in the interval [0, 4].')
+        raise ValueError("Error in mesh version input. Choose an integer in the interval [0, 4].")
 
     # Parse cilia modification scenario
     cilia_scenario_input = int(argv[3])
     if cilia_scenario_input==0:
-        cilia_string = 'all_cilia'
+        cilia_string = "all_cilia"
     elif cilia_scenario_input==1:
-        cilia_string = 'rm_anterior'
+        cilia_string = "rm_anterior"
     elif cilia_scenario_input==2:
-        cilia_string = 'rm_dorsal'
+        cilia_string = "rm_dorsal"
     elif cilia_scenario_input==3:
-        cilia_string = 'rm_ventral'
+        cilia_string = "rm_ventral"
     else:
-        raise ValueError('Error in cilia modification scenario input. Choose an integer in the interval [0, 3].')
+        raise ValueError("Error in cilia modification scenario input. Choose an integer in the interval [0, 3].")
     
     # Temporal parameters
     f = 2.22         # Cardiac frequency [Hz]
@@ -667,7 +671,7 @@ if __name__ == '__main__':
     print(f"Timestep: dt = {dt:.4g}")
 
     # Set velocity data filename
-    data_fname = f'../output/flow/checkpoints/velocity_mesh={mesh_version}_model={model_version}_ciliaScenario={cilia_string}_dt={dt:.4g}'
+    data_fname = f"../output/flow/checkpoints/velocity_mesh={mesh_version}_model={model_version}_ciliaScenario={cilia_string}_dt={dt:.4g}"
 
     # Create and set up solver object
     transport_sim = TransportSolver(data_fname=data_fname, model_version=model_version,

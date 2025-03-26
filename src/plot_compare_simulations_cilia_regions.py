@@ -32,9 +32,9 @@ volumes = [comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*dx(tag))), op=M
 volumes[3] += volumes[2]+volumes[1]+volumes[0] # Add ROI volumes 1, 2, and 3 to get the total of ROI 4
 
 # Load data c_hat, the total concenctration in each ROI
-with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[0]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_original    = np.load(file)
-with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[1]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_dorsal  = np.load(file)
-with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[2]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_ventral = np.load(file)
+with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[0]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_original = np.load(file)
+with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[1]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_dorsal   = np.load(file)
+with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[2]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_ventral  = np.load(file)
 with open(f'../output/transport/mesh={mesh_version}_model={model_version}_molecule={molecule}_ciliaScenario={cilia_scenarios[3]}_dt={dt:.4g}/data/c_hats.npy', 'rb') as file: c_bar_anterior = np.load(file)
 
 # Divide the total concentrations in the ROIs by the volume of the respective ROI
@@ -42,7 +42,7 @@ for i in ROI_tags:
     c_bar_original[:, i-1] /= volumes[i-1]
     c_bar_dorsal[:, i-1]   /= volumes[i-1]
     c_bar_ventral[:, i-1]  /= volumes[i-1]
-    c_bar_anterior[:, i-1]  /= volumes[i-1]
+    c_bar_anterior[:, i-1] /= volumes[i-1]
 
 # Get the number of timesteps
 num_timesteps = c_bar_original.shape[0]
@@ -114,6 +114,6 @@ for row_idx in range(ax_c.shape[0]):
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
 save_figs = 1
-if save_figs: fig_c.savefig(f"../output/illustrations/compare_cilia/concentrations_model{model_version}.png")
+if save_figs: fig_c.savefig(f"../output/illustrations/compare_cilia/concentrations_model={model_version}.png")
 
 plt.show()

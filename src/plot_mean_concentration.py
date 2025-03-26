@@ -27,7 +27,7 @@ transport_dir = '../output/transport/results/'
 
 # Problem version
 model_version = 'C'
-molecule = 'D2'
+molecule = 'D3'
 cilia_string = 'all_cilia'
 mesh_version = 'original'
 output_dir = f'../output/illustrations/'
