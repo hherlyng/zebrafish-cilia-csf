@@ -25,6 +25,6 @@ cylinder meshes:
 python simulate_mms_verification.py
 ```
 The printed tables of error norms and convergence rates should
-match those in table X of the paper, i.e., a linear convergence rate in the 
+match those in Table 3 of the paper, i.e., a linear convergence rate in the 
 $H^1$ semi-norm for the velocity error and linear convergence rate in the
 $L^2$ norm for the pressure error.
