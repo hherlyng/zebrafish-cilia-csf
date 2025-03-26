@@ -279,20 +279,6 @@ $D_1$, $D_2$ and $D_3$, respectively. With all $\mathrm{Pe} > 1$, this
 indicates that advection is the dominant transport mechanism on a
 global scale.
 
-To further quantify the solute transport, we examine the mean
-concentrations $\cbar_i(t)$ in six ROIs over time
-(\Crefpanels{fig:fig2}{e--g}) and, in addition, the times $\hat{t}_i$
-when the mean concentrations first exceed a threshold value
-$\hat{c}_i$ (\Crefpanels{fig:fig2}{h}).  Higher diffusion coefficients
-result in more rapid transport (\Crefpanels{fig:fig2}{e--g}), with
-lower times-to-threshold in ROIs 2--6 (\Crefpanels{fig:fig2}{h}). For
-all three diffusion coefficients, the solute first spreads within the
-middle ventricle, covering ROIs 2--4, before appearing in the anterior
-ventricle (ROI 5) and finally reaching the posterior ventricle
-(ROI 6). Notably, the extracellular vesicles, associated with the smallest diffusion
-coefficient, do not reach the posterior ventricle (ROI 6) within the
-simulated time frame~\Crefpanels{fig:fig2}{b, e}.
-
 \begin{figure}%[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
@@ -312,6 +298,20 @@ simulated time frame~\Crefpanels{fig:fig2}{b, e}.
     Note that there is no bar for $D_1$ in ROI 6, because the threshold value was never exceeded.}
     \label{fig:fig2}
 \end{figure}
+
+To further quantify the solute transport, we examine the mean
+concentrations $\cbar_i(t)$ in six ROIs over time
+(\Crefpanels{fig:fig2}{e--g}) and, in addition, the times $\hat{t}_i$
+when the mean concentrations first exceed a threshold value
+$\hat{c}_i$ (\Crefpanels{fig:fig2}{h}).  Higher diffusion coefficients
+result in more rapid transport (\Crefpanels{fig:fig2}{e--g}), with
+lower times-to-threshold in ROIs 2--6 (\Crefpanels{fig:fig2}{h}). For
+all three diffusion coefficients, the solute first spreads within the
+middle ventricle, covering ROIs 2--4, before appearing in the anterior
+ventricle (ROI 5) and finally reaching the posterior ventricle
+(ROI 6). Notably, the extracellular vesicles, associated with the smallest diffusion
+coefficient, do not reach the posterior ventricle (ROI 6) within the
+simulated time frame~\Crefpanels{fig:fig2}{b, e}.
 
 \subsection{Model validation by comparison with photoconversion experiments}
 
@@ -341,21 +341,22 @@ especially with regard to ROIs 2 and 3. Overall, we note that the time
 to reach a 25\% threshold agree well between the model predictions and
 experimental values (\Crefpanels{fig:fig3}{c, d}).
 
-\begin{figure}%[H]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
+    \includegraphics[width=0.975\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
     \caption{
     \textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$ 
     in each region of interest (ROI)
-    observed during experiments of photoconversion of Dendra2 proteins in ROI 1. 
-    Bold lines are mean values of the cohort and shaded regions cover one standard devation errors
-    in the mean.
+    observed during experiments monitoring
+    the movement of Dendra2 proteins photoconverted by laser targeting ROI 1. 
+    Bold lines are mean values of the cohort ($n=8$) and shaded regions cover
+    one standard devation errors in the mean.
     \textbf{b.} Mean concentration $\cbar(t)$ in each ROI in a
     simulation of Dendra2 protein transport with
     the diffusion coefficient $D_3$.
     \textbf{c.} Time to $\Delta F(t)$ reaches a threshold value of 0.25 in
     one representative zebrafish larva.
-    Time to $\cbar(t)$ reaches a threshold value of 0.25 for
+    \textbf{d.} Time to $\cbar(t)$ reaches a threshold value of 0.25 for
     a transport simulation with diffusion coefficient $D_3$.
     We have excluded the posterior-most regions of the geometries,
     because the values of $\Delta F$ and $\cbar$ never exceeded the threshold
@@ -414,10 +415,10 @@ diffusion plays an important role for
 solute movement to regions upstream in the cilia-mediated flow fields or to
 distant ventricles, while cilia affect the downstream mean concentrations.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
-    \caption{\textbf{a.} Relative change in fluorescence intensity $F(t)$
+    \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$
     in each region of interest (ROI) for control (black lines, $n=8$)
     and \emph{smh} mutant (red lines, $n=6$) fish. 
     Bold lines are mean values of the cohorts and shaded regions cover one standard devation errors
@@ -430,7 +431,7 @@ distant ventricles, while cilia affect the downstream mean concentrations.
     the null hypothesis that the two distributions of control and mutant data are 
     from the same population.
     \textbf{c.} Mean concentration $\cbar(t)$ in each ROI,
-    simulated using the baseline model (black lines) and the cardiac-only/no-cilia model (red lines).
+    simulated using the baseline model (black lines) and the cardiac-induced/no-cilia model (red lines).
     The horizontal gray lines mark the threshold value $\hat{c}$, and the time
     $\hat{t}$ when the threshold is first exceeded is reported in the plot legends.
     Note that in both panels \textbf{a} and \textbf{c}, the vertical axes have
@@ -465,6 +466,20 @@ Of the total tangential forces exerted by the cilia, ventral cilia in the middle
 contribute with 34\%, while the dorsal cilia exert 52\% of the total tangential
 force~(\Crefpanels{fig:fig5}{b}). The magnitude of these force contributions are thus
 more similar than the difference in their impact on the maximum velocity magnitudes.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
+    \caption{\textbf{a.} The three separate cilia regions for which cilia paralysis is simulated
+    by imposing a zero tangential traction boundary condition in the respective region.
+    \textbf{b.} The total tangential force applied to the boundary with the tangential traction
+    boundary condition in each of the three separate ciliated regions, as well as the total force
+    (the sum of the three regions), calculated with \Cref{eq:tangential_force_calculation}. 
+    \textbf{c.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
+    paralysis scenarios considered. The region named in the legend is the region
+    where we modify the cilia tangential traction boundary condition to a free-slip condition
+    in the CSF flow model.}
+    \label{fig:fig5}
+\end{figure}
 
 Changes in the transport of Dendra2 are most prominent when removing the dorsal cilia
 in the middle ventricle. All mean concentration profiles 
@@ -478,20 +493,6 @@ mean concentrations (\Crefpanels{fig:fig5}{c}).
 Finally, without ventral cilia in the middle ventricle,
 more solute spreads towards the anterior ventricle (ROI 5) and
 less solute spreads towards the posterior ventricle (ROI 6).
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
-    \caption{\textbf{a.} The three separate ciliated regions cilia paralysis is simulated
-    by imposing a zero tangential traction boundary condition in the respective region.
-    \textbf{b.} The total tangential force applied with the tangential traction
-    boundary condition in the three separate ciliated regions, as well as the total
-    (the sum of the three regions), calculated with \Cref{eq:tangential_force_calculation}. 
-    \textbf{c.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
-    paralysis scenarios considered. The region named in the legend is the region
-    where we modify the cilia tangential traction boundary condition to a free-slip condition
-    in the CSF flow model.}
-    \label{fig:fig5}
-\end{figure}
 
 \subsection{Modification of ventricular geometry impacts solute distribution}
 Variations in ventricular morphology impact CSF flow patterns~\cite{Olstad2019CiliaryDevelopment}.
