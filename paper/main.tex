@@ -2220,7 +2220,7 @@ To verify the model implementation with the zebrafish brain ventricles mesh,
 we compared velocity norms for varying degrees of refinement of the brain ventricles
 mesh~(\Cref{tab:ventricles_norms_BDM}).
 We used the original mesh obtained by meshing the surface geometry using
-fTetWild~\cite{fTetWild}; the region around the photoconversion region is not
+fTetWild~\cite{Hu2020FastWild}; the region around the photoconversion region is not
 refined on the mesh used for the convergence study.
 For the cilia traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ introduced in~\Cref{subsec:appendixA1},
 we set a constant $\tau = 6.5\times 10^{-4}$ Pa and
@@ -2311,15 +2311,18 @@ computational cells as the standard mesh, the numerical values of
 $\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$
 remained practically unchanged. This is a result
 of the fact that incompressibility is only achieved in a weak sense when
-employing Taylor-Hood elements. Since the advective flux
+employing Taylor-Hood elements. The advective part of the total flux
+is
 \begin{equation*}
-    \nabla\cdot(c\uu) = c(\nabla\cdot\uu) + \uu\cdot\nabla c,
+    \nabla\cdot(c\uu) = c(\nabla\cdot\uu) + \uu\cdot\nabla c.
 \end{equation*}
-where in this case $\nabla\cdot\uu\neq 0$, a source (or sink) term for the concentration
+In the case that $\nabla\cdot\uu\neq 0$, a source (or sink) term for the concentration
 is introduced. This may introduce errors in the numerical approximation of $c$
 and lead to instabilities and spurious oscillations, especially in the case of
 advection-dominated transport
 \cite{gresho1998incompressible, cesmelioglu2022compatible, johnson2009numerical}.
+The $\mathrm{BDM}_1$-$\mathrm{DG}_0$ scheme avoids these issues,
+since $\nabla\cdot\uu_h=0$ is satisfied exactly as a result of the element definitions.
 
 In addition to its favorable mass-conserving property, the BDM-DG scheme
 lets us impose the impermeability condition strongly without any tailored approach,
