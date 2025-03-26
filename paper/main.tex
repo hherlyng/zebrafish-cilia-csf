@@ -707,7 +707,7 @@ by the definition of the elements, the numerical approximation of
 the CSF velocity $\uu_h$ satisfies the continuity equation (\Cref{eq:stokes_eqs_cont}).
 This yields $\normlinf{\nabla\cdot\uu_h}=0$ to within solver tolerances,
 an important property for the stability of the advection-diffusion
-equation\cite{cesmelioglu2022compatible, johnson2009numerical}.
+equation\cite{cesmelioglu2022compatible, johnson2009numerical, gresho1998incompressible}.
 In addition to its favorable mass-conserving property,
 the BDM-DG discretization scheme 
 we employed for the Stokes equations
@@ -1565,7 +1565,7 @@ rendering flow features in the $y$-direction unobservable.
 In the following, we consider the way of handling the stress
 boundary integral for each model version successively. 
 
-\textbf{Only-cilia/no-cardiac model.} This model version has cilia forces
+\textbf{Cilia-driven/no-cardiac model.} This model version has cilia forces
 as the only mechanism driving flow. We consider the
 Stokes equations~\Cref{eq:appendix_stokes_eqs} with the slip boundary conditions
 \begin{subequations}
@@ -1581,11 +1581,11 @@ on the boundary $\Gamma=\Gc\cup\Gs$. The boundary $\Gs$ is a free-slip boundary,
 where we impose the free-slip condition~\Cref{eq:modelA_full_slip_BC}.
 The first condition~\Cref{eq:modelA_slip_BC_impermeability} is the
 impermeability condition, enforcing no flow normal to the boundary,
-whereas~\Cref{eq:modelA_slip_BC_shear} imposes a stress tangential to
-the boundary. These tangential stresses are applied to represent
+whereas~\Cref{eq:modelA_slip_BC_shear} imposes a traction tangential to
+the boundary. This tangential traction is applied to represent
 the forces that the collective cilia motion exerts on the cerebrospinal fluid. 
 
-The boundary conditions~\Cref{eq:modelA_slip_BC} are set weakly through the stress
+The boundary conditions~\Cref{eq:modelA_slip_BC} are set weakly through the
 boundary integral 
 \begin{equation}
     \intG{\bsig\nn\cdot\vv} =  \intG{\hat{\bsig}\cdot\vv}
@@ -1594,7 +1594,7 @@ boundary integral
 in the weak form~\Cref{eq:modelA_weak_form1} of the Stokes equations.
 We decompose the traction vector $\hat{\bsig}$ into a normal and tangential component:
 \begin{equation*}
-    \hat{\bsig} = \bsigperp + \bsigpar
+    \hat{\bsig} = \bsigperp + \bsigpar.
 \end{equation*}
 Inserting the above into~\Cref{eq:boundary_integral_BC1},
 combined with application of the tangential traction
@@ -1606,17 +1606,17 @@ free-slip condition~\Cref{eq:modelA_full_slip_BC}, yields
     + \intGc{\btau\cdot\vv} = \intG{\bsigperp\cdot\vv} + \intGc{\btau\cdot\vv}.
     \label{eq:boundary_integral_BC2}
 \end{equation}
-The second term on the right-hand side of~\Cref{eq:boundary_integral_BC2}
-is moved to the right-hand side of the weak form, since $\btau$ is known
- Using $\hat{\bsig}_{\perp} = (\hat{\bsig}\cdot\nn)\nn$,
- we can write the first term on the right-hand side of~\Cref{eq:boundary_integral_BC2} as
+Since $\btau$ is known, the second term on the right-hand side of~\Cref{eq:boundary_integral_BC2}
+is moved to the right-hand side of the weak form.
+With $\hat{\bsig}_{\perp} = (\hat{\bsig}\cdot\nn)\nn$,
+we can write the first term on the right-hand side of~\Cref{eq:boundary_integral_BC2} as
 \begin{equation}
     \intG{\bsigperp\cdot\vv} = \intG{((\hat{\bsig}\cdot\nn)\nn)\cdot\vv} =
     \intG{(\hat{\bsig}\cdot\nn)(\vv\cdot\nn)}.
     \label{eq:boundary_integral_BC_normal}
 \end{equation}
-Since $\Gp=\emptyset$ in this model version, and the term~\Cref{eq:boundary_integral_BC_normal}
-vanishes owing to the construction $\VV$. As a result, for the cilia-only/no-cardiac model,
+This term vanishes owing to the construction $\VV$.
+As a result, for the cilia-driven/no-cardiac model,
 the weak form of the momentum equation takes the following form:
 \begin{equation*}
     \intO{\rho\pdifft{\uu}\cdot\vv}
@@ -1626,7 +1626,7 @@ the weak form of the momentum equation takes the following form:
 Next, multiplying the continuity equation~\Cref{eq:BDM_stokes_div}
 with a test function $q\in Q$, we require that
 \begin{equation}
-    -\intO{q\nabla\cdot\uu} = 0,\quad\forall q\in Q
+    -\intO{q\nabla\cdot\uu} = 0,\quad\forall q\in Q.
     \label{eq:pressure_weak_form}
 \end{equation}
 The full weak form of the Stokes equations for this flow model is then:
@@ -1667,7 +1667,7 @@ for the different cilia populations are summarized in~\Cref{tab:r_vector_and_lam
 \renewcommand{\arraystretch}{1.5}
 \begin{table}[H]
     \centering
-    \caption{Definitions of $\rr$ and $\lambda(\xx)$ used in for the cilia tangential 
+    \caption{Definitions of $\rr$ and $\lambda(\xx)$ used in the cilia tangential 
     traction boundary condition $\btau = \tau\lambda(\xx)P_{\nn}(\rr)$,
     where $\tau=0.65$ mPa. The $x-$coordinates $x_{0, i}$ and $x_{e, i}$ define 
     the cilia domain in the dorsal ($i=d$) and ventral ($i=v$) regions of 
@@ -1691,8 +1691,10 @@ for the different cilia populations are summarized in~\Cref{tab:r_vector_and_lam
 \end{table}
 \endgroup
 
-\textbf{Only-cardiac/no-cilia model.} For this model version,
+\textbf{Cardiac-induced/no-cilia model.} For this model version,
 the only physical mechanism inducing fluid flow is the cardiac cycle.
+The cardiac cycle generates directional back-and-forth motion of the CSF
+in the zebrafish brain ventricles.
 We model the influence of the cardiac cycle with a normal pressure boundary condition:
 \begin{subequations}
     \begin{alignat}{2}
@@ -1716,7 +1718,7 @@ vanishes over $\Gs$. Therefore, we now have
     &= \intGp{(\mu(\nabla\uu + (\nabla\uu)^T) - p\mathbf{I})\nn\cdot\vv}\notag \\
     &= \intGp{\mu(\nabla\uu)^T\nn\cdot\vv} + \intGp{(\mu\nabla\uu
     - p\mathbf{I})\nn\cdot\vv}\notag\\
-    &= \intGp{\mu(\nabla\uu)^T\nn\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}
+    &= \intGp{\mu(\nabla\uu)^T\nn\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}.
     \label{eq:modelB_boundary_integral1}
 \end{align}
 We leave the first term on the left-hand side
@@ -1810,17 +1812,19 @@ space and discontinuous Lagrange polynomial elements for the pressure. We refer 
 as discontinuous Galerkin (DG) elements. For all cells $K$ of the computational mesh $\Omega_h$,
 we define
 \begin{align*}
-    {\VV}_h &= \Big\{\vv_h : \vv_h\in\mathbf{H}(\mathrm{div});
-    \vv_h\vert_K\in\big[P_k\big]^d;
+    \VV_h &= \Big\{\vv_h : \vv_h\in\mathbf{H}(\mathrm{div});
+    \vv_h\vert_K\in\big[P_k(K)\big]^d;
     \forall K\in\Omega_h;
     \vv_h\cdot\nn=0 \ \text{on } \Gamma\setminus\Gp\Big\},\\
-    Q_h &= \Big\{q_h : q_h\in L^2;  q_h\vert_K\in P_{k-1}; \forall K\in\Omega_h\Big\},
+    Q_h &= \Big\{q_h : q_h\in L^2;  q_h\vert_K\in P_{k-1}(K); \forall K\in\Omega_h\Big\},
 \end{align*}
 where $P_k$ is the space of polynomials of degree less than or equal to $k$.
 The BDM family of elements have degrees of freedom
-associated with integral moments of vector components normal to facets of the mesh,
-and is therefore non-conforming. However, the BDM-DG is $\mathbf{H}(\mathrm{div})$
-conforming and thus exactly mass-conserving, because the continuity equation can be satisfied
+associated with integral moments of vector components normal to facets of the mesh.
+Because $\VV_h\not\subset\VV$, the elements are non-conforming.
+This BDM-DG scheme for the Stokes equations
+is $\mathbf{H}(\mathrm{div})$ conforming and thus exactly mass-conserving,
+because the continuity equation can be satisfied
 in every computational mesh cell due to the fact that $\nabla\cdot\VV_h\subset Q_h$.
 Moreover, control of normal components of $\uu_h$ conveniently 
 lets us enforce the impermeability condition $\uu_h\cdot\nn=0$ strongly.
@@ -1839,7 +1843,7 @@ First, we define the average and jump operators, respectively, as
 \end{equation}
 where $\uu$ is a first-order tensor and 
 $\nn$ is the normal vector on a facet separating two cells,
-where the plus and minus signs denote variables in each of the two cells.
+and the plus and minus signs denote variables in each of the two cells.
 The normal vector is chosen such that it points towards the exterior of
 its corresponding cell. On the boundary, the operators are defined as
 $\avg{\uu} = \uu\cdot\nn$ and $\jump{\uu} = \uu$,
@@ -1859,10 +1863,10 @@ where $\mathcal{F}$ is the set of all interior facets of the computational mesh.
 The first term of $\mathcal{A}_{\mathrm{stab}}$ penalizes jumps
 in the tangential components of the velocity
 across interior facets, where the penalty parameter $\gamma>0$ must be chosen large enough
-to achieve stability. For convergence the penalization term
-scales with the cell diameter of a mesh cell $h$,
-defined as the maximal distance between two points in a cell. The other two terms
-of $\mathcal{A}_{\mathrm{stab}}$ are added to ensure coercivity and symmetry of
+to achieve stability. The penalization term
+scales with the average of the cell diameter of neighboring mesh cells,
+with $h$ defined as the maximal distance between two points in a cell. The other two terms
+of $\mathcal{A}_{\mathrm{stab}}$ are added to ensure consistency and symmetry of
 the bilinear form, such that the problem is well-defined.
 
 Including the stabilization outlined above, the semi-discrete weak formulation of
@@ -1899,10 +1903,11 @@ Recall the strong form of the advection-diffusion equation:
 \end{equation}
 where $\Omega$ is the domain with boundary $\Gamma$, and the total solute flux
 \begin{equation*}
-    \JJ(c) = c\uu - D\nabla c.
+    \JJ(c) = c\uu - D\nabla c,
 \end{equation*}
+where $c\in H^1$ is the solute concentration and
+$\uu\in\VV$ is the cerebrospinal fluid velocity .
 We consider $\JJ = \JJ(c)$, unless otherwise indicated.
-The concentration $c\in W$ and the cerebrospinal fluid velocity $\uu\in\VV$.
 The weak form of~\Cref{eq:adv_diff_strong_DG} is derived by
 multiplying the equation with a test function $\phi \in W$ and integrating over the domain: 
 \begin{equation*}
@@ -1917,8 +1922,10 @@ The boundary integral of the total flux is handled differently for
 the three different model versions, depending on the boundary conditions considered.
 
 \textbf{Only-cilia/no-cardiac model.} We consider $\Omega$ to be
-a closed domain with impermeable walls, setting $\JJ\cdot\nn=0$ on $\Gamma$.
-The weak form is then reduced to
+a closed domain with impermeable walls, so that the whole boundary
+$\Gamma$ constitutes a no-flux boundary $\Gnf$.
+By imposing $\JJ\cdot\nn=0$ on $\Gamma=\Gnf$, 
+the weak form~\Cref{eq:adv_diff_weak_formA1} is reduced to
 \begin{equation*}
     \intO{\pdifft{c}\phi} - \intO{\JJ\cdot\nabla\phi} = 0, \quad\forall\phi\in W.
 \end{equation*}
@@ -1971,10 +1978,14 @@ latter is the outflow flux
 \end{equation*}
 at the previous timestep. In the limit that the timestep $\Delta t\to 0$, we would be imposing
 \begin{equation*}
-    \intGin{(\JJ\cdot\nn)} = \intGout{(\JJ\cdot\nn)},
+    \intGin{(\JJ\cdot\nn)} = \intGout{(\JJ\cdot\nn)}.
 \end{equation*}
-which means no mass would be added to the system except for at the injection site,
-which is desired as we endeavor to model the ventricles as a closed system.
+This implies conservation of solute concentration at each timestep,
+which is the desired behavior
+as we endeavor to model the ventricles as a closed system.
+Note that the total concentration would still increase in time,
+because we impose the concentration profile in the photoconversion
+region $\Omega_{\mathrm{pc}}$ (region of interest 1).
 
 Using the introduced approaches of handling the in- and outflow boundaries,
 the resulting abstract weak formulation for the cardiac-only/no-cilia model is:
@@ -2003,8 +2014,7 @@ for the baseline model, defined
 by~\Cref{eq:adv_diff_weak_formB,eq:adv_diff_skew_form,eq:adv_diff_linear_form}.
 The weak formulation is discretized with a symmetric interior-penalty method using
 discontinuous Galerkin finite elements~\cite{Arnold1982AnElements}.
-Let the subscript $h$ denote discrete variables. Exchanging the
-variables in~\Cref{eq:adv_diff_weak_formB} with their discrete
+Exchanging the variables in~\Cref{eq:adv_diff_weak_formB} with their discrete
 counterparts yields the discrete weak form: find $c_h\in W_h$ such that
 \begin{equation*}
     a(c_h, \phi_h) + b(c_h, \phi_h) = L(\phi_h), \quad\forall\phi_h\in W_h.
@@ -2012,7 +2022,7 @@ counterparts yields the discrete weak form: find $c_h\in W_h$ such that
 The space $W_h$ is constructed with finite elements with
 discontinuous Lagrange polynomial basis functions:
 \begin{equation}
-    W_h = \Big\{w_h : w_h\in L^2;  w_h\vert_K\in P_k; \forall K\in\Omega_h\Big\}.
+    W_h = \Big\{w_h : w_h\in L^2;  w_h\vert_K\in P_k(K); \forall K\in\Omega_h\Big\}.
 \end{equation}
 These elements allow for discontinuities in the discrete solution across element edges.
 To ensure a stable discretization with these elements, we add the stabilization
@@ -2030,11 +2040,13 @@ to the discrete weak formulation, where
     \hat{u}_h = \frac{1}{2}\left(\uu_h\cdot\nn + \vert\uu_h\cdot\nn\vert\right)
 \end{equation*}
 is used to upwind the velocity $\uu_h$ with respect to a
-facet. Similar to the stabilization employed for the Stokes equations, the first two terms
-of \Cref{eq:SIP_stabilization} penalize jumps in the concentration flux across interior facets.
-The stabilization parameter $\alpha>0$ must be chosen
-large enough to achieve stability. The two last terms in $a_{\mathrm{stab}}$ are
-added to preserve coercivity and symmetry of the bilinear form. The average and jump operators used
+facet. The stabilization parameter $\alpha>0$ must be chosen
+large enough to achieve stability. In~\Cref{eq:SIP_stabilization}, the first two terms
+penalize jumps in the concentration flux across interior facets,
+and are needed to preserve coercivity of the bilinear form.
+The last two terms in $a_{\mathrm{stab}}$ are
+added to preserve symmetry and consistency of the bilinear form, respectively.
+The average and jump operators used
 in~\Cref{eq:SIP_stabilization} are defined, respectively, as
 \begin{equation*}
     \avg{c} = \frac{c^+ + c^-}{2} \qquad\mathrm{and}\qquad \jump{c} = c^+\nn^+ + c^-\nn^-.
@@ -2112,9 +2124,9 @@ on meshes of varying grid resolution.
 
 \subsection{Norms and convergence order}\label{subsec:norms_and_eoc}
 Errors of the velocity $\uu_h$ and pressure $p_h$ approximated with finite elements
-were measured in the $\mathbf{H}^1$ and $L^2$ error norms, respectively.
+were measured in $\mathbf{H}^1$ and $L^2$ error norms, respectively.
 With the exact velocity field $\uu_{\mathrm{ex}}$, the $\mathbf{H}^1$
-error norm was calculated as
+error semi-norm was calculated as
 \begin{equation*}
     \Hnorm{\uu_h - \uu_{\mathrm{ex}}}^2
     = \intO{\nabla(\uu_h - \uu_{\mathrm{ex}}) : \nabla(\uu_h - \uu_{\mathrm{ex}})}.
@@ -2125,7 +2137,7 @@ The $L^2$ error norms for the pressure were calculated as
 \end{equation*}
 The approximated functions were interpolated onto elements in a space of piecewise-continuous
 Lagrange polynomials of three polynomial degrees higher than the elements used to approximate
-the functions, meaning that polynomial degrees 5 and 4 were used for the velocity and pressure
+the functions, meaning that polynomial degrees 4 and 3 were used for the velocity and pressure
 errors, respectively. Numerical integration was performed with a Gauss quadrature rule,
 with the quadrature rule degree equal to the polynomial degree of the integrated
 finite element functions. 
@@ -2159,12 +2171,14 @@ For the analysis, we used tangential traction boundary conditions on all
 of the cylinder surface. Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}
 with the velocity and pressure expressions defined in~\Cref{subsec:mms}
 for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated $\mathbf{L}^2$
-and $\mathbf{H}^1$ error norms for $\uu_h$, and the $L^2$ error norm for
-$p_h$~(\Cref{tab:cylinder_error_rates}). Based on the error norm calculations,
-we also calculated the experimental order of convergence~(\Cref{subsec:norms_and_eoc}).
+error norms and $\mathbf{H}^1$ error semi-norms for $\uu_h$,
+and $L^2$ error norms for $p_h$~(\Cref{tab:cylinder_error_rates}).
+Based on the error norm calculations,
+we calculated the experimental order of convergence,
+as defined in \Cref{subsec:norms_and_eoc}.
 We observe convergence in all of the reported error norms. Furthermore,
 we report the error in calculation of the maximum velocities, and observe
-convergence in this error as well. Lastly, we calculated the $L^2$ norm of
+convergence in this error as well. Finally, we calculated the $L^2$ norms of
 the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
 \begin{table}[!htbp]
     \small
@@ -2205,38 +2219,43 @@ the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
 To verify the model implementation with the zebrafish brain ventricles mesh,
 we compared velocity norms for varying degrees of refinement of the brain ventricles
 mesh~(\Cref{tab:ventricles_norms_BDM}).
-For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$.
-For a velocity vector $\uu=(u_x, u_y, u_z)$, the velocity magnitude is
-$u = \sqrt{u_x^2 + u_y^2 + u_z^2}$. We also report the maximum value
-$\normlinf{u_h}$ scaled by the area $|\Gc|=\intGc{}$ over which tangential traction
-$\btau$ was applied. We chose this measure using $|\Gc|$ as a scale because the regions
-of the mesh marked as cilia-populated changes slightly with every mesh refinement,
-owing to the unstructured organization of the mesh cells. This change in the surface
-area over which the tangential traction was applied directly affected
-the maximum velocity magnitude,
-since the maximum velocity magnitude is a result of the total amount of force
-$\intGc{\btau\cdot P_{\nn}(\rr)}$ applied on the ciliated boundary, where the cilia
-vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ as introduced in~\Cref{subsec:appendixA1}.
-In the numerical experiments, we set a constant $\tau = 6.5\times 10^{-4}$ Pa and
-$\lambda(\xx)=1$. We set $\rr = (1, 0, 1)$ in the ventral middle ventricle cilia region
+We used the original mesh obtained by meshing the surface geometry using
+fTetWild~\cite{fTetWild}; the region around the photoconversion region is not
+refined on the mesh used for the convergence study.
+For the cilia traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ introduced in~\Cref{subsec:appendixA1},
+we set a constant $\tau = 6.5\times 10^{-4}$ Pa and
+$\lambda(\xx)=1$ in the numerical experiments.
+We set $\rr = (1, 0, 1)$ in the ventral middle ventricle cilia region
 and $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and the anterior ventricle cilia
 regions. We used $\gamma=10$ for the BDM penalty parameter.
 
-To account for the fact that the volume $|\Omega|=\intO{}$ also changes
+For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$.
+We also report $\normlinf{u_h}$ scaled by the area $|\Gc|=\intGc{}$ of the cilia
+boundary $\Gc$ over which tangential traction
+$\btau$ was applied. We chose this measure using $|\Gc|$ as a scale because the regions
+of the mesh marked as cilia-populated change slightly with every mesh refinement,
+owing to the unstructured organization of the mesh cells.
+These changes in the surface area over which the tangential traction is applied
+result in changes to the maximum velocity magnitude,
+since the maximum velocity magnitude is a result of the total amount of force
+$\intGc{\sqrt{\btau\cdot \btau}}$ applied on the cilia boundary.
+
+To account for the fact that the volume of the domain $|\Omega|=\intO{}$ also changes
 slightly with mesh refinement, we report the $\mathbf{L}^2$ norm of $\uu_h$ scaled by $|\Omega|$.
-Finally, we provide verification of mass conservation by reporting the $\mathbf{L}^2$ norms of
+Finally, we provide verification of mass conservation by reporting the $L^2$ norms of
 the divergence $\nabla\cdot\uu_h$. We remark that the units used in the model
 implementation was millimeters, which is why~\Cref{tab:ventricles_norms_BDM}
 reports units in millimeters, instead of micrometers which has been used elsewhere in the paper. 
 \begin{table}[!htbp]
     \centering
     \caption{Velocity norms under mesh refinement
-    on the brain ventricles mesh using the only-cilia/no-cardiac flow model
-     with $\btau = \tau P_{\nn}(\rr)$, using
-     $\tau = 6.5\times 10^{-4}$ Pa,
-     $\rr = (1, 0, 1)$ in the ventral middle ventricle and,
-     $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and
-     the anterior ventricle.}\label{tab:ventricles_norms_BDM}
+    of the brain ventricles mesh using the cilia-driven/no-cardiac flow model
+    with $\btau = \tau \lambda(\xx)P_{\nn}(\rr)$, using
+    $\lambda(\xx)=1$,
+    $\tau = 6.5\times 10^{-4}$ Pa,
+    $\rr = (1, 0, 1)$ in the ventral middle ventricle and,
+    $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and
+    the anterior ventricle.}\label{tab:ventricles_norms_BDM}
     \begin{tabular}{cc|cccc}
         \toprule
         \# cells & \# dofs &
@@ -2256,63 +2275,69 @@ reports units in millimeters, instead of micrometers which has been used elsewhe
 \end{table}
 
 \subsection{Discussion of the numerical approximation and convergence rates}
-The Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
-($\mathrm{BDM}_1$-$\mathrm{DG}_0$) that we employ for the Stokes equations
-is computationally more expensive than a more conventional approach based on
-e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
-($P_2-P_1$ elements) or lower-order enriched
-elements~\cite{Brezzi2011MixedMethods},
-such as the mini-element ($P_1-P_1$ with a velocity stabilization).
-Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
-than or equal to $k$.
-We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
-since numerical experiments proved that a divergence-free velocity field was
-fundamental to attain a stable discretization of the advection-diffusion equation
-in advection-dominated regions. Using conventional
-Taylor-Hood elements for the Stokes equations
-stability of the advection-diffusion discretization either
-required excessive mesh refinement and/or problem-specific tuning of
-hyperparameters when employing a Streamline-Upwind/Petrov Galerkin stabilization
-method~\cite{Franca1992StabilizedModel}, which is why we also opted for a DG method
-for the advection-diffusion equation.
-Probing numerical values of the divergence of
-the velocity when using Taylor-Hood elements for the fluid equations revealed that,
-on the standard computational mesh, the $L^2$ norm of $\nabla\cdot\uu_h$ was
-in the order of $10^{-6}$, while the
-maximum value of the divergence of the velocity was of order unity. This is a result
-of the fact that incompressibility is only achieved in a (global) weak sense when
-employing Taylor-Hood elements. On a refined mesh with roughly six times as many
-computational cells as the standard mesh, the numerical values of
-$\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$ were still
-of order unity. This may lead to the
-hyperbolic advective term in the advection-diffusion equation accumulating errors
-that grow unstable over time. 
-
-In addition to its favorable mass-conserving property, the BDM-DG scheme
-lets us impose the impermeability condition strongly, and the tangential
-traction boundary condition weakly, without any tailored approach,
-since these boundary conditions appear naturally in the weak form of the
-Stokes equations~(\Cref{subsec:appendixA1}). If instead e.g. Taylor-Hood
-elements were to be used, the impermeability boundary condition must
-be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
-or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
-Bertoluzza2017BoundaryHemodynamics}.
-
-A priori error estimates for the $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ scheme are naturally 
+A priori error estimates for the
+Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
+$\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ are naturally 
 derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
 The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
 For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
 reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
 $k=1$, we observe linear convergence in the velocity in the $\mathbf{H}^1$ error norm
-and the pressure in the $L^2$ error norm.   
+and the pressure in the $L^2$ error norm on the cylinder mesh. For the ventricles meshes,
+we observe consistent values of the reported quantities, verifying the model
+implementation.
+
+The $\mathrm{BDM}_1$-$\mathrm{DG}_0$ scheme that we employ for the Stokes equations
+is computationally more expensive than a more conventional approach based on
+e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
+($P_2-P_1$ elements) or lower-order enriched
+elements~\cite{Brezzi2011MixedMethods},
+such as the mini-element ($P_1-P_1$ with a velocity stabilization).
+We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
+since numerical experiments proved that a divergence-free velocity field was
+fundamental to attain a stable discretization of the advection-diffusion equation
+in advection-dominated regions. Preliminarily, we attempted
+to discretize the Stokes equations with 
+Taylor-Hood elements, but with the resulting numerical approximation
+of the velocity $\uu_h$, we were unable to achieve
+stability of the advection-diffusion discretization.
+Numerical experiments identified non-zero divergence of $\uu_h$
+as the root cause of these stability issues.
+On the standard computational mesh, the $L^2$ norm of $\nabla\cdot\uu_h$ was
+in the order of $10^{-6}$, while the
+maximum value of the divergence of the velocity was of order unity.
+On a refined mesh with roughly six times as many
+computational cells as the standard mesh, the numerical values of
+$\normltwo{\nabla\cdot\uu_h}$ and $\normlinf{\nabla\cdot\uu_h}$
+remained practically unchanged. This is a result
+of the fact that incompressibility is only achieved in a weak sense when
+employing Taylor-Hood elements. Since the advective flux
+\begin{equation*}
+    \nabla\cdot(c\uu) = c(\nabla\cdot\uu) + \uu\cdot\nabla c,
+\end{equation*}
+where in this case $\nabla\cdot\uu\neq 0$, a source (or sink) term for the concentration
+is introduced. This may introduce errors in the numerical approximation of $c$
+and lead to instabilities and spurious oscillations, especially in the case of
+advection-dominated transport
+\cite{gresho1998incompressible, cesmelioglu2022compatible, johnson2009numerical}.
+
+In addition to its favorable mass-conserving property, the BDM-DG scheme
+lets us impose the impermeability condition strongly without any tailored approach,
+since this boundary condition appears naturally in the weak form of the
+Stokes equations~(\Cref{subsec:appendixA1}) and the BDM elements control
+the normal component of the velocity. If instead (for example) Taylor-Hood
+elements were to be used, the impermeability boundary condition must
+be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
+or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
+Bertoluzza2017BoundaryHemodynamics}.
 
 \section{Quantification of velocities in particle tracking}\label{sec:appC_particle_transport}
-Particle tracking data~\cite{Olstad2019CiliaryDevelopment} was analyzed.
+Particle tracking data was analyzed~\cite{Olstad2019CiliaryDevelopment}.
 For four zebrafish, five recordings with a few particles for each fish were carried out.
 The particles tracked were in the duct between the rhombencephalic ventricle and the
 diencephalic ventricle. Frequency of image acquisition was 20.22 Hz.
 The collected data constituted $x$ and $y$ positions of the particles at every time
-instant of image acquisition. The velocities $\uu_x$ and $\uu_y$ were determined by
+instant of image acquisition. The velocities $u_x$ and $u_y$ were determined by
 calculating the change in positions $\Delta x$ and $\Delta y$ relative to the change
 in time $\Delta t$ between two subsequent images, $\Delta t$ being equal to the
 frequency of acquisition.
