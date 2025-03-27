@@ -1,9 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{WileyMSP-template}
 
-\LoadClass{article}
+\LoadClass[11pt]{article}
 \RequirePackage{graphicx}
-\RequirePackage{caption}
+\RequirePackage[font=small]{caption}
 \RequirePackage[left=2cm,%
                 right=2cm,%
                 top=2.25cm,%
