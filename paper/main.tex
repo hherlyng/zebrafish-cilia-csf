@@ -234,15 +234,14 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
     anterior/posterior facets (blue). Dorsal (D), ventral (V), anterior (A), posterior (P),
     left (L) and right (R) coordinates indicated.
     \textbf{e.} Streamlines of the (steady-state) CSF flow field simulated with the
-    cilia-only/no-cardiac flow model.
-    \textbf{f.} Streamlines of the CSF flow field simulated with the cardiac-only/no-cilia flow
+    cilia-driven/no-cardiac flow model.
+    \textbf{f.} Illustration of the cardiac-related normal pressure forcing imposed on the
+    anterior/posterior boundaries. Time instants of streamline plots indicated.
+    \textbf{g.} Streamlines of the CSF flow field simulated with the cardiac-induced/no-cilia flow
     model at a time 25\% into the cardiac cycle. %t=0.112613 s, period=0.45045 s
-    \textbf{g.} Illustration of the cardiac-related normal pressure forcing imposed on the
-    anterior/posterior boundaries.
-    \textbf{h--j.} Streamlines simulated with the baseline flow model at
-    a time a time 25\% (\textbf{h}), 50\% (\textbf{i}) and 75\% (\textbf{j})
-    into the cardiac cycle. Times indicated in panel \textbf{g}.
-    %t=0.112613 s %t=0.225225 s %t=0.315315 s
+    \textbf{h--j.} Streamlines simulated with the baseline flow model (cilia+cardiac)
+    at a time 25\% (\textbf{h}), 50\% (\textbf{i}) and 75\% (\textbf{j})
+    into the cardiac cycle. %t=0.112613 s %t=0.225225 s %t=0.315315 s
     Scale bars 50 \textmu m.
     }
     \label{fig:fig1}
@@ -259,9 +258,10 @@ different diffusing solutes injected within a region of interest (ROI 1) in the
 dorsal region of the middle ventricle (\Crefpanels{fig:fig2}{a}),
 subject to the CSF flow induced by motile cilia and cardiac pressure
 pulsations. In particular, we consider three different molecular
-diffusion coefficients, corresponding to a large extracellular vesicle ($D_1 = 2.17
-\times 10^{-12}$ m$^2$/s), a 90 kDa protein STM-GFP ($D_2 = 5.75
-\times 10^{-11}$ m$^2$/s), and a 26 kDa photoconvertible protein
+diffusion coefficients, corresponding to a large extracellular vesicle (EV, $D_1 = 2.17
+\times 10^{-12}$ m$^2$/s), a 90 kDa Starmaker-Green Fluorescent Protein
+(STM-GFP, $D_2 = 5.75 \times 10^{-11}$ m$^2$/s),
+and a 26 kDa photoconvertible protein
 Dendra2 ($D_3 = 1.15 \times 10^{-10}$ m$^2$/s).
 
 Interestingly, the distribution patterns differ between the
@@ -551,8 +551,7 @@ as the model and the fish have slightly different geometries.
     applied on the original mesh is the baseline of 100\%,
     to which the forces $F_i$ of the other mesh versions are compared, where $i$ denotes
     the cases fore-shrunk, middle shrunk, mid-hind shrunk, and the combination of the three.
-    The bars for the four shrunk scenarios thus
-    display $F_i/F_{\mathrm{original}}\times 100\%$.}
+    The bars for the four shrunk scenarios display $F_i/F_{\mathrm{original}}\times 100\%$.}
     \label{fig:fig6}
 \end{figure}
 
@@ -685,7 +684,7 @@ lineages and ventricular morphology on CSF flow and intraventricular transport.
 We envision that our framework will be useful as a basis for future analyses of
 CSF dynamics in more complex geometries and also other animal species and humans.
 
-\subsection{Numerical approximation and computational model parameters}
+\subsection{Numerical approximation and computational modeling aspects}
 We modeled motile cilia as a stress
 exerted tangentially on the CSF at the ventricular walls
 while employing a slip boundary condition,
@@ -730,7 +729,7 @@ heterogeneous manner~\cite{Olstad2019CiliaryDevelopment}. Heterogeneous
 arrangement of cilia, both in location, beating direction and beating frequency,
 has been shown to enhance particle clearance in airway cilia arrays
 in mice~\cite{Ramirez-SanJuan2020Multi-scaleArrays}.
-Incorporating spatial arrangement heterogeneity in our model could possibly
+Incorporating spatial arrangement heterogeneity in our model could
 result in different transport timescales,
 but we would not expect notable changes to the general trends of the macroscopic
 transport that we study here, since the effects of introducing heterogeneous spacing
@@ -759,17 +758,15 @@ Thouvenin2020OriginCanal, Yoshida2022EffectVentricles}.
 To simulate protein transport in the brain ventricles, we numerically solved
 an advection-diffusion equation. Except for where we imposed a normal pressure
 boundary condition on the CSF flow,
-we imposed a no-flux condition on the concentration. Imposing a pressure-driven
-cardiac-related flow on certain parts of the CSF flow boundary leads to in- and outflow,
-and the advective transport then requires handling of in- and outflux boundary conditions.
-We set an approximate periodic boundary condition on the the in- and outflux boundaries,
-such that the total mass is conserved in the
-limit that the timestep size is zero, reflecting our assumption that the
-ventricular system is closed.
+we imposed a no-flux condition on the concentration. The normal pressure
+boundary condition leads to in- and outflow of CSF,
+and this advective transport requires handling of in- and outflux boundary conditions on
+the concentration. For the influx, we applied an approximate periodic boundary condition
+that conserves the total solute concentration.
 We handled the outflux by imposing zero diffusive flux while
-leaving the advective flux term as an unknown in the weak formulation
-of the advection-diffusion equation. This has been referred to with different names
-in previous works, names such as the ``free boundary condition"~\cite{Papanastasiou1992ACondition},
+leaving the advective flux term as an unknown in the weak form
+of the advection-diffusion equation. This approach has been referred to with different names,
+such as the ``free boundary condition"~\cite{Papanastasiou1992ACondition},
 the ``no boundary condition"~\cite{Griffiths1997TheCondition}, and the 
 ``consistent flux boundary condition"~\cite{Lynch2020NumericalHemodynamics}. 
 In leaving the advective flux term in the weak form we are lacking a boundary condition,
@@ -782,11 +779,11 @@ in- and outflow boundaries to limit adverse effects of
 the advective flux boundary condition on the mean concentrations. 
 
 A possible improvement to the in- and outflow boundary conditions would be
-to consider a 3D-0D coupling of the in- and outflow boundaries using
+to consider a 3D-0D coupling of in- and outflow using
 ordinary differential equations,
-similar to what has been done in cardiac
+similar to applications in cardiac
 modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
-However, if the ventricular system in reality is a closed system,
+However, if the brain ventricular system in reality is a closed system,
 one should rather seek out a way of modeling the CSF flow without open boundaries to avoid
 handling in- and outflow boundary conditions. A more appropriate way of handling the beating
 cardiac motion could be to impose a ventricular wall deformation, assumed to result from pulsatile
@@ -796,36 +793,6 @@ $\uu\cdot\nn=0$ on the ventricular walls. Such wall motion-induced CSF flow has 
 simulated successfully in the human brain ventricular system~\cite{Causemann2022HumanFramework,
 Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
 
-The diffusion coefficients used in this study are based on experimental values. 
-The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$
-is based on the value $\num{1.15e-10} \pm 0.11 \ \mathrm{m^2/s}$ reported in an
-experiment~\cite{GuraSadovsky2017MeasurementExpansion}, while the Stokes-Einstein
-relation~(\Cref{eq:D_stokes_einstein})~\cite{Einstein1905UberTeilchen} was used to extrapolate
-the value of $D_2$ and estimate the value of $D_1$, based on experimental
-data~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells,
-Mahmood2023ExosomeTemperature}. The Stokes-Einstein relation assumes the diffusing
-substance is of spherical shape, which proteins are not, and the relation does not
-necessarily hold in CSF. Moreover, the extrapolation implies the assumption that
-the two substances (the one for which we determine $D$ and the one we extrapolate from)
-have equal densities. Consequently, there is uncertainty in the diffusion coefficient values used.
-We note that Sadovsky~\emph{et al.}~\cite{GuraSadovsky2017MeasurementExpansion} reported that
-Dendra2 satisfies the Stokes-Einstein in a solution of similar viscosity
-to CSF. We used CSF density and viscosity values measured in
-humans~\cite{Bloomfield1998EffectsFluid},
-and because embryonic CSF in zebrafish is high in proteins, nutrients and other substances,
-the CSF in which the photoconverted Dendra2 are transported in our experiments may be more viscous
-than we assumed. This could reduce the diffusion coefficient (cf.~\Cref{eq:D_stokes_einstein}),
-but based on reports of protein concentration having a limited impact on the viscosity of
-CSF~\cite{Bloomfield1998EffectsFluid, Brydon1995PhysicalViscosity}, this reduction is presumably
-limited. Merely the presence of other proteins and nutrients may also reduce the diffusion
-coefficient by reduction of mean-free path lengths of molecules~\cite{Cussler2009Diffusion:Systems}.
-Considering the diffusion coefficients $D_1$ and $D_2$ (both smaller
-than $D_3$) in our transport analysis provides information about how the simulation
-results of Dendra2 transport would be altered if the
-diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is underestimated, 
-we expect a trend similar to the difference in the $D_2$ and $D_3$ solute concentrations;
-incerasingly diffusive fields.
-
 We heuristically determined the magnitude of the cilia tangential traction boundary condition
 with the parameter $\tau = 0.65$ mPa. The maximum stress
 $\vert\btau\vert_{\mathrm{max}} = 2.5 \ \mathrm{mPa} = \num{2.5e-3} \ \mathrm{N/m^2}$
@@ -833,10 +800,11 @@ was applied in the dorsal-posterior region of the middle ventricle.
 Previous simulation studies of cilia-mediated flow in brain ventricles have
 used a volumetric force density to represent the cilia.
 Based on reconstruction of CSF flow in murine brain ventricles,
-Siyahhan~\emph{et al.}~\cite{Siyahhan2014FlowVentricles}
-employed a force that increased linearly from the ventricular wall to a maximum force density of
+a previous study employed a force that increased linearly from
+the ventricular wall to a maximum force density of
 $f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$ at a distance 15 \textmu m (the cilium length)
-away from the wall. If we assumed a cilia array of the same thickness
+away from the wall~\cite{Siyahhan2014FlowVentricles}.
+If we assumed a cilia array of the same thickness
 $\delta = 15$ \textmu m in our model, the maximum stress $\vert\btau\vert_{\mathrm{max}}$
 would correspond to a maximum force density of 
 \begin{equation*}
@@ -853,11 +821,46 @@ With $\delta=5$ \textmu m, our cilia stress corresponds to a maximum force densi
 $f_c=507$ N/$\mathrm{m^3}$, which is very similar to
 $f_{\mathrm{max}} = 526$ N/$\mathrm{m^3}$~\cite{Siyahhan2014FlowVentricles}.
 Another study that used a force density to model ciliary motion is
-Thouvenin~\emph{et al.}~\cite{Thouvenin2020OriginCanal}, where two-dimensional flow
-in the central canal of zebrafish embryos was modeled using a cilia force density of
+considered two-dimensional flow in the central canal of zebrafish
+embryos~\cite{Thouvenin2020OriginCanal}.
+Cilia was modeled using a cilia force density of
 4000 N/$\mathrm{m^2}$. Averaging this value over the central canal diameter 8.9 \textmu m
-they measured yields 449 N/$\mathrm{m^3}$. It is very interesting to note the similarity 
-in cilia force densities estimated in our and these two previous studies. 
+measured in the study yields a maximum force of 449 N/$\mathrm{m^3}$.
+It is very interesting to note the similarity 
+in cilia force densities estimated in our and these two previous studies.
+\fixme{Previous work concluded that motile cilia align by response to the shear
+stress of flow. Perhaps there is an optimal cilia stress?}
+
+The diffusion coefficients used in this study are based on experimental values. 
+The value $D_3=\num{1.15e-10} \ \mathrm{m^2/s}$
+is based on the value $\num{1.15e-10} \pm 0.11 \ \mathrm{m^2/s}$ reported in an
+experiment~\cite{GuraSadovsky2017MeasurementExpansion}, while the Stokes-Einstein
+relation~(\Cref{eq:D_stokes_einstein})~\cite{Einstein1905UberTeilchen} was used to extrapolate
+the value of $D_2$ and estimate the value of $D_1$, based on experimental
+data~\cite{Swaminathan1997PhotobleachingDiffusion, Potma2001ReducedCells,
+Mahmood2023ExosomeTemperature}. The Stokes-Einstein relation assumes the diffusing
+substance is of spherical shape, which proteins are not, and the relation does not
+necessarily hold in CSF. Moreover, the extrapolation implies the assumption that
+the two substances (the one for which we determine $D$ and the one we extrapolate from)
+have equal densities. Consequently, there is uncertainty in the diffusion coefficient values used.
+We note that one previous study reported that
+Dendra2 satisfies the Stokes-Einstein in a solution of similar viscosity
+to CSF\cite{GuraSadovsky2017MeasurementExpansion}.
+We used CSF density and viscosity values measured in
+humans~\cite{Bloomfield1998EffectsFluid},
+and because embryonic CSF in zebrafish is high in proteins, nutrients and other substances,
+the CSF in which the photoconverted Dendra2 are transported in our experiments may be more viscous
+than we assumed. This could reduce the diffusion coefficient (cf.~\Cref{eq:D_stokes_einstein}),
+but based on reports of protein concentration having a limited impact on the viscosity of
+CSF~\cite{Bloomfield1998EffectsFluid, Brydon1995PhysicalViscosity}, this reduction is presumably
+limited. Merely the presence of other proteins and nutrients may also reduce the diffusion
+coefficient by reduction of mean-free path lengths of molecules~\cite{Cussler2009Diffusion:Systems}.
+Considering the diffusion coefficients $D_1$ and $D_2$ (both smaller
+than $D_3$) in our transport analysis provides information about how the simulation
+results of Dendra2 transport would be altered if the
+diffusion coefficient $D_3$ is overestimated. In the case that $D_3$ is underestimated, 
+we expect a trend similar to the difference in the $D_2$ and $D_3$ solute concentrations;
+incerasingly diffusive fields.
 
 \subsection{The role of motile cilia in intraventricular flow and transport}
 Our work has studied CSF flow and solute distribution
