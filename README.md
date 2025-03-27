@@ -14,7 +14,12 @@ can be used to create a `conda` environment by running
 conda env create -f environment.yml
 ```
 in a terminal. This installs all of the dependencies in a `conda` environment named
-'zfish-cilia-csf-env'. The dependencies can alternatively be installed via `spack`.
+'zfish-cilia-csf-env', which can be activated with
+```
+conda activate zfish-cilia-csf-env
+```
+
+The dependencies can alternatively be installed via `spack`.
 
 ## Test the setup by running the verification code
 The script `simulate_mms_verification.py` is used to run convergence tests for the 
