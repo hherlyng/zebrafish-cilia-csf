@@ -24,7 +24,13 @@ f = 2.22
 dt = 1/f/20
 colors = loadmat('../data/photoconversion_data/aggregated_data/colors')['color'] # The colors used for plotting
 fig_num = 1 # Figure number index
-
+import colormaps as cm
+blue = colors[0]
+green = cm.dark2_3.colors[0]
+orange = cm.dark2_3.colors[1]
+purple = cm.puor_4.colors[3]
+yellow = cm.puor_4.colors[1]
+colors = ['k', green, purple, orange, yellow, blue]
 # Directories
 flow_dir = '../output/flow/checkpoints/'
 transport_dir = '../output/transport/'

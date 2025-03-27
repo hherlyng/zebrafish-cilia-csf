@@ -19,7 +19,14 @@ plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-seri
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
-colors = loadmat("../data/data_photoconversion/aggregated_data/colors")['color'] # The colors used for plotting
+colors = loadmat("../data/photoconversion_data/aggregated_data/colors")['color'] # The colors used for plotting
+import colormaps as cm
+blue = colors[0]
+green = cm.dark2_3.colors[0]
+orange = cm.dark2_3.colors[1]
+purple = cm.puor_4.colors[3]
+yellow = cm.puor_4.colors[1]
+colors = ['k', green, purple, orange, yellow, blue]
 
 # Directories
 flow_dir = '../output/flow/checkpoints/'
@@ -51,7 +58,7 @@ c_threshold2 = 0.10 # threshold value used to calculate "time to threshold" in R
 
 # Plot parameters
 save_fig = 1 # Save figures if set to 1, don't save if set to 0
-lw = 6 # linewidth
+lw = 8 # linewidth
 
 # Loop over molecules
 transport_data_filename = '../output/transport/mesh=original_model=C_molecule=D3_ciliaScenario=all_cilia_dt=0.02252/data/c_hats.npy'
