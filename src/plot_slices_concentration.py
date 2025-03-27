@@ -60,7 +60,7 @@ for j in range(len(record_periods)):
         cells, types, x = dfx.plot.vtk_mesh(W)
         grids.append(pv.UnstructuredGrid(cells, types, x))
         c_in = dfx.fem.Function(W)
-        input_filename = f'../output/transport/mesh={mesh_version}_model={model_version}_molecule=D{i}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/'
+        input_filename = f'../output/transport/mesh={mesh_version}_model={model_version}_molecule=D{i}_ciliaScenario={cilia_scenario}_dt={dt:.4g}/checkpoints/concentration_snapshots/'
         a4d.read_function(u=c_in, filename=input_filename, engine="BP4", time=record_periods[j])
         grids[m].point_data["c"] = c_in.x.array.real
         grids[m].set_active_scalars("c")

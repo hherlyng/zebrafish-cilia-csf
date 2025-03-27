@@ -50,7 +50,7 @@ c_threshold1 = 0.25 # threshold value used to calculate "time to threshold" in R
 c_threshold2 = 0.10 # threshold value used to calculate "time to threshold" in ROIs 5-6
 
 # Plot parameters
-save_fig = 0 # Save figures if set to 1, don't save if set to 0
+save_fig = 1 # Save figures if set to 1, don't save if set to 0
 lw = 6 # linewidth
 
 # Loop over molecules

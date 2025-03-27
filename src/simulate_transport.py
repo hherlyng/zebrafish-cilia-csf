@@ -606,7 +606,7 @@ if __name__ == "__main__":
     # B = cardiac-induced/no-cilia
     # C = cilia+cardiac (baseline)
 
-    model_version = "C" 
+    model_version = "B" 
     write_data = True # Write ROI mean concentrations as numpy data
     write_output_vtx = False # Write VTX output file
     write_output_xdmf = False # Write XDMF output file

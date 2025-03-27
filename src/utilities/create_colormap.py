@@ -64,7 +64,7 @@ if __name__=='__main__':
         cb.set_ticks([0, 1])
         cb.set_ticklabels([0, 1.0])
         ax.tick_params(axis='x', labelsize=36)
-        ax.set_title(r"Concentration $c$ [-]", fontsize=42)
+        ax.set_title(r"Concentration $c$ [-]", fontsize=36)
         fig_name = "../../output/illustrations/colorbars/colorbar_D3.png"
     elif bar_type==2:
         fig = plt.figure(figsize=(15, 4))

@@ -22,7 +22,7 @@ comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
 f = 2.22
 dt = 1/f/20
-colors = loadmat('../data/data_photoconversion/aggregated_data/colors')['color'] # The colors used for plotting
+colors = loadmat('../data/photoconversion_data/aggregated_data/colors')['color'] # The colors used for plotting
 fig_num = 1 # Figure number index
 
 # Directories
@@ -121,8 +121,8 @@ for bar_container, hatch in zip(bars.containers, hatches):
     for bar in bar_container:
         bar.set_hatch(hatch)
 
-ax2.set_xlabel("ROI number", fontsize=35, labelpad=25)
-ax2.set_ylabel(r"Time to threshold $\hat{t}$ [s]", fontsize=35, labelpad=50)
+ax2.set_xlabel("ROI number", fontsize=32, labelpad=25)
+ax2.set_ylabel(r"Time to threshold $\hat{t}$ [s]", fontsize=32, labelpad=50)
 ax2.tick_params(labelsize=35)
 ax2.legend(labels=[r'$D_1$', r'$D_2$', r'$D_3$'], loc='upper left', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
 ax2.yaxis.tick_right()

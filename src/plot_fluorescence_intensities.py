@@ -12,7 +12,7 @@ plt.rcParams.update({
 plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 # Set data directory and load .mat files
-data_dir = "../data/data_photoconversion/aggregated_data/"
+data_dir = "../data/photoconversion_data/aggregated_data/"
 metadata = loadmat(data_dir+"metadata") # Metadata, e.g. FPS and pixel size
 colors   = loadmat(data_dir+"colors")['color'] # The colors used for plotting
 control = loadmat(data_dir+"control_data")['control'] # The control fish cohort photoconversion data

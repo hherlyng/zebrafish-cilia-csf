@@ -77,7 +77,7 @@ plotter.camera.focal_point = (x_mid, y_max, z_mid)
 plotter.camera.zoom(0.275)
 
 # Display the plot and save to file
-save_fig = 0
+save_fig = 1
 if save_fig:
     output_filename = f'../output/illustrations/slice_time_to_threshold_model={model_version}_molecule={molecule}'
     plotter.show(screenshot=output_filename+'.png')

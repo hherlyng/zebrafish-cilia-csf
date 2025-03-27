@@ -2,7 +2,7 @@
 
 \pagestyle{plain} 
 
-\title{\textbf{Advection versus diffusion in intraventricular transport}}
+\title{\textbf{Advection versus diffusion in brain intraventricular transport}}
 %
 %
 % Author: Please give full first and last names for authors and
@@ -18,7 +18,7 @@
 \affil[2]{Department of Clinical and Molecular Medicine, Norwegian University of Science and Technology, Trondheim, Norway} % Erling Skjalgsons gate 1, 7491
 \affil[3]{K.~G.~Jebsen Center for Brain Fluid Research, Oslo, Norway}
 \affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}, \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
-\date{\vspace{-2em}}
+\date{\vspace{-2em}} % Remove space between affiliations and abstract
 
 \begin{document}
 \maketitle
@@ -33,16 +33,16 @@ by beating of motile cilia, hair-like structures that line the ependymal cell la
 of the walls of the brain ventricles. Despite the physiological importance of CSF flow,
 the underlying mechanisms of cilia-mediated flow and transport
 in the brain ventricles remain yet to be comprehensively resolved.
-In this study, we analyze and evaluate the role of motile cilia
-in intraventricular CSF flow and transport. We use the geometry
-of the zebrafish larval brain ventricles, for which we have detailed knowledge of cilia properties and CSF motion velocities
-and frequencies, to develop finite element methods that model flow and transport.
+In this study, the role of motile cilia in brain intraventricular CSF flow and transport
+is analyzed and evaluated. The geometry of the zebrafish larval brain ventricles,
+for which detailed knowledge of cilia properties and CSF motion velocities
+and frequencies exists, was used to develop finite element methods that model flow and transport.
 The computational model is validated by in vivo experiments that monitor transport
 of a photoconvertible protein secreted in the brain ventricles.
-Our results show that while cilia contribute to advection of large particles,
+The results show that while cilia contribute to advection of large particles,
 diffusion plays a significant role in the transport of small molecules such as proteins.
-We also found that cilia location and the geometry of the ventricular system impact solute distribution.
-Altogether, our work presents a computational framework that can be applied to other
+It is also demonstrated that cilia location and the geometry of the ventricular system impact solute distribution.
+Altogether, this work presents a computational framework that can be applied to other
 ventricular systems, together with new concepts of how molecules are transported within the brain and its ventricles.
 
 \end{abstract}
@@ -79,10 +79,11 @@ Kurtcuoglu2005ComputationalSystem, Olstad2019CiliaryDevelopment,
 macaulay2022cerebrospinal, mestre2018flow}.
 Cilia are hair-like structures found in a vast diversity of
 biological organisms and in several human organs,
-of which the brain is one of them~\cite{Fulford1986Muco-ciliaryLung,
+of which the brain is one of them~\cite{DGama2025MotileBrain,
+Fulford1986Muco-ciliaryLung,
 Pacherres2022CiliaryProduction, Jahn1972LocomotionProtozoa,
 Brennen1977FluidFlagella, Ringers2020Role, spassky2013motile,
-DGama2025MotileBrain, mitchell2007evolution,
+Pellicciotta2020Cilia, mitchell2007evolution,
 Tsukita2012CoordinatedFeet, BLAKE1974MechanicsMotion,
 Reiten2017Motile-Cilia-MediatedComputations, Thouvenin2020OriginCanal}. 
 The ventricular surface of the brain, known as the ependyma, is lined by
@@ -326,7 +327,7 @@ consisted of the acquisition of a baseline fluorescence intensity
 $F_0$, before localized exposure to a UV laser (at ROI 1) that
 converts Dendra2 from a green- to a red-emitting fluorescent
 protein. To quantify the transport of photoconverted proteins, we
-measured and calculated the change in fluorescence intensity $\Delta F
+measured and calculated the change in fluorescence intensity $\Delta F(t)
 = (F(t)-F_0)/F_0$ over time (\Crefpanels{fig:fig3}{a}).
 
 Comparison of the intensity changes with the simulated concentration
@@ -743,7 +744,8 @@ cilia would presumably affect both magnitude and directionality of advective tra
 Previous studies have demonstrated that changes to beating directionality affects transport,
 and that specific coordination of the ciliary beating is important in the brain ventricles for
 flow and signaling processes~\cite{Eichele2020Cilia-drivenVentricle, Olstad2019CiliaryDevelopment,
-Faubel2016Cilia-basedVentricles, Guirao2010CouplingCilia, Afzelius2004CiliaRelatedDiseases},
+Faubel2016Cilia-basedVentricles, Guirao2010CouplingCilia, Afzelius2004CiliaRelatedDiseases,
+Pellicciotta2020Cilia},
 but also in other phenomena such as maintaining healthy functioning of mucous transport in
 airways~\cite{Rayner1996CiliarySyndrome, Schneiter2021Multi-scaleFunction,
 Bustamante-Marin2019LackClearance, Tsukita2012CoordinatedFeet} and in nodal flow which establishes
@@ -968,10 +970,11 @@ tritonX-100, and Proteinase K 0.1 mg/ml) overnight at 50°C.
 To stop the lysis reaction, the samples were heated to 95°C for 10 minutes
 and then centrifuged at 13000 rpm for 2 minutes.
 The supernatant containing gDNA was utilized for KASP assays-based analysis.
-The gDNAs were diluted (1:2) with water, and 3 \textmu L of the diluted gDNA was
-used to perform the KASP assay following the guidelines of the manufacturer (LGC Biosearch Technologies™).
-For each sample well, the \fixme{master} mix contained: 5 \textmu L of master mix; 0.14
-\textmu L of assay mix; 1.86 \textmu L of RO water.
+The gDNAs were diluted (1:2) with water. 
+The KASP assay was run following the guidelines of the
+manufacturer (LGC Biosearch Technologies™) with 3 \textmu L gDNA,
+5 \textmu L of master mix, 0.14 \textmu L of assay mix
+and 1.86 \textmu L of RO water per well on a 96-well plate.
 
 \subsection{Generation of transgenic line to study CSF and transport dynamics} 
 To generate a transgenic line expressing the photoconvertible protein Dendra2 in

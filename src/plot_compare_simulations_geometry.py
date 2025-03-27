@@ -148,5 +148,5 @@ for row_idx in range(ax_c.shape[0]):
 
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.30)
-if save_figs: fig_c.savefig(f"../output/illustrations/compare_geometry/all_ROIs_model{model_version}.png")
+if save_figs: fig_c.savefig(f"../output/illustrations/compare_geometry/mean_concentrations_model={model_version}_molecule={molecule}.png")
 plt.show()
