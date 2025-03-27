@@ -108,7 +108,7 @@ for idx, tag in enumerate(ROI_tags):
     textstr = r'${\hat{t}}_0$'+f'= {t_hatsC[idx]:.1f} s\n' + \
               r'${\hat{t}}_{\rm{II}}$'+f'= {t_hatsB[idx]:.1f} s'  
     props = dict(boxstyle='square', facecolor='white', alpha=0.5)
-    ca_c.text(0.05, 0.95, textstr, transform=ca_c.transAxes, fontsize=32, verticalalignment='top', bbox=props)
+    ca_c.text(0.05, 0.90, textstr, transform=ca_c.transAxes, fontsize=27, verticalalignment='top', bbox=props)
     
     ca_c.set_title(f'ROI {tag}', fontsize=35)
     ca_c.set_xticks([0, 250, 500, 750])
@@ -130,8 +130,8 @@ for idx, tag in enumerate(ROI_tags):
 
     if row_idx==(ax_c.shape[0]-1): ca_c.set_xlabel("Time [s]", fontsize=40)
     if idx==0:
-        ca_c.legend(loc='best', fontsize=30, frameon=True, fancybox=False, edgecolor='k')
-        ca_t.legend(loc='best', fontsize=30, frameon=True, fancybox=False, edgecolor='k')
+        ca_c.legend(loc='best', fontsize=27, frameon=True, fancybox=False, edgecolor='k')
+        ca_t.legend(loc='best', fontsize=27, frameon=True, fancybox=False, edgecolor='k')
 
 # Set tight layout and show (and optionally save)
 fig_c.tight_layout(); fig_t.tight_layout()

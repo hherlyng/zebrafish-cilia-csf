@@ -106,17 +106,17 @@ for idx, tag in enumerate(ROI_tags):
     ca_ttt.tick_params(axis='y', labelsize=36)
     ca_ttt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
     ca_ttt.set_ylabel("Time [s]", fontsize=0)
-    ca_ttt.set_xlabel(f'ROI {tag}', fontsize=40, labelpad=25)
+    ca_ttt.set_xlabel(f'ROI {tag}', fontsize=36, labelpad=25)
     ca_ttt.set_ylim(0, ca_ttt.get_ylim()[1]*1.25)
 
     if idx==0:
         ca_dff.legend(loc='lower right', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
-        ca_ttt.legend(labels=['Control', 'Mutant'], loc='lower right', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
+        ca_ttt.legend(labels=['Control', 'Mutant'], loc='lower right', fontsize=27, frameon=True, fancybox=False, edgecolor='k')
         ca_ttt.set_ylabel("Time [s]", fontsize=40, labelpad=25)
 
 # Set tight layout and show (and optionally save)
 fig_dff.tight_layout(); fig_ttt.tight_layout()
-save_figs = 0
+save_figs = 1
 if save_figs:
     fig_dff.savefig(f"../output/illustrations/experiments_dff_compare_control_mutant.png")
     fig_ttt.savefig(f"../output/illustrations/experiments_ttt_compare_control_mutant.png")
