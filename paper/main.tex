@@ -1517,7 +1517,7 @@ and $p\in Q$ is the fluid pressure, and $\rho$ and $\mu$ are the fluid density
 and dynamic viscosity, respectively. Unless otherwise stated, we let $\bsig = \bsig(\uu, p)$. 
 
 To derive weak formulations of the continuous problem defined by the Stokes
-equations~\Cref{eq:appendix_stokes_eqs}, we consider the function space
+equations (\Cref{eq:appendix_stokes_eqs}), we consider the function space
 \begin{align*}
     \VV &= \bigg\{\vv \ : \ \vv\in\mathbf{H}^1(\Omega),
     \vv\cdot\nn=0 \ \mathrm{on} \ \Gamma\setminus\Gp\bigg\},
@@ -1529,7 +1529,7 @@ cardiac pulsations. Bold-faced characters for a space denotes a $d$--dimensional
 where $d$ is the spatial dimension of $\Omega$. For example,
 $\mathbf{H}^1(\Omega) = [H^1(\Omega)]^3$ if $\Omega$ is three-dimensional.
 
-To derive a weak formulation of the Stokes equations~\Cref{eq:appendix_stokes_eqs},
+To derive a weak formulation of the Stokes equations (\Cref{eq:appendix_stokes_eqs}),
 we begin by multiplying~\Cref{eq:BDM_stokes_mom} with a
 test function $\vv\in\VV$ and integrating over the domain:
 \begin{equation*}
@@ -1569,8 +1569,8 @@ The details of the function $\lambda(\xx)$ follow subsequent to deriving the wea
 We choose $\rr = \rr^+ = (1, 0, 1)$ or $\rr = \rr^- = -(1, 0, 1)$
 to impose forces perpendicular to the $y$-axis.
 The reason for this is that all of the experimental images we compare
-with are taken in the $xz$-plane,
-rendering flow features in the $y$-direction unobservable.
+with are taken in the $xz$-plane (rostrocaudal-dorsoventral plane),
+rendering flow features in the $y$-direction (lateral) unobservable.
 In the following, we consider the way of handling the stress
 boundary integral for each model version successively. 
 
@@ -1587,28 +1587,28 @@ Stokes equations~\Cref{eq:appendix_stokes_eqs} with the slip boundary conditions
     \end{alignat}\label{eq:modelA_slip_BC}%
 \end{subequations}%
 on the boundary $\Gamma=\Gc\cup\Gs$. The boundary $\Gs$ is a free-slip boundary,
-where we impose the free-slip condition~\Cref{eq:modelA_full_slip_BC}.
-The first condition~\Cref{eq:modelA_slip_BC_impermeability} is the
+where we impose the free-slip condition given by \Cref{eq:modelA_full_slip_BC}.
+The first condition (\Cref{eq:modelA_slip_BC_impermeability}) is the
 impermeability condition, enforcing no flow normal to the boundary,
 whereas~\Cref{eq:modelA_slip_BC_shear} imposes a traction tangential to
 the boundary. This tangential traction is applied to represent
 the forces that the collective cilia motion exerts on the cerebrospinal fluid. 
 
-The boundary conditions~\Cref{eq:modelA_slip_BC} are set weakly through the
-boundary integral 
+The boundary conditions defined by~\Cref{eq:modelA_slip_BC}
+are set weakly through the boundary integral 
 \begin{equation}
     \intG{\bsig\nn\cdot\vv} =  \intG{\hat{\bsig}\cdot\vv}
     \label{eq:boundary_integral_BC1}
 \end{equation}
-in the weak form~\Cref{eq:modelA_weak_form1} of the Stokes equations.
+in the weak form of the Stokes equations (\Cref{eq:modelA_weak_form1}).
 We decompose the traction vector $\hat{\bsig}$ into a normal and tangential component:
 \begin{equation*}
     \hat{\bsig} = \bsigperp + \bsigpar.
 \end{equation*}
 Inserting the above into~\Cref{eq:boundary_integral_BC1},
 combined with application of the tangential traction
-condition~\Cref{eq:modelA_slip_BC_shear} and the
-free-slip condition~\Cref{eq:modelA_full_slip_BC}, yields
+condition (\Cref{eq:modelA_slip_BC_shear}) and the
+free-slip condition (\Cref{eq:modelA_full_slip_BC}), yields
 \begin{equation}
     \intG{\hat{\bsig}\cdot\vv} = \int_{\Gc\cup\Gs}{(\bsigperp + \bsigpar)\cdot\vv}\, ds = 
     \int_{\Gc\cup\Gs}{\bsigperp\cdot\vv}\, ds
@@ -1632,7 +1632,7 @@ the weak form of the momentum equation takes the following form:
     + \intO{2\mu\beps(\uu) : \beps(\vv)}
     - \intO{p\nabla\cdot\vv} = \intGc{\btau\cdot\vv}, \quad\forall\vv\in\VV.
 \end{equation*}
-Next, multiplying the continuity equation~\Cref{eq:BDM_stokes_div}
+Next, multiplying the continuity equation (\Cref{eq:BDM_stokes_div})
 with a test function $q\in Q$, we require that
 \begin{equation}
     -\intO{q\nabla\cdot\uu} = 0,\quad\forall q\in Q.
@@ -1654,9 +1654,9 @@ find $(\uu, \, p) \in \VV\times Q$, such that
 We observe that, in this case with slip boundary conditions on the entirety of
 the boundary $\Gamma$, for any real constant $C$ the vector
 $(\uu, p)=(\mathbf{0}, C)$ satisfies the equations.
-Hence the system~\Cref{eq:stokes_weak_modelA} is singular with a one-dimensional nullspace
-of constant pressures.
-Consequently, assembly of our discretization of the  equations~\Cref{eq:stokes_weak_modelA}
+Hence \Cref{eq:stokes_weak_modelA} is a singular system 
+with a one-dimensional nullspace of constant pressures.
+Consequently, assembly of the discretization of the Stokes equations (\Cref{eq:stokes_weak_modelA})
 into a linear equation system $\mathbf{A}\mathbf{x}=\mathbf{b}$ yields a singular matrix $\mathbf{A}$.
 To ensure existence of solutions, we orthogonalize the right-hand side vector $\mathbf{b}$ with
 respect to the pressure nullspace basis (the set of all constants), before solving the linear
@@ -1720,7 +1720,7 @@ included inside the parentheses on the left-hand side of~\Cref{eq:modelB_pressur
 for it to be the traction $\bsig$. Since this is not the case,
 we rather refer to this boundary condition as a normal pressure boundary condition.
 The boundary $\Gs$ is handled as discussed in the previous section,
-such that the stress boundary integral~\Cref{eq:boundary_integral_BC1}
+such that the stress boundary integral in~\Cref{eq:boundary_integral_BC1}
 vanishes over $\Gs$. Therefore, we now have
 \begin{align}
     \intG{\hat{\bsig}\cdot\vv} = \intGp{\hat{\bsig}\cdot\vv}
@@ -1733,7 +1733,7 @@ vanishes over $\Gs$. Therefore, we now have
 We leave the first term on the left-hand side
 of~\Cref{eq:modelB_boundary_integral1} in the weak form of
 the momentum equation. The second term is determined by
-the boundary condition~\Cref{eq:modelB_pressure_BC},
+the boundary condition defined in~\Cref{eq:modelB_pressure_BC},
 and is therefore moved to the right-hand side of the weak form.
 The weak form of the momentum equation is then
 \begin{equation}
@@ -1793,16 +1793,16 @@ with the definitions
                           + \intO{2\mu\beps(\uu) : \beps(\vv)}
                           -\intGp{\mu(\nabla\uu)^T\nn\cdot\vv},\label{eq:stokes_bilinear_form}\\
     \mathcal{B}(\uu, q) &= -\intO{q\nabla\cdot\uu}, \label{eq:stokes_skew_form}\\
-    \mathcal{L}(\vv) &= \intGc{\btau\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}.
-    \label{eq:stokes_linear_form}
+    \mathcal{L}(\vv) &= \intGc{\btau\cdot\vv} + \intGp{\Tilde{p}(t)(\vv\cdot\nn)}.\label{eq:stokes_linear_form}
 \end{align}
 
 \subsection{Discretization of the Stokes equations}
-We will outline the discretization of the weak
-formulation~\Cref{eq:abstract_weak_form_modelC,
-eq:stokes_bilinear_form,eq:stokes_skew_form,eq:stokes_linear_form}
-of the Stokes equations for the baseline model. A similar approach can
-be used to discretize the weak formulation for the other model versions.
+We outline the discretization of the weak
+formulation of the Stokes equations for the baseline model 
+(both cilia traction and cardiac pressure pulsations present) given by
+\Cref{eq:abstract_weak_form_modelC,eq:stokes_bilinear_form,eq:stokes_skew_form,eq:stokes_linear_form}.
+A similar approach can be used to discretize the weak formulation
+for the other model versions.
 First, we consider the spatial discretization of the weak formulation.
 We rewrite the weak form in terms of the discretized variables,
 denoted with the subscript $h$, on the discrete domain $\Omega_h$:
@@ -1842,7 +1842,7 @@ requires a stabilization of the bilinear form $\mathcal{A}(\uu_h, \vv_h)$.
 Because the elements of $\VV_h$ define the normal components of $\uu_h$,
 continuity in tangential components of $\uu_h$ on interior facets of
 the mesh is ensured through stabilization
-of the discrete weak form~\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}.
+of the discrete weak form defined by \Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}.
 We apply the stabilization outlined in Hong~\emph{et al.}~\cite{Hong2016AEquations}.
 First, we define the average and jump operators, respectively, as
 \begin{equation}
@@ -1867,14 +1867,15 @@ We now define and add the bilinear form
     &-\sum_{f\in \mathcal{F}}\int_f{2\mu\avg{\beps(\uu_h)}\cdot\jump{\vv_h}}\,\mathrm ds
     -\sum_{f\in \mathcal{F}}\int_f{2\mu\avg{\beps(\vv_h)}\cdot\jump{\uu_h}}\,\mathrm ds
 \end{align*}
-to the discrete weak formulation~\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC},
+to the discrete weak formulation (\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}),
 where $\mathcal{F}$ is the set of all interior facets of the computational mesh.
 The first term of $\mathcal{A}_{\mathrm{stab}}$ penalizes jumps
 in the tangential components of the velocity
 across interior facets, where the penalty parameter $\gamma>0$ must be chosen large enough
-to achieve stability. The penalization term
-scales with the average of the cell diameter of neighboring mesh cells,
-with $h$ defined as the maximal distance between two points in a cell. The other two terms
+to achieve stability. For appropriate convergence, the penalization term
+includes a scaling with the average of the cell diameter of neighboring mesh cells,
+with $h$ defined as the maximal distance between two points in a cell~\cite{Nitsche1971UberSind}.
+The other two terms
 of $\mathcal{A}_{\mathrm{stab}}$ are added to ensure consistency and symmetry of
 the bilinear form, such that the problem is well-defined.
 
@@ -1891,17 +1892,16 @@ find ($\uu_h, p_h$)$\in$($\VV_h, Q_h$) such that
     \end{alignat}%
     \label{eq:abstract_semi_discrete_weak_form_modelC}%
 \end{subequations}%
-We solved~\Cref{eq:abstract_semi_discrete_weak_form_modelC}
-numerically with the penalty parameter $\gamma=10$.
 
-In time, we discretize the weak formulation~\Cref{eq:abstract_semi_discrete_weak_form_modelC}
+In time, we discretize the weak formulation (\Cref{eq:abstract_semi_discrete_weak_form_modelC})
 with the implicit Euler method, approximating the time derivative as
 \begin{equation*}
     \pdifft{\uu} \approx \frac{\uu^{n+1} - \uu^n}{\Delta t},
 \end{equation*}
 where $n$ denotes the timestep index. All of the other terms
 in~\Cref{eq:abstract_semi_discrete_weak_form_modelC} are evaluated at timestep $n+1$.
-The method is implicit and of first order in time~\cite{butcher2016numerical}.
+The method is implicit and of first order in time~\cite{butcher2016numerical}. 
+The fully discrete Stokes equations were solved with the penalty parameter $\gamma=10$.
 
 \subsection{Weak formulation of the advection-diffusion equation}
 \label{subsec:adv_diff_eq_weak_form}
@@ -1930,11 +1930,11 @@ Integrating the second term by parts and applying Green's first identity yields
 The boundary integral of the total flux is handled differently for
 the three different model versions, depending on the boundary conditions considered.
 
-\textbf{Only-cilia/no-cardiac model.} We consider $\Omega$ to be
+\textbf{Cilia-driven/no-cardiac model.} We consider $\Omega$ to be
 a closed domain with impermeable walls, so that the whole boundary
 $\Gamma$ constitutes a no-flux boundary $\Gnf$.
 By imposing $\JJ\cdot\nn=0$ on $\Gamma=\Gnf$, 
-the weak form~\Cref{eq:adv_diff_weak_formA1} is reduced to
+the weak form defined by \Cref{eq:adv_diff_weak_formA1} is reduced to
 \begin{equation*}
     \intO{\pdifft{c}\phi} - \intO{\JJ\cdot\nabla\phi} = 0, \quad\forall\phi\in W.
 \end{equation*}
@@ -1947,8 +1947,8 @@ we get the following abstract weak formulation: find $c\in W$ such that
     a(c, \phi) = 0, \quad\forall\phi\in W.
 \end{equation*}
 
-\textbf{Only-cardiac/no-cilia model.} When using the normal pressure
-boundary condition~\Cref{eq:modelB_pressure_BC} to model pulsatile flow,
+\textbf{Cardiac-induced/no-cilia model.} When using the normal pressure
+boundary condition (\Cref{eq:modelB_pressure_BC}) to model pulsatile flow,
 we have in- and outflow of cerebrospinal fluid and thus advection of
 $c$ on the pressure boundary $\Gp$.
 Let $\Gp=\Gin\cup\Gout$ and $\Gamma = \Gnf\cup\Gin\cup\Gout$, with 
@@ -2067,8 +2067,6 @@ find $c_h\in W_h$, such that
     \quad\forall\phi_h\in W_h.
     \label{eq:discrete_weak_form_adv_diff}
 \end{equation}
-In this work, we solved~\Cref{eq:discrete_weak_form_adv_diff} numerically
-with the penalty parameter value $\alpha=25$.
 
 In time, we discretized~\Cref{eq:discrete_weak_form_adv_diff} with the
 second-order backward difference scheme BDF2~\cite{Volker2016}. This scheme
@@ -2078,7 +2076,9 @@ approximates the time derivative as
 \end{equation*}
 where $n$ denotes the timestep index. All of the other terms
 in~\Cref{eq:discrete_weak_form_adv_diff} are evaluated at timestep $n+1$.
-The method is implicit and of second order in time.
+The method is implicit and of second order in time. We solved the fully
+discrete weak formulation of the advection-diffusion equation
+with the penalty parameter value $\alpha=50$.
 
 %--------------VERIFICATION--------------%
 \section{Verification}\label{sec:appB_verification}
@@ -2121,7 +2121,7 @@ $\beps(\uu) = \frac{1}{2}\left(\nabla\uu + (\nabla\uu)^T\right)$, and the bounda
     \uu &= \uu_{\mathrm{mms}} \qquad&&\mathrm{on \ }\Gamma,
 \end{alignat}
 where $\Gamma=\partial\Omega$ is the boundary of the domain.
-Since the velocity field~\Cref{eq:velocity_mms} is divergence free by construction,
+Since the velocity field defined by~\Cref{eq:velocity_mms} is divergence free by construction,
 $g = 0$. Setting the external force $\ff=-\nabla\cdot\bsig(\uu_{\mathrm{mms}}, p_{\mathrm{mms}})$
 using~\Cref{eq:velocity_mms} and~\Cref{eq:pressure_mms},
 the solutions $\uu$ and $p$ to~\Cref{eq:stokes_mms} will be the ones
@@ -2254,7 +2254,7 @@ slightly with mesh refinement, we report the $\mathbf{L}^2$ norm of $\uu_h$ scal
 Finally, we provide verification of mass conservation by reporting the $L^2$ norms of
 the divergence $\nabla\cdot\uu_h$. We remark that the units used in the model
 implementation was millimeters, which is why~\Cref{tab:ventricles_norms_BDM}
-reports units in millimeters, instead of micrometers which has been used elsewhere in the paper. 
+reports values in units of millimeters, instead of micrometers which has been used elsewhere in the paper. 
 \begin{table}[!htbp]
     \centering
     \caption{Velocity norms under mesh refinement
