@@ -7,6 +7,8 @@ from ufl       import div, dot, inner, sym, grad, avg, curl
 from mpi4py    import MPI
 from petsc4py  import PETSc
 from basix.ufl import element, mixed_element
+from utilities.mesh    import mark_facets
+from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
 from dolfinx.fem.petsc import assemble_matrix, assemble_vector, set_bc, apply_lifting
 
 print = PETSc.Sys.Print
@@ -146,18 +148,20 @@ def get_system_mms(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct
     return A, b, W, B, u_ex, p_ex
 
 # Mesh tags for flow
-ANTERIOR_PRESSURE    = 2
-POSTERIOR_PRESSURE   = 3
-VOLUME               = 4
-MIDDLE_VENTRAL_CILIA = 5
-MIDDLE_DORSAL_CILIA  = 6
-ANTERIOR_CILIA       = 7
-SLIP                 = 8
+ANTERIOR_PRESSURE    = 2 # The pressure BC facets on the anterior ventricle boundary
+POSTERIOR_PRESSURE   = 3 # The pressure BC facets on the posterior ventricle boundary
+MIDDLE_VENTRAL_CILIA = 5 # The cilia BC facets on the ventral wall of the middle ventricle
+MIDDLE_DORSAL_CILIA  = 6 # The cilia BC facets on the dorsal wall of the middle ventricle
+ANTERIOR_CILIA1      = 7 # The cilia BC facets on the dorsal, anterior walls of the anterior ventricle
+ANTERIOR_CILIA2      = 8 # The cilia BC facets on the dorsal, posterior walls of the anterior ventricle
+SLIP                 = 9 # The free-slip facets of the boundary
+
+impermeability_tags = (MIDDLE_DORSAL_CILIA, MIDDLE_VENTRAL_CILIA,
+                       ANTERIOR_CILIA1, ANTERIOR_CILIA2, SLIP)
 
 def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bool):
 
-    from utilities.mesh import mark_boundaries_flow
-    bdry_facets = mark_boundaries_flow(mesh=msh, inflow_outflow=False)
+    bdry_facets = mark_facets(mesh=msh, inflow_outflow=False)
     k  = 1
     cell = msh.basix_cell()
     Velm = element("BDM", cell, k)
@@ -174,10 +178,31 @@ def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bo
     ds = ufl.Measure("ds", domain=msh, subdomain_data=bdry_facets)
     n = ufl.FacetNormal(msh)
     
-    # Define the stress vector used in the slip boundary conditions
-    tau = 6.5e-4 # Tangential stress BC parameter
+    #---------------------------------------------------------------#
+    # Define the stress vector used in the slip boundary conditions #
+    #---------------------------------------------------------------#
+    tau = 6.5e-4
     tau_vec   = tau*ufl.as_vector((1, 0, 1)) # Stress vector to be projected tangentially onto the mesh
-    tangent_traction = lambda n: Tangent(tau_vec, n) # The tangential component of the stress vector
+
+    # Define coordinates used in the tau expressions
+    xx, _, _ = ufl.SpatialCoordinate(mesh)
+    x0_dorsal = 0.175
+    xe_dorsal = 0.335
+
+    x0_ventral = 0.155
+    xe_ventral = 0.310
+
+    # Define the tau expressions
+    tau_vec_dorsal = 2.75*tau_vec * (xx - x0_dorsal) / (xe_dorsal - x0_dorsal) # Dorsal cilia lambda expression
+    tau_vec_ventral = 0.5*tau_vec * (1 - (xx - x0_ventral) / (xe_ventral - x0_ventral)) # Ventral cilia lambda expression
+    tau_vec_anterior1 = 0.4*tau_vec # Anterior cilia lambda expression (anterior part)
+    tau_vec_anterior2 = tau_vec # Anterior cilia lambda expression (posterior part)
+
+    # Use the tau expressions to define the tangent traction vectors
+    tangent_traction_dorsal    = Tangent(tau_vec_dorsal, n)
+    tangent_traction_ventral   = Tangent(tau_vec_ventral, n)
+    tangent_traction_anterior1 = Tangent(tau_vec_anterior1, n)
+    tangent_traction_anterior2 = Tangent(tau_vec_anterior2, n)
 
     f = dfx.fem.Function(V)
     
@@ -189,16 +214,15 @@ def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bo
     a += Stabilization(msh, u, v, mu, penalty=penalty)
 
     L  = inner(f, v) * dx
-    L += -inner(Tangent(v, n), tangent_traction(n)) * (ds(ANTERIOR_CILIA) + ds(MIDDLE_DORSAL_CILIA))
-    L +=  inner(Tangent(v, n), tangent_traction(n)) * ds(MIDDLE_VENTRAL_CILIA)
+    L -= inner(Tangent(v, n), tangent_traction_dorsal) * ds(MIDDLE_DORSAL_CILIA)
+    L -= inner(Tangent(v, n), tangent_traction_anterior1) * ds(ANTERIOR_CILIA1)
+    L += inner(Tangent(v, n), tangent_traction_ventral) * ds(MIDDLE_VENTRAL_CILIA)
+    L += inner(Tangent(v, n), tangent_traction_anterior2) * ds(ANTERIOR_CILIA2)
     
     # Impose impermeability boundary condition strongly
     # Create facet-cell connectivity and get the facets of the slip boundary
     mesh.topology.create_connectivity(mesh.topology.dim-1, mesh.topology.dim) 
-    imperm_bdry = np.concatenate((bdry_facets.find(ANTERIOR_CILIA),
-                                  bdry_facets.find(MIDDLE_DORSAL_CILIA),
-                                  bdry_facets.find(MIDDLE_VENTRAL_CILIA),
-                                  bdry_facets.find(SLIP)))
+    imperm_bdry = np.concatenate(([bdry_facets.find(tag) for tag in impermeability_tags]))
     u_bc = dfx.fem.Function(V)
     dofs = dfx.fem.locate_dofs_topological((W.sub(0), V), msh.topology.dim-1, imperm_bdry)
     bcs  = [dfx.fem.dirichletbc(u_bc, dofs, W.sub(0))]
@@ -240,6 +264,7 @@ def solve(A: PETSc.Mat, B: PETSc.Mat, b: PETSc.Vec, W: dfx.fem.FunctionSpace, di
         ksp.setType("preonly")
         ksp.getPC().setType("lu")
         ksp.getPC().setFactorSolverType("mumps")
+        ksp.getPC().getFactorMatrix().setMumpsIcntl(icntl=14, ival=80) # Increase MUMPS working memory
         opts = PETSc.Options()
         opts.setValue("ksp_view", None)
         opts.setValue("ksp_monitor_true_residual", None)                
@@ -319,7 +344,7 @@ if __name__ == "__main__":
     mu_value = 1.0
     penalty_value = 10.0
     direct = True
-    mesh_type = "cyl"
+    mesh_type = "zfish"
 
     history = []
 
@@ -359,7 +384,6 @@ if __name__ == "__main__":
             uh_mag = np.sqrt(u1**2 + u2**2 + u3**2)
             uh_mag_max = uh_mag.max()
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
-            #u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
             
             u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
             u0_out.interpolate(u0)
@@ -370,14 +394,13 @@ if __name__ == "__main__":
             u0_mag_max = u0_mag.max()
             u0_Linf = mesh.comm.allreduce(u0_mag_max, op=MPI.MAX)
 
-            from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
             eu_H1  = calc_error_H1(u_approx=uh, u_exact=u0, dX=dx)
             eu_L2  = calc_error_L2(u_approx=uh, u_exact=u0, dX=dx)
             ep_L2  = calc_error_L2(u_approx=ph, u_exact=p0, dX=dx)
             eu_div = calc_error_Hdiv(u_approx=uh, u_exact=u0, dX=dx)
             eu_Linf = u_Linf - u0_Linf
 
-            div_uh = np.sqrt(mesh.comm.allreduce(abs(dfx.fem.assemble_scalar(dfx.fem.form(div(uh)**2*dx))), op=MPI.SUM))
+            div_uh = np.sqrt(mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(div(uh)**2*dx)), op=MPI.SUM))
             tdim = mesh.topology.dim
             num_cells = mesh.topology.index_map(tdim).size_local
             cells = np.arange(num_cells, dtype=np.int32)
@@ -410,28 +433,27 @@ if __name__ == "__main__":
             ep_L2_prev   = ep_L2
             print(tabulate.tabulate(history, headers=headers))
             
-
     elif mesh_type=="zfish":
 
         # init
         headers = ("hmin", "hmax", "#cells", "dimW", "|u|_0", "|u|_Linf", "|u|_Linf_s", "|div u|_0", "niters", "|r|")
 
-        for i in [0, 1]:#, 2]:
+        for i in [3]:#[0, 1, 2]:
             
             with dfx.io.XDMFFile(MPI.COMM_WORLD, f"../geometries/ventricles/ventricles_{i}.xdmf", "r") as xdmf:
                 mesh = xdmf.read_mesh()
 
-            mu_value = 6.97e-4
+            mu_value = 7e-4
             A, b, W, B = get_system(mesh, penalty_value, mu_value, direct)
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
 
             # Calculate mean pressure and subtract it from the calculated pressure
-            from utilities.mesh import mark_boundaries_flow
-            ft = mark_boundaries_flow(mesh, inflow_outflow=False)
+            ft = mark_facets(mesh, inflow_outflow=False)
             dx = ufl.Measure("dx", domain=mesh)
             ds = ufl.Measure("ds", domain=mesh, subdomain_data=ft)
             vol = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1 * dx)), op=MPI.SUM)
-            gamma_c = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*ds((ANTERIOR_CILIA, MIDDLE_DORSAL_CILIA, MIDDLE_VENTRAL_CILIA)))), op=MPI.SUM)
+            gamma_c = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*ds((ANTERIOR_CILIA1, ANTERIOR_CILIA2, 
+                                                                                     MIDDLE_DORSAL_CILIA, MIDDLE_VENTRAL_CILIA)))), op=MPI.SUM)
             mean_p_h = mesh.comm.allreduce(1/vol * dfx.fem.assemble_scalar(dfx.fem.form(ph * dx)), op=MPI.SUM)
 
             ph.x.array[:] -= mean_p_h
@@ -446,6 +468,7 @@ if __name__ == "__main__":
             uh_mag = np.sqrt(u1**2 + u2**2 + u3**2)
             uh_mag_max = uh_mag.max()
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
+            print("Max velocity: ", u_Linf)
             u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
 
             tdim = mesh.topology.dim
@@ -455,13 +478,16 @@ if __name__ == "__main__":
             hmin = mesh.comm.allreduce(h.min(), op=MPI.MIN)
             hmax = mesh.comm.allreduce(h.max(), op=MPI.MAX)
 
-            # Scale to micrometers
-            uh_L2   *= 1e3
-            u_Linf *= 1e3
-            u_Linf_scaled *= 1e-3
-            div_uh_L2 *= 1e9
-
-            history.append((hmin, hmax, mesh.topology.index_map(3).size_global, W.dofmap.index_map.size_global, uh_L2, u_Linf, u_Linf_scaled, div_uh_L2, niters, rnorm))
+            history.append((hmin,
+                            hmax,
+                            mesh.topology.index_map(3).size_global,
+                            W.dofmap.index_map.size_global,
+                            uh_L2,
+                            u_Linf,
+                            u_Linf_scaled,
+                            div_uh_L2,
+                            niters,
+                            rnorm))
             print(tabulate.tabulate(history, headers=headers))
 
     elif mesh_type=="square":
@@ -498,7 +524,6 @@ if __name__ == "__main__":
             uh_mag = np.sqrt(u1**2 + u2**2)
             uh_mag_max = uh_mag.max()
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
-            #u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
             
             u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
             u0_out.interpolate(u0)
@@ -508,7 +533,6 @@ if __name__ == "__main__":
             u0_mag_max = u0_mag.max()
             u0_Linf = mesh.comm.allreduce(u0_mag_max, op=MPI.MAX)
 
-            from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
             eu_H1  = calc_error_H1(u_approx=uh_out, u_exact=u0_out, dX=dx, vector_elements=True)
             eu_L2  = calc_error_L2(u_approx=uh_out, u_exact=u0_out, dX=dx, vector_elements=True)
             ep_L2  = calc_error_L2(u_approx=ph, u_exact=p0, dX=dx)
@@ -526,10 +550,29 @@ if __name__ == "__main__":
 
             if i==3:
                 if direct:
-                    from decimal import Decimal
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--"))
+                    history.append((hmin,
+                                    hmax,
+                                    mesh.topology.index_map(gdim).size_global,
+                                    W.dofmap.index_map.size_global,
+                                    f"{eu_L2:.1E}", "--",
+                                    f"{eu_H1:.1E}", "--",
+                                    f"{eu_div:.1E}", "--",
+                                    f"{eu_Linf:.1E}", "--",
+                                    f"{div_uh:.1E}",
+                                    f"{ep_L2:.1E}", "--"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--", niters, rnorm))
+                    history.append((hmin,
+                                    hmax,
+                                    mesh.topology.index_map(gdim).size_global,
+                                    W.dofmap.index_map.size_global,
+                                    f"{eu_L2:.1E}", "--", 
+                                    f"{eu_H1:.1E}", "--",
+                                    f"{eu_div:.1E}", "--",
+                                    f"{eu_Linf:.1E}", "--",
+                                    f"{div_uh:.1E}",
+                                    f"{ep_L2:.1E}", "--",
+                                    niters,
+                                    rnorm))
             else:
                 eu_L2_eoc   = np.log(eu_L2_prev/eu_L2) / np.log(2)
                 eu_H1_eoc   = np.log(eu_H1_prev/eu_H1) / np.log(2)
@@ -537,10 +580,39 @@ if __name__ == "__main__":
                 eu_Linf_eoc = np.log(eu_Linf_prev/eu_Linf) / np.log(2)
                 ep_L2_eoc   = np.log(ep_L2_prev/ep_L2) / np.log(2)
                 if direct:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}"))
+                    history.append((hmin,
+                                    hmax,
+                                    mesh.topology.index_map(gdim).size_global,
+                                    W.dofmap.index_map.size_global,
+                                    f"{eu_L2:.1E}",
+                                    f"{eu_L2_eoc:.2f}",
+                                    f"{eu_H1:.1E}",
+                                    f"{eu_H1_eoc:.2f}",
+                                    f"{eu_div:.1E}",
+                                    f"{eu_div_eoc:.2f}",
+                                    f"{eu_Linf:.1E}",
+                                    f"{eu_Linf_eoc:.2f}",
+                                    f"{div_uh:.1E}",
+                                    f"{ep_L2:.1E}",
+                                    f"{ep_L2_eoc:.2f}"))
                 else:
-                    history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", f"{eu_L2_eoc:.2f}", f"{eu_H1:.1E}", f"{eu_H1_eoc:.2f}", f"{eu_div:.1E}", f"{eu_div_eoc:.2f}", f"{eu_Linf:.1E}", f"{eu_Linf_eoc:.2f}", f"{div_uh:.1E}", f"{ep_L2:.1E}", f"{ep_L2_eoc:.2f}", niters, rnorm))
-            
+                    history.append((hmin,
+                                    hmax,
+                                    mesh.topology.index_map(gdim).size_global,
+                                    W.dofmap.index_map.size_global,
+                                    f"{eu_L2:.1E}",
+                                    f"{eu_L2_eoc:.2f}",
+                                    f"{eu_H1:.1E}",
+                                    f"{eu_H1_eoc:.2f}",
+                                    f"{eu_div:.1E}",
+                                    f"{eu_div_eoc:.2f}",
+                                    f"{eu_Linf:.1E}",
+                                    f"{eu_Linf_eoc:.2f}",
+                                    f"{div_uh:.1E}",
+                                    f"{ep_L2:.1E}",
+                                    f"{ep_L2_eoc:.2f}",
+                                    niters,
+                                    rnorm))
             eu_L2_prev   = eu_L2
             eu_H1_prev   = eu_H1
             eu_div_prev  = eu_div
@@ -583,7 +655,6 @@ if __name__ == "__main__":
             uh_mag = np.sqrt(u1**2 + u2**2 + u3**2)
             uh_mag_max = uh_mag.max()
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
-            #u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
             
             u0_out = dfx.fem.Function(dfx.fem.functionspace(mesh, element("DG", mesh.basix_cell(), 1, shape=(mesh.geometry.dim,))))
             u0_out.interpolate(u0)
@@ -594,7 +665,6 @@ if __name__ == "__main__":
             u0_mag_max = u0_mag.max()
             u0_Linf = mesh.comm.allreduce(u0_mag_max, op=MPI.MAX)
 
-            from utilities.helpers import calc_error_H1, calc_error_L2, calc_error_Hdiv
             eu_H1  = calc_error_H1(u_approx=uh, u_exact=u0, dX=dx)
             eu_L2  = calc_error_L2(u_approx=uh, u_exact=u0, dX=dx)
             ep_L2  = calc_error_L2(u_approx=ph, u_exact=p0, dX=dx)
@@ -612,7 +682,6 @@ if __name__ == "__main__":
 
             if i==2:
                 if direct:
-                    from decimal import Decimal
                     history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--"))
                 else:
                     history.append((hmin, hmax, mesh.topology.index_map(gdim).size_global, W.dofmap.index_map.size_global, f"{eu_L2:.1E}", "--", f"{eu_H1:.1E}", "--", f"{eu_div:.1E}", "--", f"{eu_Linf:.1E}", "--", f"{div_uh:.1E}", f"{ep_L2:.1E}", "--", niters, rnorm))
@@ -635,6 +704,7 @@ if __name__ == "__main__":
             print(tabulate.tabulate(history, headers=headers))
     
     else: raise ValueError("Unknown mesh_type.")
+
     print(f"Script time = {time.perf_counter() - tic:.2f} sec")
     vtx_u = dfx.io.VTXWriter(comm=mesh.comm, filename="MMS_BDM_velocity.bp", output=[uh_out], engine="BP4")
     vtx_u.write(0)

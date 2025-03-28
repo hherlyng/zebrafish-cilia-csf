@@ -296,10 +296,10 @@ class FlowSolver:
         tau_vec_anterior2 = tau_vec # Anterior cilia lambda expression (posterior part)
 
         # Use the tau expressions to define the tangent traction vectors
-        self.tangent_traction_dorsal    = lambda n: Tangent(tau_vec_dorsal, n)
-        self.tangent_traction_ventral   = lambda n: Tangent(tau_vec_ventral, n)
-        self.tangent_traction_anterior1 = lambda n: Tangent(tau_vec_anterior1, n)
-        self.tangent_traction_anterior2 = lambda n: Tangent(tau_vec_anterior2, n)
+        self.tangent_traction_dorsal    = Tangent(tau_vec_dorsal, n)
+        self.tangent_traction_ventral   = Tangent(tau_vec_ventral, n)
+        self.tangent_traction_anterior1 = Tangent(tau_vec_anterior1, n)
+        self.tangent_traction_anterior2 = Tangent(tau_vec_anterior2, n)
 
         #------------BILINEAR FORM------------#
         a  = 0 # Initialize
@@ -322,12 +322,12 @@ class FlowSolver:
         if self.model_version == "A": # Only cilia forces
             # Add tangential traction
             if self.cilia_scenario!=1:
-                L += -inner(Tangent(v, n), self.tangent_traction_anterior1(n)) * ds(ANTERIOR_CILIA1)
-                L +=  inner(Tangent(v, n), self.tangent_traction_anterior2(n)) * ds(ANTERIOR_CILIA2)
+                L += -inner(Tangent(v, n), self.tangent_traction_anterior1) * ds(ANTERIOR_CILIA1)
+                L +=  inner(Tangent(v, n), self.tangent_traction_anterior2) * ds(ANTERIOR_CILIA2)
             if self.cilia_scenario!=2:
-                L += -inner(Tangent(v, n), self.tangent_traction_dorsal(n)) * ds(MIDDLE_DORSAL_CILIA)
+                L += -inner(Tangent(v, n), self.tangent_traction_dorsal) * ds(MIDDLE_DORSAL_CILIA)
             if self.cilia_scenario!=3:
-                L +=  inner(Tangent(v, n), self.tangent_traction_ventral(n)) * ds(MIDDLE_VENTRAL_CILIA)
+                L +=  inner(Tangent(v, n), self.tangent_traction_ventral) * ds(MIDDLE_VENTRAL_CILIA)
         elif self.model_version=="B": # Only pulsatile cardiac motion
             # Add time-derivative term
             L += rho/deltaT*dot(self.u_, v) * dx 
@@ -346,12 +346,12 @@ class FlowSolver:
 
             # Add tangential traction
             if self.cilia_scenario!=1:
-                L += -inner(Tangent(v, n), self.tangent_traction_anterior1(n)) * ds(ANTERIOR_CILIA1)
-                L +=  inner(Tangent(v, n), self.tangent_traction_anterior2(n)) * ds(ANTERIOR_CILIA2)
+                L += -inner(Tangent(v, n), self.tangent_traction_anterior1) * ds(ANTERIOR_CILIA1)
+                L +=  inner(Tangent(v, n), self.tangent_traction_anterior2) * ds(ANTERIOR_CILIA2)
             if self.cilia_scenario!=2:
-                L += -inner(Tangent(v, n), self.tangent_traction_dorsal(n)) * ds(MIDDLE_DORSAL_CILIA)
+                L += -inner(Tangent(v, n), self.tangent_traction_dorsal) * ds(MIDDLE_DORSAL_CILIA)
             if self.cilia_scenario!=3:
-                L +=  inner(Tangent(v, n), self.tangent_traction_ventral(n)) * ds(MIDDLE_VENTRAL_CILIA)
+                L +=  inner(Tangent(v, n), self.tangent_traction_ventral) * ds(MIDDLE_VENTRAL_CILIA)
 
             # Create pressure BC expression and interpolate it into a finite element function
             self.p_bc_expr = OscillatoryPressure(A=self.A_pressure, f=self.freq)
@@ -607,14 +607,14 @@ if __name__ == "__main__":
 
     # Input parameters
     direct = True # Use direct solver if True, else use iterative solver
-    model = "C" # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
+    model = "A" # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
     f = 2.22 # Cardiac frequency [Hz]
     period = 1 / f # The cardiac period [s]
     T  = 1*period # Simulation end time [s]
     period_partition = 20
     dt = period / period_partition # Timestep size [s]
-    write_output = True # Write velocity field to VTX file if True
-    write_checkpoint = True # Write velocity field checkpoints to adios4dolfinx file if True
+    write_output = False # Write velocity field to VTX file if True
+    write_checkpoint = False # Write velocity field checkpoints to adios4dolfinx file if True
 
     # Set mesh version from input
     mesh_version_input = int(argv[1])
@@ -632,7 +632,8 @@ if __name__ == "__main__":
         raise ValueError("Error in mesh version input. Choose an integer in the interval [0, 4].")
 
     # Read mesh and mark facets
-    mesh_filename = f"../geometries/standard/{mesh_version}_ventricles.xdmf"
+    # mesh_filename = f"../geometries/standard/{mesh_version}_ventricles.xdmf"
+    mesh_filename = f"../geometries/ventricles/ventricles_0.xdmf"
     with dfx.io.XDMFFile(MPI.COMM_WORLD, mesh_filename, "r") as xdmf: mesh = xdmf.read_mesh()
 
     in_out = False if model=="A" else True # Determine whether to mark pressure boundaries

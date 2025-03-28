@@ -51,9 +51,9 @@ ventricular systems, together with new concepts of how molecules are transported
 Brain development and function depend on numerous regulatory
 processes, including the flow of cerebrospinal fluid
 (CSF)~\cite{fame2020emergence}. Produced mostly by the choroid
-plexus and partly by brain interstitial fluid~\cite{Brodal2016},
+plexus and partly by brain interstitial fluid,
 CSF is a clear liquid that flows through the ventricular system and subarachnoid
-space~\cite{Damkier2013}. By transporting growth factors, nutrients, neurotransmitters
+space~\cite{Brodal2016, Damkier2013}. By transporting growth factors, nutrients, neurotransmitters
 and metabolites, as well as removing waste products, CSF regulates
 brain development and homeostasis~\cite{Ringers2020Role, fame2020emergence, del2010ependymal}.
 Disruption of the CSF circulation is detrimental to brain health and disturbs
@@ -1624,8 +1624,8 @@ impermeability condition is assumed to hold on the \emph{entire} domain boundary
 for this model version, which leaves the pressure under-determined as a result of no
 boundary condition specifying the pressure.
 
-The tangential traction $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ that represents the cilia
-motion differ for the cilia regions. We heuristically determined the constant $\tau= 0.65$ mPa
+For the tangential traction $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ that represents the cilia
+motion, we heuristically determined the constant $\tau= 0.65$ mPa
 and the spatially varying function $\lambda(\xx)$. The definitions of $\rr$ and $\lambda(\xx)$
 for the different cilia populations are summarized in~\Cref{tab:r_vector_and_lambda_function}.
 \begingroup
@@ -2152,11 +2152,12 @@ the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
 \begin{table}[!htbp]
     \small
     \centering
-    \caption{Error norms of the velocity $\uu_h$ in the
+    \caption{Errors of the velocity approximation $\uu_h$ in the
     $\mathbf{L}^2$ and $\mathbf{H}^1$ norms,
     the pressure $p_h$ in the $L^2$ norm,
     and the error in the maximum velocity magnitude $\uu_{h, {\mathrm{mag}}}$
-    for mesh refinement on a cylinder mesh with the cilia-driven/no-cardiac flow model.
+    for mesh refinement on a cylinder mesh with the cilia-driven/no-cardiac flow model,
+    with $\mu=1$.
     Additionally, we report the $L^2$ norm of the divergence of the velocity.
     For all error norms, convergence rates calculated
     with~\Cref{eq:convergence_order_estimate} are given
