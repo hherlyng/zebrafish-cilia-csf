@@ -10,11 +10,11 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "font.family" : "Arial",
+    "font.family" : "Liberation Serif",
+    "mathtext.fontset" : "dejavuserif",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
@@ -108,7 +108,7 @@ for idx, tag in enumerate(ROI_tags):
     textstr = r'${\hat{t}}_0$'+f'= {t_hatsC[idx]:.0f} s\n' + \
               r'${\hat{t}}_{\rm{II}}$'+f'= {t_hatsB[idx]:.0f} s' 
     props = dict(boxstyle='square', facecolor='white', alpha=0.5)
-    ca_c.text(0.05, 0.90, textstr, transform=ca_c.transAxes, fontsize=27, verticalalignment='top', bbox=props)
+    ca_c.text(0.05, 0.90, textstr, transform=ca_c.transAxes, fontsize=30, verticalalignment='top', bbox=props)
     
     ca_c.set_title(f'ROI {tag}', fontsize=35)
     ca_c.set_xticks([0, 250, 500, 750])

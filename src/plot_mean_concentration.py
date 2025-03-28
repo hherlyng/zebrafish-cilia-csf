@@ -11,11 +11,11 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "font.family" : "Arial",
+    "font.family" : "Liberation Serif",
+    "mathtext.fontset" : "dejavuserif",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet

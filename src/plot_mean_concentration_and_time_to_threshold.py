@@ -12,11 +12,11 @@ from utilities.mesh import create_ventricle_volumes_meshtags
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "font.family" : "Arial",
+    "font.family" : "Liberation Serif",
+    "mathtext.fontset" : "dejavuserif",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-plt.rcParams['text.latex.preamble'] += '\\usepackage{sfmath}' # Enable sans-serif math font
 
 comm = MPI.COMM_WORLD # MPI Communicator
 gm   = dfx.mesh.GhostMode.shared_facet
@@ -127,10 +127,10 @@ for bar_container, hatch in zip(bars.containers, hatches):
     for bar in bar_container:
         bar.set_hatch(hatch)
 
-ax2.set_xlabel("ROI number", fontsize=32, labelpad=25)
-ax2.set_ylabel(r"Time to threshold $\hat{t}$ [s]", fontsize=32, labelpad=50)
-ax2.tick_params(labelsize=35)
-ax2.legend(labels=[r'$D_1$', r'$D_2$', r'$D_3$'], loc='upper left', fontsize=32, frameon=True, fancybox=False, edgecolor='k')
+ax2.set_xlabel("ROI number", fontsize=30, labelpad=25)
+ax2.set_ylabel(r"Time to threshold $\hat{t}$ [s]", fontsize=30, labelpad=50)
+ax2.tick_params(labelsize=26)
+ax2.legend(labels=[r'$D_1$', r'$D_2$', r'$D_3$'], loc='upper left', fontsize=30, frameon=True, fancybox=False, edgecolor='k')
 ax2.yaxis.tick_right()
 ax2.yaxis.label_position = ['Right']
 ax2.spines['right'].set_visible(True)

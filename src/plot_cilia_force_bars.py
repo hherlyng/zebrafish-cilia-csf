@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "font.family" : "Arial",
+    "font.family" : "Liberation Serif",
+    "mathtext.fontset" : "dejavuserif",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })

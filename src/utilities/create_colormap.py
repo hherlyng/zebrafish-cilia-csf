@@ -46,14 +46,15 @@ if __name__=='__main__':
     import matplotlib
     import matplotlib.pyplot as plt
     import colormaps as cm
+    # Set matplotlib properties
     plt.rcParams.update({
-        "font.family" : "Arial",
+        "font.family" : "Liberation Serif",
+        "mathtext.fontset" : "dejavuserif",
         "axes.spines.top" : False,
         "axes.spines.right" : False
     })
-    plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}"
 
-    bar_type = 1
+    bar_type = 2
 
     if bar_type==1:
         fig = plt.figure(figsize=(5.5, 1.5))

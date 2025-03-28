@@ -5,11 +5,11 @@ plt.style.use('petroff10')
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "font.family" : "Arial",
+    "font.family" : "Liberation Serif",
+    "mathtext.fontset" : "dejavuserif",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-print(plt.rcParams.keys())
 
 x = np.linspace(0, 1, 101)
 sine_curve = lambda t: np.sin(2*np.pi*t)
@@ -18,7 +18,7 @@ y = sine_curve(x)
 fig, ax = plt.subplots(figsize=[16, 7])
 
 ax.plot(x, y, linewidth=5)
-font = {'family': 'Arial',
+font = {'family': 'Liberation Serif',
         'size'  : 50}
 
 ax.set_xticks([0.0, 0.25, 0.50, 0.75, 1.00])
@@ -42,7 +42,7 @@ xs = [x1, x2, x3]
 ys = [y1, y2, y3]
 
 [ax.plot(x, y, color='k', marker='o', markersize=15) for x, y in zip(xs, ys)]
-bfont = {'family': 'Arial',
+bfont = {'family': 'Liberation Serif',
          'size'  : 50,
          'fontweight' : 'bold'}
 ax.text(xs[0], ys[0]*1.125, 'f, h', fontdict=bfont)

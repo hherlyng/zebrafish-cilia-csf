@@ -8,11 +8,11 @@ from scipy.stats import mannwhitneyu
 
 # Set matplotlib properties
 plt.rcParams.update({
-    "font.family" : "Arial",
+    "font.family" : "Liberation Serif",
+    "mathtext.fontset" : "dejavuserif",
     "axes.spines.top" : False,
     "axes.spines.right" : False
 })
-plt.rcParams["text.latex.preamble"] += "\\usepackage{sfmath}" # Enable sans-serif math font
 
 # Set data directory and load .mat files
 data_dir = "../data/photoconversion_data/aggregated_data/"
