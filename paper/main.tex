@@ -1789,19 +1789,19 @@ we define
 where $P_k$ is the space of polynomials of degree less than or equal to $k$.
 The BDM family of elements have degrees of freedom
 associated with integral moments of vector components normal to facets of the mesh.
-Because $\VV_h\not\subset\VV$, the elements are non-conforming.
-This BDM-DG scheme for the Stokes equations
-is $\mathbf{H}(\mathrm{div})$ conforming and thus exactly mass-conserving,
-because the continuity equation can be satisfied
-in every computational mesh cell due to the fact that $\nabla\cdot\VV_h\subset Q_h$.
+Because $\VV_h\not\subset\VV$, this BDM-DG scheme yields a non-conforming
+method for the Stokes equations. The scheme is
+$\mathbf{H}(\mathrm{div})$-conforming and exactly mass-conserving:
+due to the fact that $\nabla\cdot\VV_h\subset Q_h$,
+the continuity equation (\Cref{eq:BDM_stokes_div})
+is satisfied in every computational mesh cell.
 Moreover, control of normal components of $\uu_h$ conveniently 
 lets us enforce the impermeability condition $\uu_h\cdot\nn=0$ strongly.
-requires a stabilization of the bilinear form $\mathcal{A}(\uu_h, \vv_h)$.
 
-Because the elements of $\VV_h$ define the normal components of $\uu_h$,
+Because the elements of $\VV_h$ only define the normal components of $\uu_h$,
 continuity in tangential components of $\uu_h$ on interior facets of
 the mesh is ensured through stabilization
-of the discrete weak form defined by \Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}.
+of the discrete weak form (\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}).
 We apply the stabilization outlined in Hong~\emph{et al.}~\cite{Hong2016AEquations}.
 First, we define the average and jump operators, respectively, as
 \begin{equation}

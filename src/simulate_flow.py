@@ -57,7 +57,7 @@ class FlowSolver:
     rho_val = 1e-3  # Fluid density [g / mm^3]
 
     # Model parameters
-    tau  = 6.5e-4 # Tangential stress BC parameter [Pa]
+    tau  = 6.5e-4 # Tangential traction force density [Pa]
     freq = 2.22   # Cardiac frequency [Hz]
     A_pressure = 0.0015 # Pressure BC amplitude [Pa]
 
