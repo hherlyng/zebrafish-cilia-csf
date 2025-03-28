@@ -1851,7 +1851,6 @@ find ($\uu_h, p_h$)$\in$($\VV_h, Q_h$) such that
     \end{alignat}%
     \label{eq:abstract_semi_discrete_weak_form_modelC}%
 \end{subequations}%
-
 In time, we discretize the weak formulation (\Cref{eq:abstract_semi_discrete_weak_form_modelC})
 with the implicit Euler method, approximating the time derivative as
 \begin{equation*}
@@ -2019,14 +2018,15 @@ in~\Cref{eq:SIP_stabilization} are defined, respectively, as
 \begin{equation*}
     \avg{c} = \frac{c^+ + c^-}{2} \qquad\mathrm{and}\qquad \jump{c} = c^+\nn^+ + c^-\nn^-.
 \end{equation*}
-The final discrete weak formulation of the advection-diffusion equation is:
+
+By including the stabilization $a_{\mathrm{stab}}(c_h, \phi_h)$,
+the final semi-discrete weak formulation of the advection-diffusion equation is:
 find $c_h\in W_h$, such that
 \begin{equation}
     a(c_h, \phi_h) + a_{\mathrm{stab}}(c_h, \phi_h) + b(c_h, \phi_h) = L(\phi_h),
     \quad\forall\phi_h\in W_h.
     \label{eq:discrete_weak_form_adv_diff}
 \end{equation}
-
 In time, we discretized~\Cref{eq:discrete_weak_form_adv_diff} with the
 second-order backward difference scheme BDF2~\cite{Volker2016}. This scheme
 approximates the time derivative as
