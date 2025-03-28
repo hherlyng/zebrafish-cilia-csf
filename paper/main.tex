@@ -401,7 +401,7 @@ ROIs 3 and 6 (\Crefpanels{fig:fig4}{c}).
 
 Compared to experimental data, the difference between the control and
 mutant scenarios was even greater for the simulations, with the
-times-to-threshold in ROI 2 and 4 being 90\% and 34\% higher in the
+times-to-threshold in ROI 2 and 4 being 81\% and 28\% higher in the
 absence of cilia-mediated flow. Moreover, the ROI 5 $\cbar$ profiles
 for the two configurations in our computational model deviate,
 which is not the case in the experiments. Altogether,
@@ -2069,7 +2069,7 @@ and~\Cref{eq:pressure_mms} are the solutions.
 To this end, we consider the general form of the steady Stokes equations
 \begin{subequations}
     \begin{align}
-        -\nabla\cdot\bsig &= \ff \qquad\mathrm{in \ }\Omega,\\
+        -\nabla\cdot\bsig &= \bm{f} \qquad\mathrm{in \ }\Omega,\\
         \nabla\cdot\uu &= g \qquad\mathrm{in \ }\Omega,
     \end{align}
     \label{eq:stokes_mms}%
@@ -2081,7 +2081,7 @@ $\beps(\uu) = \frac{1}{2}\left(\nabla\uu + (\nabla\uu)^T\right)$, and the bounda
 \end{alignat}
 where $\Gamma=\partial\Omega$ is the boundary of the domain.
 Since the velocity field defined by~\Cref{eq:velocity_mms} is divergence free by construction,
-$g = 0$. Setting the external force $\ff=-\nabla\cdot\bsig(\uu_{\mathrm{mms}}, p_{\mathrm{mms}})$
+$g = 0$. Setting the external force $\bm{f}=-\nabla\cdot\bsig(\uu_{\mathrm{mms}}, p_{\mathrm{mms}})$
 using~\Cref{eq:velocity_mms} and~\Cref{eq:pressure_mms},
 the solutions $\uu$ and $p$ to~\Cref{eq:stokes_mms} will be the ones
 defined by~\Cref{eq:velocity_mms} and~\Cref{eq:pressure_mms},
@@ -2138,15 +2138,16 @@ The cylinder had unit length and a diameter of one half length unit.
 For the analysis, we used tangential traction boundary conditions on all
 of the cylinder surface. Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}
 with the velocity and pressure expressions defined in~\Cref{subsec:mms}
-for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated $\mathbf{L}^2$
-error norms and $\mathbf{H}^1$ error semi-norms for $\uu_h$,
-and $L^2$ error norms for $p_h$~(\Cref{tab:cylinder_error_rates}).
-Based on the error norm calculations,
+for $\uu_{\mathrm{ex}}$ and $p_{\mathrm{ex}}$, we calculated the error of 
+the velocity approximation $\uu_h$
+in the $\mathbf{L}^2$ norm and $\mathbf{H}^1$ semi-norm,
+and the error of the pressure approximation $p_h$ in the $L^2$ norm (\Cref{tab:cylinder_error_rates}).
+Based on the error calculations,
 we calculated the experimental order of convergence,
 as defined in \Cref{subsec:norms_and_eoc}.
 We observe convergence in all of the reported error norms. Furthermore,
 we report the error in calculation of the maximum velocities, and observe
-convergence in this error as well. Finally, we calculated the $L^2$ norms of
+convergence in this error as well. Finally, we calculated the $L^2$ norm of
 the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
 \begin{table}[!htbp]
     \small
@@ -2155,7 +2156,7 @@ the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
     $\mathbf{L}^2$ and $\mathbf{H}^1$ norms,
     the pressure $p_h$ in the $L^2$ norm,
     and the error in the maximum velocity magnitude $\uu_{h, {\mathrm{mag}}}$
-    for mesh refinement on a cylinder mesh with the only-cilia/no-cardiac flow model.
+    for mesh refinement on a cylinder mesh with the cilia-driven/no-cardiac flow model.
     Additionally, we report the $L^2$ norm of the divergence of the velocity.
     For all error norms, convergence rates calculated
     with~\Cref{eq:convergence_order_estimate} are given
@@ -2322,7 +2323,7 @@ Particle movement varied over the different measurements. The mean of $\overline
 The maximum mean velocities
 in absolute values were 10.2 \textmu m/s and 2.4 \textmu m/s for
 $\overline{u}_x$ and $\overline{u}_y$,
-respectively. We used the only-cardiac/no-cilia flow model to tune the
+respectively. We used the cardiac-induced/no-cilia flow model to tune the
 pressure boundary condition
 amplitude $A$. The choice of $A=1.5$ mPa was used since: (i) it yields a
 maximum velocity magnitude
