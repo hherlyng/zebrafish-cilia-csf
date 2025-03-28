@@ -54,10 +54,9 @@
 
 % Math
 \newcommand{\cbar}{\overline{c}} % Mean concentration
-\newcommand{\pdifft}[1]{\frac{\partial  #1}{\partial t}}
+\newcommand{\pdifft}[1]{\frac{\partial  #1}{\partial t}} % Time derivative
 
 % Bold faced math characters
-\newcommand{\ff}{\bm{f}}
 \newcommand{\nn}{\bm{n}}
 \newcommand{\rr}{\bm{r}}
 \newcommand{\uu}{\bm{u}}
@@ -65,36 +64,35 @@
 \newcommand{\xx}{\bm{x}}
 \newcommand{\JJ}{\bm{J}}
 \newcommand{\VV}{\bm{V}}
-\newcommand{\bsig}{\bm{\sigma}}
-\newcommand{\bsigpar}{\hat{\bsig}_{\parallel}}
-\newcommand{\bsigperp}{\hat{\bsig}_{\perp}}
-\newcommand{\beps}{\bm{\varepsilon}}
-\newcommand{\btau}{\bm{\tau}}
+\newcommand{\bsig}{\bm{\sigma}} % Bold sigma (stress tensor)
+\newcommand{\bsigpar}{\hat{\bsig}_{\parallel}} % Tangential traction
+\newcommand{\bsigperp}{\hat{\bsig}_{\perp}} % Normal traction
+\newcommand{\beps}{\bm{\varepsilon}} % Bold epsilon (symmetric gradient)
+\newcommand{\btau}{\bm{\tau}} % Bold tau (cilia traction)
 
 % Discontinuity operators
 \newcommand{\avg}[1]{\{#1\}}
 \newcommand{\jump}[1]{\llbracket#1\rrbracket}
 
 % Boundaries
-\newcommand{\Gs}{\Gamma_{\mathrm{s}}}
-\newcommand{\Gc}{\Gamma_{\mathrm{c}}}
-\newcommand{\Gp}{\Gamma_{\mathrm{p}}}
-\newcommand{\Gnf}{\Gamma_{\mathrm{nf}}}
-\newcommand{\Gin}{\Gamma_{\mathrm{in}}}
-\newcommand{\Gout}{\Gamma_{\mathrm{out}}}
+\newcommand{\Gs}{\Gamma_{\mathrm{s}}} % Slip boundary
+\newcommand{\Gc}{\Gamma_{\mathrm{c}}} % Cilia boundary
+\newcommand{\Gp}{\Gamma_{\mathrm{p}}} % Anterior/Posterior pressure boundary
+\newcommand{\Gnf}{\Gamma_{\mathrm{nf}}} % No-flux boundary
+\newcommand{\Gin}{\Gamma_{\mathrm{in}}} % Inflow boundary
+\newcommand{\Gout}{\Gamma_{\mathrm{out}}} % Outflow boundary
 
 % Integrals
 \newcommand{\dx}{\, \mathrm d\bm{x}}
 \newcommand{\intO}[1]{\int_{\Omega}#1 \, \mathrm d\bm{x}}
 \newcommand{\intG}[1]{\int_{\Gamma}#1 \, \mathrm ds}
-\newcommand{\intF}[1]{\int_{\mathcal{F}_k}#1 \, \mathrm dS}
 \newcommand{\intGin}[1]{\int_{\Gamma_{\mathrm{in}}}#1 \, \mathrm ds}
 \newcommand{\intGout}[1]{\int_{\Gamma_{\mathrm{out}}}#1 \, \mathrm ds}
 \newcommand{\intGc}[1]{\int_{\Gamma_{\mathrm{c}}}#1 \, \mathrm ds}
 \newcommand{\intGp}[1]{\int_{\Gamma_{\mathrm{p}}}#1 \, \mathrm ds}
 
 % Norms
-\newcommand{\normltwo}[1]{{ \vert\vert#1\vert\vert}_{L^2}}
-\newcommand{\normltwovec}[1]{{ \vert\vert#1\vert\vert}_{\mathbf{L}^2}}
+\newcommand{\normltwo}[1]{{\vert\vert#1\vert\vert}_{L^2}}
+\newcommand{\normltwovec}[1]{{\vert\vert#1\vert\vert}_{\mathbf{L}^2}}
 \newcommand{\normlinf}[1]{{\vert\vert#1\vert\vert}_{L^{\infty}}}
-\newcommand{\Hnorm}[1]{\vert\vert#1\vert\vert_{\mathbf{H}^1}}
+\newcommand{\Hnorm}[1]{\vert#1\vert_{\mathbf{H}^1}}

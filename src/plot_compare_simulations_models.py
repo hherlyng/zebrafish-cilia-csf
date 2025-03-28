@@ -105,8 +105,8 @@ for idx, tag in enumerate(ROI_tags):
     ca_c.plot(t_hatsB[idx], c_threshold, marker='s', label='Cardiac', markersize=msize_c_plot, color=colors[1])
 
     # Add textbox with times to threshold
-    textstr = r'${\hat{t}}_0$'+f'= {t_hatsC[idx]:.1f} s\n' + \
-              r'${\hat{t}}_{\rm{II}}$'+f'= {t_hatsB[idx]:.1f} s'  
+    textstr = r'${\hat{t}}_0$'+f'= {t_hatsC[idx]:.0f} s\n' + \
+              r'${\hat{t}}_{\rm{II}}$'+f'= {t_hatsB[idx]:.0f} s' 
     props = dict(boxstyle='square', facecolor='white', alpha=0.5)
     ca_c.text(0.05, 0.90, textstr, transform=ca_c.transAxes, fontsize=27, verticalalignment='top', bbox=props)
     
