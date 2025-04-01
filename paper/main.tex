@@ -2,7 +2,7 @@
 
 \pagestyle{plain} 
 
-\title{\Large\textbf{Advection versus diffusion in cerebral intraventricular transport}}
+\title{\Large\textbf{Advection versus diffusion in brain ventricular transport}}
 
 \author[1,*]{Halvor Herlyng}
 \author[1]{Ada J.~Ellingsrud}
@@ -1415,9 +1415,7 @@ available\fixme{~\cite{zenodo-link-to-all-code}}.
 A direct solver using MUMPS~\cite{Amestoy2011Mumps} is used to solve the
 linear systems resulting from the discretized Stokes equations.
 For the discretized advection-diffusion equation, we use a flexible GMRES solver
-with block Jacobi preconditioning for the outer solves
-and ILU preconditioning for the inner solves
-\cite{fgmres, Jacobi1845UeberGleichungen, chan1997approximate}. 
+with block Jacobi preconditioning \cite{fgmres, Jacobi1845UeberGleichungen}. 
 We discretize the time-dependent diffusion equation (without advection)
 and use the assembled linear system matrix
 as the preconditioner matrix for the advection-diffusion problem.
@@ -2150,38 +2148,28 @@ we report the error in calculation of the maximum velocities, and observe
 convergence in this error as well. Finally, we calculated the $L^2$ norm of
 the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
 \begin{table}[!htbp]
-    \small
+    \footnotesize
     \centering
-    \caption{Errors of the velocity approximation $\uu_h$ in the
-    $\mathbf{L}^2$ and $\mathbf{H}^1$ norms,
-    the pressure $p_h$ in the $L^2$ norm,
-    and the error in the maximum velocity magnitude $\uu_{h, {\mathrm{mag}}}$
-    for mesh refinement on a cylinder mesh with the cilia-driven/no-cardiac flow model,
-    with $\mu=1$.
-    Additionally, we report the $L^2$ norm of the divergence of the velocity.
+    \caption{Error norms for the convergence study
+    performed with a cylinder mesh with
+    the cilia-driven/no-cardiac flow model using $\mu=1$.
     For all error norms, convergence rates calculated
     with~\Cref{eq:convergence_order_estimate} are given
-    in parentheses.}\label{tab:cylinder_error_rates}
+    in parentheses. The coarsest mesh had a mesh size $h_0$,
+    and for every mesh refinement the mesh size $h$ was halved.}\label{tab:cylinder_error_rates}
     \begin{tabular}{cc|ccccc}
         \toprule
         $h/h_0$ & \# dofs &
         $\normltwovec{\uu_h - \uu_{\mathrm{ex}}}$
         & $\Hnorm{\uu_h - \uu_{\mathrm{ex}}}$
         & $\normltwo{p_h - p_{\mathrm{ex}}}$
-        & $\normlinf{u_h} -\normlinf{u_{\mathrm{ex}}}$
+        & $\vert\normlinf{u_h} - \normlinf{u_{\mathrm{ex}}}\vert$
         & $\normltwo{\nabla\cdot\uu_h}$\\ 
         \midrule 
-        1    & 8652    & \num{2.3e-02}  (--)  & \num{4.3e-01}   (--)  & \num{5.4e-01}  (--) 
-        & \num{2.4e-02} (---) & \num{1.4e-07} \\  
-
-        1/2  & 41190   & \num{9.3e-03} (1.30) & \num{2.8e-01}  (0.61) & \num{3.7e-01} (0.53)
-        & \num{5.0e-03} (2.25) & \num{2.8e-08} \\  
-
-        1/4  & 255016  & \num{3.5e-03} (1.42) & \num{1.4e-01}  (1.00) & \num{2.1e-01} (0.79)
-        & \num{1.4e-03} (1.83) & \num{7.3e-11} \\     
-
-        1/8  & 1855337 & \num{1.3e-03} (1.46) & \num{6.9e-02}  (1.03) & \num{1.1e-01} (0.94)
-        & \num{6.7e-04} (1.08) & \num{1.4e-10} \\   
+        1    & 8652    & \num{2.3e-02}  (--)  & \num{4.3e-01}   (--)  & \num{5.6e-01}  (--)  & \num{2.4e-02}  (--)  & \num{1.4e-07} \\  
+        1/2  & 41190   & \num{9.3e-03} (1.30) & \num{2.8e-01}  (0.61) & \num{3.9e-01} (0.53) & \num{5.0e-03} (2.25) & \num{2.8e-08} \\  
+        1/4  & 255016  & \num{3.5e-03} (1.42) & \num{1.4e-01}  (1.00) & \num{2.1e-01} (0.85) & \num{1.4e-03} (1.83) & \num{7.3e-11} \\     
+        1/8  & 1855337 & \num{1.3e-03} (1.46) & \num{6.9e-02}  (1.03) & \num{1.1e-01} (0.92) & \num{6.7e-04} (1.08) & \num{1.5e-10} \\   
         \bottomrule
     \end{tabular}
 \end{table}
@@ -2192,23 +2180,20 @@ mesh~(\Cref{tab:ventricles_norms_BDM}).
 We used the original mesh obtained by meshing the surface geometry using
 fTetWild~\cite{Hu2020FastWild}; the region around the photoconversion region is not
 refined on the mesh used for the convergence study.
-For the cilia traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ introduced in~\Cref{subsec:appendixA1},
-we set a constant $\tau = 6.5\times 10^{-4}$ Pa and
-$\lambda(\xx)=1$ in the numerical experiments.
-We set $\rr = (1, 0, 1)$ in the ventral middle ventricle cilia region
-and $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and the anterior ventricle cilia
-regions. We used $\gamma=10$ for the BDM penalty parameter.
+In the numerical experiments, we used the cilia
+traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$
+defined in~\Cref{tab:r_vector_and_lambda_function}
+and $\gamma=10$ for the BDM penalty parameter.
 
 For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$.
-We also report $\normlinf{u_h}$ scaled by the area $|\Gc|=\intGc{}$ of the cilia
-boundary $\Gc$ over which tangential traction
-$\btau$ was applied. We chose this measure using $|\Gc|$ as a scale because the regions
+We also report $\normlinf{u_h}$ scaled by the total force $F=\intGc{\sqrt{\btau\cdot \btau}}$
+applied on the cilia boundary $\Gc$. We chose this measure using $F$ as a scale because the regions
 of the mesh marked as cilia-populated change slightly with every mesh refinement,
 owing to the unstructured organization of the mesh cells.
 These changes in the surface area over which the tangential traction is applied
-result in changes to the maximum velocity magnitude,
+result in changes to $\normlinf{u_h}$,
 since the maximum velocity magnitude is a result of the total amount of force
-$\intGc{\sqrt{\btau\cdot \btau}}$ applied on the cilia boundary.
+$F$ applied on the cilia boundary.
 
 To account for the fact that the volume of the domain $|\Omega|=\intO{}$ also changes
 slightly with mesh refinement, we report the $\mathbf{L}^2$ norm of $\uu_h$ scaled by $|\Omega|$.
@@ -2218,28 +2203,24 @@ implementation was millimeters, which is why~\Cref{tab:ventricles_norms_BDM}
 reports values in units of millimeters, instead of micrometers which has been used elsewhere in the paper. 
 \begin{table}[!htbp]
     \centering
+    \small
     \caption{Velocity norms under mesh refinement
-    of the brain ventricles mesh using the cilia-driven/no-cardiac flow model
-    with $\btau = \tau \lambda(\xx)P_{\nn}(\rr)$, using
-    $\lambda(\xx)=1$,
-    $\tau = 6.5\times 10^{-4}$ Pa,
-    $\rr = (1, 0, 1)$ in the ventral middle ventricle and,
-    $\rr = -(1, 0, 1)$ in the dorsal middle ventricle and
-    the anterior ventricle.}\label{tab:ventricles_norms_BDM}
+    of the brain ventricles mesh using the cilia-driven/no-cardiac flow model.}
+    \label{tab:ventricles_norms_BDM}
     \begin{tabular}{cc|cccc}
         \toprule
         \# cells & \# dofs &
         $\normlinf{u_h}$ $\left[\frac{\mathrm{mm}}{\mathrm{s}}\right]$
-        & $\frac{1}{|\Gc|}\normlinf{u_h}$ $\left[\frac{1}{\mathrm{mm\cdot s}}\right]$
+        & $\frac{1}{F}\normlinf{u_h}$ $\left[\frac{1}{\mathrm{Pa\cdot mm\cdot s}}\right]$
         & $\frac{1}{\vert\Omega\vert}\normltwovec{\uu_h}$
         $\left[\frac{\mathrm{mm}}{\mathrm{s}}\right]$
         & $\normltwo{\nabla\cdot\uu_h}$ $\left[\frac{\mathrm{mm^3}}{\mathrm{s^2}}\right]$\\
         \midrule 
-        132134  & 943820  & 0.0276 & 0.97 & \num{3.6e-03} & \num{6.3e-16}\\
-        180901  & 1289881 & 0.0284 & 0.98 & \num{3.7e-03} & \num{1.5e-13}\\
-        262598  & 1870703 & 0.0292 & 0.98 & \num{3.8e-03} & \num{6.2e-16}\\
-        395339  & 2811668 & 0.0292 & 0.96 & \num{3.8e-03} & \num{1.9e-14}\\
-        627439  & 4448761 & 0.0286 & 0.92 & \num{3.7e-03} & \num{4.6e-14}\\
+        132134  & 943820  & 0.026 & \num{3.8e3} & \num{2.2e-03} & \num{1.9e-16}\\
+        180901  & 1289881 & 0.027 & \num{3.7e3} & \num{2.2e-03} & \num{3.0e-16}\\
+        262598  & 1870703 & 0.027 & \num{3.7e3} & \num{2.3e-03} & \num{6.7e-16}\\
+        395339  & 2811668 & 0.028 & \num{3.6e3} & \num{2.2e-03} & \num{2.0e-14}\\
+        627439  & 4448761 & 0.027 & \num{3.5e3} & \num{2.2e-03} & \num{4.9e-14}\\
         \bottomrule
     \end{tabular}
 \end{table}
