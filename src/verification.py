@@ -218,6 +218,23 @@ def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bo
     L -= inner(Tangent(v, n), tangent_traction_anterior1) * ds(ANTERIOR_CILIA1)
     L += inner(Tangent(v, n), tangent_traction_ventral) * ds(MIDDLE_VENTRAL_CILIA)
     L += inner(Tangent(v, n), tangent_traction_anterior2) * ds(ANTERIOR_CILIA2)
+
+    def calculate_tangential_force(traction_vector, tags: tuple[int] | int):
+
+            # Integrate the tangential traction to get the force
+            force = dfx.fem.assemble_scalar(
+                        dfx.fem.form(
+                                     ufl.sqrt(inner(traction_vector, traction_vector))*ds(tags)
+                                    )
+                                )
+
+            # Return the integral accumulated across procs                                
+            return mesh.fcomm.allreduce(force, op=MPI.SUM)
+    total_force = (calculate_tangential_force(tangent_traction_dorsal, MIDDLE_DORSAL_CILIA)
+                 + calculate_tangential_force(tangent_traction_ventral, MIDDLE_VENTRAL_CILIA)
+                 + calculate_tangential_force(tangent_traction_anterior1, ANTERIOR_CILIA1)
+                 + calculate_tangential_force(tangent_traction_anterior2, ANTERIOR_CILIA2)
+    )
     
     # Impose impermeability boundary condition strongly
     # Create facet-cell connectivity and get the facets of the slip boundary
@@ -252,7 +269,7 @@ def get_system(msh: dfx.mesh.Mesh, penalty_val: float, mu_val: float, direct: bo
     a_prec_cpp = dfx.fem.form(a_prec)
     B, _ = assemble_system(a_prec_cpp, L_cpp, bcs)
 
-    return A, b, W, B
+    return A, b, W, B, total_force
 
 def solve(A: PETSc.Mat, B: PETSc.Mat, b: PETSc.Vec, W: dfx.fem.FunctionSpace, direct: bool):
     wh = dfx.fem.Function(W)
@@ -360,7 +377,7 @@ if __name__ == "__main__":
         eu_div_prev = 0
         ep_L2_prev  = 0
 
-        for i in [0, 1, 2, 3, 4, 5]:
+        for i in [0, 1, 2, 3]:
 
             with dfx.io.XDMFFile(MPI.COMM_WORLD, f"../geometries/cylinder/cylinder_{i}.xdmf", "r") as xdmf:
                 mesh = xdmf.read_mesh()
@@ -438,13 +455,13 @@ if __name__ == "__main__":
         # init
         headers = ("hmin", "hmax", "#cells", "dimW", "|u|_0", "|u|_Linf", "|u|_Linf_s", "|div u|_0", "niters", "|r|")
 
-        for i in [3]:#[0, 1, 2]:
+        for i in [0, 1, 2, 3, 4]:
             
             with dfx.io.XDMFFile(MPI.COMM_WORLD, f"../geometries/ventricles/ventricles_{i}.xdmf", "r") as xdmf:
                 mesh = xdmf.read_mesh()
 
             mu_value = 7e-4
-            A, b, W, B = get_system(mesh, penalty_value, mu_value, direct)
+            A, b, W, B, total_force = get_system(mesh, penalty_value, mu_value, direct)
             uh, ph, uh_out, niters, rnorm = solve(A, B, b, W, direct)
 
             # Calculate mean pressure and subtract it from the calculated pressure
@@ -452,8 +469,6 @@ if __name__ == "__main__":
             dx = ufl.Measure("dx", domain=mesh)
             ds = ufl.Measure("ds", domain=mesh, subdomain_data=ft)
             vol = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1 * dx)), op=MPI.SUM)
-            gamma_c = mesh.comm.allreduce(dfx.fem.assemble_scalar(dfx.fem.form(1*ds((ANTERIOR_CILIA1, ANTERIOR_CILIA2, 
-                                                                                     MIDDLE_DORSAL_CILIA, MIDDLE_VENTRAL_CILIA)))), op=MPI.SUM)
             mean_p_h = mesh.comm.allreduce(1/vol * dfx.fem.assemble_scalar(dfx.fem.form(ph * dx)), op=MPI.SUM)
 
             ph.x.array[:] -= mean_p_h
@@ -469,7 +484,7 @@ if __name__ == "__main__":
             uh_mag_max = uh_mag.max()
             u_Linf = mesh.comm.allreduce(uh_mag_max, op=MPI.MAX)
             print("Max velocity: ", u_Linf)
-            u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/gamma_c, op=MPI.MAX)
+            u_Linf_scaled = mesh.comm.allreduce(uh_mag_max/total_force, op=MPI.MAX)
 
             tdim = mesh.topology.dim
             num_cells = mesh.topology.index_map(tdim).size_local

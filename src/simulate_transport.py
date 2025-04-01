@@ -20,7 +20,6 @@ Author: Halvor Herlyng, 2023-.
 """
 
 print = PETSc.Sys.Print
-# PETSc.Log.begin()
 
 # Set compiler options for runtime optimization
 cache_dir = f"{str(Path.cwd())}/.cache"
@@ -397,9 +396,6 @@ class TransportSolver:
             self.solver.setType("fgmres")
             self.solver.getPC().setType("bjacobi")
             self.solver.setTolerances(rtol=1e-10)
-            opts = PETSc.Options()
-            opts.setValue("sub_pc_type", "ilu")
-            self.solver.setFromOptions()
         
     def assemble_system_matrix(self):
         """ Assemble the system matrix of the variational problem. """
@@ -536,7 +532,6 @@ class TransportSolver:
                 # Solve
                 self.solver.solve(self.b, self.c_h.x.petsc_vec)
                 self.c_h.x.scatter_forward()
-                # PETSc.Log.view()
 
                 # Update previous timestep solution
                 self.c__.x.array[:] = self.c_.x.array.copy()
@@ -606,14 +601,14 @@ if __name__ == "__main__":
     # B = cardiac-induced/no-cilia
     # C = cilia+cardiac (baseline)
 
-    model_version = "B" 
-    write_data = True # Write ROI mean concentrations as numpy data
+    model_version = "C" 
+    write_data = False # Write ROI mean concentrations as numpy data
     write_output_vtx = False # Write VTX output file
     write_output_xdmf = False # Write XDMF output file
     write_checkpoint  = False # Write DOLFINx fem function concentration checkpoints
-    write_snapshot_checkpoint = True # Write checkpoints at specific periods defined in class
+    write_snapshot_checkpoint = False # Write checkpoints at specific periods defined in class
     use_direct_solver = False # Use a direct or iterative solver
-    k = 2 # DG element polynomial degree
+    k = 1 # DG element polynomial degree
     
     # Molecule options:
     # D1 = Extracellular vesicles (radius 150 nm)
@@ -660,7 +655,7 @@ if __name__ == "__main__":
     # Temporal parameters
     f = 2.22         # Cardiac frequency [Hz]
     period = 1 / f   # Cardiac period [s]
-    T  = 1900*period # Simulation end time
+    T  = 2*period # Simulation end time
     period_partition = 20
     dt = period / period_partition # Timestep size [s]
     print("Transport simulation information:")
