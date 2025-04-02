@@ -433,33 +433,55 @@ while the cilia affect the downstream mean concentrations.
     \label{fig:fig4}
 \end{figure}
 
-\subsection{Loss of cilia motility in specific subpopulation slows down transport}
+\subsection{Regional loss of cilia motility delays transport}
 
-We previously characterized three distinct ciliated cell lineages in the
-zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment, DGama2025MotileBrain}.
-To identify the effects of these lineages on CSF flow and transport, 
-we investigate region-specific cilia paralysis with the computational model.
-Three cilia-covered regions were considered paralyzed separately:
-the anterior ventricle, and the dorsal and ventral parts
-of the middle ventricle (\Crefpanels{fig:fig5}{a}).
-To simulate cilia paralysis, the cilia tangential traction boundary condition
-is for each case changed to a free-slip boundary condition
-in the paralyzed region,
-prescribing zero tangential forces to
-represent absence of cilia motion.
+We previously characterized three distinct ciliated cell lineages in
+the zebrafish larval brain~\cite{Olstad2019CiliaryDevelopment,
+  DGama2025MotileBrain}.  To identify the effects of these lineages on
+CSF flow and transport, we investigate region-specific cilia paralysis
+with the computational model.  Three cilia-covered regions were
+paralyzed separately: the anterior ventricle, and the dorsal and
+ventral parts of the middle ventricle (\Crefpanels{fig:fig5}{a}).  To
+simulate regional cilia paralysis, we remove the tangential traction exerted by
+the cilia in the respective region.
+%
+%% the cilia tangential traction boundary condition is for each case
+%% changed to a free-slip boundary condition in the paralyzed region,
+%% prescribing zero tangential forces to represent absence of cilia
+%% motion.
+%
 
-The CSF velocities are most strongly
-affected when removing cilia in the dorsal part of the middle ventricle,
-as the maximum velocity magnitude drops from 27.9 \textmu m/s to 7.9 \textmu m/s.
-In vivo, these dorsal cilia generate the strongest flow at
-this developmental stage of the fish~(\Crefpanels{fig:fig1}{c})~\cite{Olstad2019CiliaryDevelopment}.
-In contrast, removing cilia in the anterior ventricle or the ventral region of the middle
-ventricle has minimal impact, and results in maximum speeds
-of 27.9 \textmu m/s and 27.4 \textmu m/s, respectively.
-Of the total tangential forces exerted by the cilia, ventral cilia in the middle ventricle
-contribute with 34\%, while the dorsal cilia exert 52\% of the total tangential
-force~(\Crefpanels{fig:fig5}{b}). The magnitude of these force contributions are thus
-more similar than the difference in their impact on the maximum velocity magnitudes.
+Removing cilia in the dorsal part of the middle ventricle has a strong
+effect on the CSF velocities: the maximum velocity magnitude drops
+from 27.9 \textmu m/s to 7.9 \textmu m/s. In vivo, these dorsal cilia
+generate the strongest flow at this developmental stage of the
+fish~(\Crefpanels{fig:fig1}{c})~\cite{Olstad2019CiliaryDevelopment}.
+In contrast, only removing cilia in the anterior ventricle or the
+ventral region of the middle ventricle has minimal impact, and results
+in maximum speeds of 27.9 \textmu m/s and 27.4 \textmu m/s,
+respectively.  We remark that out of the total tangential forces,
+ventral cilia in the middle ventricle contribute by 34\%, while the
+dorsal cilia exert 52\% of the total tangential
+force~(\Crefpanels{fig:fig5}{b}). \mer{Thus, the CSF velocities are
+  affected not only by the magnitude of the applied forces, but result
+  from a nontrivial interplay between force, directionality and
+  location.}
+%% The magnitude of these force
+%% contributions are thus more similar than the difference in their
+%% impact on the maximum velocity magnitudes.
+
+Turning to transport of Dendra2, we again note that removal of the
+dorsal cilia has the most pronounced effect. All mean concentration
+profiles (except ROI 1, where we impose the photoconversion curve)
+change noticeably (\Crefpanels{fig:fig5}{c}). Compared to the baseline
+model results, we observe less solute distribution in the middle and
+anterior ventricles (ROIs 2--5), and more rapid transport to the
+posterior ventricle (ROI 6). On the other hand, removal of anterior
+cilia does not alter the mean concentrations
+(\Crefpanels{fig:fig5}{c}). Finally, without ventral cilia in the
+middle ventricle, more solute spreads towards the anterior ventricle
+(ROI 5) and less solute spreads towards the posterior ventricle (ROI
+6).
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
@@ -475,18 +497,6 @@ more similar than the difference in their impact on the maximum velocity magnitu
     \label{fig:fig5}
 \end{figure}
 
-Changes in the transport of Dendra2 are most prominent when removing the dorsal cilia
-in the middle ventricle. All mean concentration profiles 
-(except ROI 1, where we impose the photoconversion curve)
-exhibit changes (\Crefpanels{fig:fig5}{c}).
-Compared to the baseline model results, we observe less solute distribution
-in the middle and anterior ventricles (ROIs 2--5),
-and more rapid transport to the posterior ventricle (ROI 6).
-On the other hand, removal of anterior cilia does not alter the 
-mean concentrations (\Crefpanels{fig:fig5}{c}).
-Finally, without ventral cilia in the middle ventricle,
-more solute spreads towards the anterior ventricle (ROI 5) and
-less solute spreads towards the posterior ventricle (ROI 6).
 
 \subsection{Modification of ventricular geometry impacts solute distribution}
 Variations in ventricular morphology impact CSF flow patterns~\cite{Olstad2019CiliaryDevelopment}.
