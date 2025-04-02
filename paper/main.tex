@@ -499,46 +499,54 @@ middle ventricle, more solute spreads towards the anterior ventricle
 
 
 \subsection{Modification of ventricular geometry impacts solute distribution}
-Variations in ventricular morphology impact CSF flow patterns~\cite{Olstad2019CiliaryDevelopment}.
-To assess how these variations influence solute distribution,
-we consider four alternative ventricular geometries:
-one where the duct connecting the anterior and middle ventricles is constricted
-(66 \% reduction in cross-sectional area);
-one where the duct connecting the middle and posterior ventricles is constricted
-(33 \% reduction);
-one where the middle ventricle is shrunk in the lateral direction (43 \% reduction);
-and the combination of the above three modifications (\Crefpanels{fig:fig6}{a, b}).
+Variations in ventricular morphology impact CSF flow
+patterns~\cite{Olstad2019CiliaryDevelopment}.  To assess how these
+variations influence solute distribution, we consider four alternative
+ventricular geometries: (i) constriction of the anterior-middle
+ventricular duct (66 \% reduction in cross-sectional area); (ii) constriction of the middle-posterior duct (33 \% reduction); (iii) middle ventricle shrunk in the lateral direction (43 \% reduction); and (iv) all three combined (\Crefpanels{fig:fig6}{a, b}).
+%
+%% one where the duct connecting the anterior and middle ventricles is constricted
+%% (66 \% reduction in cross-sectional area);
+%% one where the duct connecting the middle and posterior ventricles is constricted
+%% (33 \% reduction);
+%% one where the middle ventricle is shrunk in the lateral direction (43 \% reduction);
+%% and the combination of these three modifications (\Crefpanels{fig:fig6}{a, b}).
+%
+%
 In these four modified geometries, the total volume is reduced by
-3.9\%, 4.1\%, 1.4\% and 9.4\%, respectively,
-compared to the original geometry.
-
-Constricting the connection between the anterior and middle ventricle reduces
-solute transport to the anterior ventricle (ROI 5),
-and the mean concentration in ROIs 2--4 and 6 slightly increases, compared to the original geometry
-(\Crefpanels{fig:fig6}{c}). This is notwithstanding a
+3.9\%, 4.1\%, 1.4\% and 9.4\%, respectively, compared to the original
+geometry. \mer{MER: HH adds a sentence on changes in tangential
+  traction(\Crefpanels{fig:fig6}{d}). This is notwithstanding a
 9.5\% reduction in ventral cilia force magnitude
-(\Crefpanels{fig:fig6}{d}), which are the cilia that propel CSF and solute towards ROI 6.
-Constricting the mid-hind brain connection
-leads to less transport into the posterior ventricle (ROI 6),
-and slightly more transport towards the anterior ventricle (ROI 5).
-Faster transport to the anterior ventricle (ROI 5) and slower transport to the
-posterior ventricle (ROI 6) is also the case for the geometry with a
-shrunk middle ventricle.
-This reduction in the transport to the posterior ventricle (ROI 6)
-happens in spite of a 6.6\% increase in the ventral cilia forces.
-Additionally, for the shrunk middle configuration, the transport upstream of CSF flow towards the
-ventral-posterior region of the middle ventricle (ROI 3) is slowed down.
+(\Crefpanels{fig:fig6}{d}), which are the cilia that propel CSF and solute towards ROI 6.)}
 
-For the mesh where all three ventricles are modified,
+Constricting the connection between the anterior and middle ventricle
+reduces solute transport to the anterior ventricle (ROI 5), and the
+mean concentration in ROIs 2--4 and 6 slightly increases, compared to
+the original geometry (\Crefpanels{fig:fig6}{c}). \mer{We thus note
+  that restricting the ...} Constricting the middle-posterior duct
+mainly delays the transport into the posterior ventricle (ROI 6),
+while \mer{gently} accelerating transport towards the anterior
+ventricle (ROI 5). Faster transport to the anterior ventricle (ROI 5)
+and slower transport to the lower middle and posterior ventricle
+(ROI3, ROI 6) is also the case for the geometry with a shrunk middle
+ventricle. \mer{Interestingly, this reduction in the transport to the
+  posterior ventricle (ROI 6) happens in spite of a 6.6\% increase in
+  the ventral cilia forces.}
+%
+%For the mesh where all three ventricles are modified,
+When combining all three modifications,
 we observe higher retention of solute in the middle ventricle (ROIs 2--4),
-while both the anterior and the posterior ventricles (ROIs 5 and 6) have reduced
-mean concentrations. To summarize, our results show that the
-ventricular geometry and the cross-sectional area of the ventricular ducts matter
-for solute transport, with notable differences in transport resulting from
-relatively modest geometry modifications. This may explain why
-we observed larger differences in the cilia-deficient computational
-model results compared to the experimental data in \Cref{fig:fig4},
-as the model and the fish have slightly different geometries.
+while the mean concentration is reduced in both the anterior and the posterior ventricles (ROIs 5 and 6)s.
+
+To summarize, these results show that the ventricular geometry and the
+cross-sectional area of the ventricular ducts clearly impact solute
+transport, with notable differences in transport resulting from modest
+geometry modifications. These findings may explain the larger
+differences in the cilia-deficient computational model results
+compared to the experimental data in \Cref{fig:fig4}, \mer{as the
+computational geometry is not an exact representation for the
+individual zebrafish ventricles.} 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
