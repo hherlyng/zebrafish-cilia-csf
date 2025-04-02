@@ -373,48 +373,42 @@ experimental values (\Crefpanels{fig:fig3}{c, d}).
 
 \subsection{Absence of ciliary motion affects local solute distribution}
 
-Ciliary motion is integral to physiological CSF flow,
-and absence of cilia has been associated with defective
-brain development and various pathologies~\cite{Eichele2020Cilia-drivenVentricle,
-Olstad2019CiliaryDevelopment, Faubel2016Cilia-basedVentricles,
-Guirao2010CouplingCilia, Afzelius2004CiliaRelatedDiseases,
-Sawamoto2006NewBrain, Yoshiba2014RolesSymmetry,
-Hirokawa2006NodalAsymmetry}.
-As observed both experimentally and computationally,
-absence of motile cilia alters CSF flow patterns. 
-We next investigate the implications of these changes on intraventricular
-transport.
+Ciliary motion is integral to physiological CSF flow, and absence of
+cilia has been associated with defective brain development and various
+pathologies~\cite{Eichele2020Cilia-drivenVentricle,
+  Olstad2019CiliaryDevelopment, Faubel2016Cilia-basedVentricles,
+  Guirao2010CouplingCilia, Afzelius2004CiliaRelatedDiseases,
+  Sawamoto2006NewBrain, Yoshiba2014RolesSymmetry,
+  Hirokawa2006NodalAsymmetry}.  As observed both experimentally and
+computationally, absence of motile cilia alters CSF flow patterns.  We
+next investigate the implications of these changes on intraventricular
+transport. We experimentally measured the movement of proteins by
+monitoring photoconverted Dendra2 signal in control zebrafish and
+motile-cilia mutant \emph{schmalhans} (\emph{smh}) zebrafish.  In ROIs
+2 and 4, which quantify Dendra2 distribution downstream of the
+photoconversion site, we observed a slower increase of fluorescence
+intensity (\Crefpanels{fig:fig4}{a}): the mean times-to-threshold in
+the \emph{smh} mutants were $45\%$ (ROI 2) and $25\%$ (ROI 4) higher
+compared to controls (\Crefpanels{fig:fig4}{b}). We found no
+significant differences between \emph{smh} mutants and controls in the
+Dendra2 distribution in ROIs 3, 5, and 6.
 
-We experimentally measured the movement of proteins by monitoring
-photoconverted Dendra2 signal in control zebrafish and 
-motile-cilia mutant \emph{schmalhans} (\emph{smh}) zebrafish.
-In ROIs 2 and 4, which quantify Dendra2 distribution
-downstream of the photoconversion site, we observed a slower increase
-of fluorescence intensity (\Crefpanels{fig:fig4}{a}). The mean times-to-threshold
-in the \emph{smh} mutants were $45\%$ (ROI 2) and $25\%$ (ROI 4) higher
-compared to controls (\Crefpanels{fig:fig4}{b}). We found no significant differences
-between \emph{smh} mutants and controls
-in the Dendra2 distribution in ROIs 3, 5, and 6.
-
-The \emph{smh} mutants are mimicked in the computational model by
+In the computational model, we represent the \emph{smh} mutants by
 considering transport of Dendra2 with CSF flow driven by cardiac
 pressure pulsations only, representing the absence of motile
 cilia. Comparing the in silico mutants with transport predictions in
 the presence of both cardiac pulsations and motile cilia, we observe
 noticeably delayed dynamics in ROIs 2, 4 and 5, but little change for
-ROIs 3 and 6 (\Crefpanels{fig:fig4}{c}).
-
-Compared to experimental data, the difference between the control and
-mutant scenarios was even greater for the simulations, with the
-times-to-threshold in ROI 2 and 4 being 81\% and 28\% higher in the
-absence of cilia-mediated flow. Moreover, the ROI 5 $\cbar$ profiles
-for the two configurations in our computational model deviate,
-which is not the case in the experiments. Altogether,
-our findings identify that, for smaller proteins such as Dendra2,
-diffusion plays an important role for
-solute movement to regions upstream in the cilia-mediated flow fields or to
-distant ventricles, while cilia affect the downstream mean concentrations.
-
+ROIs 3 and 6 (\Crefpanels{fig:fig4}{c}). Compared to experimental
+data, the control and mutant scenarios differed more for the
+simulations, with the times-to-threshold in ROI 2 and 4 being 81\% and
+28\% higher in the absence of cilia-mediated flow. Moreover, the
+predicted mean concentrations in ROI 5 deviate between the two
+scenarios, which is not the case in the experiments. Altogether, our
+findings identify that, for smaller proteins such as Dendra2,
+diffusion plays an important role for solute movement to regions
+upstream in the cilia-mediated flow fields or to distant ventricles,
+while the cilia affect the downstream mean concentrations.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
