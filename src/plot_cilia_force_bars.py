@@ -13,8 +13,7 @@ plt.rcParams.update({
 
 save_figs = 1
 regions = ['Dorsal', 'Ventral', 'Anterior', 'Total']
-versions = ['Original', 'Shrunk fore-mid', 'Shrunk middle', 'Shrunk mid-hind', 'Fore+middle+hind']
-
+versions = ['Original', 'Anterior-middle constricted', 'Middle shrunk', 'Middle-posterior constricted', 'Anterior+middle+posterior']
 
 ##########################
 ##  FIGURE 5 BAR PLOT   ##
@@ -76,7 +75,7 @@ for bar_container, hatch in zip(bars.containers, hatches):
         bar.set_hatch(hatch)
 
 
-ax_bars.legend(labels=versions, loc='center', bbox_to_anchor=(1.125, 0.5),
+ax_bars.legend(labels=versions, loc='center', bbox_to_anchor=(1.175, 0.5),
                    fontsize=17, frameon=True, fancybox=False, edgecolor='k')
 ax_bars.set_ylabel('Relative tangential force [%]', fontsize=22, labelpad=20)
 ax_bars.set_ylim([65, 115])
@@ -86,6 +85,6 @@ ax_bars.set_xticks(df_forces.index.values)
 ax_bars.set_xticklabels(regions)
 ax_bars.set_xlabel('')
 ax_bars.tick_params(axis='both', labelsize=20)
-fig_bars.subplots_adjust(right=0.80, left=0.1)
+fig_bars.subplots_adjust(right=0.75, left=0.1)
 if save_figs: fig_bars.savefig('../output/illustrations/compare_geometry/fig6_cilia_forces_bar_plot.png')
 plt.show()

@@ -131,17 +131,17 @@ for row_idx in range(ax_c.shape[0]):
         ca_c = ax_c[row_idx, col_idx]
     
         ca_c.plot(times, c_bar1[:, idx], color=colors[0], label='Original', linewidth=lw)
-        ca_c.plot(times, c_bar2[:, idx], color=colors[1], linestyle='--', marker='o', markevery=2000, label='Shrunk fore-mid', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar3[:, idx], color=colors[2], linestyle='--', marker='^', markevery=2000, label='Shrunk middle', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar4[:, idx], color=colors[3], linestyle='--', marker='s', markevery=2000, label='Shrunk mid-hind', linewidth=lw, markersize=msize)
-        ca_c.plot(times, c_bar5[:, idx], color=colors[4], linestyle='--', marker='p', markevery=2000, label='Fore+middle+hind', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar2[:, idx], color=colors[1], linestyle='--', marker='o', markevery=2000, label='Anterior-middle constricted', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar3[:, idx], color=colors[2], linestyle='--', marker='^', markevery=2000, label='Middle shrunk', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar4[:, idx], color=colors[3], linestyle='--', marker='s', markevery=2000, label='Middle-posterior constricted', linewidth=lw, markersize=msize)
+        ca_c.plot(times, c_bar5[:, idx], color=colors[4], linestyle='--', marker='p', markevery=2000, label='Anterior+middle+posterior', linewidth=lw, markersize=msize)
 
-        ca_c.set_title(f'ROI {tag}', fontsize=30, pad=2.0)
+        ca_c.set_title(f'ROI {tag}', fontsize=28, pad=1.5)
         ca_c.set_xticks([0, 250, 500, 750])
         ca_c.tick_params(labelsize=30)
         
-        if col_idx==0: ca_c.set_ylabel(r"Mean conc. $\overline{c}$ [-]", fontsize=32)    
-        if row_idx==(ax_c.shape[0]-1): ca_c.set_xlabel("Time [s]", fontsize=35, labelpad=25)
+        if col_idx==0: ca_c.set_ylabel(r"Mean concentration $\overline{c}$ [-]", fontsize=32, labelpad=15)    
+        if row_idx==(ax_c.shape[0]-1): ca_c.set_xlabel("Time [s]", fontsize=35, labelpad=20)
         if tag==1: ca_c.legend(loc='lower right', fontsize=22, frameon=True, fancybox=False, edgecolor='k')
 
         idx += 1
