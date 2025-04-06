@@ -16,6 +16,9 @@
 \affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}, \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
 \date{\vspace{-2em}} % Remove space between affiliations and abstract
 
+
+\newcommand{\miro}[1]{{\color{cyan}#1}}
+
 \begin{document}
 
 \maketitle
@@ -189,7 +192,7 @@ Assuming that viscous forces are dominating the ventricular CSF flow,
 we model the flow by the Stokes equations.
 The net forces of motile cilia acting on the CSF are modeled as a steady,
 bidirectional tangential traction acting on parts of the ventricular wall
-(\Crefpanels{fig:fig1}{d}), with free velocity slip at the walls.
+(\Crefpanels{fig:fig1}{d}), with \miro{no-penetration condition at the walls}.
 Simulations show that this traction alone
 leads to a partial compartmentalization of the ventricular system,
 with large-scale vortex structures in the anterior, middle and
@@ -636,8 +639,7 @@ Even though we identified similar dynamics in simulations and
 in vivo experiments, the transport dynamics of the simulations were generally
 more rapid and resulted in higher total amounts of solute.
 Differences between experiments and simulations may relate to
-ventricular size, as we showed that modifying the geometry of the
-ventricular geometry impacts solute distribution,
+ventricular size, as we showed that modifying the ventricular geometry impacts solute distribution,
 and the ventricular size varies substantially 
 in the control population at 2 dpf.
 Additionally, differences may result
@@ -746,10 +748,9 @@ The Brezzi-Douglas-Marini and discontinuous Galerkin scheme
 $\mathrm{BDM}_1$-$\mathrm{DG}_0$
 we used to discretize the Stokes equations
 is computationally more expensive
-than \fixme{conventional} methods such as a
-Taylor-Hood discretization
-($P_k-P_{k-1}$ elements)~\cite{Stenberg1990ErrorProblem} or lower-order enriched
-elements (such as $P_1-P_1$ with a velocity stabilization)~\cite{Brezzi2011MixedMethods}.
+than \fixme{conventional methods} \miro{ the more commonly used discretizations} such as a
+Taylor-Hood ($P_2-P_{1}$ elements)~\cite{Stenberg1990ErrorProblem} or lower-order enriched
+elements (e.g. MINI)~\cite{Brezzi2011MixedMethods}.
 Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
 than or equal to the integer $k$.
 We opted for the BDM-DG scheme because of its exactly-mass-conserving property;
@@ -768,7 +769,7 @@ the impermeability boundary condition must
 be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
 or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
 Bertoluzza2017BoundaryHemodynamics}, which affects
-convergence properties and increases problem complexity
+convergence properties \miro{$<<$what do you mean here?} and increases problem complexity
 (see \Cref{subsec:appendixA1} for more details).
 
 \subsection{Outlook}
@@ -836,7 +837,7 @@ Animals were in the pigmentless \emph{nacre\textsuperscript{b692}}
 Wholemount in vivo live imaging and photoconversion
 experiments were performed with zebrafish larvae at the 2 dpf stage obtained from inbreeding of heterozygous
 \emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xUAS:Signal-Dendra2})
-adult animals, as described by D'Gama~\emph{et al.}~\cite{DGama2024Cilia-mediatedBrain}.
+adult animals, as described by D'Gama~\emph{et al.}~\cite{DGama2024Cilia-mediatedBrain}. \miro{$<<$ undef ref here}
 Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+})
 or \emph{smh}\textsuperscript{+/-} heterozygous zebrafish from the same breeding.
 The mutants were identified based on their curved body~\cite{Jau-NianChen1997Left-rightZebrafish}.
@@ -1011,13 +1012,13 @@ In addition, cardiac pulsations induce pulsatile CSF flow.
 We model this flow of CSF by the time-dependent,
 incompressible Stokes equations which read as follows.
 Find the CSF velocity $\uu = \uu(\xx, t) = (u_x(\xx, t), u_y(\xx, t), u_z(\xx, t))$
-and the CSF pressure $p = p(\xx, t)$ for $\xx \in \Omega$ and time $t>0$, such that
+and the CSF pressure $p = p(\xx, t)$ for $\xx \in \Omega$ and time $t\in(0, T]$, such that
 \begin{subequations}
     \begin{align}
       \rho \pdifft{\uu} - \nabla \cdot \bsig &= \mathbf{0}
-      \quad \text{in } \Omega,\\
+      \quad \text{in } \Omega\times(0, T],\\
       \nabla \cdot \uu &= 0 
-      \quad  \text{in } \Omega,\label{eq:stokes_eqs_cont} 
+      \quad  \text{in } \Omega\times(0, T],\label{eq:stokes_eqs_cont} 
   \end{align}
   \label{eq:stokes_eqs}% 
 \end{subequations}%
@@ -1095,9 +1096,9 @@ as compared to the effect of cilia motion on the flow (cf.~\Cref{sec:appC_partic
 \subsection{Computational model of solute transport after photoconversion}
 We simulate transport of photoconverted proteins within the brain ventricles by
 modeling transport of a solute with concentration $c(\xx, t)$ for $\xx\in\Omega$ and
-time $t > 0$ by the advection-diffusion equation
+time $t\in(0, T]$ by the advection-diffusion equation
 \begin{equation}
-    \pdifft{c} + \nabla\cdot\JJ = 0 \quad \text{in } \Omega,
+    \pdifft{c} + \nabla\cdot\JJ = 0 \quad \text{in } \Omega\times(0, T],
     \label{eq:adv_diff_strong}
 \end{equation}
 where the total concentration flux $\JJ$ is assumed to consist of an advective and a diffusive flux:
@@ -1128,9 +1129,12 @@ in the concentration field may arise from imposing $c(\xx, t)$ in $\Omega_{\math
 the mesh is locally refined around this region.
 
 In order to impose a smooth initial condition, we initially solve the diffusion equation
-\begin{equation*}
-    \pdifft{c} = \Tilde{D}\nabla^2 c
-\end{equation*}
+\begin{equation}\label{eq:cinit}
+  \begin{aligned}
+    &\pdifft{c} = \Tilde{D}\nabla^2 c \quad \text{in } \Omega\times(0, 2\Delta t]\\
+      &c(\xx, t=0) = 0\quad\text{ in }\Omega
+  \end{aligned}\
+\end{equation}
 with an increased diffusion coefficient $\Tilde{D}=D\times 10^{5}$ for two timesteps.
 The solutions are normalized by their respective maximum values, and subsequently
 multiplied with the value of \Cref{eq:photoconversion_curve} at the times $t=\Delta t$
@@ -1145,7 +1149,7 @@ Motivated by an interest in molecules that are significant in neural development
 we study the transport of molecules resembling (i) the Dendra2 Fluorescent Protein (Dendra2)
 used in the photoconversion, (ii) the Starmaker+Green Fluorescent Protein (STM-GFP) reported by
 Jeong~\emph{et al.}~\cite{Jeong2024TheZebrafish}, and (iii) extracellular vesicles.
-To estimate the diffusion coefficients of these, when not
+To estimate their diffusion coefficients, when not
 available in the literature, we use the Stokes--Einstein relation
 \begin{equation}
     D = \frac{k_B T}{6\pi \mu R},
@@ -1243,7 +1247,7 @@ in space, while in time, we employ a first-order implicit Euler discretization~\
 We set the timestep size $\Delta t = 0.023$ s such that 20 timesteps represent one cardiac cycle.
 For the spatial discretization, we use piecewise linear Brezzi-Douglas-Marini (BDM)
 elements for the velocity.~\cite{Brezzi1985TwoProblems, Nedelec1986AIR3}
-The BDM elements have degrees of freedom associated with integral moments of the
+The BDM elements degrees of freedom are associated with integral moments of the
 velocity component normal to the facets of elements,
 thus we enforce the impermeability condition $\uu\cdot\nn=0$ strongly.
 We impose the boundary conditions for both the tangential traction $\bsigpar$ and
@@ -1251,17 +1255,18 @@ the normal pressure $\Tilde{p}(t)$ weakly.
 For the pressure, we use piecewise constant (zeroth order discontinuous Galerkin (DG)) elements.
 The resulting total number of degrees of freedom at each time step is 1 009 874.
 The element combination $\mathrm{BDM}_1$--$\mathrm{DG}_{0}$ yields a non-conforming
-discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}.
+discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}. \miro{In particular,
+  with BDM only the normal component of the velocity is continuous.}
 Continuity in tangential velocities on interior facets
 is weakly enforced with a penalty parameter $\gamma=10$~\cite{Hong2016AEquations}.
 Since the divergence of the velocity function space is the pressure function space for this scheme,
 the divergence-free condition of the velocity is satisfied exactly, ensuring mass conservation.~\cite{Boffi2008FiniteProblem} 
 
 \subsection{Numerical approximation of the advection-diffusion equation}\label{subsec:num_approx_adv_diff}
-The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized
-with with a second-order, symmetric interior penalty DG
-method in space~\cite{Arnold1982AnElements}, chosen due to its favorable
-conservation properties. At each timestep the total number of degrees of freedom 
+\miro{The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized in
+space with quadratic DG elements using symmetric interior penalty DG method~\cite{Arnold1982AnElements}.
+The scheme was chosen due to its favorable mass 
+conservation properties}. At each timestep the total number of degrees of freedom 
 is 1 415 120. In time, the equation is discretized with the second-order backward
 difference scheme BDF2.~\cite{Volker2016}
 To accurately approximate the solute concentrations even
@@ -1339,8 +1344,8 @@ We consider the time-dependent Stokes equations
 \begin{subequations}
 \begin{alignat}{2}
    \rho\pdifft{\uu} - \nabla \cdot \bsig(\uu, p)
-   &= \mathbf{0} \quad &&\mathrm{in} \ \Omega, \label{eq:BDM_stokes_mom}\\
-  \nabla \cdot \uu &= 0 \quad &&\mathrm{in} \ \Omega, \label{eq:BDM_stokes_div} 
+   &= \mathbf{0} \quad &&\mathrm{in} \ \Omega\times(0, T], \label{eq:BDM_stokes_mom}\\
+  \nabla \cdot \uu &= 0 \quad &&\mathrm{in} \ \Omega\times(0, T], \label{eq:BDM_stokes_div} 
 \end{alignat}
 \label{eq:appendix_stokes_eqs}% 
 \end{subequations}%
@@ -1352,7 +1357,11 @@ and $p\in Q$ is the fluid pressure, and $\rho$ and $\mu$ are the fluid density
 and dynamic viscosity, respectively. Unless otherwise stated, we let $\bsig = \bsig(\uu, p)$. 
 
 To derive weak formulations of the continuous problem defined by the Stokes
-equations (\Cref{eq:appendix_stokes_eqs}), we consider the function space
+equations (\Cref{eq:appendix_stokes_eqs}), we consider the function space\footnote{
+To simplify the exposition we focus only on spatial regularity. In particular,
+$\vv\in\mathbf{H}^1(\Omega)$ is understood as $\vv(\cdot, t)\in \mathbf{H}^1(\Omega)$ for all
+$t>0$. Similar convention is applied also when discussing advection-diffusion equation in \Cref{subsec:adv_diff_eq_weak_form}.
+}
 \begin{align*}
     \VV &= \bigg\{\vv \ : \ \vv\in\mathbf{H}^1(\Omega),
     \vv\cdot\nn=0 \ \mathrm{on} \ \Gamma\setminus\Gp\bigg\},
@@ -1499,8 +1508,8 @@ system. To obtain a unique solution, which together with existence renders the
 problem well-posed, information of the pressure nullspace is passed to the linear solver.
 Let us remark that the singularity is a consequence of the fact that the
 impermeability condition is assumed to hold on the \emph{entire} domain boundary
-for this model version, which leaves the pressure under-determined as a result of no
-boundary condition specifying the pressure.
+for this model version, which leaves the pressure under-determined as it is not
+subject to any boundary condition.
 
 For the tangential traction $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$ that represents the cilia
 motion, we heuristically determined the constant $\tau= 0.65$ mPa
@@ -1671,16 +1680,15 @@ Because $\VV_h\not\subset\VV$, this BDM-DG scheme yields a non-conforming
 method for the Stokes equations. The scheme is
 $\mathbf{H}(\mathrm{div})$-conforming and exactly mass-conserving:
 due to the fact that $\nabla\cdot\VV_h= Q_h$,
-the continuity equation (\Cref{eq:BDM_stokes_div})
-can be satisfied in every computational mesh cell.
+the continuity equation (\Cref{eq:BDM_stokes_div}) is satisfied point-wise.
 Moreover, control of normal components of $\uu_h$ conveniently 
 lets us enforce the impermeability condition $\uu_h\cdot\nn=0$ strongly.
 
-Because the elements of $\VV_h$ only define the normal components of $\uu_h$,
-continuity in tangential components of $\uu_h$ on interior facets of
-the mesh is ensured through stabilization
-of the discrete weak form (\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}).
-We apply the stabilization outlined by Hong~\emph{et al.}~\cite{Hong2016AEquations}.
+\miro{The elements of $\VV_h$ only ensure by construction the continuity of normal components of $\uu_h$.
+Continuity of the tangential components of $\uu_h$ on interior facets of
+the mesh is enforced weakly by additional stabilization to 
+the discrete weak form (\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}).
+Specifically}, we apply the stabilization outlined by Hong~\emph{et al.}~\cite{Hong2016AEquations}.
 First, we define the average and jump operators, respectively, as
 \begin{equation}
     \avg{\uu} = \frac{\uu^+\cdot\nn^+ - \uu^-\cdot\nn^-}{2}
@@ -1709,9 +1717,9 @@ where $\mathcal{F}$ is the set of all interior facets of the computational mesh.
 The first term of $\mathcal{A}_{\mathrm{stab}}$ penalizes jumps
 in the tangential components of the velocity
 across interior facets, where the penalty parameter $\gamma>0$ must be chosen large enough
-to achieve stability. For appropriate convergence, the penalization term
-includes a scaling with the average of the cell diameter of neighboring mesh cells,
-with $h$ defined as the maximal distance between two points in a cell~\cite{Nitsche1971UberSind}.
+to achieve stability. \miro{For appropriate convergence, the penalization term
+includes a mesh-dependent scaling. In this work we choose it as the average of the cell diameter of neighboring mesh cells,
+with $h$ defined as the maximal distance between two points in a cell~\cite{Nitsche1971UberSind}.}
 The other two terms
 of $\mathcal{A}_{\mathrm{stab}}$ are added to ensure consistency and symmetry of
 the bilinear form, such that the problem is well-defined.
@@ -1743,14 +1751,14 @@ The fully discrete Stokes equations were solved with the penalty parameter $\gam
 \label{subsec:adv_diff_eq_weak_form}
 Recall the strong form of the advection-diffusion equation:
 \begin{equation}
-    \pdifft{c} + \nabla\cdot\JJ = 0 \quad\mathrm{in} \ \Omega,
+    \pdifft{c} + \nabla\cdot\JJ = 0 \quad\mathrm{in} \ \Omega\times(0, T],
     \label{eq:adv_diff_strong_DG}
 \end{equation}
 where $\Omega$ is the domain with boundary $\Gamma$, and the total solute flux
 \begin{equation*}
     \JJ(c) = c\uu - D\nabla c,
 \end{equation*}
-where $c\in W=H^1$ is the solute concentration and
+where $c\in W=H^1(\Omega)$ is the solute concentration and
 $\uu\in\VV$ is the cerebrospinal fluid velocity .
 We consider $\JJ = \JJ(c)$, unless otherwise indicated.
 The weak form of~\Cref{eq:adv_diff_strong_DG} is derived by
@@ -2009,17 +2017,15 @@ the convergence order $\eta$ was approximated as
     \eta = \frac{\log{(e_k/e_{k+1}})}{\log{(h_k/h_{k+1}})}.
     \label{eq:convergence_order_estimate}
 \end{equation}
-Consider a finite element function 
-\begin{equation*}
-    \phi = \phi_i\psi_i(\xx)
-\end{equation*}
-with basis functions $\psi_i$, where $i$ are the degrees of freedom and Einstein
-summation is employed.
-The infinity norm of $\phi$ was approximated from the vector
-of coefficients $\left\{\phi_i\right\}$, which represent point evaluations of $\phi$ as
+\miro{
+We define the approximation of the infinity norm of a finite element function
+$\phi = \phi_i\psi_i(\xx)$
+as 
 \begin{equation*}
     \normlinf{\phi} = \max_i{\vert \phi_i\vert}.
 \end{equation*}
+Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom defined as point envaluations}
+
 
 \subsection{Numerical verification of model implementation}\label{subsec:numerical_verification}
 A cylinder geometry meshed with varying degrees of refinement was used to
@@ -2077,7 +2083,7 @@ traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$
 defined in~\Cref{tab:r_vector_and_lambda_function}
 and $\gamma=10$ for the BDM penalty parameter.
 
-For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$.
+For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$, \miro{$u_h=\sqrt{\uu_h\cdot\uu_h}$}.
 We also report $\normlinf{u_h}$ scaled by the total force $F=\intGc{\sqrt{\btau\cdot \btau}}$
 applied on the cilia boundary $\Gc$. We chose this measure using $F$ as a scale because the regions
 of the mesh marked as cilia-populated change slightly with every mesh refinement,
@@ -2121,10 +2127,10 @@ reports values in units of millimeters, instead of micrometers which has been us
 A priori error estimates for the
 Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
 $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ are naturally 
-derived in a mesh-dependent broken $H^k$-norm for $\uu$ and the $L^2$-norm for the pressure.
+derived in a mesh-dependent broken $\mathbf{H}^1$-norm for $\uu$ and the $L^2$-norm for the pressure.
 The respective error norms are expected to decay with order $k$~\cite{Cockburn2005AEquations}.
 For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
-reports the velocity errors in the standard $H^k$ norm. Using polynomial degree  
+reports the velocity errors in the standard $\mathbf{H}^1$ (semi)norm. Using polynomial degree  
 $k=1$, we observe linear convergence in the velocity in the $\mathbf{H}^1$ error norm
 and the pressure in the $L^2$ error norm on the cylinder mesh. For the ventricles meshes,
 we observe consistent values of the reported quantities, verifying the model
@@ -2135,7 +2141,7 @@ is computationally more expensive than a more conventional approach based on
 e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
 ($P_2-P_1$ elements) or lower-order enriched
 elements~\cite{Brezzi2011MixedMethods},
-such as the mini-element ($P_1-P_1$ with a velocity stabilization).
+such as the MINI-element.
 We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
 since numerical experiments proved that a divergence-free velocity field was
 fundamental to attain a stable discretization of the advection-diffusion equation
