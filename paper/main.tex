@@ -622,9 +622,10 @@ primarily by advection are thus more easily compartmentalized within
 the ventricles as a result of the compartmentalized CSF flow.
 
 \subsection{Effects of cilia motility on transport}
-Removing motile cilia slowed down transport within
+
+Removing motile cilia delayed transport within
 the middle ventricle and towards the anterior ventricle,
-but the transport to the posterior ventricle was unaffected.
+while the transport to the posterior ventricle was unaffected.
 Photoconversion experiments with cilia mutant
 zebrafish larva (\emph{smh}) aligned with these observations.
 This further indicates that
@@ -635,43 +636,41 @@ depends on cilia motility.
 Interestingly, Yoshida~\emph{et al.} observed a drastic reduction
 in CSF mixing in specific regions of the brain
 ventricles when simulating reduced cilia motility~\cite{Yoshida2022EffectVentricles}.
-Our experimental results provide not only confidence
+\fixme{Our experimental results provide not only confidence
 in the predictive ability of our computational model,
 but also quantify the impact of cilia motility
-on brain ventricular transport.
+on brain ventricular transport.}
 
-\subsection{Model parameters and sources of discrepancies}
-Even though we identified similar dynamics in simulations and
-in vivo experiments, the transport dynamics of the simulations were generally
-more rapid and resulted in higher total amounts of solute.
-Differences between experiments and simulations may relate to
-ventricular size, as we showed that modifying the ventricular geometry impacts solute distribution,
-and the ventricular size varies substantially 
-in the control population at 2 dpf.
-Additionally, differences may result
-from the definition of the photoconversion site,
-since the volume of this region determines the total amount of solute
-and thereby the rate of transport. Another source
-of discrepancy may relate to the permeability of the ventricular wall,
-which we considered as impermeable in our simulations.
-The neuroepithelium lining the walls of brain ventricles in 24 hour old zebrafish
-is permeable to dyes smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}.
-If this is also the case at 2 dpf, Dendra2 
-(which are 26 kDa in size~\cite{Gurskaya2006EngineeringLight})
-would leak out of the brain ventricles over the relevant time spans
-and render the dynamics slower.
-It may also be the case that our model predicts faster
-transport because the Dendra2 diffusion
-coefficient we used (based on an experimental value
-\cite{GuraSadovsky2017MeasurementExpansion}) is too high.
-This could be because embryonic CSF has higher viscosity
-than the solution considered in the measurements, 
-or because the presence of proteins, nutrients and other solutes
-obstructs diffusive transport
-\cite{Bloomfield1998EffectsFluid, Einstein1905UberTeilchen, Cussler2009Diffusion:Systems}.
-Finally, an important difference
-is the three-dimensional nature of the computational model,
-while the experimental images only show 2D slices.
+\subsection{Model validation}
+
+Our computational predictions and in vivo experimental measurements
+agree to a large extent. Examining any discrepancies in more detail
+indicates that the simulated transport dynamics are more rapid and
+results in higher total amounts of solute. Differences between
+experiments and simulations may relate to ventricular size, as we
+showed that modifying the ventricular geometry impacts solute
+distribution, and the ventricular size varies substantially in the
+control population at 2 dpf. In addition, differences may result from
+the definition of the photoconversion site, since the volume of this
+region determines the total amount of solute and thereby the rate of
+transport. Another source of discrepancy may relate to the
+permeability of the ventricular wall, which we considered as
+impermeable in our simulations. The neuroepithelium lining the walls
+of brain ventricles in 24 hour old zebrafish is permeable to dyes
+smaller than 70 kDa~\cite{Chang2012AnNeuroepithelium}.  If this is
+also the case at 2 dpf, Dendra2 (which are 26 kDa in
+size~\cite{Gurskaya2006EngineeringLight}) would leak out of the brain
+ventricles over the relevant time spans and render the dynamics
+slower.  It may also be the case that our model predicts faster
+transport because the Dendra2 diffusion coefficient we used (based on
+an experimental value \cite{GuraSadovsky2017MeasurementExpansion}) is
+too high. This could be because embryonic CSF has higher viscosity
+than the solution considered in the measurements, or because the
+presence of proteins, nutrients and other solutes obstructs diffusive
+transport \cite{Bloomfield1998EffectsFluid, Einstein1905UberTeilchen,
+  Cussler2009Diffusion:Systems}. Finally, an important difference is
+the three-dimensional nature of the computational model, while the
+experimental images only show 2D slices.
 
 We modeled motile cilia as a tangential
 traction at the ventricular walls
@@ -734,49 +733,43 @@ of flow,~\cite{Pellicciotta2020Cilia}
 it is interesting to note the above similarity 
 in cilia force estimates.
 
-\subsection{Numerical approximation}
-When solving an advection-diffusion equation to
-simulate protein transport, we handled advective transport
+\subsection{Numerical considerations}
+When simulating solute transport, we handled the advective transport
 through the anterior/posterior boundaries
-(where cardiac pressure pulsations are imposed)
-with an approximate periodic boundary condition
-that conserves the total solute concentration.
-A possible improvement to this would be
-to consider a 3D-0D coupling of in- and outflow using
+(where cardiac pressure pulsations were imposed)
+via an approximate periodic boundary condition
+that conserved the total solute concentration.
+A possible improvement would be
+to consider a 3D-0D coupling of the in- and outflow using
 ordinary differential equations,
 similar to applications in cardiac
 modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
-Alternatively, the beating cardiac motion could be modeled by ventricular wall deformation
-to avoid advective boundary fluxes\cite{Causemann2022HumanFramework,
+Alternatively, the beating cardiac motion could be modeled by ventricular wall deformation to avoid advective boundary fluxes\cite{Causemann2022HumanFramework,
 Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}.
-
-The Brezzi-Douglas-Marini and discontinuous Galerkin scheme
+%
+We also remark that the Brezzi-Douglas-Marini and discontinuous Galerkin scheme
 $\mathrm{BDM}_1$-$\mathrm{DG}_0$
-we used to discretize the Stokes equations
+used to discretize the Stokes equations
 is computationally more expensive
-than \fixme{conventional methods} \miro{ the more commonly used discretizations} such as a
+than more commons discretizations such as 
 Taylor-Hood ($P_2-P_{1}$ elements)~\cite{Stenberg1990ErrorProblem} or lower-order enriched
 elements (e.g. MINI)~\cite{Brezzi2011MixedMethods}.
-Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
-than or equal to the integer $k$.
-We opted for the BDM-DG scheme because of its exactly-mass-conserving property;
-by the definition of the elements, the numerical approximation of
-the CSF velocity $\uu_h$ satisfies the continuity equation (\Cref{eq:stokes_eqs_cont}).
-As a result $\normltwo{\nabla\cdot\uu_h}=0$ to within solver tolerances,
-an important property for the stability of the advection-diffusion
+%Here, $P_k$ is the space of continuous Lagrange polynomials of degree less
+%than or equal to the integer $k$.
+However, we prefer the BDM-DG scheme because of its mass conservation properties: the numerical approximation of
+the CSF velocity $\uu_h$ satisfies the continuity equation (\Cref{eq:stokes_eqs_cont}) point-wise, an important property for the stability of the advection-diffusion
 equation, especially in advection-dominated cases.
 \cite{cesmelioglu2022compatible, johnson2009numerical, gresho1998incompressible}
 Additionally, the BDM-DG scheme 
 lets us impose the impermeability condition $\uu\cdot\nn=0$
-strongly, since the BDM elements control the normal component of the 
-velocity~\cite{Brezzi1985TwoProblems}.
-For elements where this is not the case (such as Taylor-Hood elements),
-the impermeability boundary condition must
-be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
-or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
-Bertoluzza2017BoundaryHemodynamics}, which affects
-convergence properties \miro{$<<$what do you mean here?} and increases problem complexity
-(see \Cref{subsec:appendixA1} for more details).
+directly~\cite{Brezzi1985TwoProblems} (see \Cref{subsec:appendixA1} for more details).
+%% For elements where this is not the case (such as Taylor-Hood elements),
+%% the impermeability boundary condition must
+%% be handled with for example a Nitsche method~\cite{Nitsche1971UberSind}
+%% or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
+%% Bertoluzza2017BoundaryHemodynamics}, which affects
+%% convergence properties \miro{$<<$what do you mean here?} and increases problem complexity
+%% (see \Cref{subsec:appendixA1} for more details).
 
 \subsection{Outlook}
 The flow generated by ciliary motion
@@ -797,15 +790,14 @@ brain ventricular transport~\cite{Faubel2016Cilia-basedVentricles}.
 As the CSF flows through the central nervous system,
 the system may be affected by the changes in CSF composition
 due to reduced mixing following reduced
-ciliary motion. We demonstrated with
-simulations that solute concentrations,
+ciliary motion. We demonstrate that solute concentrations,
 and in turn CSF composition, 
 are affected by ventricular
 geometry changes. A 10\% difference in volume
 had a noticeable impact on solute transport,
 showing that pathological ventricular volume changes,
 such as the enlargement observed in hydrocephalus,
-would affect CSF composition.
+could affect CSF composition.
 Because CSF plays an important role in the regulation of solutes
 within the ventricular system~\cite{yamada2021cerebrospinal},
 understanding more of the interplay between
@@ -813,9 +805,9 @@ transport dynamics and ventricular morphology,
 as well as the impact of
 reduced mixing resulting from cilia-deficiency,
 are important considerations for future work.
-We hope our findings and the computational
-framework we have presented can help address
-such open questions in the future.
+%We hope our findings and the computational
+%framework we have presented can help address
+%such open questions in the future.
 
 \section{Methods}
 
