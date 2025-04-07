@@ -26,7 +26,7 @@ The script `simulate_mms_verification.py` is used to run convergence tests for t
 Stokes equations discretization. Test your setup by running the script on the 
 cylinder meshes:
 ```
-python simulate_mms_verification.py
+python verification.py
 ```
 The printed tables of error norms and convergence rates should
 match those in Table 3 of the paper, i.e., a linear convergence rate in the 
