@@ -353,7 +353,7 @@ experimental values (\Crefpanels{fig:fig3}{c, d}).
     observed during experiments monitoring
     the movement of Dendra2 proteins photoconverted by laser targeting ROI 1. 
     Bold lines are mean values of the cohort ($n=8$) and shaded regions cover
-    one standard devation errors in the mean.
+    one standard deviation errors in the mean.
     \textbf{b.} Mean concentration $\cbar(t)$ in each ROI in a
     simulation of Dendra2 protein transport with
     the diffusion coefficient $D_3$.
@@ -420,7 +420,7 @@ while the cilia affect the downstream mean concentrations.
     \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$
     in each region of interest (ROI) for control (black lines)
     and \emph{smh} mutant (red lines) zebrafish. 
-    Bold lines are mean values of the cohorts and shaded regions cover one standard devation.
+    Bold lines are mean values of the cohorts and shaded regions cover one standard deviation.
     \textbf{b.} Times when $\Delta F(t)$ first exceeds a threshold value,
     equal to 0.25 (ROIs 2--4) or 0.10 (ROIs 5, 6), for controls (gray dots) and
     \emph{smh} mutants (red dots).
@@ -540,7 +540,7 @@ and the posterior ventricles (ROIs 5 and 6).
 To summarize, these results show that the ventricular geometry and the
 cross-sectional area of the ventricular ducts clearly impact solute
 transport, with notable differences in transport resulting from modest
-geometry modifications. These findings may explain the larger
+geometry modifications. These findings may also explain the larger
 differences in the cilia-deficient computational model results
 compared to the differences in experimental data in \Cref{fig:fig4},
 as the computational geometry is not an exact representation of the
@@ -756,7 +756,7 @@ than or equal to the integer $k$.
 We opted for the BDM-DG scheme because of its exactly-mass-conserving property;
 by the definition of the elements, the numerical approximation of
 the CSF velocity $\uu_h$ satisfies the continuity equation (\Cref{eq:stokes_eqs_cont}).
-Resultingly $\normltwo{\nabla\cdot\uu_h}=0$ to within solver tolerances,
+As a result $\normltwo{\nabla\cdot\uu_h}=0$ to within solver tolerances,
 an important property for the stability of the advection-diffusion
 equation, especially in advection-dominated cases.
 \cite{cesmelioglu2022compatible, johnson2009numerical, gresho1998incompressible}
@@ -2024,7 +2024,7 @@ as
 \begin{equation*}
     \normlinf{\phi} = \max_i{\vert \phi_i\vert}.
 \end{equation*}
-Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom defined as point envaluations}
+Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom defined as point evaluations}
 
 
 \subsection{Numerical verification of model implementation}\label{subsec:numerical_verification}
@@ -2145,7 +2145,7 @@ such as the MINI-element.
 We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
 since numerical experiments proved that a divergence-free velocity field was
 fundamental to attain a stable discretization of the advection-diffusion equation
-in advection-dominated regions. Preliminarily, we attempted
+in advection-dominated regions. First, we attempted
 to discretize the Stokes equations with 
 Taylor-Hood elements, but with the resulting numerical approximation
 of the velocity $\uu_h$, we were unable to achieve
