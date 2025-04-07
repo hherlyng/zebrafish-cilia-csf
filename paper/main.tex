@@ -567,29 +567,34 @@ individual zebrafish ventricles.
 
 \section{Discussion}
 In this study, we have presented a computational model of CSF flow and
-solute transport within brain ventricles.
-We used the larval zebrafish brain ventricles since its geometry and
-flow mechanisms are well described, thereby allowing us to validate
-our simulations experimentally. Our computational framework can be adapted to
-and implemented in other ventricular systems in the future,
-once the flow parameters of such systems
-are adequately resolved.
-We assumed that intraventricular CSF flow was governed
-by the Stokes equations.
-By imposing tangential traction and normal pressure
-on the CSF flow, we were able to reproduce flow fields with similar features
-as observed experimentally. The prominent flow features were vortex-structured flow
-mediated by cilia, and pulsatile flow mediated by the cardiac cycle.
+solute transport within brain ventricles.  We used the larval
+zebrafish brain ventricles since their geometry and flow mechanisms are
+well described, thereby allowing for validation of the simulation
+results against experimental measurements. Our computational framework
+can be adapted to other ventricular systems, once the flow parameters
+of such are adequately resolved. Here, we assumed that
+intraventricular CSF flow was governed by the Stokes equations. By
+imposing tangential traction and normal pressure acting on the CSF, we
+were able to reproduce flow features observed experimentally. In
+particular, vortex-structured flow mediated by the cilia and pulsatile
+flow mediated by the cardiac cycle emerged as key flow characteristics.
 
-Using the simulated CSF flow, we modeled solute transport by an advection-diffusion equation.
-The transport results compared well with data from in vivo experiments in zebrafish.
-Then, by using a computational model as well as zebrafish mutants with paralyzed cilia,
-we identified that even though advection by cilia is dominant,
-diffusion plays a significant role in protein transport.
-Finally, we investigated how local cilia paralysis and ventricular geometries
-affect solute distribution. Altogether, we present not only new findings on the roles of
-advection and diffusion in brain ventricular transport, but also provide a
-computational framework to study CSF flow and transport in ventricular geometries.
+Using the simulated CSF flow, we modeled solute transport via an
+advection-diffusion equation. The resulting evolution and distribution
+of solutes compared well with data from in vivo experiments in
+zebrafish and is advection-dominated on the global scale for a
+physiologically-relevant range of solutes. By studying the
+distribution patterns in the absence of cilia motion, both via
+zebrafish mutants and computationally, we find that diffusion more
+strongly affects solute spread to distant parts of the ventricular
+system (upstream). Regional loss of cilia delayed solute transport
+with the most pronounced effect stemming from dorsal cilia
+paralysis. Moreover, the ventricular morphology also affects solute
+distribution, with the duct between the anterior and middle ventricles
+as a key passage. Altogether, we present not only new findings on the
+roles of advection and diffusion in brain ventricular transport, but
+also provide a computational framework to study CSF flow and transport
+in ventricular geometries.
 
 \subsection{The roles of advection and diffusion in brain ventricular solute transport}
 To investigate brain ventricular solute transport, we quantified transport
