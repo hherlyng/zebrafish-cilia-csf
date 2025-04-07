@@ -597,28 +597,29 @@ also provide a computational framework to study CSF flow and transport
 in ventricular geometries.
 
 \subsection{The roles of advection and diffusion in brain ventricular solute transport}
-To investigate brain ventricular solute transport, we quantified transport
-based on changes in fluorescence intensity $\Delta F$ (experiments) and
-mean concentration $\cbar$ (simulations) over time. Our results convincingly show that
-the solute transport depends on a balance of advection and diffusion.
-While advection is the strongest transport mechanism on a global scale for
-the three solutes we studied (global Péclet numbers greater than unity),
-diffusion is balancing out advection for shorter distances and in regions without motile cilia activity.
-For instance, for the larger extracellular vesicles, no solute reached the (distant)
-posterior ventricle (a distance of $L = 200$ \textmu m) within the simulation time (around 860 s).
-Advective transport by the mean velocity $\overline{U}=2.4$ \textmu m/s over the same
-distance would happen on a timescale of $t_a=L/\overline{U}=83$ s, indicating that
-transport to the posterior ventricle is solely driven by diffusion at this developmental
-stage. The estimated timescale of diffusion $t_d=L^2/D_1$ over the 
-same distance is $\approx$24500 s, compared to 696 s and 348 s for the 
-smaller proteins (STM-GFP and Dendra2).
-This explains why $D_1$ is the only
-case where no solute spreads to the posterior ventricle,
-while STM-GFP and Dendra2 are transported there by diffusion.
-Larger molecules transported primarily by advection
-are thus more easily
-compartmentalized within the ventricles
-as a result of the compartmentalized CSF flow.
+
+We quantified brain ventricular solute transport based on changes in
+fluorescence intensity $\Delta F$ (experiments) and mean concentration
+$\cbar$ (simulations) over time. Our results show that the solute
+distribution depends on a balance between advection and diffusion.
+While advection is the strongest transport mechanism on a global scale
+for the three solutes we studied (global Péclet numbers $> 1$),
+diffusion is balancing out advection for shorter distances and in
+regions without motile cilia activity.  For instance, for the larger
+extracellular vesicles, no solute reached the distant posterior
+ventricle (a distance of $L = 200$ \textmu m) within the simulation
+time (around 860 s). Advective transport by the mean velocity
+$\overline{U}=2.4$ \textmu m/s over the same distance would occur on a
+timescale of $t_a=L/\overline{U}=83$ s, indicating that transport to
+the posterior ventricle is not driven by advection at this
+developmental stage. The estimated timescale of diffusion for the
+extracellular vesicles ($t_d=L^2/D_1$) over the same distance is 24500
+s, but as low as 696 s and 348 s for the smaller proteins STM-GFP and
+Dendra2, respectively. These estimates support our observations that
+STM-GFP and Dendra2 spread to the posterior ventricle (by diffusion)
+while the extracellular vesicles do not. Larger molecules transported
+primarily by advection are thus more easily compartmentalized within
+the ventricles as a result of the compartmentalized CSF flow.
 
 \subsection{Effects of cilia motility on transport}
 Removing motile cilia slowed down transport within
