@@ -16,9 +16,6 @@
 \affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}, \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
 \date{\vspace{-2em}} % Remove space between affiliations and abstract
 
-
-\newcommand{\miro}[1]{{\color{cyan}#1}}
-
 \begin{document}
 
 \maketitle
@@ -192,7 +189,7 @@ Assuming that viscous forces are dominating the ventricular CSF flow,
 we model the flow by the Stokes equations.
 The net forces of motile cilia acting on the CSF are modeled as a steady,
 bidirectional tangential traction acting on parts of the ventricular wall
-(\Crefpanels{fig:fig1}{d}), with \miro{no-penetration condition at the walls}.
+(\Crefpanels{fig:fig1}{d}), with an impermeability condition at the walls.
 Simulations show that this traction alone
 leads to a partial compartmentalization of the ventricular system,
 with large-scale vortex structures in the anterior, middle and
@@ -628,18 +625,18 @@ the middle ventricle and towards the anterior ventricle,
 while the transport to the posterior ventricle was unaffected.
 Photoconversion experiments with cilia mutant
 zebrafish larva (\emph{smh}) aligned with these observations.
-This further indicates that
+These simulations and experiments further indicate that
 transport from the middle to the posterior ventricle is
 purely diffusive at this developmental stage,
 while transport within the middle ventricle
 depends on cilia motility.
+Furthermore, our experimental results provide quantification
+of the impact of cilia motility
+on brain ventricular transport.
 Interestingly, Yoshida~\emph{et al.} observed a drastic reduction
-in CSF mixing in specific regions of the brain
-ventricles when simulating reduced cilia motility~\cite{Yoshida2022EffectVentricles}.
-\fixme{Our experimental results provide not only confidence
-in the predictive ability of our computational model,
-but also quantify the impact of cilia motility
-on brain ventricular transport.}
+in CSF mixing in specific regions of the human brain
+ventricles when simulating reduced cilia motility~\cite{Yoshida2022EffectVentricles},
+an observation that compares well with our findings.  
 
 \subsection{Model validation}
 
@@ -709,6 +706,11 @@ the ventricular wall to a maximum force density of
 $f_{\mathrm{max}} = 526 \ \mathrm{N/m^3}$ at
 a distance 15 \textmu m (the cilium length)
 away~\cite{Siyahhan2014FlowVentricles}.
+Their simulation results suggest that cilia only contribute to
+near-wall flow dynamics, which contrasts our results in which
+the cilia induce large-scale flow. This is a consequence of the 
+scale of the cilia and the difference in ventricular size
+between humans and zebrafish.
 In a cilia array of thickness $\delta = 15$ \textmu m,
 the maximum stress in our model would correspond to a maximum force density of 
 \begin{equation*}
@@ -720,7 +722,8 @@ With $\delta=5$ \textmu m (the typical cilium length in zebrafish brain ventricl
 \cite{Olstad2019CiliaryDevelopment,
 Salman2022ComputationalEmbryo, Ringers2023NovelEpithelia}) 
 our cilia stress corresponds to a maximum force density of
-$f_c=507 \ \mathrm{N/m^3}$.
+$f_c=507 \ \mathrm{N/m^3}$, similar to the value
+Siyahhan~\emph{et al.} used~\cite{Siyahhan2014FlowVentricles}.
 For further comparison, Thouvenin~\emph{et al.}
 modeled two-dimensional cilia-mediated 
 flow in the central canal of zebrafish
@@ -731,7 +734,7 @@ In light of the previous finding that motile cilia
 align by response to shear stress magnitudes
 of flow,~\cite{Pellicciotta2020Cilia}
 it is interesting to note the above similarity 
-in cilia force estimates.
+in cilia force estimates, despite the variety in application.
 
 \subsection{Numerical considerations}
 When simulating solute transport, we handled the advective transport
@@ -835,7 +838,7 @@ Animals were in the pigmentless \emph{nacre\textsuperscript{b692}}
 Wholemount in vivo live imaging and photoconversion
 experiments were performed with zebrafish larvae at the 2 dpf stage obtained from inbreeding of heterozygous
 \emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xUAS:Signal-Dendra2})
-adult animals, as described by D'Gama~\emph{et al.}~\cite{DGama2024Cilia-mediatedBrain}. \miro{$<<$ undef ref here}
+adult animals, as described by D'Gama~\emph{et al.}~\cite{DGama2025MotileBrain}.
 Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+})
 or \emph{smh}\textsuperscript{+/-} heterozygous zebrafish from the same breeding.
 The mutants were identified based on their curved body~\cite{Jau-NianChen1997Left-rightZebrafish}.
@@ -1253,18 +1256,18 @@ the normal pressure $\Tilde{p}(t)$ weakly.
 For the pressure, we use piecewise constant (zeroth order discontinuous Galerkin (DG)) elements.
 The resulting total number of degrees of freedom at each time step is 1 009 874.
 The element combination $\mathrm{BDM}_1$--$\mathrm{DG}_{0}$ yields a non-conforming
-discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}. \miro{In particular,
-  with BDM only the normal component of the velocity is continuous.}
+discretization scheme for the Stokes equations~\cite{Stenberg1989SomeEquations}. 
+In particular, with BDM only the normal component of the velocity is continuous.
 Continuity in tangential velocities on interior facets
 is weakly enforced with a penalty parameter $\gamma=10$~\cite{Hong2016AEquations}.
 Since the divergence of the velocity function space is the pressure function space for this scheme,
 the divergence-free condition of the velocity is satisfied exactly, ensuring mass conservation.~\cite{Boffi2008FiniteProblem} 
 
 \subsection{Numerical approximation of the advection-diffusion equation}\label{subsec:num_approx_adv_diff}
-\miro{The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized in
-space with quadratic DG elements using symmetric interior penalty DG method~\cite{Arnold1982AnElements}.
+The advection-diffusion equation (\Cref{eq:adv_diff_strong}) is discretized in
+space with quadratic DG elements using a symmetric interior penalty DG method~\cite{Arnold1982AnElements}.
 The scheme was chosen due to its favorable mass 
-conservation properties}. At each timestep the total number of degrees of freedom 
+conservation properties. At each timestep the total number of degrees of freedom 
 is 1 415 120. In time, the equation is discretized with the second-order backward
 difference scheme BDF2.~\cite{Volker2016}
 To accurately approximate the solute concentrations even
@@ -1358,7 +1361,7 @@ To derive weak formulations of the continuous problem defined by the Stokes
 equations (\Cref{eq:appendix_stokes_eqs}), we consider the function space\footnote{
 To simplify the exposition we focus only on spatial regularity. In particular,
 $\vv\in\mathbf{H}^1(\Omega)$ is understood as $\vv(\cdot, t)\in \mathbf{H}^1(\Omega)$ for all
-$t>0$. Similar convention is applied also when discussing advection-diffusion equation in \Cref{subsec:adv_diff_eq_weak_form}.
+$t>0$. Similar convention is applied also when discussing the advection-diffusion equation in \Cref{subsec:adv_diff_eq_weak_form}.
 }
 \begin{align*}
     \VV &= \bigg\{\vv \ : \ \vv\in\mathbf{H}^1(\Omega),
@@ -1682,11 +1685,11 @@ the continuity equation (\Cref{eq:BDM_stokes_div}) is satisfied point-wise.
 Moreover, control of normal components of $\uu_h$ conveniently 
 lets us enforce the impermeability condition $\uu_h\cdot\nn=0$ strongly.
 
-\miro{The elements of $\VV_h$ only ensure by construction the continuity of normal components of $\uu_h$.
+The elements of $\VV_h$ only ensure by construction the continuity of normal components of $\uu_h$.
 Continuity of the tangential components of $\uu_h$ on interior facets of
 the mesh is enforced weakly by additional stabilization to 
 the discrete weak form (\Cref{eq:no_stabilization_abstract_discrete_weak_form_modelC}).
-Specifically}, we apply the stabilization outlined by Hong~\emph{et al.}~\cite{Hong2016AEquations}.
+Specifically, we apply the stabilization outlined by Hong~\emph{et al.}~\cite{Hong2016AEquations}.
 First, we define the average and jump operators, respectively, as
 \begin{equation}
     \avg{\uu} = \frac{\uu^+\cdot\nn^+ - \uu^-\cdot\nn^-}{2}
@@ -1715,9 +1718,10 @@ where $\mathcal{F}$ is the set of all interior facets of the computational mesh.
 The first term of $\mathcal{A}_{\mathrm{stab}}$ penalizes jumps
 in the tangential components of the velocity
 across interior facets, where the penalty parameter $\gamma>0$ must be chosen large enough
-to achieve stability. \miro{For appropriate convergence, the penalization term
-includes a mesh-dependent scaling. In this work we choose it as the average of the cell diameter of neighboring mesh cells,
-with $h$ defined as the maximal distance between two points in a cell~\cite{Nitsche1971UberSind}.}
+to achieve stability. For appropriate convergence, the penalization term
+includes a mesh-dependent scaling. In this work,
+we choose it as the average of the cell diameter of neighboring mesh cells,
+with $h$ defined as the maximal distance between two points in a cell~\cite{Nitsche1971UberSind}.
 The other two terms
 of $\mathcal{A}_{\mathrm{stab}}$ are added to ensure consistency and symmetry of
 the bilinear form, such that the problem is well-defined.
@@ -2015,14 +2019,14 @@ the convergence order $\eta$ was approximated as
     \eta = \frac{\log{(e_k/e_{k+1}})}{\log{(h_k/h_{k+1}})}.
     \label{eq:convergence_order_estimate}
 \end{equation}
-\miro{
+
 We define the approximation of the infinity norm of a finite element function
 $\phi = \phi_i\psi_i(\xx)$
 as 
 \begin{equation*}
     \normlinf{\phi} = \max_i{\vert \phi_i\vert}.
 \end{equation*}
-Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom defined as point evaluations}
+Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom defined as point evaluations.
 
 
 \subsection{Numerical verification of model implementation}\label{subsec:numerical_verification}
@@ -2081,7 +2085,7 @@ traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$
 defined in~\Cref{tab:r_vector_and_lambda_function}
 and $\gamma=10$ for the BDM penalty parameter.
 
-For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$, \miro{$u_h=\sqrt{\uu_h\cdot\uu_h}$}.
+For all meshes, we report the maximum discrete velocity magnitude $\normlinf{u_h}$, with $u_h=\sqrt{\uu_h\cdot\uu_h}$.
 We also report $\normlinf{u_h}$ scaled by the total force $F=\intGc{\sqrt{\btau\cdot \btau}}$
 applied on the cilia boundary $\Gc$. We chose this measure using $F$ as a scale because the regions
 of the mesh marked as cilia-populated change slightly with every mesh refinement,
@@ -2186,21 +2190,21 @@ Particle tracking data was analyzed~\cite{Olstad2019CiliaryDevelopment}.
 For four zebrafish, five recordings with a few particles for each fish were carried out.
 The particles tracked were in the duct between the rhombencephalic ventricle and the
 diencephalic ventricle. Frequency of image acquisition was 20.22 Hz.
-The collected data constituted $x$ and $y$ positions of the particles at every time
-instant of image acquisition. The velocities $u_x$ and $u_y$ were determined by
-calculating the change in positions $\Delta x$ and $\Delta y$ relative to the change
+The collected data constituted $x$ (rostrocaudal axis) and $z$ (dorsoventral axis) positions of the particles at every time
+instant of image acquisition. The velocities $u_x$ and $u_z$ were determined by
+calculating the change in positions $\Delta x$ and $\Delta z$ relative to the change
 in time $\Delta t$ between two subsequent images, $\Delta t$ being equal to the
 frequency of acquisition.
 Mean velocities $\overline{u}_x$~(\Crefpanels{fig:particle_tracking_data}{a}) and
-$\overline{u}_y$~(\Crefpanels{fig:particle_tracking_data}{b}),
+$\overline{u}_z$~(\Crefpanels{fig:particle_tracking_data}{b}),
 which serve as a quantification of particle drift, were calculated
 by taking the difference between the last and first positions of a particle.
 
 Particle movement varied over the different measurements. The mean of $\overline{u}_x$ was
-0.26 \textmu m/s and the mean of $\overline{u}_y$ was 0.08 \textmu m/s.
+0.26 \textmu m/s and the mean of $\overline{u}_z$ was 0.08 \textmu m/s.
 The maximum mean velocities
 in absolute values were 10.2 \textmu m/s and 2.4 \textmu m/s for
-$\overline{u}_x$ and $\overline{u}_y$,
+$\overline{u}_x$ and $\overline{u}_z$,
 respectively. We used the cardiac-induced/no-cilia flow model to tune the
 pressure boundary condition
 amplitude $A$. The choice of $A=1.5$ mPa was used since: (i) it yields a
@@ -2210,15 +2214,12 @@ particle tracking data when
 rejecting the outlier at around 10 \textmu m/s; (ii) it yields a time-averaged mean velocity
 of 0.89 \textmu m/s, which is close to the mean observed in the particle tracking data.
 \begin{figure}[H]
-    \begin{minipage}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{graphics/mean_velocities_x.png}
-    \end{minipage}
-    \begin{minipage}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{graphics/mean_velocities_y.png}
-    \end{minipage} 
+    \centering
+    \includegraphics[width=\textwidth]{graphics/figure7.png}
     \caption{Particle tracking data. Mean velocities in
-    the $x$ (\textbf{a.}) and $y$ (\textbf{b.}) directions of the particles tracked.
-    The dashed horizontal line designates a value of zero.}\label{fig:particle_tracking_data}
+    the $x$ (\textbf{a}) and $z$ (\textbf{b})
+    directions of the particles tracked.
+    The dashed horizontal lines designate zero.}\label{fig:particle_tracking_data}
 \end{figure}
 
 \end{document}
