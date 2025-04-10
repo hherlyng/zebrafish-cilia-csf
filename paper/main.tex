@@ -189,7 +189,7 @@ Assuming that viscous forces are dominating the ventricular CSF flow,
 we model the flow by the Stokes equations.
 The net forces of motile cilia acting on the CSF are modeled as a steady,
 bidirectional tangential traction acting on parts of the ventricular wall
-(\Crefpanels{fig:fig1}{d}), with an impermeability condition at the walls.
+(\Crefpanels{fig:fig1}{d}), with an impermeability condition (no normal flow) at the walls.
 Simulations show that this traction alone
 leads to a partial compartmentalization of the ventricular system,
 with large-scale vortex structures in the anterior, middle and
@@ -413,7 +413,7 @@ upstream in the cilia-mediated flow fields or to distant ventricles,
 while the cilia affect the downstream mean concentrations.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
+    \includegraphics[width=0.96\textwidth]{graphics/figure4_compare_control_mutant.png}
     \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$
     in each region of interest (ROI) for control (black lines)
     and \emph{smh} mutant (red lines) zebrafish. 
@@ -489,7 +489,6 @@ middle ventricle more solute spreads towards the anterior ventricle
     \label{fig:fig5}
 \end{figure}
 
-
 \subsection{Modification of ventricular geometry impacts solute distribution}
 Variations in ventricular morphology impact CSF flow
 patterns, and we previously identified large
@@ -509,6 +508,25 @@ geometry. As a result of the geometry modifications,
 the forces applied with the 
 cilia tangential traction differ across the scenarios
 (\Crefpanels{fig:fig6}{c}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
+    \caption{\textbf{a.} The original computational mesh of the ventricular geometry.
+    \textbf{b.} The four modified versions of the computational geometry. Compared
+    to the original mesh, the volumes of the deformed meshes are reduced by 3.9\%, 4.1\%, 1.4\% 
+    and 9.4\%.
+    \textbf{c.} Mean concentration $\cbar(t)$ simulated with the original and modified geometries
+    in the six regions of interest (ROIs).
+    \textbf{d.} A comparison of the tangential cilia force in the three cilia regions
+    and the total force applied, calculated with \Cref{eq:tangential_force_calculation}.
+    In each region, the force $F_{\mathrm{original}}$ 
+    applied on the original mesh is the baseline of 100\%,
+    to which the forces $F_i$ of the other mesh versions are compared, where $i$ denotes
+    the modification scenario.
+    The bars for the four alternative scenarios display $F_i/F_{\mathrm{original}}\times 100\%$.}
+    \label{fig:fig6}
+\end{figure}
 
 Constricting the anterior-middle duct
 reduces solute transport to the anterior ventricle (ROI 5), and the
@@ -542,25 +560,6 @@ differences in the cilia-deficient computational model results
 compared to the differences in experimental data in \Cref{fig:fig4},
 as the computational geometry is not an exact representation of the
 individual zebrafish ventricles.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
-    \caption{\textbf{a.} The original computational mesh of the ventricular geometry.
-    \textbf{b.} The four modified versions of the computational geometry. Compared
-    to the original mesh, the volumes of the deformed meshes are reduced by 3.9\%, 4.1\%, 1.4\% 
-    and 9.4\%.
-    \textbf{c.} Mean concentration $\cbar(t)$ simulated with the original and modified geometries
-    in the six regions of interest (ROIs).
-    \textbf{d.} A comparison of the tangential cilia force in the three cilia regions
-    and the total force applied, calculated with \Cref{eq:tangential_force_calculation}.
-    In each region, the force $F_{\mathrm{original}}$ 
-    applied on the original mesh is the baseline of 100\%,
-    to which the forces $F_i$ of the other mesh versions are compared, where $i$ denotes
-    the modification scenario.
-    The bars for the four alternative scenarios display $F_i/F_{\mathrm{original}}\times 100\%$.}
-    \label{fig:fig6}
-\end{figure}
 
 \section{Discussion}
 In this study, we have presented a computational model of CSF flow and
@@ -932,7 +931,7 @@ and ROIs 2--6 in different regions of the ventricular system.
 The pixel values of the fluorescence intensity within one ROI were
 averaged for each time point, and the relative change $\Delta F$ calculated with this averaged value.
 To normalize the data with respect to photoconversion efficiency, the
-$\Delta F$ curves for all ROIs were divided by the $\Delta F$ values
+$\Delta F$ values for all ROIs were divided by the $\Delta F$ values
 obtained for ROI 1 at the end of the experiment,
 so that $\Delta F$ values for the photoconverted site ROI 1 ranged from
 zero to one. Finally, we averaged the $\Delta F$ data from controls and from mutants.
@@ -1121,7 +1120,7 @@ Mimicking the experimental protocol, we consider the dorsal part of the
 diencephalic ventricle as the subdomain $\Omega_{\mathrm{pc}}$, and set
 \begin{equation}
   c(\xx, t)=\frac{\log{(1+t/a)}}{\log{(1+T/a)}},
-  \quad \xx \in \Omega_{\mathrm{pc}}, \quad t > 0.
+  \quad \xx \in \Omega_{\mathrm{pc}}, \quad t\in(0, T].
 \label{eq:photoconversion_curve}
 \end{equation}
 The value $a=65$ was chosen to fit the fluorescence intensity curve
@@ -1130,12 +1129,10 @@ in the concentration field may arise from imposing $c(\xx, t)$ in $\Omega_{\math
 the mesh is locally refined around this region.
 
 In order to impose a smooth initial condition, we initially solve the diffusion equation
-\begin{equation}\label{eq:cinit}
-  \begin{aligned}
-    &\pdifft{c} = \Tilde{D}\nabla^2 c \quad \text{in } \Omega\times(0, 2\Delta t]\\
-      &c(\xx, t=0) = 0\quad\text{ in }\Omega
-  \end{aligned}\
-\end{equation}
+\begin{alignat*}{2}
+\pdifft{c} &= \Tilde{D}\nabla^2 c \quad &&\text{in } \Omega\times(0, 2\Delta t]\\
+    c(\xx, t=0) &= 0 \quad&&\text{in }\Omega
+\end{alignat*}
 with an increased diffusion coefficient $\Tilde{D}=D\times 10^{5}$ for two timesteps.
 The solutions are normalized by their respective maximum values, and subsequently
 multiplied with the value of \Cref{eq:photoconversion_curve} at the times $t=\Delta t$
@@ -2031,8 +2028,13 @@ Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom de
 
 \subsection{Numerical verification of model implementation}\label{subsec:numerical_verification}
 A cylinder geometry meshed with varying degrees of refinement was used to
-perform convergence analysis of the numerical methods used to solve the Stokes equations.
+perform convergence analysis of the numerical method used to solve the Stokes equations.
 The cylinder had unit length and a diameter of one half length unit.
+For each mesh refinement, the edge lengths were approximately halved.
+Since the refinement was not uniform, we used the ratio of the minimal
+edge lengths $h_{\mathrm{min}, k}/h_{\mathrm{min}, k+1}$ between two 
+successive refinements when calculating the convergence rate using
+\Cref{eq:convergence_order_estimate}.
 For the analysis, we used tangential traction boundary conditions on all
 of the cylinder surface. Using the Method of Manufactured Solutions~\cite{Roache2001CodeSolutions}
 with the velocity and pressure expressions defined in~\Cref{subsec:mms}
@@ -2055,21 +2057,20 @@ the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
     the cilia-driven/no-cardiac flow model using $\mu=1$.
     For all error norms, convergence rates calculated
     with~\Cref{eq:convergence_order_estimate} are given
-    in parentheses. The coarsest mesh had a mesh size $h_0$,
-    and for every mesh refinement the mesh size $h$ was halved.}\label{tab:cylinder_error_rates}
+    in parentheses.}\label{tab:cylinder_error_rates}
     \begin{tabular}{cc|ccccc}
         \toprule
-        $h/h_0$ & \# dofs &
+        \# cells & \# dofs &
         $\normltwovec{\uu_h - \uu_{\mathrm{ex}}}$
         & $\Hnorm{\uu_h - \uu_{\mathrm{ex}}}$
         & $\normltwo{p_h - p_{\mathrm{ex}}}$
         & $\vert\normlinf{u_h} - \normlinf{u_{\mathrm{ex}}}\vert$
         & $\normltwo{\nabla\cdot\uu_h}$\\ 
         \midrule 
-        1    & 8652    & \num{2.3e-02}  (--)  & \num{4.3e-01}   (--)  & \num{5.6e-01}  (--)  & \num{2.4e-02}  (--)  & \num{1.4e-07} \\  
-        1/2  & 41190   & \num{9.3e-03} (1.30) & \num{2.8e-01}  (0.61) & \num{3.9e-01} (0.53) & \num{5.0e-03} (2.25) & \num{2.8e-08} \\  
-        1/4  & 255016  & \num{3.5e-03} (1.42) & \num{1.4e-01}  (1.00) & \num{2.1e-01} (0.85) & \num{1.4e-03} (1.83) & \num{7.3e-11} \\     
-        1/8  & 1855337 & \num{1.3e-03} (1.46) & \num{6.9e-02}  (1.03) & \num{1.1e-01} (0.92) & \num{6.7e-04} (1.08) & \num{1.5e-10} \\   
+        1140    & 8652    & \num{2.3e-02}  (--)  & \num{4.3e-01}   (--)  & \num{5.6e-01}  (--)  & \num{2.4e-02}  (--)  & \num{1.4e-07} \\  
+        5568    & 41190   & \num{9.3e-03} (1.59) & \num{2.8e-01}  (0.75) & \num{3.9e-01} (0.65) & \num{5.0e-03} (2.75) & \num{2.8e-08} \\  
+        35311   & 255016  & \num{3.5e-03} (1.58) & \num{1.4e-01}  (1.11) & \num{2.1e-01} (0.95) & \num{1.4e-03} (2.03) & \num{7.3e-11} \\     
+        260717  & 1855337 & \num{1.3e-03} (1.59) & \num{6.9e-02}  (1.12) & \num{1.1e-01} (1.00) & \num{6.7e-04} (1.18) & \num{1.5e-10} \\   
         \bottomrule
     \end{tabular}
 \end{table}
@@ -2139,11 +2140,10 @@ we observe consistent values of the reported quantities, verifying the model
 implementation.
 
 The $\mathrm{BDM}_1$-$\mathrm{DG}_0$ scheme that we employ for the Stokes equations
-is computationally more expensive than a more conventional approach based on
+is computationally more expensive than more common approaches based on
 e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
 ($P_2-P_1$ elements) or lower-order enriched
-elements~\cite{Brezzi2011MixedMethods},
-such as the MINI-element.
+elements (e.g. MINI)~\cite{Brezzi2011MixedMethods}.
 We opted for the BDM-DG scheme because of its exactly-mass-conserving property,
 since numerical experiments proved that a divergence-free velocity field was
 fundamental to attain a stable discretization of the advection-diffusion equation
