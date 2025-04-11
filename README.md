@@ -19,8 +19,6 @@ in a terminal. This installs all of the dependencies in a `conda` environment na
 conda activate zfish-cilia-csf-env
 ```
 
-The dependencies can alternatively be installed via `spack`.
-
 ## Test the setup by running the verification code
 The script `simulate_mms_verification.py` is used to run convergence tests for the 
 Stokes equations discretization. Test your setup by running the script on the 
@@ -63,3 +61,8 @@ where `molecule` is an integer argument:
 
 The arguments `mesh_version` and `cilia_scenario` take the same inputs
 as for the flow simulation script.
+
+## Data
+The directory `data` contains the photoconversion data and particle tracking data
+referenced in the paper. Some scripts do not use relative directory
+paths, and need their path to be changed in order to run.
