@@ -248,13 +248,13 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
 
 \subsection{Ventricular solute transport is advection-dominated for larger molecules}
 
-Proteins, neurotransmitters and other molecular substances
+Proteins, neurotransmitters and other molecules
 intrinsically diffuse within the brain ventricles, but are also
 advected by the flow of CSF. A natural question is which of these
-mechanisms that dominate for any given type of solute. To address this
+mechanisms dominates for any given type of solute. To address this
 question, we simulate the distribution and evolution of three
-different diffusing solutes injected within a region of interest (ROI 1) in the
-dorsal region of the middle ventricle (\Crefpanels{fig:fig2}{a}),
+different solutes injected within a region of interest (ROI 1) in the
+dorsal region of the middle ventricle (\Crefpanels{fig:fig2}{a}) and
 subject to the CSF flow induced by motile cilia and cardiac pressure
 pulsations. In particular, we consider three different molecular
 diffusion coefficients, corresponding to a large extracellular vesicle (EV, $D_1 = 2.17
@@ -382,7 +382,8 @@ Guirao2010CouplingCilia, Afzelius2004CiliaRelatedDiseases,
 Sawamoto2006NewBrain, Yoshiba2014RolesSymmetry,
 Hirokawa2006NodalAsymmetry, Youn2018PrimaryDiseases,
 Ma2024CiliaDisease, Ibanez-Tallon2002LossHydrocephalus}.  As observed both experimentally and
-computationally, absence of motile cilia alters CSF flow patterns.  We
+computationally, absence of motile cilia alters CSF flow patterns
+\Crefpanels{fig:fig1}{g}~\cite{Olstad2019CiliaryDevelopment}. We
 next investigate the implications of these changes on brain ventricular
 transport. We experimentally measured the movement of proteins by
 monitoring photoconverted Dendra2 signal in control zebrafish and
@@ -406,8 +407,10 @@ data, the control and mutant scenarios differed more for the
 simulations, with the times-to-threshold in ROI 2 and 4 being 81\% and
 28\% higher in the absence of cilia-mediated flow. Moreover, the
 predicted mean concentrations in ROI 5 deviate between the two
-scenarios, which is not the case in the experiments. Altogether, our
-findings identify that, for smaller proteins such as Dendra2,
+scenarios, while in the experiments the difference in
+fluorescence intensities is not significant.
+Altogether, our findings identify that,
+for smaller proteins such as Dendra2,
 diffusion plays an important role for solute movement to regions
 upstream in the cilia-mediated flow fields or to distant ventricles,
 while the cilia affect the downstream mean concentrations.
@@ -567,8 +570,8 @@ solute transport within brain ventricles.  We used the larval
 zebrafish brain ventricles since their geometry and flow mechanisms are
 well described, thereby allowing for validation of the simulation
 results against experimental measurements. Our computational framework
-can be adapted to other ventricular systems, once the flow parameters
-of such are adequately resolved. Here, we assumed that
+can be adapted to other ventricular systems, once their flow parameters
+are adequately resolved. Here, we assumed that
 intraventricular CSF flow was governed by the Stokes equations. By
 imposing tangential traction and normal pressure acting on the CSF, we
 were able to reproduce flow features observed experimentally. In
