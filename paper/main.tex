@@ -223,7 +223,7 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{graphics/figure1.png}
+    \includegraphics[width=\textwidth]{graphics/figure1.png}
     \caption{
     \textbf{a.} Schematic illustration of the two cerebrospinal fluid (CSF) flow components modeled,
     motile cilia and cardiac pulsations, and their contributions to the flow patterns.
@@ -279,7 +279,7 @@ $D_1$, $D_2$ and $D_3$, respectively. With all $\mathrm{Pe} > 1$, this
 indicates that advection is the dominant transport mechanism on a
 global scale.
 
-\begin{figure}%[H]
+\begin{figure}
     \centering
     \includegraphics[width=\textwidth]{graphics/figure2_simulation_results_different_coeffs.png}
     \caption{Simulated distribution and evolution after photoconversion of
@@ -341,25 +341,25 @@ especially with regard to ROIs 2 and 3. Overall, we note that the time
 to reach a 25\% threshold agree well between the model predictions and
 experimental values (\Crefpanels{fig:fig3}{c, d}).
 
-\begin{figure}[H]
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.975\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
+    \includegraphics[width=\textwidth]{graphics/figure3_compare_experiments_and_simulations.png}
     \caption{
     \textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$ 
     in each region of interest (ROI)
     observed during experiments monitoring
     the movement of Dendra2 proteins photoconverted by laser targeting ROI 1. 
     Bold lines are mean values of the cohort ($n=8$) and shaded regions cover
-    one standard deviation errors in the mean.
+    one standard deviation.
     \textbf{b.} Mean concentration $\cbar(t)$ in each ROI in a
-    simulation of Dendra2 protein transport with
+    simulation of Dendra2 transport with
     the diffusion coefficient $D_3$.
     \textbf{c.} Time to $\Delta F(t)$ reaches a threshold value of 0.25 in
     one representative zebrafish larva.
     \textbf{d.} Time to $\cbar(t)$ reaches a threshold value of 0.25 for
     a transport simulation with diffusion coefficient $D_3$.
-    We have excluded the posterior-most regions of the geometries,
-    because the values of $\Delta F$ and $\cbar$ never exceeded the threshold
+    The posterior-most regions of the geometries are excluded,
+    because $\Delta F$ and $\cbar$ never exceeded the threshold
     value of 0.25 in these regions. Scale bars 50 \textmu m.}
     \label{fig:fig3}
 \end{figure}
@@ -414,9 +414,9 @@ for smaller proteins such as Dendra2,
 diffusion plays an important role for solute movement to regions
 upstream in the cilia-mediated flow fields or to distant ventricles,
 while the cilia affect the downstream mean concentrations.
-\begin{figure}[H]
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.96\textwidth]{graphics/figure4_compare_control_mutant.png}
+    \includegraphics[width=\textwidth]{graphics/figure4_compare_control_mutant.png}
     \caption{\textbf{a.} Relative change in fluorescence intensity $\Delta F(t)$
     in each region of interest (ROI) for control (black lines)
     and \emph{smh} mutant (red lines) zebrafish. 
@@ -477,7 +477,7 @@ cilia does not alter the mean concentrations
 (\Crefpanels{fig:fig5}{c}). Finally, when removing ventral cilia in the
 middle ventricle more solute spreads towards the anterior ventricle
 (ROI 5), and less solute spreads towards the posterior ventricle (ROI 6).
-\begin{figure}[H]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
     \caption{\textbf{a.} The three separate cilia regions for which cilia paralysis is simulated
@@ -512,25 +512,6 @@ the forces applied with the
 cilia tangential traction differ across the scenarios
 (\Crefpanels{fig:fig6}{c}).
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
-    \caption{\textbf{a.} The original computational mesh of the ventricular geometry.
-    \textbf{b.} The four modified versions of the computational geometry. Compared
-    to the original mesh, the volumes of the deformed meshes are reduced by 3.9\%, 4.1\%, 1.4\% 
-    and 9.4\%.
-    \textbf{c.} Mean concentration $\cbar(t)$ simulated with the original and modified geometries
-    in the six regions of interest (ROIs).
-    \textbf{d.} A comparison of the tangential cilia force in the three cilia regions
-    and the total force applied, calculated with \Cref{eq:tangential_force_calculation}.
-    In each region, the force $F_{\mathrm{original}}$ 
-    applied on the original mesh is the baseline of 100\%,
-    to which the forces $F_i$ of the other mesh versions are compared, where $i$ denotes
-    the modification scenario.
-    The bars for the four alternative scenarios display $F_i/F_{\mathrm{original}}\times 100\%$.}
-    \label{fig:fig6}
-\end{figure}
-
 Constricting the anterior-middle duct
 reduces solute transport to the anterior ventricle (ROI 5), and the
 mean concentrations in ROIs 2--4 and 6 slightly increase, compared to
@@ -563,6 +544,25 @@ differences in the cilia-deficient computational model results
 compared to the differences in experimental data in \Cref{fig:fig4},
 as the computational geometry is not an exact representation of the
 individual zebrafish ventricles.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{graphics/figure6_compare_modified_geometries.png}
+    \caption{\textbf{a.} The original computational mesh of the ventricular geometry.
+    \textbf{b.} The four modified versions of the computational geometry. Compared
+    to the original mesh, the volumes of the deformed meshes are reduced by 3.9\%, 4.1\%, 1.4\% 
+    and 9.4\%.
+    \textbf{c.} Mean concentration $\cbar(t)$ simulated with the original and modified geometries
+    in the six regions of interest (ROIs).
+    \textbf{d.} A comparison of the tangential cilia force in the three cilia regions
+    and the total force applied, calculated with \Cref{eq:tangential_force_calculation}.
+    In each region, the force $F_{\mathrm{original}}$ 
+    applied on the original mesh is the baseline of 100\%,
+    to which the forces $F_i$ of the other mesh versions are compared, where $i$ denotes
+    the modification scenario.
+    The bars for the four alternative scenarios display $F_i/F_{\mathrm{original}}\times 100\%$.}
+    \label{fig:fig6}
+\end{figure}
 
 \section{Discussion}
 In this study, we have presented a computational model of CSF flow and
@@ -889,7 +889,7 @@ with a total of 8 controls and 6 mutants.
 
 \subsection{Photoconversion data analysis}
 The image data analysis was performed in MATLAB and the codes are
-openly available~\fixme{\cite{zenodo-link-to-all-code}}.  The
+openly available~\cite{Herlyng2025Zenodo}.  The
 photoconverted channel was aligned to correct for drift in $x,y$
 directions using previously developed
 codes~\cite{Reiten2017Motile-Cilia-MediatedComputations,
@@ -1280,7 +1280,7 @@ advection-diffusion equation were implemented and solved numerically with
 DOLFINx with petsc4py as linear algebra backend
 \cite{dolfinx2023preprint, Dalcin2011ParallelPython}.
 The simulation code is openly
-available\fixme{~\cite{zenodo-link-to-all-code}}.
+available~\cite{Herlyng2025Zenodo}.
 A direct solver using MUMPS~\cite{Amestoy2011Mumps} is used to solve the
 linear systems resulting from the discretized Stokes equations.
 For the discretized advection-diffusion equation, we use a flexible GMRES solver
@@ -1307,8 +1307,8 @@ Council of Norway (grants \#314189 and \#353348).
 % Data Availability Statement
 \medskip
 \noindent \textbf{Data Availability Statement} \par
-\noindent The data and model implementations presented in this paper are
-openly available at \fixme{REPO-LINK}.
+\noindent The software and data used and presented in this paper are
+openly available\cite{Herlyng2025Zenodo}.
 
 % Conflic of Interest Disclosure
 \medskip
@@ -2203,7 +2203,8 @@ of 0.89 \textmu m/s, which is close to the mean observed in the particle trackin
     \centering
     \includegraphics[width=\textwidth]{graphics/figure7.png}
     \caption{Particle tracking data. Mean velocities in
-    the $x$ (\textbf{a}) and $z$ (\textbf{b})
+    along the rostrocaudal axis ($x$ axis, \textbf{a})
+    and along the dorsoventral axis ($z$ axis, \textbf{b})
     directions of the particles tracked.
     The dashed horizontal lines designate zero.}\label{fig:particle_tracking_data}
 \end{figure}
