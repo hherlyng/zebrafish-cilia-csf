@@ -608,7 +608,7 @@ if __name__ == "__main__":
     write_checkpoint  = False # Write DOLFINx fem function concentration checkpoints
     write_snapshot_checkpoint = False # Write checkpoints at specific periods defined in class
     use_direct_solver = False # Use a direct or iterative solver
-    k = 1 # DG element polynomial degree
+    k = 2 # DG element polynomial degree
     
     # Molecule options:
     # D1 = Extracellular vesicles (radius 150 nm)
@@ -655,7 +655,7 @@ if __name__ == "__main__":
     # Temporal parameters
     f = 2.22         # Cardiac frequency [Hz]
     period = 1 / f   # Cardiac period [s]
-    T  = 2*period # Simulation end time
+    T  = 1900*period # Simulation end time
     period_partition = 20
     dt = period / period_partition # Timestep size [s]
     print("Transport simulation information:")

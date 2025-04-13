@@ -607,7 +607,7 @@ if __name__ == "__main__":
 
     # Input parameters
     direct = True # Use direct solver if True, else use iterative solver
-    model = "A" # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
+    model = "C" # Model version A (only cilia), B (only cardiac) or C (cilia+cardiac)
     f = 2.22 # Cardiac frequency [Hz]
     period = 1 / f # The cardiac period [s]
     T  = 1*period # Simulation end time [s]
@@ -615,6 +615,7 @@ if __name__ == "__main__":
     dt = period / period_partition # Timestep size [s]
     write_output = False # Write velocity field to VTX file if True
     write_checkpoint = False # Write velocity field checkpoints to adios4dolfinx file if True
+    post_process = False # Check divergence error and calculate forces
 
     # Set mesh version from input
     mesh_version_input = int(argv[1])
@@ -632,8 +633,7 @@ if __name__ == "__main__":
         raise ValueError("Error in mesh version input. Choose an integer in the interval [0, 4].")
 
     # Read mesh and mark facets
-    # mesh_filename = f"../geometries/standard/{mesh_version}_ventricles.xdmf"
-    mesh_filename = f"../geometries/ventricles/ventricles_0.xdmf"
+    mesh_filename = f"../geometries/standard/{mesh_version}_ventricles.xdmf"
     with dfx.io.XDMFFile(MPI.COMM_WORLD, mesh_filename, "r") as xdmf: mesh = xdmf.read_mesh()
 
     in_out = False if model=="A" else True # Determine whether to mark pressure boundaries
@@ -674,4 +674,4 @@ if __name__ == "__main__":
     print("\n#-------------Solving linear system--------------#\n")
     solver.solve()
     print("\n#-------------Simulation complete----------------#\n")
-    solver.post_process()
+    if post_process: solver.post_process()
