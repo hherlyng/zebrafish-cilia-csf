@@ -45,7 +45,7 @@ ys = [y1, y2, y3]
 bfont = {'family': 'Liberation Serif',
          'size'  : 50,
          'fontweight' : 'bold'}
-ax.text(xs[0], ys[0]*1.125, 'f, h', fontdict=bfont)
+ax.text(xs[0], ys[0]*1.125, 'g, h', fontdict=bfont)
 ax.text(xs[1]*1.025, ys[1], 'i', fontdict=bfont)
 ax.text(xs[2], ys[2]*0.85, 'j', fontdict=bfont)
 
