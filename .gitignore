@@ -22,6 +22,9 @@ output/
 # data folder
 data/
 
+# media folder
+media/
+
 # geometries
 geometries/ventricles/
 geometries/cylinder/
