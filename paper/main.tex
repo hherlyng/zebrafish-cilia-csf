@@ -174,10 +174,6 @@ particles within the brain ventricles.
 
 \subsection{Motile cilia induce flow compartmentalization within the brain ventricles}
 
-% Why? (Interesting point #1. However, we do not know aspect #2. 
-% How? (We therefore ...)
-% What ... 
-
 In vivo particle tracking reveals characteristic CSF flow patterns in
 zebrafish larval brain ventricles
 (\Crefpanels{fig:fig1}{a--c})~\cite{Olstad2019CiliaryDevelopment}.
@@ -208,7 +204,7 @@ When combining cilia motion and cardiac pulsations, we recognize flow features
 persisting throughout the cardiac cycle, now with vortex structures in
 the anterior and middle ventricles and directional flow in the
 posterior ventricle (\Crefpanels{fig:fig1}{h--j},
-\href{https://doi.org/10.5281/zenodo.15194757}{Supplementary Video 1}).
+\href{https://doi.org/10.5281/zenodo.15194757}{Supplementary Video S1}).
 These characteristic patterns suggest that the flow in
 the anterior and middle ventricles is primarily driven by the motile
 cilia, while the cardiac pressure pulsations dominate within the
@@ -267,14 +263,14 @@ Dendra2 ($D_3 = 1.15 \times 10^{-10}$ m$^2$/s).
 Interestingly, the distribution patterns differ between the
 solutes. For the smallest diffusion coefficient, representing
 extracellular vesicles, the advective transport by the CSF dominates diffusion: the
-CSF flow structures carry over into the concentration field,
+CSF flow structures are evident in the concentration field,
 indicating that transport along the streamlines is more rapid than the
 diffusion across the streamlines (\Crefpanels{fig:fig2}{b}). The
 balance between diffusion and advection shifts with increasing
-diffusion coefficient as the solute spreads more uniformly throughout
+diffusion coefficient as solute spreads more uniformly throughout
 the ventricular geometry (\Crefpanels{fig:fig2}{b--d}). Notably, the
 smaller solutes with higher diffusion coefficients spread more quickly
-to distal regions. Computing Péclet numbers, we find that
+to distal regions. Computing Péclet numbers, we find 
 $\mathrm{Pe}_1=664$, $\mathrm{Pe}_2=25$ and $\mathrm{Pe}_3=13$ for
 $D_1$, $D_2$ and $D_3$, respectively. With all $\mathrm{Pe} > 1$, this
 indicates that advection is the dominant transport mechanism on a
@@ -326,7 +322,7 @@ Our photoconversion protocol
 consisted of the acquisition of a baseline fluorescence intensity
 $F_0$, before localized exposure to a UV laser (at ROI 1) that
 converts Dendra2 from a green- to a red-emitting fluorescent
-protein (\href{https://doi.org/10.5281/zenodo.15194757}{Supplementary Video 2}).
+protein (\href{https://doi.org/10.5281/zenodo.15194757}{Supplementary Video S2}).
 To quantify the transport of photoconverted proteins, we
 measured and calculated the change in fluorescence intensity $\Delta F(t)
 = (F(t)-F_0)/F_0$ over time (\Crefpanels{fig:fig3}{a}).
@@ -483,14 +479,12 @@ middle ventricle more solute spreads towards the anterior ventricle
     \centering
     \includegraphics[width=\textwidth]{graphics/figure5_compare_cilia_modifications.png}
     \caption{\textbf{a.} The three separate cilia regions for which cilia paralysis is simulated
-    by imposing a zero tangential traction boundary condition in the respective region.
-    \textbf{b.} The total tangential force applied to the boundary with the tangential traction
-    boundary condition in each of the three separate ciliated regions, as well as the total force
+    by removing the cilia tangential traction boundary condition in the respective region.
+    \textbf{b.} The total force applied to the boundary with the cilia traction
+    in each of the three separate ciliated regions, and the total force
     (the sum of the three regions), calculated with \Cref{eq:tangential_force_calculation}. 
     \textbf{c.} Mean concentration $\cbar(t)$ for the six regions of interest (ROIs) in the three 
-    paralysis scenarios considered. The region named in the legend is the region
-    where we modify the cilia tangential traction boundary condition to a free-slip condition
-    in the CSF flow model.}
+    paralysis scenarios. The legend refers to the region where cilia are removed.}
     \label{fig:fig5}
 \end{figure}
 
@@ -1277,10 +1271,9 @@ For the other flow scenarios, the Stokes equations are solved for one
 period of the pulsatile cardiac motion. The solution of this one period
 is then used periodically as input for the advection-diffusion equation.
 
-The numerical solution schemes for the Stokes equations and the
-advection-diffusion equation were implemented and solved numerically with
-DOLFINx with petsc4py as linear algebra backend
-\cite{dolfinx2023preprint, Dalcin2011ParallelPython}.
+The numerical methods for the Stokes equations and the
+advection-diffusion equation were implemented and solved
+with DOLFINx\cite{dolfinx2023preprint}.
 The simulation code is openly
 available~\cite{Herlyng2025Zenodo}.
 A direct solver using MUMPS~\cite{Amestoy2011Mumps} is used to solve the
@@ -1309,8 +1302,10 @@ Council of Norway (grants \#314189 and \#353348).
 % Data Availability Statement
 \medskip
 \noindent \textbf{Data availability statement} \par
-\noindent The software and data used and presented in this paper are
-openly available\cite{Herlyng2025Zenodo}.
+\noindent The software and data used and presented in this paper,
+as well as the supplementary videos, are
+archived on Zenodo and openly available at
+\href{https://doi.org/10.5281/zenodo.15194757}{https://doi.org/10.5281/zenodo.15194757}\cite{Herlyng2025Zenodo}.
 
 % Conflic of Interest Disclosure
 \medskip
@@ -1318,7 +1313,7 @@ openly available\cite{Herlyng2025Zenodo}.
 \noindent The authors declare no conflicts of interest.
 
 % Bibliography
-\bibliographystyle{ieeetr}
+\bibliographystyle{unsrturl}
 \bibliography{ref}
 
 \newpage 
