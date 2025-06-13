@@ -328,7 +328,7 @@ class TransportSolver:
         if self.write_output_xdmf:
             # Intialize XDMF output file for the concentration
             self.output_xdmf_str = self.output_dir + "concentration.xdmf" 
-            self.c_dg0 = dfx.fem.Function(dfx.fem.functionspace(self.mesh, element("DG", self.mesh.basix_cell(), 0)))           
+            self.c_out = dfx.fem.Function(dfx.fem.functionspace(self.mesh, element("CG", self.mesh.basix_cell(), self.element_degree)))           
             self.xdmf_c = dfx.io.XDMFFile(self.comm, self.output_xdmf_str, "w")
             self.xdmf_c.write_mesh(self.mesh)
             print(f"Writing XDMF output to: {self.output_xdmf_str}\n")
@@ -466,9 +466,9 @@ class TransportSolver:
 
                 # Write output to file
                 if self.write_output_vtx : self.vtx_c.write(self.t)
-                if self.write_output_xdmf:
-                    self.c_dg0.interpolate(self.c_h)
-                    self.xdmf_c.write_function(u=self.c_dg0, t=self.t)
+                if self.write_output_xdmf and (i % 100)==0:
+                    self.c_out.interpolate(self.c_h)
+                    self.xdmf_c.write_function(u=self.c_out, t=self.t)
                 
                 # Write checkpoints
                 if self.write_checkpoint: 
@@ -552,9 +552,9 @@ class TransportSolver:
 
                 if self.write_output_vtx: self.vtx_c.write(self.t) # Write to file
 
-                if self.write_output_xdmf:
-                    self.c_dg0.interpolate(self.c_h)
-                    self.xdmf_c.write_function(u=self.c_dg0, t=self.t)
+                if self.write_output_xdmf and (period_counter % 5)==0:
+                    self.c_out.interpolate(self.c_h)
+                    self.xdmf_c.write_function(u=self.c_out, t=self.t)
 
                 if self.write_checkpoint:
                     self.write_time += 1
