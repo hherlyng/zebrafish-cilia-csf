@@ -1,4 +1,5 @@
-import numpy   as np
+import numpy     as np
+import colormaps as cm
 import matplotlib.pyplot as plt
 
 from scipy.io import loadmat
@@ -20,13 +21,15 @@ mutant  = loadmat(data_dir+"mutant_data")['mut'] # The mutant fish cohort photoc
 tt_control = loadmat(data_dir+"tt_control")['tt_control'][0][0] # Time-to-threshold data for the control cohort
 tt_mutant  = loadmat(data_dir+"tt_mutant")['tt_mutant'][0][0] # Time-to-threshold data for the mutant cohort 
 fps = metadata['metadata'][0][0][2][0][0] # Extract fps from metadata
-import colormaps as cm
+
+# Plotting style
 blue = colors[0]
 green = cm.dark2_3.colors[0]
 orange = cm.dark2_3.colors[1]
 purple = cm.puor_4.colors[3]
 yellow = cm.puor_4.colors[1]
 colors = ['k', green, purple, orange, yellow, blue]
+
 # Get the number of timesteps
 num_timesteps = control.shape[2]
 times = 1/fps*np.arange(num_timesteps)
@@ -56,6 +59,7 @@ ax1.set_ylabel(r"Fluoresc. intensity change $\Delta F$ [-]", fontsize=60, labelp
 leg = ax1.legend(loc='upper left', fontsize=45, frameon=True, fancybox=False, edgecolor='k',
            ncols=len(ROI_idx),
            handlelength=1.2, borderpad=0.4, columnspacing=0.6, handletextpad=0.5)
+           
 # Increase the line width in the legend
 for line in leg.get_lines():
     line.set_linewidth(10.0)

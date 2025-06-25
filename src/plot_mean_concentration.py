@@ -42,7 +42,6 @@ f = 2.22
 dt = 1/f/20
 
 # Read mesh
-# mesh_input_filename = flow_dir+f"{tau_version}/pressure+neighbor_refined/model_{model_version}/velocity_data_dt=0.02252"
 mesh_input_filename = f'../output/flow/checkpoints/velocity_mesh={mesh_version}_model={model_version}_ciliaScenario={cilia_string}_dt={dt:.4g}'
 mesh = a4d.read_mesh(comm=comm, filename=mesh_input_filename, engine="BP4", ghost_mode=gm)
 
@@ -62,8 +61,6 @@ lw = 8 # linewidth
 
 # Loop over molecules
 transport_data_filename = '../output/transport/mesh=original_model=C_molecule=D3_ciliaScenario=all_cilia_dt=0.02252/data/c_hats.npy'
-# transport_data_filename = transport_dir + \
-#                 f"{tau_version}/{mesh_version}/log_model_{model_version}_{molecule}_DG1_pressureBC/data/c_hats.npy"
 
 # Load transport data: c_bars = the total concentration in each ROI
 with open(transport_data_filename, "rb") as file: c_bars = np.load(file) 
