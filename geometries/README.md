@@ -1,5 +1,6 @@
-Data from Nathalie Yurisch-Jaksi, August 26 2021:
-surface_Ventricles_Smoothened2_fromChrista.stl
+The file `ventricles_surface.stl` is the surface geometry of
+embryonic zebrafish brain ventricles (2 dpf) used to mesh
+the ventricular geometry.
 
 --------
 
