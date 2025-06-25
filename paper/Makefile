@@ -1,5 +1,5 @@
 FILE=main
-
+FILE_2=main_v1
 default:
 	pdflatex $(FILE).tex
 
@@ -10,7 +10,7 @@ final:
 	pdflatex $(FILE).tex
 
 diff:
-	latexdiff old.tex paper.tex > diff.tex
+	latexdiff $(FILE_2).tex $(FILE).tex > diff.tex
 	pdflatex diff.tex
 	bibtex diff
 	pdflatex diff.tex

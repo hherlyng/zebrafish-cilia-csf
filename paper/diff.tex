@@ -1,4 +1,7 @@
 \documentclass{WileyMSP-template}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL main_v1.tex   Wed Jun 25 13:39:44 2025
+%DIF ADD main.tex      Wed Jun 25 17:32:29 2025
 
 \pagestyle{plain} 
 
@@ -15,6 +18,45 @@
 \affil[3]{K.~G.~Jebsen Center for Brain Fluid Research, Oslo, Norway}
 \affil[*]{\href{mailto:hherlyng@simula.no}{hherlyng@simula.no}, \href{mailto:nathalie.jurisch-yaksi@ntnu.no}{nathalie.jurisch-yaksi@ntnu.no}}
 \date{\vspace{-2em}} % Remove space between affiliations and abstract
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
 
 \begin{document}
 
@@ -179,10 +221,10 @@ embryonic zebrafish brain ventricles
 (\Crefpanels{fig:fig1}{a--c})~\cite{Olstad2019CiliaryDevelopment}.
 We attempt to accurately represent these flow patterns with
 computational fluid dynamics driven by cardiac pulsations and motile
-cilia lining the surface of the brain ventricles, using a
+cilia lining the surface of the brain ventricles\DIFaddbegin \DIFadd{, using a
 computational geometry generated with confocal imaging data of
-a zebrafish embryo (\Crefpanels{fig:fig1}{d}).
-A description of the geometry is provided in \Cref{sec:image_based_geometry}.
+a zebrafish embryo (}\Crefpanels{fig:fig1}{d}\DIFadd{).
+A description of the geometry is provided in }\Cref{sec:image_based_geometry}\DIFaddend .
 
 Assuming that viscous forces are dominating the ventricular CSF flow,
 we model the flow by the Stokes equations.
@@ -241,10 +283,10 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
     \textbf{h--j.} Streamlines simulated with the baseline flow model (cilia+cardiac)
     at a time 25\% (\textbf{h}), 50\% (\textbf{i}) and 75\% (\textbf{j})
     into the cardiac cycle. %t=0.112613 s %t=0.225225 s %t=0.315315 s
-    We remark that the velocities in the cardiac-induced/no-cilia
-    flow model are one order of magnitude lower (maximum 4.8 \textmu m/s) than the
+    \DIFaddbeginFL \DIFaddFL{We remark that the velocities in the cardiac-induced/no-cilia
+    flow model are one order of magnitude lower (maximum 4.8 }\textmu \DIFaddFL{m/s) than the
     velocities in the flow models that include motile cilia.
-    Scale bars 50 \textmu m.
+    }\DIFaddendFL Scale bars 50 \textmu m.
     }
     \label{fig:fig1}
 \end{figure}
@@ -740,8 +782,8 @@ of flow,~\cite{Pellicciotta2020Cilia}
 it is interesting to note the above similarity 
 in cilia force estimates, despite the variety in application.
 
-\subsection{Limitations and numerical considerations}
-Since we focused our study on the effect of cilia, we neglected
+\subsection{\DIFdelbegin \DIFdel{Numerical }\DIFdelend \DIFaddbegin \DIFadd{Limitations and numerical }\DIFaddend considerations}
+\DIFaddbegin \DIFadd{Since we focused our study on the effect of cilia, we neglected
 physiological effects other than cilia and cardiac pulsations on ventricular flow.
 The approach used to model cardiac pulsations is simplified for several reasons.
 One is the knowledge of the physiological processes involved in cardiac pulsations,
@@ -759,46 +801,53 @@ where we expect that the above mentioned physiological effects will be more prom
 Third, availability of particle tracking data allowed for calibrating 
 our cardiac pulsations model, since there is only one parameter, the normal
 pressure amplitude, that needs to be determined.
+}
 
-The simplified approach to modeling cardiac pulsations
+\DIFadd{The simplified approach to modeling cardiac pulsations
 resulted in CSF flow in and out of the 
 anterior/posterior ends of the ventricles.
-When simulating solute transport, we handled the advective transport
-through these boundaries
-via an approximate periodic boundary condition.
+}\DIFaddend When simulating solute transport, we handled the advective transport
+through \DIFdelbegin \DIFdel{the anterior/posterior boundaries
+(where cardiac pressure pulsations were imposed)
+}\DIFdelend \DIFaddbegin \DIFadd{these boundaries
+}\DIFaddend via an approximate periodic boundary condition\DIFdelbegin \DIFdel{that conserved the }\DIFdelend \DIFaddbegin \DIFadd{.
 This condition lets solute exit at the anterior or posterior
 boundary and re-enter at the other side to
-conserve the total solute concentration,
+conserve the }\DIFaddend total solute concentration\DIFdelbegin \DIFdel{.
+}\DIFdelend \DIFaddbegin \DIFadd{,
 to reflect our assumption that the embryonic zebrafish
 ventricular system is closed at 2 dpf. This boundary
 condition may influence the second-order accuracy of
 the advection-diffusion equation discretization. 
 To ensure that the model implementation did not
 introduce excessive numerical diffusion, we
-performed a refinement study of the transport model (see~\Cref{subsec:numerical_verification_transport}).
-A possible improvement of the approximate periodic boundary
-condition would be
+performed a refinement study of the transport model (see~}\Cref{subsec:numerical_verification_transport}\DIFadd{).
+}\DIFaddend A possible improvement \DIFaddbegin \DIFadd{of the approximate periodic boundary
+condition }\DIFaddend would be
 to consider a 3D-0D coupling of the in- and outflow using
 ordinary differential equations,
 similar to applications in cardiac
 modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
 Alternatively, the beating cardiac motion could be
-modeled by the above mentioned ventricular wall deformations
-to avoid advective boundary fluxes\cite{Causemann2022HumanFramework,
-Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain},
+modeled by \DIFdelbegin \DIFdel{ventricular wall deformation }\DIFdelend \DIFaddbegin \DIFadd{the above mentioned ventricular wall deformations
+}\DIFaddend to avoid advective boundary fluxes\cite{Causemann2022HumanFramework,
+Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain}\DIFdelbegin \DIFdel{.
+%DIF < 
+We also remark that the }\DIFdelend \DIFaddbegin \DIFadd{,
 in the case that a quantitative description of such wall deformations for the embryonic
 zebrafish brain ventricles were present.
+}
 
-The Brezzi-Douglas-Marini and discontinuous Galerkin scheme
+\DIFadd{The }\DIFaddend Brezzi-Douglas-Marini and discontinuous Galerkin scheme
 $\mathrm{BDM}_1$-$\mathrm{DG}_0$
-used to discretize the Stokes equations is a first-order
+used to discretize the Stokes equations is \DIFaddbegin \DIFadd{a first-order
 approximation. Because of consistent results under a refinement
-study (see~\Cref{subsec:numerical_verification})
+study (see~}\Cref{subsec:numerical_verification}\DIFadd{)
 as well as qualitative replication of experimentally
 observed flow fields, we deemed the approximation satisfactory
 for the purposes of this study.
 We also remark that the $\mathrm{BDM}_1$-$\mathrm{DG}_0$ scheme
-is computationally more expensive
+is }\DIFaddend computationally more expensive
 than more common discretizations such as 
 Taylor-Hood ($P_2-P_{1}$ elements)~\cite{Stenberg1990ErrorProblem} or lower-order enriched
 elements (e.g. MINI)~\cite{Brezzi2011MixedMethods}.
@@ -997,8 +1046,8 @@ false; allow track merging: false; merging max distance: 15.0; cutoff percentile
 Only the particle tracks with at least 30 data points, while simultaneously
 covering a distance of at least 8.8 \textmu m, are shown (\Crefpanels{fig:fig1}{b, c}).
 
-\subsection{Image-based computational geometries of zebrafish brain ventricles}\label{sec:image_based_geometry}
-To model CSF flow and transport in the zebrafish brain ventricles, we
+\subsection{Image-based computational geometries of zebrafish brain ventricles}\DIFaddbegin \label{sec:image_based_geometry}
+\DIFaddend To model CSF flow and transport in the zebrafish brain ventricles, we
 generated a 3D surface representation of the ventricular walls using
 confocal imaging data of a zebrafish embryo injected
 intraventricularly with a 70 kDa dye at 2
@@ -1015,12 +1064,15 @@ and around 300 microns in the lateral direction. At most around
 The standard mesh consists of 141 512 tetrahedral cells with a
 maximal (minimal) edge length of 14.9 \textmu
 m (3.1 \textmu m) (\Crefpanels{fig:fig1}{d}). Parts of the
-ventricular surfaces were marked as lined with motile cilia
+ventricular surfaces were marked \DIFdelbegin \DIFdel{to be }\DIFdelend \DIFaddbegin \DIFadd{as }\DIFaddend lined with motile cilia
 (\Crefpanels{fig:fig1}{d}, magenta
 markers)~\cite{Olstad2019CiliaryDevelopment}.
-The surface geometry from confocal imaging data
+\DIFaddbegin \DIFadd{The surface geometry from confocal imaging data
 and all computational meshes used in this work are openly
-available~\cite{Herlyng2025Zenodo}.
+available~\mbox{%DIFAUXCMD
+\cite{Herlyng2025Zenodo}}\hskip0pt%DIFAUXCMD
+.
+}\DIFaddend 
 
 The morphology and geometry of the brain ventricles vary across zebrafish
 individuals, and under physiological and pathological conditions~\cite{Olstad2019CiliaryDevelopment}. 
@@ -1121,7 +1173,7 @@ boundary $\Gp$~(\Crefpanels{fig:fig1}{d}, blue markers).
 Based on a measured cardiac frequency of $f=2.22$ Hz~\cite{Olstad2019CiliaryDevelopment},
 we set the angular cardiac frequency $\omega=2\pi f=6.97$ rad/s. The amplitude $A=1.5$ mPa determines the magnitude of the pulsatile flow
 and was calibrated based on previous experiments~\cite{Olstad2019CiliaryDevelopment}.
-Particle tracking data was used to determine the contributions of the
+Particle tracking data \DIFdelbegin \DIFdel{were }\DIFdelend \DIFaddbegin \DIFadd{was }\DIFaddend used to determine the contributions of the
 cardiac pulsations to the velocity magnitude,
 as compared to the effect of cilia motion on the flow (cf.~\Cref{sec:appC_particle_transport}).
 
@@ -1139,18 +1191,21 @@ where the total concentration flux $\JJ$ is assumed to consist of an advective a
 \end{equation*}
 Here, $\uu$ is the CSF velocity field, governed by the Stokes equations (\Cref{eq:stokes_eqs}),
 and $D$ is the molecular diffusion coefficient of the solute. 
-The ventricles are assumed to be a closed system,
+The \DIFdelbegin \DIFdel{ventricular walls }\DIFdelend \DIFaddbegin \DIFadd{ventricles }\DIFaddend are assumed to be \DIFdelbegin \DIFdel{impermeable (admitting }\emph{\DIFdel{no flux}}%DIFAUXCMD
+\DIFdel{: $\JJ\cdot\nn=0$), except at the anterior/posterior boundary $\Gp$}\DIFdelend \DIFaddbegin \DIFadd{a closed system,
 with impermeable ventricular walls. Therefore, we impose a no-flux condition
-$\JJ\cdot\nn=0$ at the boundary $\Gamma\setminus\Gp$.
-At the anterior/posterior boundary $\Gp$, solute concentration may be advected in and out
-of the domain by the CSF flow. To approximate the no-flux condition
+$\JJ\cdot\nn=0$ at the boundary $\Gamma\setminus\Gp$}\DIFaddend .
+At the anterior/posterior boundary \DIFdelbegin \DIFdel{, we permit the solute concentration to be advected into
+}\DIFdelend \DIFaddbegin \DIFadd{$\Gp$, solute concentration may be advected in }\DIFaddend and out
+of the domain \DIFdelbegin \DIFdel{in a manner that ensures conservation of mass
+(see}\DIFdelend \DIFaddbegin \DIFadd{by the CSF flow. To approximate the no-flux condition
 on $\Gp$ and approximately achieve conservation of the total solute concentration,
 we do the following. On the outflow part of $\Gp$ ($\uu\cdot\nn\geq 0$),
 we impose zero diffusive flux ($D\nabla c\cdot\nn = 0$).
 The total flux on the inflow part of $\Gp$ ($\uu\cdot\nn < 0$) is 
 set equal to the total outflow flux at the previous timestep
 to approximate a periodic boundary condition.
-See~\Cref{subsec:adv_diff_eq_weak_form} for further details.
+See}\DIFaddend ~\Cref{subsec:adv_diff_eq_weak_form} for \DIFdelbegin \DIFdel{details)}\DIFdelend \DIFaddbegin \DIFadd{further details}\DIFaddend .
 
 To computationally represent protein photoconversion in a region
 $\Omega_{\mathrm{pc}} \subset \Omega$ (corresponding to ROI 1),
@@ -2066,7 +2121,7 @@ as
 Here $\psi_i$ are the basis functions and $\phi_i$ are the degrees of freedom defined as point evaluations.
 
 
-\subsection{Numerical verification of CSF flow model implementation}\label{subsec:numerical_verification}
+\subsection{Numerical verification of \DIFaddbegin \DIFadd{CSF flow }\DIFaddend model implementation}\label{subsec:numerical_verification}
 A cylinder geometry meshed with varying degrees of refinement was used to
 perform convergence analysis of the numerical method used to solve the Stokes equations.
 The cylinder had unit length and a diameter of one half length unit.
@@ -2115,13 +2170,13 @@ the divergence $\nabla\cdot\uu_h$ to verify the property of mass conservation.
     \end{tabular}
 \end{table}
 
-To verify the CSF flow model implementation with the zebrafish brain ventricles mesh,
+To verify the \DIFaddbegin \DIFadd{CSF flow }\DIFaddend model implementation with the zebrafish brain ventricles mesh,
 we compared velocity norms for varying degrees of refinement of the brain ventricles
 mesh~(\Cref{tab:ventricles_norms_BDM}).
 We used the original mesh obtained by meshing the surface geometry using
-fTetWild~\cite{Hu2020FastWild} (the region around the photoconversion region is not
-refined on the mesh used for the convergence study), and we refined the original
-mesh using fTetWild.
+fTetWild~\cite{Hu2020FastWild} \DIFdelbegin \DIFdel{; }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend the region around the photoconversion region is not
+refined on the mesh used for the convergence study\DIFaddbegin \DIFadd{), and we refined the original
+mesh using fTetWild}\DIFaddend .
 In the numerical experiments, we used the cilia
 traction vector $\btau = \tau\lambda(\xx) P_{\nn}(\rr)$
 defined in~\Cref{tab:r_vector_and_lambda_function}
@@ -2167,41 +2222,42 @@ reports values in units of millimeters, instead of micrometers which has been us
     \end{tabular}
 \end{table}
 
-\subsection{Numerical verification of solute transport model implementation}\label{subsec:numerical_verification_transport}
-To verify the solute transport model implementation with the zebrafish brain ventricles mesh,
+\DIFaddbegin \subsection{\DIFadd{Numerical verification of solute transport model implementation}}\label{subsec:numerical_verification_transport}
+\DIFadd{To verify the solute transport model implementation with the zebrafish brain ventricles mesh,
 we compared times to threshold and final total concentration values scaled by domain volume
 for Dendra2 transport simulations with varying degrees of refinement of the brain ventricles
-mesh~(\Cref{tab:ventricles_norms_adv_diff}).
-We used the same meshes as the flow model verification (see \Cref{subsec:numerical_verification}).
+mesh~(}\Cref{tab:ventricles_norms_adv_diff}\DIFadd{).
+We used the same meshes as the flow model verification (see }\Cref{subsec:numerical_verification}\DIFadd{).
 The final total concentration values were scaled by $\vert\Omega\vert$ to account for the
 fact that the domain changes slightly with mesh refinement.
+}
 
 \begin{table}[!htbp]
     \centering
     \small
-    \caption{Times to threshold in the six regions of interest
+    \caption{\DIFaddFL{Times to threshold in the six regions of interest
     and final total solute concentration
     $c_{\mathrm{tot}}(t=T) = \intO{c(\xx, T)}$
     scaled by domain volume $\vert\Omega\vert$
     under mesh refinement of the brain ventricles mesh, for simulations of Dendra2
-    solute transport using the baseline model.}
+    solute transport using the baseline model.}}
     \label{tab:ventricles_norms_adv_diff}
     \begin{tabular}{cc|ccccccc}
         \toprule
-        \# cells & \# dofs &
-        $\hat{t}_1$ [s] & $\hat{t}_2$ [s]& $\hat{t}_3$ [s]& $\hat{t}_4$ [s]& $\hat{t}_5$ [s]& 
-        $\hat{t}_6$ [s] & $\frac{1}{\vert\Omega\vert}c_{\mathrm{tot}}(t=T)$ [--] \\
+        \DIFaddFL{\# cells }& \DIFaddFL{\# dofs }&
+        \DIFaddFL{$\hat{t}_1$ }[\DIFaddFL{s}] & \DIFaddFL{$\hat{t}_2$ }[\DIFaddFL{s}]& \DIFaddFL{$\hat{t}_3$ }[\DIFaddFL{s}]& \DIFaddFL{$\hat{t}_4$ }[\DIFaddFL{s}]& \DIFaddFL{$\hat{t}_5$ }[\DIFaddFL{s}]& 
+        \DIFaddFL{$\hat{t}_6$ }[\DIFaddFL{s}] & \DIFaddFL{$\frac{1}{\vert\Omega\vert}c_{\mathrm{tot}}(t=T)$ }[\DIFaddFL{--}] \\
         \midrule 
-        132134  & 1321340  & 61 & 199 & 217 & 167 & 213 & 342 & 0.524 \\
-        180901  & 1809010  & 61 & 193 & 210 & 161 & 208 & 338 & 0.532 \\
-        262598  & 2625980  & 61 & 190 & 208 & 160 & 206 & 336 & 0.529 \\
-        395339  & 3953390  & 61 & 187 & 205 & 156 & 204 & 334 & 0.543 \\
-        627439  & 6274390  & 61 & 184 & 201 & 152 & 205 & 326 & 0.556 \\
+        \DIFaddFL{132134  }& \DIFaddFL{1321340  }& \DIFaddFL{61 }& \DIFaddFL{199 }& \DIFaddFL{217 }& \DIFaddFL{167 }& \DIFaddFL{213 }& \DIFaddFL{342 }& \DIFaddFL{0.524 }\\
+        \DIFaddFL{180901  }& \DIFaddFL{1809010  }& \DIFaddFL{61 }& \DIFaddFL{193 }& \DIFaddFL{210 }& \DIFaddFL{161 }& \DIFaddFL{208 }& \DIFaddFL{338 }& \DIFaddFL{0.532 }\\
+        \DIFaddFL{262598  }& \DIFaddFL{2625980  }& \DIFaddFL{61 }& \DIFaddFL{190 }& \DIFaddFL{208 }& \DIFaddFL{160 }& \DIFaddFL{206 }& \DIFaddFL{336 }& \DIFaddFL{0.529 }\\
+        \DIFaddFL{395339  }& \DIFaddFL{3953390  }& \DIFaddFL{61 }& \DIFaddFL{187 }& \DIFaddFL{205 }& \DIFaddFL{156 }& \DIFaddFL{204 }& \DIFaddFL{334 }& \DIFaddFL{0.543 }\\
+        \DIFaddFL{627439  }& \DIFaddFL{6274390  }& \DIFaddFL{61 }& \DIFaddFL{184 }& \DIFaddFL{201 }& \DIFaddFL{152 }& \DIFaddFL{205 }& \DIFaddFL{326 }& \DIFaddFL{0.556 }\\
         \bottomrule
     \end{tabular}
 \end{table}
 
-\subsection{Discussion of the numerical approximation and convergence rates}
+\DIFaddend \subsection{Discussion of the numerical approximation and convergence rates}
 A priori error estimates for the
 Brezzi-Douglas-Marini and discontinuous Galerkin discretization scheme
 $\mathrm{BDM}_k$-$\mathrm{DG}_{k-1}$ are naturally 
@@ -2210,16 +2266,16 @@ The respective error norms are expected to decay with order $k$~\cite{Cockburn20
 For the sake of simplicity,~\Cref{tab:cylinder_error_rates}
 reports the velocity errors in the standard $\mathbf{H}^1$ (semi)norm. Using polynomial degree  
 $k=1$, we observe linear convergence in the velocity in the $\mathbf{H}^1$ error norm
-and the pressure in the $L^2$ error norm on the cylinder mesh. The BDM-DG scheme is
+and the pressure in the $L^2$ error norm on the cylinder mesh. \DIFdelbegin \DIFdel{For }\DIFdelend \DIFaddbegin \DIFadd{The BDM-DG scheme is
 thus of first-order accuracy, which may introduce excessive numerical diffusion.
-However, for the ventricles meshes, we observe consistent values of the reported quantities
-(\Cref{tab:ventricles_norms_BDM}), verifying the model implementation.
+However, for }\DIFaddend the ventricles meshes, we observe consistent values of the reported quantities
+\DIFaddbegin \DIFadd{(}\Cref{tab:ventricles_norms_BDM}\DIFadd{)}\DIFaddend , verifying the model implementation.
 
-The advection-diffusion equation discretization used is of second-order accuracy in 
+The \DIFaddbegin \DIFadd{advection-diffusion equation discretization used is of second-order accuracy in 
 both space and time. This accuracy may be influenced by the approximate periodic
 boundary condition that we employ on the anterior/posterior boundary.
 To verify the implementation, we report times to threshold in the six regions of interest,
-as well as the final total solute concentration (\Cref{tab:ventricles_norms_adv_diff})
+as well as the final total solute concentration (}\Cref{tab:ventricles_norms_adv_diff}\DIFadd{)
 for varying degrees of refinement of the ventricles mesh.
 We observe consistent values across the meshes.
 Similar to the flow model being influenced by the slight changes
@@ -2229,8 +2285,9 @@ photoconversion region (region of interest 1) increases slightly
 with mesh refinement. This is presumably the cause for
 the increase in total final concentration and thus
 shorter times to threshold.
+}
 
-The $\mathrm{BDM}_1$-$\mathrm{DG}_0$ scheme that we employ for the Stokes equations
+\DIFadd{The }\DIFaddend $\mathrm{BDM}_1$-$\mathrm{DG}_0$ scheme that we employ for the Stokes equations
 is computationally more expensive than more common approaches based on
 e.g. Taylor-Hood discretization~\cite{Stenberg1990ErrorProblem}
 ($P_2-P_1$ elements) or lower-order enriched
@@ -2277,12 +2334,18 @@ or with a Lagrange multiplier~\cite{Babuska1973TheMultipliers,
 Bertoluzza2017BoundaryHemodynamics}.
 
 \section{Quantification of velocities in particle tracking}\label{sec:appC_particle_transport}
-Particle tracking data~\cite{Olstad2019CiliaryDevelopment} was analyzed
+Particle tracking data\DIFdelbegin \DIFdel{was analyzed~\mbox{%DIFAUXCMD
+\cite{Olstad2019CiliaryDevelopment} }\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{~\mbox{%DIFAUXCMD
+\cite{Olstad2019CiliaryDevelopment} }\hskip0pt%DIFAUXCMD
+was analyzed
 to discern the relative contribution of cardiac pulsations to CSF flow,
-as compared to the contribution of motile cilia.
+as compared to the contribution of motile cilia}\DIFaddend .
 For four zebrafish, five recordings with a few particles for each fish were carried out.
 The particles tracked were in the duct between the rhombencephalic ventricle and the
-diencephalic ventricle, where cilia do not greatly impact CSF flow~\cite{Olstad2019CiliaryDevelopment}.
+diencephalic ventricle\DIFaddbegin \DIFadd{, where cilia do not greatly impact CSF flow~\mbox{%DIFAUXCMD
+\cite{Olstad2019CiliaryDevelopment}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
 Frequency of image acquisition was 20.22 Hz.
 The collected data constituted $x$ (rostrocaudal axis) and $z$ (dorsoventral axis) positions of the particles at every time
 instant of image acquisition. The velocities $u_x$ and $u_z$ were determined by
