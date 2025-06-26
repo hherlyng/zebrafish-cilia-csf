@@ -743,6 +743,12 @@ of flow,~\cite{Pellicciotta2020Cilia}
 it is interesting to note the above similarity 
 in cilia force estimates, despite the variety in application.
 
+% Can we call the section as Model limitations
+% Then, the first 2 paragraphs discuss limitations of the continuous
+% model and the final one could say something about limitations of 
+% the discretization. However, I would include there both Stokes and
+% Adv-diff.
+%
 \subsection{Limitations and numerical considerations}
 Since we focused our study on the effect of cilia, we neglected
 physiological effects other than cilia and cardiac pulsations on ventricular flow.
@@ -870,7 +876,7 @@ Wholemount in vivo live imaging and photoconversion
 experiments were performed with zebrafish embryos at the 2 dpf stage obtained from inbreeding of heterozygous
 \emph{smh\textsuperscript{+/-};Tg(gfap:Gal4FF);Tg(5xUAS:Signal-Dendra2})
 adult animals, as described by D'Gama~\emph{et al.}~\cite{DGama2025MotileBrain}.
-Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+})
+Controls consisted of either wild-type (\emph{smh}\textsuperscript{+/+})  
 or \emph{smh}\textsuperscript{+/-} heterozygous zebrafish from the same breeding.
 The mutants were identified based on their curved body~\cite{Jau-NianChen1997Left-rightZebrafish}.
 
@@ -1146,7 +1152,11 @@ The ventricles are assumed to be a closed system,
 with impermeable ventricular walls. Therefore, we impose a no-flux condition
 $\JJ\cdot\nn=0$ at the boundary $\Gamma\setminus\Gp$.
 At the anterior/posterior boundary $\Gp$, solute concentration may be advected in and out
-of the domain by the CSF flow. To approximate the no-flux condition
+of the domain by the CSF flow. 
+% Above we say that no-flux is on Gamma\Gamma_p. Why does the next
+% sentence bring up "approximate the no-flux condition on \Gamma_p"?
+% Gamma_p the fluxes should reflect periodicity, no?
+To approximate the no-flux condition
 on $\Gp$ and approximately achieve conservation of the total solute concentration,
 we do the following. On the outflow part of $\Gp$ ($\uu\cdot\nn\geq 0$),
 we impose zero diffusive flux ($D\nabla c\cdot\nn = 0$).
@@ -2171,8 +2181,14 @@ reports values in units of millimeters, instead of micrometers which has been us
 \end{table}
 
 \subsection{Numerical verification of solute transport model implementation}\label{subsec:numerical_verification_transport}
+% To verify implementation of the solue transport model we 
+% consider convergence of [quantities] on different refinements 
+% of the zebrafish brain ventricle geometries. Same meshes as in
+% flow model verifications were used.
 To verify the solute transport model implementation with the zebrafish brain ventricles mesh,
-we compared times to threshold and final total concentration values scaled by domain volume
+we compared times to threshold and 
+% Can't we call it a mean concentration?
+final total concentration values scaled by domain volume
 for Dendra2 transport simulations with varying degrees of refinement of the brain ventricles
 mesh~(\Cref{tab:ventricles_norms_adv_diff}).
 We used the same meshes as the flow model verification (see \Cref{subsec:numerical_verification}).
@@ -2218,10 +2234,19 @@ thus of first-order accuracy, which may introduce excessive numerical diffusion.
 However, for the ventricles meshes, we observe consistent values of the reported quantities
 (\Cref{tab:ventricles_norms_BDM}), verifying the model implementation.
 
+% Consider: The scheme used for discretization of advection-diffusion
+% equation is second-order accurate in space and time.
+%
 The advection-diffusion equation discretization used is of second-order accuracy in 
-both space and time. This accuracy may be influenced by the approximate periodic
+both space and time.
+% However accuracy of the discrete model may be influenced by the
+% approximate ...
+%
+This accuracy may be influenced by the approximate periodic
 boundary condition that we employ on the anterior/posterior boundary.
 To verify the implementation, we report times to threshold in the six regions of interest,
+% Accordinte to caption of Tab5; you have mean solute concentration
+% at final time? Which is it?
 as well as the final total solute concentration (\Cref{tab:ventricles_norms_adv_diff})
 for varying degrees of refinement of the ventricles mesh.
 We observe consistent values across the meshes.
