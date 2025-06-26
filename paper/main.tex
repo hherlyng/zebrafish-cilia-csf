@@ -90,7 +90,7 @@ known as the ependyma, and beat in a
 coordinated pattern at frequencies of 10--40 Hz to mediate fluid
 flow~\cite{mitchell2007evolution, Ringers2020Role, spassky2013motile,
 Ringers2023NovelEpithelia, roth2025structure}. Given their
-microscopic size, ranging from 5 to 15 microns, cilia contribute
+microscopic size, ranging from 5 to 15 \textmu m, cilia contribute
 primarily to flow near the ependyma in the
 brain~\cite{Siyahhan2014FlowVentricles, Olstad2019CiliaryDevelopment,
 Ringers2020Role, Faubel2016Cilia-basedVentricles}. In contrast,
@@ -180,9 +180,10 @@ embryonic zebrafish brain ventricles
 We attempt to accurately represent these flow patterns with
 computational fluid dynamics driven by cardiac pulsations and motile
 cilia lining the surface of the brain ventricles, using a
-computational geometry generated with confocal imaging data of
+computational geometry generated from confocal imaging data of
 a zebrafish embryo (\Crefpanels{fig:fig1}{d}).
-A description of the geometry is provided in \Cref{sec:image_based_geometry}.
+A description of the geometry is provided in the
+\hyperref[sec:methods]{Methods} section.
 
 Assuming that viscous forces are dominating the ventricular CSF flow,
 we model the flow by the Stokes equations.
@@ -243,7 +244,8 @@ features observed in vivo~\cite{Olstad2019CiliaryDevelopment}.
     into the cardiac cycle. %t=0.112613 s %t=0.225225 s %t=0.315315 s
     We remark that the velocities in the cardiac-induced/no-cilia
     flow model are one order of magnitude lower (maximum 4.8 \textmu m/s) than the
-    velocities in the flow models that include motile cilia.
+    velocities in the flow models that include motile cilia (maxima 26.7 \textmu m/s (cilia-driven/no-cardiac)
+    and 27.9 \textmu m/s (baseline)).
     Scale bars 50 \textmu m.
     }
     \label{fig:fig1}
@@ -385,7 +387,8 @@ Olstad2019CiliaryDevelopment, Faubel2016Cilia-basedVentricles,
 Guirao2010CouplingCilia, Afzelius2004CiliaRelatedDiseases,
 Sawamoto2006NewBrain, Yoshiba2014RolesSymmetry,
 Hirokawa2006NodalAsymmetry, Youn2018PrimaryDiseases,
-Ma2024CiliaDisease, Ibanez-Tallon2002LossHydrocephalus}.  As observed both experimentally and
+Ma2024CiliaDisease, Ibanez-Tallon2002LossHydrocephalus,
+DGama2025MotileBrain}.  As observed both experimentally and
 computationally, absence of motile cilia alters CSF flow patterns
 \Crefpanels{fig:fig1}{g}~\cite{Olstad2019CiliaryDevelopment}. We
 next investigate the implications of these changes on brain ventricular
@@ -744,9 +747,9 @@ in cilia force estimates, despite the variety in application.
 Since we focused our study on the effect of cilia, we neglected
 physiological effects other than cilia and cardiac pulsations on ventricular flow.
 The approach used to model cardiac pulsations is simplified for several reasons.
-One is the knowledge of the physiological processes involved in cardiac pulsations,
-such as blood vessel contraction and dilation, brain tissue displacement
-and interstitial fluid dynamics.
+One is due to a lack of knowledge in the processes driving cardiac pulsations of CSF,
+which may relate to blood vessel contraction and dilatation,
+or displacement of the ventricular wall and brain parenchyma.
 The description of these physiological processes in
 embryonic zebrafish brain ventricles
 is not as extensive as that for the human brain. We therefore
@@ -754,7 +757,7 @@ neglected wall displacements, blood vessel movement and fluid
 displacement across the ventricular walls.
 Second, our study considers a a younger brain that does not have a fully developed ventricular,
 cardiovascular and nervous system.
-This would however be highly relevant to model in more developed zebrafish,
+Including these parameters would however be highly relevant to model a more developed zebrafish,
 where we expect that the above mentioned physiological effects will be more prominent. 
 Third, availability of particle tracking data allowed for calibrating 
 our cardiac pulsations model, since there is only one parameter, the normal
@@ -783,7 +786,7 @@ ordinary differential equations,
 similar to applications in cardiac
 modeling~\cite{Brown2024AMechanics, Augustin2021ACirculation}.
 Alternatively, the beating cardiac motion could be
-modeled by the above mentioned ventricular wall deformations
+modeled by ventricular wall deformations
 to avoid advective boundary fluxes\cite{Causemann2022HumanFramework,
 Kurtcuoglu2005ComputationalSystem, Kurtcuoglu2007ComputationalSylvius, Linninger2005PulsatileBrain},
 in the case that a quantitative description of such wall deformations for the embryonic
@@ -840,7 +843,7 @@ as well as the impact of
 reduced mixing resulting from cilia-deficiency,
 are important considerations for future work.
 
-\section{Methods}
+\section{Methods}\label{sec:methods}
 
 \subsection{Zebrafish maintenance, genotyping and strains in photoconversion experiments}
 The animal facilities for zebrafish~(\emph{danio rerio}) are approved by the
