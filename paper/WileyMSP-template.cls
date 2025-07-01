@@ -10,7 +10,7 @@
                 bottom=2.25cm,%
                 headheight=12pt,%
                 a4paper]{geometry}%
-\RequirePackage{gensymb}
+\RequirePackage{textcomp, gensymb}
 \RequirePackage{siunitx} % \num{} to format powers of 10
 \RequirePackage{float} % Fiure placement
 \RequirePackage{amsmath} % Math
@@ -19,12 +19,14 @@
 \RequirePackage{color} % Text color
 \RequirePackage{bm} % Bold math
 \RequirePackage{authblk}
+\RequirePackage{silence}
 \RequirePackage{stmaryrd} % Double brackets for jump operator
 \RequirePackage[colorlinks=true, allcolors=blue]{hyperref} % Links
 \RequirePackage[nameinlink, capitalise]{cleveref} % Cross referencing
 \RequirePackage[superscript,ref]{cite} % Citation
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
+\WarningFilter*{latex}{Text page \thepage\space contains only floats}
 
 % Author block
 \setlength{\affilsep}{1.5em}
