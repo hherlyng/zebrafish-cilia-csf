@@ -12,7 +12,7 @@
                 a4paper]{geometry}%
 \RequirePackage{textcomp, gensymb}
 \RequirePackage{siunitx} % \num{} to format powers of 10
-\RequirePackage{float} % Fiure placement
+\RequirePackage{float} % Figure placement
 \RequirePackage{amsmath} % Math
 \RequirePackage{amssymb} % Blackboard letters
 \RequirePackage{booktabs} % Tables
