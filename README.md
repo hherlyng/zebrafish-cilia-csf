@@ -1,7 +1,7 @@
 # Modeling of cerebrospinal fluid (CSF) flow and solute transport in zebrafish brain ventricles
 This repository contains the software used in the paper
 
-["Advection versus diffusion in brain ventricular transport"](https://www.biorxiv.org/content/10.1101/2025.04.15.648743v1)
+["Advection versus diffusion in brain ventricular transport"](https://link.springer.com/article/10.1186/s12987-025-00692-3)
 by
 H. Herlyng, A. J. Ellingsrud, M. Kuchta, I. Jeong, Marie E. Rognes, Nathalie Jurisch-Yaksi
 
@@ -11,18 +11,19 @@ DOLFINx. The code is parallelized and uses MPI communcation.
 
 The Stokes equations are discretized with Brezzi-Douglas-Marini elements for the velocity and
 discontinuous Galerkin elements for the pressure. The advection-diffusion equation is solved
-with a discontinuous Galerkin method. See [the paper](https://www.biorxiv.org/content/10.1101/2025.04.15.648743v1) for details.
+with a discontinuous Galerkin method. See [the paper](https://link.springer.com/article/10.1186/s12987-025-00692-3) for details.
 
 Please cite the paper if you use any contents of this repo:
 ```
-@article{Herlyng2025AdvectionDiffusion,
-	author = {Herlyng, Halvor and Ellingsrud, Ada J. and Kuchta, Miroslav and Jeong, Inyoung and Rognes, Marie E. and Jurisch-Yaksi, Nathalie},
-	title = {Advection versus diffusion in brain ventricular transport},
-	year = {2025},
-	doi = {10.1101/2025.04.15.648743},
-	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2025/04/15/2025.04.15.648743},
-	journal = {bioRxiv}
+@article{herlyng2025advection,
+	title={Advection versus diffusion in brain ventricular transport},
+	author={Herlyng, Halvor and Ellingsrud, Ada J and Kuchta, Miroslav and Jeong, Inyoung and Rognes, Marie E and Jurisch-Yaksi, Nathalie},
+	journal={Fluids and Barriers of the CNS},
+	volume={22},
+	number={1},
+	pages={82},
+	year={2025},
+	publisher={Springer}
 }
 ```
 
